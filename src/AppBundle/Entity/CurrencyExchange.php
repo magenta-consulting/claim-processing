@@ -9,13 +9,14 @@
 namespace AppBundle\Entity;
 
 
-class PayCode
+class CurrencyExchange
 {
 
     private $id;
     private $code;
     private $description;
-    private $type;
+    private $exRate;
+    private $effectiveDate;
     private $company;
 
 }

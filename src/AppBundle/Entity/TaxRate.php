@@ -9,13 +9,14 @@
 namespace AppBundle\Entity;
 
 
-class PayCode
+class TaxRate
 {
 
     private $id;
     private $code;
     private $description;
-    private $type;
+    private $rate;
+    private $isLocalDefault;
     private $company;
 
 }

@@ -1,47 +1,6 @@
 services:
-    admin.email_template:
-            class: AppBundle\Admin\EmailTemplateAdmin
-            arguments: [~, AppBundle\Entity\Core\EmailTemplate, ~]
-            tags:
-                - { name: sonata.admin, manager_type: orm, label: Feature }
-    admin.feature:
-            class: AppBundle\Admin\FeatureAdmin
-            arguments: [~, AppBundle\Entity\Space\Feature, ~]
-            tags:
-                - { name: sonata.admin, manager_type: orm, label: Feature }
-    admin.category:
-            class: AppBundle\Admin\CategoryAdmin
-            arguments: [~, AppBundle\Entity\Category, ~]
-            tags:
-                - { name: sonata.admin, manager_type: orm, label: Category }
-
-    admin.blog_post:
-            class: AppBundle\Admin\BlogPostAdmin
-            arguments: [~, AppBundle\Entity\BlogPost, ~]
-            tags:
-                - { name: sonata.admin, manager_type: orm, label: Blog post }
-    admin.space:
-            class: AppBundle\Admin\SpaceAdmin
-            arguments: [~, AppBundle\Entity\Space\Space, ~]
-            tags:
-                - { name: sonata.admin, manager_type: orm, label: Spaces ,group: admin}
     admin.user_fos:
             class: AppBundle\Admin\UserAdmin
             arguments: [~, AppBundle\Entity\Core\User, ~]
             tags:
                 - { name: sonata.admin, manager_type: orm, label: Users }
-    admin.booking:
-            class: AppBundle\Admin\BookingAdmin
-            arguments: [~, AppBundle\Entity\Booking\Booking, ~]
-            tags:
-                - { name: sonata.admin, manager_type: orm, label: Bookings }
-    admin.post:
-            class: AppBundle\Admin\PostAdmin
-            arguments: [~, AppBundle\Entity\Core\Post, ~]
-            tags:
-                - { name: sonata.admin, manager_type: orm, label: Post }
-    admin.page:
-            class: AppBundle\Admin\PageAdmin
-            arguments: [~, AppBundle\Entity\Core\Page, ~]
-            tags:
-                - { name: sonata.admin, manager_type: orm, label: Page }

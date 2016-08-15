@@ -9,13 +9,13 @@
 namespace AppBundle\Entity;
 
 
-class PayCode
+class ClaimType
 {
 
     private $id;
     private $code;
-    private $description;
     private $type;
+    private $enabled;
     private $company;
 
 }

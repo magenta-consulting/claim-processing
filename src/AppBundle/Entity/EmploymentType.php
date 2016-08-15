@@ -9,7 +9,7 @@
 namespace AppBundle\Entity;
 
 
-class Employment
+class EmploymentType
 {
     /**
      * @ORM\Id
@@ -23,11 +23,13 @@ class Employment
      * @var integer
      * @ORM\Column(type="integer")
      */
-    protected $code;
+    private $code;
 
     /**
      * @var integer
      * @ORM\Column(type="string")
      */
-    protected $description;
+    private $description;
+
+    private $company;
 }

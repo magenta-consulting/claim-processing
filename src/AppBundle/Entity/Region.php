@@ -9,13 +9,13 @@
 namespace AppBundle\Entity;
 
 
-class PayCode
+class Region
 {
 
     private $id;
     private $code;
+    private $enabled;
     private $description;
-    private $type;
-    private $company;
+    private $costCentre;
 
 }

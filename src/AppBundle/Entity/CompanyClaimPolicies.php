@@ -9,13 +9,13 @@
 namespace AppBundle\Entity;
 
 
-class PayCode
+class CompanyClaimPolicies
 {
 
     private $id;
-    private $code;
-    private $description;
-    private $type;
-    private $company;
+    private $cutOffDate;
+    private $claimablePeriod;
+    private $enabled;
+    private $claimType;
 
 }

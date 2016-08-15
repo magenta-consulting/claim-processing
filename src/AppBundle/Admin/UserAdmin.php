@@ -1,8 +1,7 @@
 <?php
 namespace AppBundle\Admin;
 
-use AppBundle\Entity\Core\User;
-use AppBundle\Entity\Space\Space;
+use AppBundle\Entity\User;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
