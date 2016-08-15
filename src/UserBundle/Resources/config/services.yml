@@ -1,0 +1,6 @@
+services:
+    user.registration:
+        class: UserBundle\EventListener\RegistrationListener
+        arguments: [@router,@service_container]
+        tags:
+            - { name: kernel.event_subscriber }

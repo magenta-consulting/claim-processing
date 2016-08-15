@@ -1,0 +1,3 @@
+user_registration_success:
+    path:     /register/success
+    defaults: { _controller: UserBundle:Registration:registerSuccess }

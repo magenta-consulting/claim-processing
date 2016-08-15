@@ -1,0 +1,60 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+    <div class="color-line"></div>
+    <div class="back-link">
+        <a href="{{ path('job_public_search') }}" class="btn btn-primary">Back to Dashboard</a>
+    </div>
+
+    <div class="register-container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="text-center m-b-md">
+                    <h3>Registration</h3>
+                </div>
+                <div class="hpanel">
+                    <div class="panel-body">
+                        {{ form_start(form , {'method' : 'post' ,'action': path('fos_user_registration_register') ,'attr': {'id': 'validate-form','novalidate': 'novalidate','class' : 'validate-form'}}) }}
+                        <div class="row">
+                            <div class="form-group col-lg-12 hidden">
+                                {{ form_label(form.username) }}
+                                {{ form_widget(form.username , {'attr' : {'class' : 'form-control' }}) }}
+                                {{ form_errors(form.username) }}
+                            </div>
+                            <div class="form-group col-lg-12">
+                                {{ form_label(form.email) }}
+                                {{ form_widget(form.email , {'attr' : {'class' : 'email form-control' ,'required': true }}) }}
+                                {{ form_errors(form.email) }}
+                            </div>
+                            <div class="form-group col-lg-12">
+                                {{ form_label(form.plainPassword.first) }}
+                                {{ form_widget(form.plainPassword.first , {'attr' : {'class' : 'form-control','required': 'required' }}) }}
+                                {{ form_errors(form.plainPassword.first) }}
+                            </div>
+                            <div class="form-group col-lg-12">
+                                {{ form_label(form.plainPassword.second) }}
+                                {{ form_widget(form.plainPassword.second, {'attr' : {'class' : 'form-control','required': 'required' }}) }}
+                                {{ form_errors(form.plainPassword.first) }}
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <input type="submit" name="submit_register" class="btn btn-success" value="{{ 'registration.submit'|trans }}" />
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block custom_js %}
+    <script>
+        $("input[name='submit_register']").on( 'click' ,function (event) {
+            $('#fos_user_registration_form_username').val($('#fos_user_registration_form_email').val());
+        })
+    </script>
+{% endblock %}
