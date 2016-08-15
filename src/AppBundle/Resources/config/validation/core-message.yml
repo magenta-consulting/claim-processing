@@ -1,0 +1,13 @@
+#AppBundle\Entity\Core\Message\Message:
+#    properties:
+#        sender:
+#            - NotBlank:
+#        recipient:
+#            - NotBlank:
+
+AppBundle\Entity\Core\Message\MessageType:
+    properties:
+        template:
+            - NotBlank:
+        type:
+            - NotBlank:

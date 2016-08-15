@@ -1,0 +1,29 @@
+app_user_host_control_list_booking:
+    path: /list-booking
+    defaults: { _controller: AppBundle:User/HostControl/Mgmt/HostControlRetrieval:listBooking}
+
+
+app_user_host_control_dashboard:
+    path: /dashboard
+    defaults: { _controller: AppBundle:User/HostControl/Mgmt/HostControlManipulation:dashboard}
+
+app_user_host_control_reviewed_space:
+    path: /reviewed-space/{space}
+    defaults: { _controller: AppBundle:User/HostControl/Mgmt/HostControlRetrieval:reviewedSpace}
+
+app_user_host_control_reviewed_space_reply:
+    path: /reviewed-space/reply/{booking}
+    defaults: { _controller: AppBundle:User/HostControl/Mgmt/HostControlManipulation:replyReview}
+
+app_user_host_control_transaction_report:
+    path: /transaction-report
+    defaults: { _controller: AppBundle:User/HostControl/Mgmt/HostControlRetrieval:transactionReport}
+
+app_user_host_control_transaction_report_save_receipt:
+    path: /transaction-report/save-receipt/{booking}
+    defaults: { _controller: AppBundle:User/HostControl/Mgmt/HostControlManipulation:saveReceipt}
+
+app_user_host_control_transaction_report_send_receipt:
+    path: /transaction-report/send-receipt/{booking}
+    defaults: { _controller: AppBundle:User/HostControl/Mgmt/HostControlManipulation:sendReceipt}
+

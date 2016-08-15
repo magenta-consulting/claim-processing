@@ -1,0 +1,18 @@
+AppBundle\Entity\Organisation\Handbook\Handbook:
+    properties:
+        title:
+            - NotBlank:
+        organisation:
+            - NotBlank:
+        locale:
+            - NotBlank:
+
+
+AppBundle\Entity\Organisation\Handbook\Section:
+    properties:
+        title:
+            - NotBlank:
+        locale:
+            - NotBlank:
+        handbook:
+            - NotBlank:

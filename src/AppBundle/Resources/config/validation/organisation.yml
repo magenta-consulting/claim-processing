@@ -1,0 +1,26 @@
+AppBundle\Entity\Organisation\Position:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [ employee,employer ]
+    properties:
+        employee:
+            - NotBlank:
+        employer:
+            - NotBlank:
+#        enabled:
+#            - Type:
+#                type: bool
+                
+AppBundle\Entity\Organisation\Organisation:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [code]
+            message: 'Code existed'
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [accountName]
+            message: 'Account Name existed'
+    properties:
+        name:
+            - NotBlank:
+
+

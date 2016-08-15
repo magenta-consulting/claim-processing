@@ -1,0 +1,36 @@
+AppBundle\Entity\Merchant\Marketing\Promotion:
+    properties:
+        type:
+            - Type:
+                type: integer
+        offerLimit:
+            - Type:
+                type: integer
+        monthlyLimit:
+            - Type:
+                type: integer
+        yearlyLimit:
+            - Type:
+                type: integer
+        companyLimit:
+            - Type:
+                type: integer
+        userLimit:
+            - Type:
+                type: integer
+        enabled:
+            - Type:
+                type: bool
+        title:
+            - NotBlank:
+
+AppBundle\Entity\Merchant\Marketing\Promotion\PromotionType:
+    properties:
+        title:
+            - NotBlank:
+                
+AppBundle\Entity\Merchant\Marketing\Promotion\Redemption:
+    properties:
+        promotion:
+            - NotBlank:
+ 

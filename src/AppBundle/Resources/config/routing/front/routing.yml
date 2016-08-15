@@ -1,0 +1,39 @@
+app_front_search_spaces:
+    path: /search-spaces
+    defaults: { _controller: AppBundle:Front/Mgmt/PublicRetrieval:searchSpaces}
+app_front_get_near_by_listing:
+    path: /get-near-by-listing
+    defaults: { _controller: AppBundle:Front/Api/PublicApi:getNearByListing}
+app_front_host_profile:
+    path: /host-profile/{user}
+    defaults: { _controller: AppBundle:Front/Mgmt/PublicRetrieval:hostProfile}
+
+app_front_contact_host:
+    path: /contact-host/{user}
+    defaults: { _controller: AppBundle:Front/Mgmt/PublicManipulation:contactHost}
+
+app_front_list_space_ajax:
+    path: /list-space/{user}
+    defaults: { _controller: AppBundle:Front/Api/PublicApi:listSpace}
+app_front_list_review_ajax:
+    path: /list-review/{user}/{space}
+    defaults: { _controller: AppBundle:Front/Api/PublicApi:listReview}
+
+app_front_detail_space:
+    path: /detail-space/{space}
+    defaults: { _controller: AppBundle:Front/Mgmt/PublicRetrieval:detailSpace}
+
+app_front_post:
+    path: /post/{type}
+    defaults: { _controller: AppBundle:Front/Mgmt/PublicRetrieval:post}
+app_front_post_detail:
+    path: /post-detail/{type}/{slug}
+    defaults: { _controller: AppBundle:Front/Mgmt/PublicRetrieval:postDetail}
+
+app_front_page:
+    path: /page/{slug}
+    defaults: { _controller: AppBundle:Front/Mgmt/PublicRetrieval:page}
+
+app_front_contact:
+    path: /contact-us/{url}
+    defaults: { _controller: AppBundle:Front/Mgmt/PublicManipulation:contact}

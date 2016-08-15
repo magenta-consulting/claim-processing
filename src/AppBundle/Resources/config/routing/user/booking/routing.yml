@@ -1,0 +1,33 @@
+app_user_booking_create:
+    path: /create/step-{step}/{space}/{booking}
+    defaults: { _controller: AppBundle:User/Booking/Mgmt/BookingManipulation:step,booking: 0}
+app_user_booking_check_available_booking:
+    path: /check-available-booking/{space}
+    defaults: { _controller: AppBundle:User/Booking/Api/BookingApi:checkAvailableBooking}
+
+app_user_booking_plot_space:
+    path: /plot-space/{space}/{booking}/{type}
+    defaults: { _controller: AppBundle:User/Booking/Mgmt/BookingManipulation:plotSpace,booking: 0}
+
+app_user_booking_approve_plot:
+    path: /approve-plot/{booking}
+    defaults: { _controller: AppBundle:User/Booking/Mgmt/BookingManipulation:approvePlot}
+app_user_booking_reject:
+    path: /reject/{booking}
+    defaults: { _controller: AppBundle:User/Booking/Mgmt/BookingManipulation:rejectPlot}
+
+app_user_booking_enquire_space:
+    path: /enquire-space/{space}
+    defaults: { _controller: AppBundle:User/Booking/Mgmt/BookingManipulation:enquireSpace}
+
+app_user_booking_add_wishlist:
+    path: /add-wishlist/{space}
+    defaults: { _controller: AppBundle:User/Booking/Mgmt/BookingManipulation:addToWishlist}
+app_user_booking_remove_wishlist:
+    path: /remove-wishlist/{space}/{userWishlist}
+    defaults: { _controller: AppBundle:User/Booking/Mgmt/BookingManipulation:removeFromWishlist}
+
+app_user_booking_approve_booking:
+    path: /approve-booking/{booking}
+    defaults: { _controller: AppBundle:User/Booking/Mgmt/BookingManipulation:approveBooking}
+
