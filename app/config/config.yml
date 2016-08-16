@@ -179,54 +179,17 @@ sonata_block:
         sonata.admin.block.admin_list:
             contexts: [admin]
 sonata_admin:
-    templates:
-        edit:                           AppBundle:SonataAdmin/CRUD:edit.html.twig
-    title:      Zonpace
-    dashboard:
-        groups:
-            Spaces:
-                on_top:               true
-                label:                ~
-                label_catalogue:      ~
-                items:
-                    - admin.space
-            Space Features:
-                on_top:               true
-                label:                ~
-                label_catalogue:      ~
-                items:
-                    - admin.feature
-
-            Users:
-                on_top:               true
-                label:                ~
-                label_catalogue:      ~
-                items:
-                    - admin.user_fos
-            Bookings:
-                on_top:               true
-                label:                ~
-                label_catalogue:      ~
-                items:
-                    - admin.booking
-            Post:
-                on_top:               true
-                label:                ~
-                label_catalogue:      ~
-                items:
-                    - admin.post
-            Page:
-                on_top:               true
-                label:                ~
-                label_catalogue:      ~
-                items:
-                    - admin.page
-            Email Template:
-                on_top:               true
-                label:                ~
-                label_catalogue:      ~
-                items:
-                    - admin.email_template
+#    templates:
+#        edit:                           AppBundle:SonataAdmin/CRUD:edit.html.twig
+    title:      Claims
+#    dashboard:
+#        groups:
+#            Spaces:
+#                on_top:               true
+#                label:                ~
+#                label_catalogue:      ~
+#                items:
+#                    - admin.space
 
 
 #    title_logo: bundles/app/images/fancy_acme_logo.png
@@ -285,7 +248,7 @@ sonata_media:
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
-    user_class: AppBundle\Entity\Core\User
+    user_class: AppBundle\Entity\User
 
 
 stof_doctrine_extensions:
