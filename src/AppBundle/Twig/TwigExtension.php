@@ -3,9 +3,6 @@
 namespace AppBundle\Twig;
 
 
-use AppBundle\Entity\Booking\Booking;
-use AppBundle\Entity\Space\Location;
-use AppBundle\Entity\Space\Space;
 use Application\Sonata\MediaBundle\Entity\Media;
 
 class TwigExtension extends \Twig_Extension

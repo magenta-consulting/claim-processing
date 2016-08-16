@@ -9,64 +9,17 @@ services:
             calls:
                  - [setContainer, ["@service_container"]]
 
-    app.pagerfanta.view.default:
-            class: AppBundle\Services\Paging\CustomView
-            public: false
-            tags: [{ name: pagerfanta.view, alias: default }]
-    app.pagerfanta.view.ajax:
-            class: AppBundle\Services\Paging\CustomAjaxView
-            public: false
-            tags: [{ name: pagerfanta.view, alias: ajax }]
-
-    app.twig_extension:
-            class: AppBundle\Twig\TwigExtension
-            arguments: ["@service_container"]
-            public: false
-            tags:
-                - { name: twig.extension }
 
     app.media.retriever:
         class: AppBundle\Services\Core\MediaRetriever
         calls:
             - [setContainer,["@service_container"]]
-    app.security.authentication_handler:
-        class: AppBundle\Handler\AuthenticationHandler
-        public: false
-        arguments: ["@security.http_utils","@service_container"]
-
     app.form_serializer:
         class: AppBundle\Services\Core\FormErrorsSerializer
 
     app.email_sender:
         class: AppBundle\Services\Core\EmailSender
         arguments: ["@mailer","@twig","@service_container"]
-
-    #form
-    app.form.type.space:
-            class: AppBundle\Form\SpaceType
-            arguments:
-                - '@service_container'
-            tags:
-                - { name: form.type }
-    app.form.type.location:
-            class: AppBundle\Form\LocationType
-            arguments:
-                - '@service_container'
-            tags:
-                - { name: form.type }
-    app.form.type.price:
-            class: AppBundle\Form\PriceType
-            arguments:
-                - '@service_container'
-            tags:
-                - { name: form.type }
-    app.form.type.date_booking:
-            class: AppBundle\Form\DateBookingType
-            arguments:
-                - '@service_container'
-            tags:
-                - { name: form.type }
-
 
 
 

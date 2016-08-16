@@ -7,8 +7,11 @@
  */
 
 namespace AppBundle\Entity;
-
-
+use Doctrine\ORM\Mapping as ORM;
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="employee_type")
+ */
 class EmployeeType
 {
     /**
@@ -21,15 +24,78 @@ class EmployeeType
 
     /**
      * @var integer
-     * @ORM\Column(type="integer")
+     * @ORM\Column(name="code",type="integer")
      */
     private $code;
 
     /**
      * @var integer
-     * @ORM\Column(type="string")
+     * @ORM\Column(name="description",type="string")
      */
     private $description;
 
+    /**
+     * @var Company
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
+     */
     private $company;
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+    
+
+    /**
+     * @return int
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param int $code
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param int $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return Company
+     */
+    public function getCompany()
+    {
+        return $this->company;
+    }
+
+    /**
+     * @param Company $company
+     */
+    public function setCompany($company)
+    {
+        $this->company = $company;
+    }
+
+
 }

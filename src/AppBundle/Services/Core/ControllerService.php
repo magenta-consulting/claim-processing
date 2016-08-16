@@ -2,8 +2,6 @@
 
 namespace AppBundle\Services\Core;
 
-use AppBundle\Entity\Booking\Booking;
-use AppBundle\Entity\Space\Space;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;

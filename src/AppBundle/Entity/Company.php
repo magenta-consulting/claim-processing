@@ -17,25 +17,21 @@ class Company
     private $id;
 
     /**
-     * @ORM\Id
      * @ORM\Column(type="string")
      */
-    protected $name;
+    private $name;
 
     /**
-     * @ORM\Id
      * @ORM\Column(type="string")
      */
-    protected $address;
+    private $address;
 
     /**
-     * @ORM\Id
      * @ORM\Column(type="integer")
      */
     protected $bizCode;
 
     /**
-     * @ORM\Id
      * @ORM\Column(type="string")
      */
     protected $country;
@@ -47,15 +43,7 @@ class Company
     {
         return $this->id;
     }
-
-    /**
-     * @param mixed $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
+    
     /**
      * @return mixed
      */

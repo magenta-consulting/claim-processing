@@ -8,13 +8,13 @@
 
 namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
+
 /**
  * @ORM\Entity
- * @ORM\Table(name="claim_type")
+ * @ORM\Table(name="branch")
  */
 
-
-class ClaimType
+class Branch
 {
 
     /**
@@ -28,23 +28,21 @@ class ClaimType
      * @ORM\Column(name="code",type="string")
      */
     private $code;
-
-    /**
-     * @var string
-     * @ORM\Column(name="type",type="string")
-     */
-    private $type;
-
     /**
      * @var boolean
      * @ORM\Column(name="enabled",type="boolean")
      */
     private $enabled;
     /**
-     * @var Company
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
+     * @var string
+     * @ORM\Column(name="description",type="text")
      */
-    private $company;
+    private $description;
+    /**
+     * @var Region
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Region")
+     */
+    private $region;
 
     /**
      * @return mixed
@@ -52,14 +50,6 @@ class ClaimType
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @param mixed $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
     }
 
     /**
@@ -79,22 +69,6 @@ class ClaimType
     }
 
     /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param string $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    /**
      * @return boolean
      */
     public function isEnabled()
@@ -111,21 +85,37 @@ class ClaimType
     }
 
     /**
-     * @return Company
+     * @return string
      */
-    public function getCompany()
+    public function getDescription()
     {
-        return $this->company;
+        return $this->description;
     }
 
     /**
-     * @param Company $company
+     * @param string $description
      */
-    public function setCompany($company)
+    public function setDescription($description)
     {
-        $this->company = $company;
+        $this->description = $description;
     }
 
-    
+    /**
+     * @return Region
+     */
+    public function getRegion()
+    {
+        return $this->region;
+    }
+
+    /**
+     * @param Region $region
+     */
+    public function setRegion($region)
+    {
+        $this->region = $region;
+    }
+
+
 
 }
