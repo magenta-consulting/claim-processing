@@ -34,9 +34,9 @@ class CostCentre
     private $description;
     /**
      * @var boolean
-     * @ORM\Column(name="enable",type="boolean")
+     * @ORM\Column(name="enabled",type="boolean")
      */
-    private $enable;
+    private $enabled;
     /**
      * @var boolean
      * @ORM\Column(name="is_default",type="boolean")
@@ -93,17 +93,17 @@ class CostCentre
     /**
      * @return boolean
      */
-    public function isEnable()
+    public function isEnabled()
     {
-        return $this->enable;
+        return $this->enabled;
     }
 
     /**
      * @param boolean $enable
      */
-    public function setEnable($enable)
+    public function setEnabled($enabled)
     {
-        $this->enable = $enable;
+        $this->enabled = $enabled;
     }
 
     /**

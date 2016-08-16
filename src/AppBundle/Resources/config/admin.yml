@@ -4,3 +4,17 @@ services:
             arguments: [~, AppBundle\Entity\User, ~]
             tags:
                 - { name: sonata.admin, manager_type: orm, label: Users }
+    admin.cost_centre:
+            class: AppBundle\Admin\CostCentreAdmin
+            arguments: [~, AppBundle\Entity\CostCentre, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Cost Centre }
+            calls:
+                - [setContainer, ["@service_container"]]
+    admin.company:
+            class: AppBundle\Admin\CompanyAdmin
+            arguments: [~, AppBundle\Entity\Company, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Cost Centre }
+            calls:
+                - [setContainer, ["@service_container"]]

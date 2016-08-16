@@ -79,4 +79,165 @@ class Claim
         $this->createdAt = new \DateTime();
     }
 
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return ClaimType
+     */
+    public function getClaimType()
+    {
+        return $this->claimType;
+    }
+
+    /**
+     * @param ClaimType $claimType
+     */
+    public function setClaimType($claimType)
+    {
+        $this->claimType = $claimType;
+    }
+
+    /**
+     * @return ClaimCategory
+     */
+    public function getClaimCategory()
+    {
+        return $this->claimCategory;
+    }
+
+    /**
+     * @param ClaimCategory $claimCategory
+     */
+    public function setClaimCategory($claimCategory)
+    {
+        $this->claimCategory = $claimCategory;
+    }
+
+    /**
+     * @return date
+     */
+    public function getReceiptDate()
+    {
+        return $this->receiptDate;
+    }
+
+    /**
+     * @param date $receiptDate
+     */
+    public function setReceiptDate($receiptDate)
+    {
+        $this->receiptDate = $receiptDate;
+    }
+
+    /**
+     * @return CurrencyExchange
+     */
+    public function getCurrencyExchange()
+    {
+        return $this->currencyExchange;
+    }
+
+    /**
+     * @param CurrencyExchange $currencyExchange
+     */
+    public function setCurrencyExchange($currencyExchange)
+    {
+        $this->currencyExchange = $currencyExchange;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
+    /**
+     * @param float $amount
+     */
+    public function setAmount($amount)
+    {
+        $this->amount = $amount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPurposeExpenses()
+    {
+        return $this->purposeExpenses;
+    }
+
+    /**
+     * @param string $purposeExpenses
+     */
+    public function setPurposeExpenses($purposeExpenses)
+    {
+        $this->purposeExpenses = $purposeExpenses;
+    }
+
+    /**
+     * @return Media
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param Media $image
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+    
+
 }
