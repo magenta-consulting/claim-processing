@@ -195,6 +195,7 @@ sonata_admin:
                 label_catalogue:      ~
                 items:
                     - admin.user_fos
+                    - admin.claim
                     - admin.cost_centre
                     - admin.region
                     - admin.branch

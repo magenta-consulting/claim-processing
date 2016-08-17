@@ -7,6 +7,14 @@ services:
             calls:
                 - [setContainer, ["@service_container"]]
                 - [setUserManager, ["@fos_user.user_manager"]]
+    admin.claim:
+            class: AppBundle\Admin\ClaimAdmin
+            arguments: [~, AppBundle\Entity\Claim, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Claim Management }
+            calls:
+                - [setContainer, ["@service_container"]]
+
     admin.cost_centre:
             class: AppBundle\Admin\CostCentreAdmin
             arguments: [~, AppBundle\Entity\CostCentre, ~]

@@ -49,7 +49,7 @@ class Claim
     private $currencyExchange;
     /**
      * @var float
-     * @ORM\Column(name="amount",type="float", precision=4, scale=2)
+     * @ORM\Column(name="amount",type="float")
      */
     private $amount;
     /**
@@ -67,6 +67,75 @@ class Claim
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
      */
     private $user;
+
+    /**
+     * @var PayCode
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PayCode")
+     */
+    private $payCode;
+
+    /**
+     * @var TaxRate
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TaxRate")
+     */
+    private $taxRate;
+
+    /**
+     * @var Company
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
+     */
+    private $company;
+    /**
+     * @return Company
+     */
+    public function getCompany()
+    {
+        return $this->company;
+    }
+
+    /**
+     * @param Company $company
+     */
+    public function setCompany($company)
+    {
+        $this->company = $company;
+    }
+
+    /**
+     * @return TaxRate
+     */
+    public function getTaxRate()
+    {
+        return $this->taxRate;
+    }
+
+    /**
+     * @param TaxRate $taxRate
+     */
+    public function setTaxRate($taxRate)
+    {
+        $this->taxRate = $taxRate;
+    }
+    
+    
+
+    /**
+     * @return PayCode
+     */
+    public function getPayCode()
+    {
+        return $this->payCode;
+    }
+
+    /**
+     * @param PayCode $payCode
+     */
+    public function setPayCode($payCode)
+    {
+        $this->payCode = $payCode;
+    }
+
+
 
     /**
      * @var \DateTime
