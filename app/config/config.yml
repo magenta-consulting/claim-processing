@@ -182,14 +182,33 @@ sonata_admin:
 #    templates:
 #        edit:                           AppBundle:SonataAdmin/CRUD:edit.html.twig
     title:      Claims
-#    dashboard:
-#        groups:
-#            Spaces:
-#                on_top:               true
-#                label:                ~
-#                label_catalogue:      ~
-#                items:
-#                    - admin.space
+    dashboard:
+        groups:
+            Companies:
+                on_top:               true
+                label:                ~
+                label_catalogue:      ~
+                items:
+                    - admin.company
+            Systems:
+                label:                ~
+                label_catalogue:      ~
+                items:
+                    - admin.user_fos
+                    - admin.cost_centre
+                    - admin.region
+                    - admin.branch
+                    - admin.department
+                    - admin.section
+                    - admin.pay_code
+                    - admin.tax_rate
+                    - admin.claim_type
+                    - admin.claim_category
+                    - admin.currency_exchange
+                    - admin.company_claim_policies
+                    - admin.approval_amount_policies
+                    - admin.employee_type
+                    - admin.employment_type
 
 
 #    title_logo: bundles/app/images/fancy_acme_logo.png
@@ -229,21 +248,22 @@ sonata_media:
     providers:
         image:
             resizer: sonata.media.resizer.square
-            filesystem: sonata.media.filesystem.s3
+#            filesystem: sonata.media.filesystem.s3
 #            thumbnail:  sonata.media.thumbnail.liip_imagine
-#            filesystem: sonata.media.filesystem.local
+            filesystem: sonata.media.filesystem.local
             allowed_extensions: ['png','jpg']
             allowed_mime_types: ['image/png','image/jpg','image/jpeg']
         file:
             resizer: false
-            filesystem: sonata.media.filesystem.s3
-#            filesystem: sonata.media.filesystem.local
+#            filesystem: sonata.media.filesystem.s3
+            filesystem: sonata.media.filesystem.local
             service:    sonata.media.provider.file
             allowed_extensions: ['pdf', 'txt', 'rtf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'odt', 'odg', 'odp', 'ods', 'odc', 'odf', 'odb', 'csv', 'xml','png','jpg']
             allowed_mime_types: ['application/pdf', 'application/x-pdf', 'application/rtf', 'text/html', 'text/rtf', 'text/plain','application/json','image/png','image/jpg','image/jpeg','application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.presentationml.presentation','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
     cdn:
         server:
-            path: http://%s3_region%/%s3_bucket_name% # this is not run because it use default url
+#            path: http://%s3_region%/%s3_bucket_name% # this is not run because it use default url
+            path:      /uploads/media # http://media.sonata-project.org
 
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
