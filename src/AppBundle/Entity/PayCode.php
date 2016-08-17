@@ -34,10 +34,17 @@ class PayCode
      */
     private $description;
     /**
-     * @var string
-     * @ORM\Column(name="type",type="string")
+     * @var PayCodeType
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PayCodeType")
      */
-    private $type;
+    private $payCodeType;
+
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="enabled",type="boolean")
+     */
+    private $enabled;
     /**
      * @var Company
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
@@ -51,8 +58,24 @@ class PayCode
     {
         return $this->id;
     }
-    
 
+    /**
+     * @return boolean
+     */
+    public function isEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * @param boolean $enabled
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+    }
+    
+    
     /**
      * @return string
      */
@@ -86,20 +109,21 @@ class PayCode
     }
 
     /**
-     * @return string
+     * @return PayCodeType
      */
-    public function getType()
+    public function getPayCodeType()
     {
-        return $this->type;
+        return $this->payCodeType;
     }
 
     /**
-     * @param string $type
+     * @param PayCodeType $payCodeType
      */
-    public function setType($type)
+    public function setPayCodeType($payCodeType)
     {
-        $this->type = $type;
+        $this->payCodeType = $payCodeType;
     }
+    
 
     /**
      * @return Company

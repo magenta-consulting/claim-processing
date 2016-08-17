@@ -1,7 +1,9 @@
 <?php
 namespace AppBundle\Admin;
 
+use AppBundle\Entity\Company;
 use AppBundle\Entity\CostCentre;
+use AppBundle\Entity\Department;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -42,18 +44,9 @@ class CompanyAdmin extends AbstractAdmin
     }
     public function toString($object)
     {
-        return $object instanceof CostCentre
-            ? $object->getCode()
+        return $object instanceof Company
+            ? $object->getName()
             : 'Company Management'; // shown in the breadcrumb on the create view
     }
-    public function prePersist($object)
-    {
-        $object->setCompany($this->getCompany());
-    }
-//    protected function configureRoutes(RouteCollection $collection)
-//    {
-//        // prevent display of "Add new" when embedding this form
-//            $collection->remove('create');
-//    }
 
 }

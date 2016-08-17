@@ -3,18 +3,61 @@ services:
             class: AppBundle\Admin\UserAdmin
             arguments: [~, AppBundle\Entity\User, ~]
             tags:
-                - { name: sonata.admin, manager_type: orm, label: Users }
+                - { name: sonata.admin, manager_type: orm, label: User Management }
     admin.cost_centre:
             class: AppBundle\Admin\CostCentreAdmin
             arguments: [~, AppBundle\Entity\CostCentre, ~]
             tags:
-                - { name: sonata.admin, manager_type: orm, label: Cost Centre }
+                - { name: sonata.admin, manager_type: orm, label: Cost Centre Management }
+            calls:
+                - [setContainer, ["@service_container"]]
+    admin.region:
+            class: AppBundle\Admin\RegionAdmin
+            arguments: [~, AppBundle\Entity\Region, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Region Management }
+            calls:
+                - [setContainer, ["@service_container"]]
+    admin.branch:
+            class: AppBundle\Admin\BranchAdmin
+            arguments: [~, AppBundle\Entity\Branch, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Branch Management }
             calls:
                 - [setContainer, ["@service_container"]]
     admin.company:
             class: AppBundle\Admin\CompanyAdmin
             arguments: [~, AppBundle\Entity\Company, ~]
             tags:
-                - { name: sonata.admin, manager_type: orm, label: Cost Centre }
+                - { name: sonata.admin, manager_type: orm, label: Company Management }
+            calls:
+                - [setContainer, ["@service_container"]]
+    admin.department:
+            class: AppBundle\Admin\DepartmentAdmin
+            arguments: [~, AppBundle\Entity\Department, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Department Management }
+            calls:
+                - [setContainer, ["@service_container"]]
+                - [addChild, ["@admin.section"]]
+    admin.section:
+            class: AppBundle\Admin\SectionAdmin
+            arguments: [~, AppBundle\Entity\Section, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Section Management }
+            calls:
+                - [setContainer, ["@service_container"]]
+    admin.pay_code:
+            class: AppBundle\Admin\PayCodeAdmin
+            arguments: [~, AppBundle\Entity\PayCode, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Pay Code Management }
+            calls:
+                - [setContainer, ["@service_container"]]
+    admin.pay_code_type:
+            class: AppBundle\Admin\PayCodeTypeAdmin
+            arguments: [~, AppBundle\Entity\PayCodeType, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Pay Code Type Management }
             calls:
                 - [setContainer, ["@service_container"]]

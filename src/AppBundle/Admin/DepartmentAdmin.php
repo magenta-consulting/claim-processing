@@ -1,22 +1,22 @@
 <?php
 namespace AppBundle\Admin;
 
-use AppBundle\Entity\CostCentre;
+use AppBundle\Entity\Department;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Admin\AdminInterface;
 
-class CostCentreAdmin extends BaseAdmin
+class DepartmentAdmin extends BaseAdmin
 {
+
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper->add('code', 'text');
         $formMapper->add('description', 'textarea');
         $formMapper->add('enabled', 'checkbox', ['required' => false]);
-        $formMapper->add('isDefault', 'checkbox', ['required' => false]);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -31,7 +31,6 @@ class CostCentreAdmin extends BaseAdmin
             ->addIdentifier('code')
             ->add('description')
             ->add('enabled', null, array('editable' => true))
-            ->add('isDefault', null, array('editable' => true))
             ->add('_action', null, array(
                 'actions' => array(
                     'delete' => array(),
@@ -41,10 +40,9 @@ class CostCentreAdmin extends BaseAdmin
 
     public function toString($object)
     {
-        return $object instanceof CostCentre
+        return $object instanceof Department
             ? $object->getCode()
-            : 'Cost Centre Management'; // shown in the breadcrumb on the create view
+            : 'Region Management'; // shown in the breadcrumb on the create view
     }
-
 
 }

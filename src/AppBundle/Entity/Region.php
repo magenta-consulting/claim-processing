@@ -45,6 +45,28 @@ class Region
     private $costCentre;
 
     /**
+     * @var Company
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
+     */
+    private $company;
+
+    /**
+     * @return Company
+     */
+    public function getCompany()
+    {
+        return $this->company;
+    }
+
+    /**
+     * @param Company $company
+     */
+    public function setCompany($company)
+    {
+        $this->company = $company;
+    }
+
+    /**
      * @return mixed
      */
     public function getId()
