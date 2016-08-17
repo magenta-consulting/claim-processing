@@ -35,20 +35,42 @@ class ApprovalAmountPolicies
     private $claimType;
 
     /**
-     * @var string
-     * @ORM\Column(name="approval1max",type="string")
+     * @var float
+     * @ORM\Column(name="approval1max",type="float")
      */
     private $approval1Max;
     /**
-     * @var string
-     * @ORM\Column(name="approval2max",type="string")
+     * @var float
+     * @ORM\Column(name="approval2max",type="float",nullable=true)
      */
     private $approval2Max;
     /**
-     * @var string
-     * @ORM\Column(name="approval3max",type="string")
+     * @var float
+     * @ORM\Column(name="approval3max",type="float",nullable=true)
      */
     private $approval3Max;
+
+    /**
+     * @var Company
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
+     */
+    private $company;
+
+    /**
+     * @return Company
+     */
+    public function getCompany()
+    {
+        return $this->company;
+    }
+
+    /**
+     * @param Company $company
+     */
+    public function setCompany($company)
+    {
+        $this->company = $company;
+    }
 
     /**
      * @return mixed

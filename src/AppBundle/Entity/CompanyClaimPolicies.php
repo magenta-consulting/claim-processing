@@ -24,8 +24,8 @@ class CompanyClaimPolicies
     private $id;
 
     /**
-     * @var date
-     * @ORM\Column(name="cut_off_date",type="date")
+     * @var integer
+     * @ORM\Column(name="cut_off_date",type="integer")
      */
     private $cutOffDate;
     /**
@@ -34,15 +34,34 @@ class CompanyClaimPolicies
      */
     private $claimablePeriod;
     /**
-     * @var boolean
-     * @ORM\Column(name="enabled",type="boolean")
-     */
-    private $enabled;
-    /**
      * @var ClaimType
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimType")
      */
     private $claimType;
+
+    /**
+     * @var Company
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
+     */
+    private $company;
+
+    /**
+     * @return Company
+     */
+    public function getCompany()
+    {
+        return $this->company;
+    }
+
+    /**
+     * @param Company $company
+     */
+    public function setCompany($company)
+    {
+        $this->company = $company;
+    }
+    
+    
 
     /**
      * @return mixed
@@ -90,22 +109,6 @@ class CompanyClaimPolicies
     public function setClaimablePeriod($claimablePeriod)
     {
         $this->claimablePeriod = $claimablePeriod;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isEnabled()
-    {
-        return $this->enabled;
-    }
-
-    /**
-     * @param boolean $enabled
-     */
-    public function setEnabled($enabled)
-    {
-        $this->enabled = $enabled;
     }
 
     /**

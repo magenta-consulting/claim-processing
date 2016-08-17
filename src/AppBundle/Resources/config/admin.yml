@@ -4,6 +4,9 @@ services:
             arguments: [~, AppBundle\Entity\User, ~]
             tags:
                 - { name: sonata.admin, manager_type: orm, label: User Management }
+            calls:
+                - [setContainer, ["@service_container"]]
+                - [setUserManager, ["@fos_user.user_manager"]]
     admin.cost_centre:
             class: AppBundle\Admin\CostCentreAdmin
             arguments: [~, AppBundle\Entity\CostCentre, ~]
@@ -59,5 +62,62 @@ services:
             arguments: [~, AppBundle\Entity\PayCodeType, ~]
             tags:
                 - { name: sonata.admin, manager_type: orm, label: Pay Code Type Management }
+            calls:
+                - [setContainer, ["@service_container"]]
+    admin.tax_rate:
+            class: AppBundle\Admin\TaxRateAdmin
+            arguments: [~, AppBundle\Entity\TaxRate, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Tax Rate Management }
+            calls:
+                - [setContainer, ["@service_container"]]
+    admin.claim_type:
+            class: AppBundle\Admin\ClaimTypeAdmin
+            arguments: [~, AppBundle\Entity\ClaimType, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Claim Type Management }
+            calls:
+                - [setContainer, ["@service_container"]]
+    admin.claim_category:
+            class: AppBundle\Admin\ClaimCategoryAdmin
+            arguments: [~, AppBundle\Entity\ClaimCategory, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Claim Category Management }
+            calls:
+                - [setContainer, ["@service_container"]]
+    admin.currency_exchange:
+            class: AppBundle\Admin\CurrencyExchangeAdmin
+            arguments: [~, AppBundle\Entity\CurrencyExchange, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Currency Management }
+            calls:
+                - [setContainer, ["@service_container"]]
+    admin.company_claim_policies:
+            class: AppBundle\Admin\CompanyClaimPoliciesAdmin
+            arguments: [~, AppBundle\Entity\CompanyClaimPolicies, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Claim Policies Management }
+            calls:
+                - [setContainer, ["@service_container"]]
+    admin.approval_amount_policies:
+            class: AppBundle\Admin\ApprovalAmountPoliciesAdmin
+            arguments: [~, AppBundle\Entity\ApprovalAmountPolicies, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Approval Amount Management }
+            calls:
+                - [setContainer, ["@service_container"]]
+
+    admin.employee_type:
+            class: AppBundle\Admin\EmployeeTypeAdmin
+            arguments: [~, AppBundle\Entity\EmployeeType, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Employee Type Management }
+            calls:
+                - [setContainer, ["@service_container"]]
+    admin.employment_type:
+            class: AppBundle\Admin\EmploymentTypeAdmin
+            arguments: [~, AppBundle\Entity\EmploymentType, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Employment Type Management }
             calls:
                 - [setContainer, ["@service_container"]]

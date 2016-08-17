@@ -6,14 +6,44 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use FOS\UserBundle\Model\UserManagerInterface;
 
-class UserAdmin extends AbstractAdmin
+class UserAdmin extends BaseAdmin
 {
+    public function preUpdate($user)
+    {
+        $this->getUserManager()->updateCanonicalFields($user);
+        $this->getUserManager()->updatePassword($user);
+    }
+
+    public function setUserManager(UserManagerInterface $userManager)
+    {
+        $this->userManager = $userManager;
+    }
+
+    /**
+     * @return UserManagerInterface
+     */
+    public function getUserManager()
+    {
+        return $this->userManager;
+    }
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('email', 'text');
-        $formMapper->add('firstName', 'text');
-        $formMapper->add('lastName', 'text');
+        $formMapper->add('email', 'text')
+        ->add('username')
+        ->add('plainPassword', 'text')
+        ->add('firstName', 'text')
+        ->add('lastName', 'text')
+
+        ->add('enabled', null, array('required' => false))
+            ->add('image','sonata_media_type',[
+            'provider' => 'sonata.media.provider.image',
+            'context' => 'default',
+            'required' => false,
+            'label' => 'Image',
+        ]);
+
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -25,9 +55,10 @@ class UserAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('email', null, array(
+            ->addIdentifier('email', null, array(
                 'sortable' => 'email',
             ))
+            ->add('image')
             ->add('firstName')
             ->add('lastName')
         ->add('enabled', null, array('editable' => true));
@@ -35,7 +66,7 @@ class UserAdmin extends AbstractAdmin
     public function toString($object)
     {
         return $object instanceof User
-            ? $object->getName()
+            ? $object->getEmail()
             : 'User'; // shown in the breadcrumb on the create view
     }
 }
