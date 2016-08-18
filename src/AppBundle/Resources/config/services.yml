@@ -17,9 +17,6 @@ services:
     app.form_serializer:
         class: AppBundle\Services\Core\FormErrorsSerializer
 
-    app.email_sender:
-        class: AppBundle\Services\Core\EmailSender
-        arguments: ["@mailer","@twig","@service_container"]
 
 
 

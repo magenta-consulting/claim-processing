@@ -1,4 +1,4 @@
-app_default:
-    path: /
-    defaults: { _controller: AppBundle:Default:index}
+app_claim:
+    type: rest
+    resource: "@AppBundle/Controller/ClaimController.php"
 
