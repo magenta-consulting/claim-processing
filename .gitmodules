@@ -1,0 +1,3 @@
+[submodule "src/Sonata/MediaBundle"]
+	path = src/Sonata/MediaBundle
+	url = https://github.com/binhle410/SonataMediaBundle.git

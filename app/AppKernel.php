@@ -38,6 +38,9 @@ class AppKernel extends Kernel
 
             new Liip\ImagineBundle\LiipImagineBundle(),
 
+            new FOS\RestBundle\FOSRestBundle(),
+            new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
+
             new AppBundle\AppBundle(),
 
         ];

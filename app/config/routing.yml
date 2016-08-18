@@ -24,3 +24,12 @@ fos_user:
 
 _liip_imagine:
     resource: "@LiipImagineBundle/Resources/config/routing.xml"
+
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /api/doc
+
+sonata_api_media:
+    type:         rest
+    prefix:       /api
+    resource:     "@SonataMediaBundle/Resources/config/routing/api.xml"
