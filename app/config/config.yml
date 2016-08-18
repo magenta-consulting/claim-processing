@@ -179,17 +179,17 @@ sonata_block:
         sonata.admin.block.admin_list:
             contexts: [admin]
 sonata_admin:
-#    templates:
-#        edit:                           AppBundle:SonataAdmin/CRUD:edit.html.twig
+    templates:
+        layout:                         AppBundle:SonataAdmin:standard_layout.html.twig
     title:      Claims
     dashboard:
         groups:
-            Companies:
-                on_top:               true
-                label:                ~
-                label_catalogue:      ~
-                items:
-                    - admin.company
+#            Companies:
+#                on_top:               true
+#                label:                ~
+#                label_catalogue:      ~
+#                items:
+#                    - admin.company
             Systems:
                 label:                ~
                 label_catalogue:      ~

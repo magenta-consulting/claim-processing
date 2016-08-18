@@ -34,3 +34,7 @@ sonata_api_media:
     type:         rest
     prefix:       /api
     resource:     "@SonataMediaBundle/Resources/config/routing/api.xml"
+
+user_public:
+    resource: "@UserBundle/Resources/config/routing.yml"
+    prefix:   /

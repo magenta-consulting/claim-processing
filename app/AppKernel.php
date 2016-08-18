@@ -40,7 +40,7 @@ class AppKernel extends Kernel
 
             new FOS\RestBundle\FOSRestBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
-
+            new UserBundle\UserBundle(),
             new AppBundle\AppBundle(),
 
         ];
