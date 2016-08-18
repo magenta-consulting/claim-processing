@@ -3,19 +3,13 @@ imports:
 
 
 services:
-    #global service
-    app.controller:
-            class: AppBundle\Services\Core\ControllerService
-            calls:
-                 - [setContainer, ["@service_container"]]
-
-
     app.media.retriever:
         class: AppBundle\Services\Core\MediaRetriever
         calls:
             - [setContainer,["@service_container"]]
-    app.form_serializer:
-        class: AppBundle\Services\Core\FormErrorsSerializer
+    app.token_authenticator:
+        class: AppBundle\Security\TokenAuthenticator
+        arguments: ['@doctrine.orm.entity_manager']
 
 
 
