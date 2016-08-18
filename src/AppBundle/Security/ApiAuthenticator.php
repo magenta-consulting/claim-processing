@@ -15,14 +15,17 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class TokenAuthenticator extends AbstractGuardAuthenticator
+class ApiAuthenticator extends AbstractGuardAuthenticator
 {
     private $em;
+    private $container;
 
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManager $em,ContainerInterface $container)
     {
         $this->em = $em;
+        $this->container = $container;
     }
 
     /**
@@ -31,33 +34,41 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function getCredentials(Request $request)
     {
-        if (!$token = $request->headers->get('X-AUTH-TOKEN')) {
-            // no token? Return null and no other methods will be called
+        if (!$username = $request->headers->get('x-username')) {
+            return;
+        }
+        if (!$password = $request->headers->get('x-password')) {
             return;
         }
 
         // What you return here will be passed to getUser() as $credentials
         return array(
-            'token' => $token,
+            'username' => $username,
+            'password' => $password,
         );
     }
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        $apiKey = $credentials['token'];
+        $username = $credentials['username'];
 
         // if null, authentication will fail
         // if a User object, checkCredentials() is called
         return $this->em->getRepository('AppBundle:User')
-            ->findOneBy(array('apiKey' => $apiKey));
+            ->findOneBy(array('username' => $username));
     }
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        // check credentials - e.g. make sure the password is valid
-        // no credential check is needed in this case
+        $password = $credentials['password'];
+        $factory = $this->container->get('security.encoder_factory');
+        $encoder = $factory->getEncoder($user);
 
-        // return true to cause authentication success
+        if (!($encoder->isPasswordValid($user->getPassword(), $password, $user->getSalt()))) {
+            throw new AuthenticationException(
+                'AUTHENTICATION_FAILED.', 401
+            );
+        }
         return true;
     }
 

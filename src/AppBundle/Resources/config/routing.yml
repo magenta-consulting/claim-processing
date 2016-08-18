@@ -1,4 +1,10 @@
+app_company:
+    type: rest
+    resource: AppBundle\Controller\CompanyController
+
+
 app_claim:
     type: rest
-    resource: "@AppBundle/Controller/ClaimController.php"
+    parent: app_company
+    resource: AppBundle\Controller\ClaimController
 

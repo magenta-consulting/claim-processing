@@ -7,9 +7,9 @@ services:
         class: AppBundle\Services\Core\MediaRetriever
         calls:
             - [setContainer,["@service_container"]]
-    app.token_authenticator:
-        class: AppBundle\Security\TokenAuthenticator
-        arguments: ['@doctrine.orm.entity_manager']
+    app.api_authenticator:
+        class: AppBundle\Security\ApiAuthenticator
+        arguments: ['@doctrine.orm.entity_manager','@service_container']
 
 
 

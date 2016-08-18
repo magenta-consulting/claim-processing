@@ -20,7 +20,55 @@ use Symfony\Component\HttpFoundation\Response;
 class ClaimController extends FOSRestController
 {
 
+    public function getAction(Company $company,Claim $claim)
+    {
+        return $this->setSuccessResponse($claim);
+    }
 
+    public function cgetAction(Request $request, Company $company)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $limit = $request->get('limit', 10);
+        $offset = $request->get('offset', 0);
+        $order = null;
+        $claims = $em->getRepository('AppBundle:Claim')->findBy(['company'=>$company], $order, $limit, $offset);
+        return $this->setSuccessResponse($claims);
+    }
+
+    public function postAction(Request $request, Company $company)
+    {
+
+    }
+
+    public function getClaimTypesAction(Request $request, Company $company)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $limit = $request->get('limit', 10);
+        $offset = $request->get('offset', 0);
+        $order = null;
+        $claims = $em->getRepository('AppBundle:ClaimType')->findBy(['company'=>$company], $order, $limit, $offset);
+        return $this->setSuccessResponse($claims);
+    }
+
+    public function getClaimCategoriesAction(Request $request, Company $company)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $limit = $request->get('limit', 10);
+        $offset = $request->get('offset', 0);
+        $order = null;
+        $claims = $em->getRepository('AppBundle:ClaimCategory')->findBy(['company'=>$company], $order, $limit, $offset);
+        return $this->setSuccessResponse($claims);
+    }
+
+    public function getTaxRatesAction(Request $request, Company $company)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $limit = $request->get('limit', 10);
+        $offset = $request->get('offset', 0);
+        $order = null;
+        $claims = $em->getRepository('AppBundle:TaxRate')->findBy(['company'=>$company], $order, $limit, $offset);
+        return $this->setSuccessResponse($claims);
+    }
     /**
      * Set Error Response to view
      * @param String $message
@@ -53,55 +101,6 @@ class ClaimController extends FOSRestController
         $view = $this->view($dataResponse, Response::HTTP_OK);
         return $this->handleView($view);
 
-    }
-    public function getAction(Request $request, Company $company, Claim $claim)
-    {
-        return $this->setSuccessResponse($claim);
-    }
-
-    public function cgetAction(Request $request, Company $company)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $limit = $request->get('limit', 10);
-        $offset = $request->get('offset', 0);
-        $order = null;
-        $claims = $em->getRepository('AppBundle:Claim')->findBy([], $order, $limit, $offset);
-        return $this->setSuccessResponse($claims);
-    }
-
-    public function postAction(Request $request, Company $company)
-    {
-
-    }
-
-    public function getClaimTypesAction(Request $request, Company $company)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $limit = $request->get('limit', 10);
-        $offset = $request->get('offset', 0);
-        $order = null;
-        $claims = $em->getRepository('AppBundle:ClaimType')->findBy([], $order, $limit, $offset);
-        return $this->setSuccessResponse($claims);
-    }
-
-    public function getClaimCategoriesAction(Request $request, Company $company)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $limit = $request->get('limit', 10);
-        $offset = $request->get('offset', 0);
-        $order = null;
-        $claims = $em->getRepository('AppBundle:ClaimCategory')->findBy([], $order, $limit, $offset);
-        return $this->setSuccessResponse($claims);
-    }
-
-    public function getTaxRatesAction(Request $request, Company $company)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $limit = $request->get('limit', 10);
-        $offset = $request->get('offset', 0);
-        $order = null;
-        $claims = $em->getRepository('AppBundle:TaxRate')->findBy([], $order, $limit, $offset);
-        return $this->setSuccessResponse($claims);
     }
 
 
