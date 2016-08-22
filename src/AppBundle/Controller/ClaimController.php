@@ -47,7 +47,11 @@ class ClaimController extends FOSRestController
         $offset = $request->get('offset', 0);
         $order = null;
         $claims = $em->getRepository('AppBundle:ClaimType')->findBy(['company'=>$company], $order, $limit, $offset);
-        return $this->setSuccessResponse($claims);
+        $data = [];
+        foreach ($claims as $claim){
+            $data[$claim->getId()] = $claim->getCode();
+        }
+        return $this->setSuccessResponse($data);
     }
 
     public function getClaimCategoriesAction(Request $request, Company $company)
@@ -56,8 +60,12 @@ class ClaimController extends FOSRestController
         $limit = $request->get('limit', 10);
         $offset = $request->get('offset', 0);
         $order = null;
-        $claims = $em->getRepository('AppBundle:ClaimCategory')->findBy(['company'=>$company], $order, $limit, $offset);
-        return $this->setSuccessResponse($claims);
+        $categories = $em->getRepository('AppBundle:ClaimCategory')->findBy(['company'=>$company], $order, $limit, $offset);
+        $data = [];
+        foreach ($categories as $category){
+            $data[$category->getId()] = $category->getCode();
+        }
+        return $this->setSuccessResponse($data);
     }
 
     public function getTaxRatesAction(Request $request, Company $company)
@@ -66,8 +74,25 @@ class ClaimController extends FOSRestController
         $limit = $request->get('limit', 10);
         $offset = $request->get('offset', 0);
         $order = null;
-        $claims = $em->getRepository('AppBundle:TaxRate')->findBy(['company'=>$company], $order, $limit, $offset);
-        return $this->setSuccessResponse($claims);
+        $taxRates = $em->getRepository('AppBundle:TaxRate')->findBy(['company'=>$company], $order, $limit, $offset);
+        $data = [];
+        foreach ($taxRates as $taxRate){
+            $data[$taxRate->getId()] = $taxRate->getCode();
+        }
+        return $this->setSuccessResponse($data);
+    }
+    public function getCurrencyExchangeAction(Request $request, Company $company)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $limit = $request->get('limit', 10);
+        $offset = $request->get('offset', 0);
+        $order = null;
+        $currencyExchanges = $em->getRepository('AppBundle:CurrencyExchange')->findBy(['company'=>$company], $order, $limit, $offset);
+        $data = [];
+        foreach ($currencyExchanges as $currencyExchange){
+            $data[$currencyExchange->getId()] = $currencyExchange->getCode();
+        }
+        return $this->setSuccessResponse($data);
     }
     /**
      * Set Error Response to view
@@ -101,6 +126,12 @@ class ClaimController extends FOSRestController
         $view = $this->view($dataResponse, Response::HTTP_OK);
         return $this->handleView($view);
 
+    }
+    public function optionsAction()
+    {
+        $response = new Response();
+        $response->headers->set('Allow', 'OPTIONS, GET, PATCH, POST, PUT, DELETE');
+        return $response;
     }
 
 

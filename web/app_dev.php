@@ -3,6 +3,16 @@
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Debug\Debug;
 
+
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    // return only the headers and not the content
+    // only allow CORS if we're doing a GET - i.e. no saving for now.
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']) && $_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'] == 'GET') {
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Headers: X-Requested-With');
+    }
+    exit;
+}
 // If you don't want to setup permissions the proper way, just uncomment the following PHP line
 // read http://symfony.com/doc/current/book/installation.html#checking-symfony-application-configuration-and-setup
 // for more information

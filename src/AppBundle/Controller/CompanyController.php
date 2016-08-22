@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Entity\User;
 
 /**
  * @RouteResource("Company")
@@ -21,9 +22,19 @@ class CompanyController extends FOSRestController
 {
 
 
+
+    public function loginAction()
+    {
+        return $this->setSuccessResponse(null,'Login Success');
+    }
     public function getAction(Company $company)
     {
         return $this->setSuccessResponse($company);
+    }
+    public function getUserAction($username)
+    {
+        $user = $em = $this->getDoctrine()->getRepository('AppBundle:User')->findOneBy(['username'=>$username]);
+        return $this->setSuccessResponse($user);
     }
     /**
      * Set Error Response to view
@@ -57,6 +68,12 @@ class CompanyController extends FOSRestController
         $view = $this->view($dataResponse, Response::HTTP_OK);
         return $this->handleView($view);
 
+    }
+    public function optionsAction()
+    {
+        $response = new Response();
+        $response->headers->set('Allow', 'OPTIONS, GET, PATCH, POST, PUT, DELETE');
+        return $response;
     }
 
 
