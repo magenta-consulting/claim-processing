@@ -31,7 +31,7 @@ class ClaimCategory
     private $code;
     /**
      * @var string
-     * @ORM\Column(name="external_code",type="string")
+     * @ORM\Column(name="external_code",type="string",nullable=true)
      */
     private $externalCode;
     /**

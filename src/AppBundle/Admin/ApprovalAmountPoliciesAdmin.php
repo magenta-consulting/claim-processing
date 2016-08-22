@@ -53,9 +53,9 @@ class ApprovalAmountPoliciesAdmin extends BaseAdmin
             'placeholder' => 'Select Claim Type',
             'empty_data'  => null
         ));
-        $formMapper->add('approval1Max', 'number');
-        $formMapper->add('approval2Max', 'number');
-        $formMapper->add('approval3Max', 'number');
+        $formMapper->add('approval1Max', 'number',['required'=>false]);
+        $formMapper->add('approval2Max', 'number',['required'=>false]);
+        $formMapper->add('approval3Max', 'number',['required'=>false]);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)

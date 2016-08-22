@@ -14,8 +14,8 @@ class ClaimCategoryAdmin extends BaseAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper->add('code', 'text');
-        $formMapper->add('externalCode', 'text');
         $formMapper->add('description', 'textarea');
+        $formMapper->add('externalCode', 'text',['required'=>false]);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -27,13 +27,14 @@ class ClaimCategoryAdmin extends BaseAdmin
     {
         $listMapper
             ->addIdentifier('code')
-            ->add('externalCode')
             ->add('description')
+            ->add('externalCode')
             ->add('_action', null, array(
                 'actions' => array(
                     'delete' => array(),
                 )
             ));
+
     }
 
     public function toString($object)
@@ -42,7 +43,6 @@ class ClaimCategoryAdmin extends BaseAdmin
             ? $object->getCode()
             : 'Claim Category Management'; // shown in the breadcrumb on the create view
     }
-
 
 
 }

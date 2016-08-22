@@ -36,7 +36,7 @@ class ApprovalAmountPolicies
 
     /**
      * @var float
-     * @ORM\Column(name="approval1max",type="float")
+     * @ORM\Column(name="approval1max",type="float",nullable=true)
      */
     private $approval1Max;
     /**
