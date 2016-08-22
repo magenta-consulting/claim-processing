@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Admin;
 
+use AppBundle\Entity\ClaimTypeType;
 use AppBundle\Entity\CostCentre;
 use AppBundle\Entity\PayCodeType;
 use AppBundle\Entity\Region;
@@ -11,7 +12,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Sonata\AdminBundle\Route\RouteCollection;
 
-class PayCodeTypeAdmin extends BaseAdmin
+class ClaimTypeTypeAdmin extends BaseAdmin
 {
 
     protected function configureFormFields(FormMapper $formMapper)
@@ -42,9 +43,9 @@ class PayCodeTypeAdmin extends BaseAdmin
 
     public function toString($object)
     {
-        return $object instanceof PayCodeType
+        return $object instanceof ClaimTypeType
             ? $object->getName()
-            : 'Pay Code Type Management'; // shown in the breadcrumb on the create view
+            : 'Claim Type Management'; // shown in the breadcrumb on the create view
     }
 
 

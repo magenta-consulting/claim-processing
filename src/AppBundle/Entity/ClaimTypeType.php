@@ -7,33 +7,32 @@
  */
 
 namespace AppBundle\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
+
 /**
  * @ORM\Entity
- * @ORM\Table(name="claim_type")
+ * @ORM\Table(name="claim_type_type")
  */
-
-
-class ClaimType
+class ClaimTypeType
 {
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer",options={"unsigned":true})
+     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
     /**
      * @var string
-     * @ORM\Column(name="code",type="string")
+     * @ORM\Column(name="name",type="string")
      */
-    private $code;
-
+    private $name;
     /**
-     * @var ClaimTypeType
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimTypeType")
+     * @var integer
+     * @ORM\Column(name="order_sort",type="integer")
      */
-    private $claimTypeType;
+    private $orderSort;
 
     /**
      * @var boolean
@@ -55,45 +54,38 @@ class ClaimType
     }
 
     /**
-     * @param mixed $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
      * @return string
      */
-    public function getCode()
+    public function getName()
     {
-        return $this->code;
+        return $this->name;
     }
 
     /**
-     * @param string $code
+     * @param string $name
      */
-    public function setCode($code)
+    public function setName($name)
     {
-        $this->code = $code;
+        $this->name = $name;
     }
 
     /**
-     * @return ClaimTypeType
+     * @return int
      */
-    public function getClaimTypeType()
+    public function getOrderSort()
     {
-        return $this->claimTypeType;
+        return $this->orderSort;
     }
 
     /**
-     * @param ClaimTypeType $claimTypeType
+     * @param int $orderSort
      */
-    public function setClaimTypeType($claimTypeType)
+    public function setOrderSort($orderSort)
     {
-        $this->claimTypeType = $claimTypeType;
+        $this->orderSort = $orderSort;
     }
 
+    
 
     /**
      * @return boolean
@@ -126,7 +118,11 @@ class ClaimType
     {
         $this->company = $company;
     }
-
     
+    
+    
+
+
+
 
 }

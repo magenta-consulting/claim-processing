@@ -11,15 +11,31 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Sonata\AdminBundle\Route\RouteCollection;
+use Doctrine\ORM\Query\Expr;
 
 class ClaimTypeAdmin extends BaseAdmin
 {
-
+    public function filterClaimTypeTypeBycompany(){
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder();
+        $expr = new Expr();
+        $qb->select('claimTypeType')
+            ->from('AppBundle\Entity\ClaimTypeType','claimTypeType')
+            ->where($expr->eq('claimTypeType.company', ':company'))
+            ->andWhere($expr->eq('claimTypeType.enabled', true))
+            ->setParameter('company', $this->getCompany());
+        return $qb;
+    }
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper->add('code', 'text');
-        $formMapper->add('type', 'text');
         $formMapper->add('enabled', 'checkbox', ['required' => false]);
+        $formMapper->add('claimTypeType', 'sonata_type_model', array(
+            'property' => 'name',
+            'query'=>$this->filterClaimTypeTypeBycompany(),
+            'placeholder' => 'Select Type',
+            'empty_data'  => null
+        ));
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -32,7 +48,7 @@ class ClaimTypeAdmin extends BaseAdmin
     {
         $listMapper
             ->addIdentifier('code')
-            ->add('type')
+            ->add('claimTypeType.name')
             ->add('enabled', null, array('editable' => true))
             ->add('_action', null, array(
                 'actions' => array(
