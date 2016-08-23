@@ -28,14 +28,9 @@ class Claim
     private $id;
     /**
      * @var ClaimType
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimType")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Category")
      */
-    private $claimType;
-    /**
-     * @var ClaimCategory
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimCategory")
-     */
-    private $claimCategory;
+    private $category;
 
     /**
      * @var date
@@ -69,71 +64,11 @@ class Claim
     private $user;
 
     /**
-     * @var PayCode
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PayCode")
-     */
-    private $payCode;
-
-    /**
-     * @var TaxRate
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TaxRate")
-     */
-    private $taxRate;
-
-    /**
      * @var Company
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
      */
     private $company;
-    /**
-     * @return Company
-     */
-    public function getCompany()
-    {
-        return $this->company;
-    }
 
-    /**
-     * @param Company $company
-     */
-    public function setCompany($company)
-    {
-        $this->company = $company;
-    }
-
-    /**
-     * @return TaxRate
-     */
-    public function getTaxRate()
-    {
-        return $this->taxRate;
-    }
-
-    /**
-     * @param TaxRate $taxRate
-     */
-    public function setTaxRate($taxRate)
-    {
-        $this->taxRate = $taxRate;
-    }
-    
-    
-
-    /**
-     * @return PayCode
-     */
-    public function getPayCode()
-    {
-        return $this->payCode;
-    }
-
-    /**
-     * @param PayCode $payCode
-     */
-    public function setPayCode($payCode)
-    {
-        $this->payCode = $payCode;
-    }
 
 
 
@@ -167,33 +102,17 @@ class Claim
     /**
      * @return ClaimType
      */
-    public function getClaimType()
+    public function getCategory()
     {
-        return $this->claimType;
+        return $this->category;
     }
 
     /**
-     * @param ClaimType $claimType
+     * @param ClaimType $category
      */
-    public function setClaimType($claimType)
+    public function setCategory($category)
     {
-        $this->claimType = $claimType;
-    }
-
-    /**
-     * @return ClaimCategory
-     */
-    public function getClaimCategory()
-    {
-        return $this->claimCategory;
-    }
-
-    /**
-     * @param ClaimCategory $claimCategory
-     */
-    public function setClaimCategory($claimCategory)
-    {
-        $this->claimCategory = $claimCategory;
+        $this->category = $category;
     }
 
     /**
@@ -293,6 +212,22 @@ class Claim
     }
 
     /**
+     * @return Company
+     */
+    public function getCompany()
+    {
+        return $this->company;
+    }
+
+    /**
+     * @param Company $company
+     */
+    public function setCompany($company)
+    {
+        $this->company = $company;
+    }
+
+    /**
      * @return \DateTime
      */
     public function getCreatedAt()
@@ -307,6 +242,9 @@ class Claim
     {
         $this->createdAt = $createdAt;
     }
-    
+
+
+
+
 
 }

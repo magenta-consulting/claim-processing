@@ -195,8 +195,8 @@ sonata_admin:
                 label:                ~
                 label_catalogue:      ~
                 items:
-                    - admin.user_fos
                     - admin.claim
+                    - admin.category
                     - admin.cost_centre
                     - admin.region
                     - admin.branch
@@ -211,6 +211,7 @@ sonata_admin:
                     - admin.approval_amount_policies
                     - admin.employee_type
                     - admin.employment_type
+                    - admin.user_fos
 
 
 #    title_logo: bundles/app/images/fancy_acme_logo.png
