@@ -103,7 +103,7 @@ services:
                 - [setContainer, ["@service_container"]]
     admin.currency_exchange:
             class: AppBundle\Admin\CurrencyExchangeAdmin
-            arguments: [~, AppBundle\Entity\CurrencyExchange, ~]
+            arguments: [~, AppBundle\Entity\CurrencyExchange, AppBundle:BE\CRUD]
             tags:
                 - { name: sonata.admin, manager_type: orm, label: Currency Management }
             calls:

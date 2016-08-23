@@ -1,10 +1,10 @@
 app_company:
     type: rest
-    resource: AppBundle\Controller\CompanyController
+    resource: AppBundle\Controller\Api\CompanyController
 
 
 app_claim:
     type: rest
     parent: app_company
-    resource: AppBundle\Controller\ClaimController
+    resource: AppBundle\Controller\Api\ClaimController
 

@@ -181,6 +181,7 @@ sonata_block:
 sonata_admin:
     templates:
         layout:                         AppBundle:SonataAdmin:standard_layout.html.twig
+        edit:                           AppBundle:SonataAdmin/CRUD:edit.html.twig
     title:      Claims
     dashboard:
         groups:
