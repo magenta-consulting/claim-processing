@@ -63,6 +63,17 @@ class CurrencyExchangeHistory
     private $currencyExchange;
 
     /**
+     * @var date
+     * @ORM\Column(name="created_at",type="datetime")
+     */
+    private $createdAt;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
+    /**
      * @return User
      */
     public function getUser()

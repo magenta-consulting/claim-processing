@@ -39,7 +39,7 @@ class Claim
 
     /**
      * @var date
-     * @ORM\Column(name="receipt_date",type="date")
+     * @ORM\Column(name="receipt_date",type="date",nullable=true)
      */
     private $receiptDate;
     /**
@@ -49,12 +49,12 @@ class Claim
     private $currencyExchange;
     /**
      * @var float
-     * @ORM\Column(name="amount",type="float")
+     * @ORM\Column(name="amount",type="float",nullable=true)
      */
     private $amount;
     /**
      * @var string
-     * @ORM\Column(name="purpose_expenses",type="text")
+     * @ORM\Column(name="purpose_expenses",type="text",nullable=true)
      */
     private $purposeExpenses;
     /**

@@ -58,10 +58,16 @@ class UserAdmin extends BaseAdmin
             ->addIdentifier('email', null, array(
                 'sortable' => 'email',
             ))
-            ->add('image')
+            ->add('username')
             ->add('firstName')
             ->add('lastName')
-        ->add('enabled', null, array('editable' => true));
+            ->add('image')
+        ->add('enabled', null, array('editable' => true))
+        ->add('_action', null, array(
+        'actions' => array(
+            'delete' => array(),
+        )
+    ));
     }
     public function toString($object)
     {

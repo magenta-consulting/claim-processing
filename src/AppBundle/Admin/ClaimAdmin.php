@@ -81,54 +81,61 @@ class ClaimAdmin extends BaseAdmin
             'placeholder' => 'Select Category',
             'empty_data'  => null
         ));
-        $formMapper->add('taxRate', 'sonata_type_model', array(
-            'property' => 'code',
-            'query'=>$this->filterTaxRateBycompany(),
-            'placeholder' => 'Select Tax Rate',
-            'empty_data'  => null
-        ));
+
         $formMapper->add('payCode', 'sonata_type_model', array(
             'property' => 'code',
             'query'=>$this->filterPayCostBycompany(),
             'placeholder' => 'Select Pay Code',
             'empty_data'  => null
         ));
-        $formMapper->add('currencyExchange', 'sonata_type_model', array(
+        $formMapper->add('taxRate', 'sonata_type_model', array(
             'property' => 'code',
-            'query'=>$this->filterCurrencyExchangeBycompany(),
-            'placeholder' => 'Select Currency',
-            'empty_data'  => null
+            'query'=>$this->filterTaxRateBycompany(),
+            'placeholder' => 'Select Tax Rate',
+            'empty_data'  => null,
+            'required'=>false
         ));
-        $formMapper->add('amount', 'number');
-        $formMapper->add('purposeExpenses', 'textarea');
-        $formMapper->add('receiptDate', 'date');
-        $formMapper->add('image','sonata_media_type',[
-            'provider' => 'sonata.media.provider.image',
-            'context' => 'default',
-            'required' => false,
-            'label' => 'Image',
-        ]);
+//        $formMapper->add('currencyExchange', 'sonata_type_model', array(
+//            'property' => 'code',
+//            'query'=>$this->filterCurrencyExchangeBycompany(),
+//            'placeholder' => 'Select Currency',
+//            'empty_data'  => null
+//        ));
+//        $formMapper->add('amount', 'number');
+//        $formMapper->add('purposeExpenses', 'textarea');
+//        $formMapper->add('receiptDate', 'date',['attr'=>['class'=>'datepicker'],'widget' => 'single_text','format' => 'MM/dd/yyyy']);
+//        $formMapper->add('image','sonata_media_type',[
+//            'provider' => 'sonata.media.provider.image',
+//            'context' => 'default',
+//            'required' => false,
+//            'label' => 'Image',
+//        ]);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('user.email');
+//        $datagridMapper->add('user.username');
         $datagridMapper->add('claimType.code');
-        $datagridMapper->add('claimCategory.code');
-        $datagridMapper->add('taxRate.code');
-        $datagridMapper->add('currencyExchange.code');
+        $datagridMapper->add('claimCategory.code',null,['label'=>'Category Code']);
+        $datagridMapper->add('taxRate.code',null,['label'=>'Tax Code']);
+        $datagridMapper->add('payCode.code',null,['label'=>'Pay Code']);
+//        $datagridMapper->add('currencyExchange.code');
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('user.email')
-            ->add('claimType.code')
-            ->add('claimCategory.code')
-            ->add('taxRate.code')
-            ->add('currencyExchange.code')
-            ->addIdentifier('amount')
-            ->addIdentifier('receiptDate')
+//            ->addIdentifier('user.username',null,['lable'=>'aa'])
+            ->addIdentifier('claimType.code')
+            ->add('claimType.claimTypeType.name',null,['label'=>'Claim Type'])
+            ->add('claimCategory.code',null,['label'=>'Category Code'])
+            ->add('claimCategory.description',null,['label'=>'Category Description'])
+            ->add('taxRate.code',null,['label'=>'Tax Code'])
+            ->add('taxRate.description',null,['label'=>'Tax Description'])
+            ->add('payCode.code',null,['label'=>'Pay Code'])
+//            ->add('currencyExchange.code')
+//            ->add('amount')
+//            ->add('receiptDate')
             ->add('_action', null, array(
                 'actions' => array(
                     'delete' => array(),
@@ -140,7 +147,7 @@ class ClaimAdmin extends BaseAdmin
     {
         return $object instanceof Claim
             ? $object->getClaimType()->getCode()
-            : 'Claim Management'; // shown in the breadcrumb on the create view
+            : 'Claim Category'; // shown in the breadcrumb on the create view
     }
 
 
