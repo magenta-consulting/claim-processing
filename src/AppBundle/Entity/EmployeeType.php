@@ -24,7 +24,7 @@ class EmployeeType
 
     /**
      * @var integer
-     * @ORM\Column(name="code",type="integer")
+     * @ORM\Column(name="code",type="string")
      */
     private $code;
 

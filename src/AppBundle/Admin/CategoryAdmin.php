@@ -60,7 +60,7 @@ class CategoryAdmin extends BaseAdmin
     }
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('name', 'text');
+        $formMapper->add('name', 'text',['label'=>'Description']);
         $formMapper->add('claimType', 'sonata_type_model', array(
             'property' => 'code',
             'query'=>$this->filterClaimTypeBycompany(),
@@ -91,7 +91,7 @@ class CategoryAdmin extends BaseAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('name');
+        $datagridMapper->add('name',null,['label'=>'Description']);
         $datagridMapper->add('claimType.code');
         $datagridMapper->add('claimCategory.code',null,['label'=>'Category Code']);
         $datagridMapper->add('taxRate.code',null,['label'=>'Tax Code']);
@@ -101,7 +101,7 @@ class CategoryAdmin extends BaseAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('name')
+            ->addIdentifier('name',null,['label'=>'Description'])
             ->add('claimType.code')
             ->add('claimType.claimTypeType.name',null,['label'=>'Claim Type'])
             ->add('claimCategory.code',null,['label'=>'Category Code'])

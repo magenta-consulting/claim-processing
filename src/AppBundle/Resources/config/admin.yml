@@ -110,9 +110,17 @@ services:
                 - [setContainer, ["@service_container"]]
     admin.currency_exchange:
             class: AppBundle\Admin\CurrencyExchangeAdmin
-            arguments: [~, AppBundle\Entity\CurrencyExchange, AppBundle:BE\CRUD]
+            arguments: [~, AppBundle\Entity\CurrencyExchange, ~]
             tags:
                 - { name: sonata.admin, manager_type: orm, label: Currency Management }
+            calls:
+                - [setContainer, ["@service_container"]]
+                - [addChild, ["@admin.currency_exchange_value"]]
+    admin.currency_exchange_value:
+            class: AppBundle\Admin\CurrencyExchangeValueAdmin
+            arguments: [~, AppBundle\Entity\CurrencyExchangeValue, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Currency Value Management }
             calls:
                 - [setContainer, ["@service_container"]]
     admin.company_claim_policies:

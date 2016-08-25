@@ -8,6 +8,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -35,21 +36,21 @@ class CurrencyExchange
     private $description;
 
     /**
-     * @var float
-     * @ORM\Column(name="ex_rate",type="float")
-     */
-    private $exRate;
-    /**
-     * @var date
-     * @ORM\Column(name="effective_date",type="date")
-     */
-    private $effectiveDate;
-
-    /**
      * @var Company
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
      */
     private $company;
+
+    /**
+     * @var Company
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\CurrencyExchangeValue",mappedBy="currencyExchange",cascade={"remove"})
+     */
+    private $currencyExchangeValues;
+
+    public function __construct()
+    {
+        $this->currencyExchangeValues = new ArrayCollection();
+    }
 
     /**
      * @return mixed
@@ -89,38 +90,6 @@ class CurrencyExchange
     public function setDescription($description)
     {
         $this->description = $description;
-    }
-
-    /**
-     * @return float
-     */
-    public function getExRate()
-    {
-        return $this->exRate;
-    }
-
-    /**
-     * @param float $exRate
-     */
-    public function setExRate($exRate)
-    {
-        $this->exRate = $exRate;
-    }
-
-    /**
-     * @return date
-     */
-    public function getEffectiveDate()
-    {
-        return $this->effectiveDate;
-    }
-
-    /**
-     * @param date $effectiveDate
-     */
-    public function setEffectiveDate($effectiveDate)
-    {
-        $this->effectiveDate = $effectiveDate;
     }
 
     /**

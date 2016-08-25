@@ -34,6 +34,9 @@ class DepartmentAdmin extends BaseAdmin
             ->add('_action', null, array(
                 'actions' => array(
                     'delete' => array(),
+//                    'View' => array(
+//                        'template' => 'AppBundle:SonataAdmin/CustomActions:_list-action-department.html.twig'
+//                    )
                 )
             ));
     }
@@ -42,7 +45,7 @@ class DepartmentAdmin extends BaseAdmin
     {
         return $object instanceof Department
             ? $object->getCode()
-            : 'Region Management'; // shown in the breadcrumb on the create view
+            : 'Department Management'; // shown in the breadcrumb on the create view
     }
 
 }

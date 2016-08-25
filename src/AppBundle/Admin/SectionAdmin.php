@@ -14,6 +14,9 @@ use Doctrine\ORM\Query\Expr;
 
 class SectionAdmin extends BaseAdmin
 {
+
+
+    protected $parentAssociationMapping = 'department';
     public function filterDepartmentBycompany(){
         $em = $this->container->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder();

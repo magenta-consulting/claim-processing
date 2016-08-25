@@ -12,9 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="currency_exchange_history")
+ * @ORM\Table(name="currency_exchange_value")
  */
-class CurrencyExchangeHistory
+class CurrencyExchangeValue
 {
 
     /**
@@ -23,16 +23,6 @@ class CurrencyExchangeHistory
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    /**
-     * @var string
-     * @ORM\Column(name="code",type="string")
-     */
-    private $code;
-    /**
-     * @var string
-     * @ORM\Column(name="description",type="text")
-     */
-    private $description;
 
     /**
      * @var float
@@ -46,48 +36,15 @@ class CurrencyExchangeHistory
     private $effectiveDate;
 
     /**
-     * @var Company
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
-     */
-    private $company;
-
-    /**
-     * @var User
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
-     */
-    private $user;
-    /**
      * @var CurrencyExchange
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CurrencyExchange")
      */
     private $currencyExchange;
-
     /**
-     * @var date
-     * @ORM\Column(name="created_at",type="datetime")
+     * @var Company
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
      */
-    private $createdAt;
-
-    public function __construct()
-    {
-        $this->createdAt = new \DateTime();
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param User $user
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-    }
+    private $company;
 
     /**
      * @return CurrencyExchange
@@ -114,37 +71,6 @@ class CurrencyExchangeHistory
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    /**
-     * @param string $code
-     */
-    public function setCode($code)
-    {
-        $this->code = $code;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
 
     /**
      * @return float
