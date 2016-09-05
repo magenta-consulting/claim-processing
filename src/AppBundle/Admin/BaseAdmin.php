@@ -24,7 +24,7 @@ class BaseAdmin extends AbstractAdmin
     {
         return $this->container;
     }
-    
+
     public function getUser()
     {
         if (!$this->container->has('security.token_storage')) {
@@ -84,8 +84,8 @@ class BaseAdmin extends AbstractAdmin
         if ($this->getUser()) {
             if ($this->getUser()->hasRole('ROLE_HR_ADMIN')) {
                 return true;
-            }else{return false;}
-        }else{return true;}
+            }
+        }
         return false;
     }
 
