@@ -72,8 +72,8 @@ class BaseAdmin extends AbstractAdmin
         if ($this->getUser()) {
             if ($this->getUser()->hasRole('ROLE_HR_ADMIN')) {
                 return true;
-            }
-        }
+            }else{return false;}
+        }else{return true;}
         return false;
     }
 
