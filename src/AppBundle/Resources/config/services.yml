@@ -11,6 +11,13 @@ services:
         class: AppBundle\Security\ApiAuthenticator
         arguments: ['@doctrine.orm.entity_manager','@service_container']
 
+    app.twig_extension:
+            class: AppBundle\Twig\TwigExtension
+            arguments: ["@service_container"]
+            public: false
+            tags:
+                - { name: twig.extension }
+
 
 
 

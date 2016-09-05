@@ -4,8 +4,9 @@ security:
 
     role_hierarchy:
         ROLE_HR_ADMIN: ROLE_USER,ROLE_SONATA_ADMIN
-        ROLE_CS_ADMIN: ROLE_HR_ADMIN
-        ROLE_ADMIN:    [ROLE_CS_ADMIN]
+        ROLE_CS_ADMIN: ROLE_USER,ROLE_SONATA_ADMIN
+        ROLE_CLIENT_ADMIN: ROLE_HR_ADMIN
+        ROLE_ADMIN:    [ROLE_CLIENT_ADMIN,ROLE_CS_ADMIN]
     providers:
         fos_userbundle:
             id: fos_user.user_provider.username_email

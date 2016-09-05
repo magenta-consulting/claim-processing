@@ -50,6 +50,7 @@ services:
                 - { name: sonata.admin, manager_type: orm, label: Company Management }
             calls:
                 - [setContainer, ["@service_container"]]
+                - [addChild, ["@admin.user_fos"]]
     admin.department:
             class: AppBundle\Admin\DepartmentAdmin
             arguments: [~, AppBundle\Entity\Department, ~]

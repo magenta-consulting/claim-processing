@@ -1,0 +1,101 @@
+<ul class="sidebar-menu">
+
+    {% if app.user.hasRole('ROLE_CLIENT_ADMIN') or app.user.hasRole('ROLE_CS_ADMIN') %}
+        <li class="first"><a href="{{ path('admin_app_company_list') }}"><i class="fa fa-folder"></i>Company</a>
+        </li>
+        <li class="last treeview"><a href="#"><i class="fa fa-folder"></i><span>Systems</span><i
+                        class="fa pull-right fa-angle-left"></i></a>
+            <ul class="active treeview-menu menu_level_1" style="display: none;">
+
+                <li class="first"><a href="{{ path('admin_app_claim_list') }}"><i
+                                class="fa fa-angle-double-right"></i>Claim</a>
+                </li>
+
+
+                <li><a href="{{ path('admin_app_category_list') }}"><i
+                                class="fa fa-angle-double-right"></i>Claim Category</a>
+                </li>
+
+
+                <li><a href="{{ path('admin_app_costcentre_list') }}"><i
+                                class="fa fa-angle-double-right"></i>Cost Centre Management</a>
+                </li>
+
+
+                <li><a href="{{ path('admin_app_region_list') }}"><i
+                                class="fa fa-angle-double-right"></i>Region Management</a>
+                </li>
+
+
+                <li><a href="{{ path('admin_app_branch_list') }}"><i
+                                class="fa fa-angle-double-right"></i>Branch Management</a>
+                </li>
+
+
+                <li><a href="{{ path('admin_app_department_list') }}"><i
+                                class="fa fa-angle-double-right"></i>Department Management</a>
+                </li>
+
+
+                <li><a href="{{ path('admin_app_section_list') }}"><i
+                                class="fa fa-angle-double-right"></i>Section Management</a>
+                </li>
+
+
+                <li><a href="{{ path('admin_app_paycode_list') }}"><i
+                                class="fa fa-angle-double-right"></i>Pay Code Management</a>
+                </li>
+
+
+                <li><a href="{{ path('admin_app_taxrate_list') }}"><i
+                                class="fa fa-angle-double-right"></i>Tax Rate Management</a>
+                </li>
+
+
+                <li><a href="{{ path('admin_app_claimtype_list') }}"><i
+                                class="fa fa-angle-double-right"></i>Claim Type Management</a>
+                </li>
+
+
+                <li><a href="{{ path('admin_app_claimcategory_list') }}"><i
+                                class="fa fa-angle-double-right"></i>Claim Category Management</a>
+                </li>
+
+
+                <li><a href="{{ path('admin_app_currencyexchange_list') }}"><i
+                                class="fa fa-angle-double-right"></i>Currency Management</a>
+                </li>
+
+
+                <li><a href="{{ path('admin_app_companyclaimpolicies_list') }}"><i
+                                class="fa fa-angle-double-right"></i>Claim Policies Management</a>
+                </li>
+
+
+                <li><a href="{{ path('admin_app_approvalamountpolicies_list') }}"><i
+                                class="fa fa-angle-double-right"></i>Approval Amount Management</a>
+                </li>
+
+
+                <li><a href="{{ path('admin_app_employeetype_list') }}"><i
+                                class="fa fa-angle-double-right"></i>Employee Type Management</a>
+                </li>
+
+
+                <li class="last"><a href="{{ path('admin_app_employmenttype_list') }}"><i
+                                class="fa fa-angle-double-right"></i>Employment Type Management</a>
+                </li>
+
+
+            </ul>
+
+        </li>
+    {% elseif app.user.hasRole('ROLE_HR_ADMIN') %}
+        <li class="first"><a href="{{ path('admin_app_company_edit',{'id':app.user.company.id}) }}"><i class="fa fa-folder"></i>My Company</a>
+        </li>
+        <li><a href="{{ path('admin_app_company_user_list',{'id':app.user.company.id}) }}"><i class="fa fa-folder"></i>My Employees</a>
+        </li>
+    {% endif %}
+
+
+</ul>

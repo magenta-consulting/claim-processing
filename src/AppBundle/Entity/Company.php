@@ -37,6 +37,76 @@ class Company
     protected $country;
 
     /**
+     * @var Company
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company",inversedBy="children")
+     */
+    private $parent;
+    /**
+     * @var
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Company",mappedBy="parent",cascade={"remove"})
+     */
+
+    private $children;
+
+
+    /**
+     * @var Company
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     */
+    private $user;
+
+    /**
+     * @return Company
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param Company $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+    
+
+    /**
+     * @return Company
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @param Company $parent
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param mixed $children
+     */
+    public function setChildren($children)
+    {
+        $this->children = $children;
+    }
+
+
+
+    /**
      * @return mixed
      */
     public function getId()

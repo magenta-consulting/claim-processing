@@ -10,6 +10,7 @@ use FOS\UserBundle\Model\UserManagerInterface;
 
 class UserAdmin extends BaseAdmin
 {
+    protected $parentAssociationMapping = 'company';
     public function preUpdate($user)
     {
         $this->getUserManager()->updateCanonicalFields($user);
