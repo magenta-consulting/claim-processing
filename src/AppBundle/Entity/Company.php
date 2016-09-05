@@ -70,7 +70,7 @@ class Company
     {
         $this->user = $user;
     }
-    
+
 
     /**
      * @return Company

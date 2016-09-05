@@ -38,6 +38,15 @@ class BaseAdmin extends AbstractAdmin
         return $this->getContainer()->get('security.token_storage')->getToken()->getUser()->getCompany();
     }
 
+    public function isAdmin()
+    {
+        if ($this->getUser()) {
+            if ($this->getUser()->hasRole('ROLE_ADMIN')) {
+                return true;
+            }
+        }
+        return false;
+    }
     public function isCLient()
     {
         if ($this->getUser()) {
@@ -109,10 +118,12 @@ class BaseAdmin extends AbstractAdmin
 
                 $query->setParameter('company', $company);
             } else {
-                $query->andWhere(
-                    $expr->eq($query->getRootAliases()[0] . '.company', ':company')
-                );
-                $query->setParameter('company', $company);
+                if($this->getClass() !== 'AppBundle\Entity\User'){
+                    $query->andWhere(
+                        $expr->eq($query->getRootAliases()[0] . '.company', ':company')
+                    );
+                    $query->setParameter('company', $company);
+                }
 
             }
         }

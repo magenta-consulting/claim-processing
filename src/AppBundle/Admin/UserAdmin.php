@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Admin;
 
+use AppBundle\Admin\Transformer\RolesTransformer;
 use AppBundle\Entity\User;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -44,6 +45,26 @@ class UserAdmin extends BaseAdmin
             'required' => false,
             'label' => 'Image',
         ]);
+        if($this->isAdmin()){
+                $formMapper->add('roles', 'choice',[
+                    'choices'=>[
+                        'ROLE_CLIENT_ADMIN' =>'ROLE_CLIENT_ADMIN',
+                        'ROLE_HR_ADMIN' =>'ROLE_HR_ADMIN',
+                        'ROLE_USER' =>'ROLE_USER',
+                    ],
+                ]);
+            $formMapper->get('roles')->addModelTransformer(new RolesTransformer());
+        }
+        if($this->isCLient()){
+            $formMapper->add('roles', 'choice',[
+                'choices'=>[
+                    'ROLE_HR_ADMIN' =>'ROLE_HR_ADMIN',
+                    'ROLE_USER' =>'ROLE_USER',
+                ],
+            ]);
+            $formMapper->get('roles')->addModelTransformer(new RolesTransformer());
+        }
+
 
     }
 
