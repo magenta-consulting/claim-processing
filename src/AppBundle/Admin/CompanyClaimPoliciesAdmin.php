@@ -32,8 +32,18 @@ class CompanyClaimPoliciesAdmin extends BaseAdmin
             'placeholder' => 'Select Type',
             'empty_data'  => null
         ));
-        $formMapper->add('cutOffDate', 'number');
-        $formMapper->add('claimablePeriod', 'number',['label'=>'Claimable Period (months)']);
+        $cutOffDate = [];
+        for($i=1;$i<=31;$i++){
+            $cutOffDate[$i]=$i;
+        }
+        $formMapper->add('cutOffDate', 'choice',
+            ['choices'=>$cutOffDate]
+            );
+        $claimablePeriod = [];
+        for($i=1;$i<=31;$i++){
+            $claimablePeriod[$i]=$i;
+        }
+        $formMapper->add('claimablePeriod', 'choice',['label'=>'Claimable Period (months)','choices'=>range(1,12)]);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)

@@ -3,6 +3,7 @@ namespace AppBundle\Admin;
 
 use AppBundle\Entity\Company;
 use AppBundle\Entity\CostCentre;
+use AppBundle\Entity\PayCodeType;
 use AppBundle\Entity\Region;
 use Doctrine\ORM\Query\Expr;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -59,6 +60,7 @@ class BaseAdmin extends AbstractAdmin
         }
         return false;
     }
+
     public function isCLient()
     {
         if ($this->getUser()) {
@@ -94,6 +96,28 @@ class BaseAdmin extends AbstractAdmin
     */
     public function prePersist($object)
     {
+        if ($this->isAdmin()) {
+            //admin current only create a client company (parent = null)
+            if ($object instanceof Company) {
+                $em = $this->getContainer()->get('doctrine')->getManager();
+                //add Pay Code Type: By system default always has “Deductions” and “Allowances”
+                $payCodeType1 = new PayCodeType();
+                $payCodeType1->setName('Deductions');
+                $payCodeType1->setOrderSort(1);
+                $payCodeType1->setEnabled(true);
+                $payCodeType1->setCompany($object);
+                $em->persist($payCodeType1);
+
+                $payCodeType2 = new PayCodeType();
+                $payCodeType2->setName('Allowances');
+                $payCodeType2->setOrderSort(1);
+                $payCodeType2->setEnabled(true);
+                $payCodeType2->setCompany($object);
+                $em->persist($payCodeType2);
+                $em->flush();
+
+            }
+        }
         if ($this->isCLient()) {
             if (!$object instanceof Company) {
                 if (!$object instanceof User) {
@@ -130,7 +154,7 @@ class BaseAdmin extends AbstractAdmin
 
                 $query->setParameter('company', $company);
             } else {
-                if($this->getClass() !== 'AppBundle\Entity\User'){
+                if ($this->getClass() !== 'AppBundle\Entity\User') {
                     $query->andWhere(
                         $expr->eq($query->getRootAliases()[0] . '.company', ':company')
                     );

@@ -29,7 +29,7 @@ class CurrencyExchangeValueAdmin extends BaseAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('exRate',null,['label'=>'Ex. Rate'])
+            ->add('exRate','text',['label'=>'Ex. Rate'])
             ->add('effectiveDate')
             ->add('_action', null, array(
                 'actions' => array(

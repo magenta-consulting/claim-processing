@@ -41,7 +41,7 @@ class PayCodeType
     private $enabled;
     /**
      * @var Company
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company",cascade={"persist"})
      */
     private $company;
 

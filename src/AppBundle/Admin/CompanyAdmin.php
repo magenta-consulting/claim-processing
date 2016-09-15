@@ -68,15 +68,5 @@ class CompanyAdmin extends BaseAdmin
     }
 
 
-    protected function configureRoutes(RouteCollection $collection)
-    {
-
-        if($this->isHr()){
-            $collection->remove('edit');
-            $collection->remove('delete');
-            $collection->remove('list');
-            $collection->remove('create');
-        }
-    }
 
 }
