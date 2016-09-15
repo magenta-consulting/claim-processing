@@ -183,47 +183,6 @@ sonata_admin:
         layout:                         AppBundle:SonataAdmin:standard_layout.html.twig
         edit:                           AppBundle:SonataAdmin/CRUD:edit.html.twig
     title:      Claims
-    dashboard:
-        groups:
-#            my_group:
-#                provider:        'AppBundle:MenuProvider\MenuProvider:mainMenu'
-#                icon:            '<i class="fa fa-edit"></i>'
-
-#            Companies:
-#                on_top:               true
-#                label:                ~
-#                label_catalogue:      ~
-#                items:
-#                    - admin.company
-#                roles: [ ROLE_ADMIN,ROLE_CLIENT_ADMIN,ROLE_CS_ADMIN ]
-#            Companies:
-#                on_top:               true
-#                label:                My Company
-#                label_catalogue:      ~
-#                items:
-#                    - admin.company
-##                roles: [ ROLE_HR_ADMIN ]
-#            Systems:
-#                label:                ~
-#                label_catalogue:      ~
-#                items:
-#                    - admin.claim
-#                    - admin.category
-#                    - admin.cost_centre
-#                    - admin.region
-#                    - admin.branch
-#                    - admin.department
-#                    - admin.section
-#                    - admin.pay_code
-#                    - admin.tax_rate
-#                    - admin.claim_type
-#                    - admin.claim_category
-#                    - admin.currency_exchange
-#                    - admin.company_claim_policies
-#                    - admin.approval_amount_policies
-#                    - admin.employee_type
-#                    - admin.employment_type
-#                roles: [ ROLE_CLIENT_ADMIN,ROLE_CS_ADMIN ]
 
 
 #    title_logo: bundles/app/images/fancy_acme_logo.png

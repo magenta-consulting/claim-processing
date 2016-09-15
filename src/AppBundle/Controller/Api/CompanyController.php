@@ -25,7 +25,6 @@ class CompanyController extends FOSRestController
 
     public function loginAction()
     {
-        $this->redirectToRoute();
         return $this->setSuccessResponse(null,'Login Success');
     }
     public function getAction(Company $company)

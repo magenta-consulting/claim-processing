@@ -11,6 +11,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Sonata\AdminBundle\Route\RouteCollection;
 use AppBundle\Admin\BaseAdmin;
+use Sonata\AdminBundle\Show\ShowMapper;
 
 class CompanyAdmin extends BaseAdmin
 {
@@ -48,6 +49,17 @@ class CompanyAdmin extends BaseAdmin
             ));
     }
 
+    /**
+     * @param ShowMapper $show
+     */
+    protected function configureShowFields(ShowMapper $show)
+    {
+        $show->add('name', 'text');
+        $show->add('address', 'text');
+        $show->add('bizCode', 'text');
+        $show->add('country', 'text');
+    }
+
     public function toString($object)
     {
         return $object instanceof Company
@@ -60,6 +72,7 @@ class CompanyAdmin extends BaseAdmin
     {
 
         if($this->isHr()){
+            $collection->remove('edit');
             $collection->remove('delete');
             $collection->remove('list');
             $collection->remove('create');
