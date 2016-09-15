@@ -13,23 +13,23 @@ class CostCentreAdmin extends BaseAdmin
 {
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('code', 'text');
-        $formMapper->add('description', 'textarea');
+        $formMapper->add('code', 'text',['label'=>'Cost Centre Code']);
+        $formMapper->add('description', 'textarea',['label'=>'Cost Centre Description']);
         $formMapper->add('enabled', 'checkbox', ['required' => false]);
         $formMapper->add('isDefault', 'checkbox', ['required' => false]);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('code')
+        $datagridMapper->add('code',null,['label'=>'Cost Centre Code'])
             ->add('enabled');
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('code')
-            ->add('description')
+            ->addIdentifier('code',null,['label'=>'Cost Centre Code'])
+            ->add('description',null,['label'=>'Cost Centre Description'])
             ->add('enabled', null, array('editable' => true))
             ->add('isDefault', null, array('editable' => true))
             ->add('_action', null, array(

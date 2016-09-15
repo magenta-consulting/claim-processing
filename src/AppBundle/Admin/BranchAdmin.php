@@ -16,22 +16,22 @@ class BranchAdmin extends BaseAdmin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('code', 'text');
-        $formMapper->add('description', 'textarea');
+        $formMapper->add('code', 'text',['label'=>'Branch Code']);
+        $formMapper->add('description', 'textarea',['label'=>'Branch Description']);
         $formMapper->add('enabled', 'checkbox', ['required' => false]);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('code')
+        $datagridMapper->add('code',null,['label'=>'Branch Code'])
             ->add('enabled');
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('code')
-            ->add('description')
+            ->addIdentifier('code',null,['label'=>'Branch Code'])
+            ->add('description',null,['label'=>'Branch Description'])
             ->add('enabled', null, array('editable' => true))
             ->add('_action', null, array(
                 'actions' => array(

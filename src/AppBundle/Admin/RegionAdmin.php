@@ -15,22 +15,22 @@ class RegionAdmin extends BaseAdmin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('code', 'text');
-        $formMapper->add('description', 'textarea');
+        $formMapper->add('code', 'text',['label'=>'Region Code']);
+        $formMapper->add('description', 'textarea',['label'=>'Region Description']);
         $formMapper->add('enabled', 'checkbox', ['required' => false]);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('code')
+        $datagridMapper->add('code',null,['label'=>'Region Code'])
             ->add('enabled');
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('code')
-            ->add('description')
+            ->addIdentifier('code',null,['label'=>'Region Code'])
+            ->add('description',null,['label'=>'Region Description'])
             ->add('enabled', null, array('editable' => true))
             ->add('_action', null, array(
                 'actions' => array(

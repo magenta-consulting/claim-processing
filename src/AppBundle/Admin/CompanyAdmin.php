@@ -19,23 +19,23 @@ class CompanyAdmin extends BaseAdmin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('name', 'text');
-        $formMapper->add('address', 'text');
+        $formMapper->add('name', 'text',['label'=>'Company Name']);
         $formMapper->add('bizCode', 'text');
+        $formMapper->add('address', 'text');
         $formMapper->add('country', 'text');
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('name');
+        $datagridMapper->add('name',null,['label'=>'Company Name']);
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('name')
-            ->add('address')
+            ->addIdentifier('name',null,['label'=>'Company Name'])
             ->add('bizCode')
+            ->add('address')
             ->add('country')
             ->add('_action', null, array(
                 'actions' => array(
@@ -54,7 +54,7 @@ class CompanyAdmin extends BaseAdmin
      */
     protected function configureShowFields(ShowMapper $show)
     {
-        $show->add('name', 'text');
+        $show->add('name', 'text',['label'=>'Company Name']);
         $show->add('address', 'text');
         $show->add('bizCode', 'text');
         $show->add('country', 'text');

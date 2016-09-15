@@ -17,19 +17,19 @@ class CurrencyExchangeValueAdmin extends BaseAdmin
     protected $parentAssociationMapping = 'currencyExchange';
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('exRate', 'number');
+        $formMapper->add('exRate', 'number',['label'=>'Ex. Rate']);
         $formMapper->add('effectiveDate','date',['attr'=>['class'=>'datepicker'],'widget' => 'single_text','format' => 'MM/dd/yyyy']);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('exRate');
+        $datagridMapper->add('exRate',null,['label'=>'Ex. Rate']);
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('exRate')
+            ->add('exRate',null,['label'=>'Ex. Rate'])
             ->add('effectiveDate')
             ->add('_action', null, array(
                 'actions' => array(

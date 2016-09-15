@@ -29,31 +29,32 @@ class PayCodeAdmin extends BaseAdmin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('code', 'text');
-        $formMapper->add('description', 'textarea');
-        $formMapper->add('enabled', 'checkbox', ['required' => false]);
+        $formMapper->add('code', 'text',['label'=>'Pay Code']);
+        $formMapper->add('description', 'textarea',['label'=>'Pay Code Description']);
         $formMapper->add('payCodeType', 'sonata_type_model', array(
             'property' => 'name',
             'query'=>$this->filterPayCodeTypeBycompany(),
             'placeholder' => 'Select Type',
-            'empty_data'  => null
+            'empty_data'  => null,
+            'label'=>'Type'
         ));
+        $formMapper->add('enabled', 'checkbox', ['required' => false]);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('code')
+        $datagridMapper->add('code',null,['label'=>'Pay Code'])
             ->add('enabled')
-            ->add('payCodeType.name');
+            ->add('payCodeType.name',null,['label'=>'Type']);
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('code')
-            ->add('description')
+            ->addIdentifier('code',null,['label'=>'Pay Code'])
+            ->add('description',null,['label'=>'Pay Code Description'])
+            ->add('payCodeType.name',null,['label'=>'Type'])
             ->add('enabled', null, array('editable' => true))
-            ->add('payCodeType.name')
             ->add('_action', null, array(
                 'actions' => array(
                     'delete' => array(),

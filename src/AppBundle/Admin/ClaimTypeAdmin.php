@@ -28,27 +28,28 @@ class ClaimTypeAdmin extends BaseAdmin
     }
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('code', 'text');
-        $formMapper->add('enabled', 'checkbox', ['required' => false]);
+        $formMapper->add('code', 'text',['label'=>'Claim Type Code']);
         $formMapper->add('claimTypeType', 'sonata_type_model', array(
             'property' => 'name',
             'query'=>$this->filterClaimTypeTypeBycompany(),
             'placeholder' => 'Select Type',
-            'empty_data'  => null
+            'empty_data'  => null,
+            'label'=>'Claim Type'
         ));
+        $formMapper->add('enabled', 'checkbox', ['required' => false]);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('code')
+        $datagridMapper->add('code',null,['label'=>'Claim Type Code'])
             ->add('enabled');
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('code')
-            ->add('claimTypeType.name')
+            ->addIdentifier('code',null,['label'=>'Claim Type Code'])
+            ->add('claimTypeType.name',null,['label'=>'Claim Type'])
             ->add('enabled', null, array('editable' => true))
             ->add('_action', null, array(
                 'actions' => array(

@@ -15,20 +15,20 @@ class CurrencyExchangeAdmin extends BaseAdmin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('code', 'text');
-        $formMapper->add('description', 'textarea');
+        $formMapper->add('code', 'text',['label'=>'Currency Code']);
+        $formMapper->add('description', 'textarea',['label'=>'Currency Description']);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('code');
+        $datagridMapper->add('code',null,['label'=>'Currency Code']);
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('code')
-            ->add('description')
+            ->addIdentifier('code',null,['label'=>'Currency Code'])
+            ->add('description',null,['label'=>'Currency Description'])
             ->add('_action', null, array(
                 'actions' => array(
                     'delete' => array(),

@@ -14,22 +14,22 @@ class DepartmentAdmin extends BaseAdmin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('code', 'text');
-        $formMapper->add('description', 'textarea');
+        $formMapper->add('code', 'text',['label'=>'Department Code']);
+        $formMapper->add('description', 'textarea',['label'=>'Department Description']);
         $formMapper->add('enabled', 'checkbox', ['required' => false]);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('code')
+        $datagridMapper->add('code',null,['label'=>'Department Code'])
             ->add('enabled');
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('code')
-            ->add('description')
+            ->addIdentifier('code',null,['label'=>'Department Code'])
+            ->add('description',null,['label'=>'Department Description'])
             ->add('enabled', null, array('editable' => true))
             ->add('_action', null, array(
                 'actions' => array(

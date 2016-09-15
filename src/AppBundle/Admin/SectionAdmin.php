@@ -31,8 +31,8 @@ class SectionAdmin extends BaseAdmin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('code', 'text');
-        $formMapper->add('description', 'textarea');
+        $formMapper->add('code', 'text',['label'=>'Section Code']);
+        $formMapper->add('description', 'textarea',['label'=>'Section Description']);
         $formMapper->add('enabled', 'checkbox', ['required' => false]);
         $formMapper->add('department', 'sonata_type_model', array(
             'property' => 'code',
@@ -44,7 +44,7 @@ class SectionAdmin extends BaseAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('code')
+        $datagridMapper->add('code',null,['label'=>'Section Code'])
             ->add('enabled')
             ->add('department.code');
     }
@@ -52,8 +52,8 @@ class SectionAdmin extends BaseAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('code')
-            ->add('description')
+            ->addIdentifier('code',null,['label'=>'Section Code'])
+            ->add('description',null,['label'=>'Section Description'])
             ->add('enabled', null, array('editable' => true))
             ->add('department.code')
             ->add('_action', null, array(
