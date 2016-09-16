@@ -47,6 +47,29 @@ class CurrencyExchangeValue
     private $company;
 
     /**
+     * @var User
+     * @ORM\Column(name="modifier",type="string")
+     */
+    private $modifier;
+
+    /**
+     * @return User
+     */
+    public function getModifier()
+    {
+        return $this->modifier;
+    }
+
+    /**
+     * @param User $modifier
+     */
+    public function setModifier($modifier)
+    {
+        $this->modifier = $modifier;
+    }
+
+
+    /**
      * @return CurrencyExchange
      */
     public function getCurrencyExchange()
@@ -119,7 +142,6 @@ class CurrencyExchangeValue
     {
         $this->company = $company;
     }
-
 
 
 }
