@@ -33,7 +33,7 @@ class TaxRateAdmin extends BaseAdmin
         $listMapper
             ->addIdentifier('code',null,['label'=>'Tax Code'])
             ->add('description',null,['label'=>'Tax Description'])
-            ->add('rate')
+            ->add('rate',null,['label'=>'Rate (%)'])
             ->add('isLocalDefault', null, array('editable' => true))
             ->add('_action', null, array(
                 'actions' => array(
