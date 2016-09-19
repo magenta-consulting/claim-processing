@@ -26,16 +26,57 @@ class Category
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+
     /**
-     * @var ClaimType
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimType")
+     * @var Company
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
      */
-    private $claimType;
+    private $company;
+
+
     /**
-     * @var ClaimCategory
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimCategory")
+     * @var Company
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
      */
-    private $claimCategory;
+    private $companyGetRule;
+
+
+    /**
+     * @var CostCentre
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CostCentre")
+     */
+    private $costCentre;
+
+    /**
+     * @var Region
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Region")
+     */
+    private $region;
+
+    /**
+     * @var Branch
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Branch")
+     */
+    private $branch;
+
+    /**
+     * @var Department
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Department")
+     */
+    private $department;
+
+    /**
+     * @var Section
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Section")
+     */
+    private $section;
+
+    /**
+     * @var EmploymentType
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\EmployeeType")
+     */
+    private $employeeType;
 
     /**
      * @var PayCode
@@ -49,32 +90,47 @@ class Category
      */
     private $taxRate;
 
+
     /**
-     * @var Company
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
+     * @var ClaimType
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimType")
      */
-    private $company;
+    private $claimType;
+    /**
+     * @var ClaimCategory
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimCategory")
+     */
+    private $claimCategory;
+
+    /**
+     * @var decimal
+     * @ORM\Column(name="claim_limit",type="decimal",precision=11,scale=2)
+     */
+    private $claimLimit;
+
+
     /**
      * @var string
-     * @ORM\Column(name="name",type="string")
+     * @ORM\Column(name="claim_limit_description",type="string")
      */
-    private $name;
+    private $claimLimitDescription;
 
     /**
      * @return string
      */
-    public function getName()
+    public function getClaimLimitDescription()
     {
-        return $this->name;
+        return $this->claimLimitDescription;
     }
 
     /**
-     * @param string $name
+     * @param string $claimLimitDescription
      */
-    public function setName($name)
+    public function setClaimLimitDescription($claimLimitDescription)
     {
-        $this->name = $name;
+        $this->claimLimitDescription = $claimLimitDescription;
     }
+
 
 
     /**
@@ -172,6 +228,136 @@ class Category
     {
         $this->company = $company;
     }
+
+    /**
+     * @return Company
+     */
+    public function getCompanyGetRule()
+    {
+        return $this->companyGetRule;
+    }
+
+    /**
+     * @param Company $companyGetRule
+     */
+    public function setCompanyGetRule($companyGetRule)
+    {
+        $this->companyGetRule = $companyGetRule;
+    }
+
+    /**
+     * @return CostCentre
+     */
+    public function getCostCentre()
+    {
+        return $this->costCentre;
+    }
+
+    /**
+     * @param CostCentre $costCentre
+     */
+    public function setCostCentre($costCentre)
+    {
+        $this->costCentre = $costCentre;
+    }
+
+    /**
+     * @return Region
+     */
+    public function getRegion()
+    {
+        return $this->region;
+    }
+
+    /**
+     * @param Region $region
+     */
+    public function setRegion($region)
+    {
+        $this->region = $region;
+    }
+
+    /**
+     * @return Branch
+     */
+    public function getBranch()
+    {
+        return $this->branch;
+    }
+
+    /**
+     * @param Branch $branch
+     */
+    public function setBranch($branch)
+    {
+        $this->branch = $branch;
+    }
+
+    /**
+     * @return Department
+     */
+    public function getDepartment()
+    {
+        return $this->department;
+    }
+
+    /**
+     * @param Department $department
+     */
+    public function setDepartment($department)
+    {
+        $this->department = $department;
+    }
+
+    /**
+     * @return Section
+     */
+    public function getSection()
+    {
+        return $this->section;
+    }
+
+    /**
+     * @param Section $section
+     */
+    public function setSection($section)
+    {
+        $this->section = $section;
+    }
+
+    /**
+     * @return EmploymentType
+     */
+    public function getEmployeeType()
+    {
+        return $this->employeeType;
+    }
+
+    /**
+     * @param EmploymentType $employeeType
+     */
+    public function setEmployeeType($employeeType)
+    {
+        $this->employeeType = $employeeType;
+    }
+
+    /**
+     * @return decimal
+     */
+    public function getClaimLimit()
+    {
+        return $this->claimLimit;
+    }
+
+    /**
+     * @param decimal $claimLimit
+     */
+    public function setClaimLimit($claimLimit)
+    {
+        $this->claimLimit = $claimLimit;
+    }
+
+
 
 
     
