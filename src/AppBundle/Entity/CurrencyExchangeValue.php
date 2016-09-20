@@ -26,7 +26,7 @@ class CurrencyExchangeValue
 
     /**
      * @var float
-     * @ORM\Column(name="ex_rate",type="float")
+     * @ORM\Column(name="ex_rate",type="string")
      */
     private $exRate;
     /**

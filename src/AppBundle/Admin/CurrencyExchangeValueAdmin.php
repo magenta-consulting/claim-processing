@@ -17,7 +17,7 @@ class CurrencyExchangeValueAdmin extends BaseAdmin
     protected $parentAssociationMapping = 'currencyExchange';
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('exRate', 'number',['label'=>'Ex. Rate']);
+        $formMapper->add('exRate', 'text',['label'=>'Ex. Rate']);
         $formMapper->add('effectiveDate','date',['attr'=>['class'=>'datepicker'],'widget' => 'single_text','format' => 'MM/dd/yyyy']);
     }
 
@@ -30,7 +30,7 @@ class CurrencyExchangeValueAdmin extends BaseAdmin
     {
         $listMapper
             ->add('modifier','text',['label'=>'Modifier'])
-            ->add('exRate','number',['label'=>'Ex. Rate'])
+            ->add('exRate','exrate',['label'=>'Ex. Rate'])
             ->add('effectiveDate')
             ->add('_action', null, array(
                 'actions' => array(

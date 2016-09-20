@@ -20,6 +20,12 @@ class TwigExtension extends \Twig_Extension
     {
         return $this->container->getParameter($name);
     }
+   public function getNumberDecimalDigits($value)
+    {
+        $value = explode('.',$value);
+        return count($value[1]);
+
+    }
 
 
 
@@ -27,6 +33,7 @@ class TwigExtension extends \Twig_Extension
     {
         return array(
             'getParameter' => new \Twig_Function_Method($this, 'getParameter', array('is_safe' => array('html'))),
+            'getNumberDecimalDigits' => new \Twig_Function_Method($this, 'getNumberDecimalDigits', array('is_safe' => array('html'))),
         );
     }
 

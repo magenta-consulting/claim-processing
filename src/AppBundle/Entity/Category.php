@@ -104,7 +104,7 @@ class Category
 
     /**
      * @var decimal
-     * @ORM\Column(name="claim_limit",type="decimal",precision=11,scale=2)
+     * @ORM\Column(name="claim_limit",type="decimal",precision=11,scale=2,nullable=true)
      */
     private $claimLimit;
 
@@ -114,6 +114,30 @@ class Category
      * @ORM\Column(name="claim_limit_description",type="string")
      */
     private $claimLimitDescription;
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="has_claim_limit",type="boolean")
+     */
+    private $hasClaimLimit;
+
+    /**
+     * @return boolean
+     */
+    public function isHasClaimLimit()
+    {
+        return $this->hasClaimLimit;
+    }
+
+    /**
+     * @param boolean $hasClaimLimit
+     */
+    public function setHasClaimLimit($hasClaimLimit)
+    {
+        $this->hasClaimLimit = $hasClaimLimit;
+    }
+
+
 
     /**
      * @return string
