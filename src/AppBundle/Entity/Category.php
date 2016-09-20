@@ -122,6 +122,32 @@ class Category
     private $hasClaimLimit;
 
     /**
+     * @var boolean
+     * @ORM\Column(name="limit_per_year",type="boolean",options={"default":false})
+     */
+    private $limitPerYear;
+
+    /**
+     * @return boolean
+     */
+    public function isLimitPerYear()
+    {
+        return $this->limitPerYear;
+    }
+
+    /**
+     * @param boolean $limitPerYear
+     */
+    public function setLimitPerYear($limitPerYear)
+    {
+        $this->limitPerYear = $limitPerYear;
+    }
+
+
+
+
+
+    /**
      * @return boolean
      */
     public function isHasClaimLimit()

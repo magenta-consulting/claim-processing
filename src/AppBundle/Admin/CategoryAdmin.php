@@ -243,6 +243,10 @@ class CategoryAdmin extends BaseAdmin
             'label' => 'Claim Limit($)',
             'required' => false
         ));
+        $formMapper->add('limitPerYear', null, array(
+            'label' => 'Limit Per Year',
+            'required' => false
+        ));
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -266,6 +270,7 @@ class CategoryAdmin extends BaseAdmin
             ->add('claimLimitDescription', null, ['label' => 'Limit Description'])
             ->add('claimLimit', null, ['label' => 'Claim Limit($)'])
             ->add('hasClaimLimit', null, ['label' => 'Has Claim Limit'])
+            ->add('limitPerYear', null)
             ->add('_action', null, array(
                 'actions' => array(
                     'delete' => array(),
