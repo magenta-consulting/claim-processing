@@ -265,7 +265,6 @@ class CategoryAdmin extends BaseAdmin
             ->add('claimCategory.code', null, ['label' => 'Category Code'])
             ->add('claimCategory.description', null, ['label' => 'Category Description'])
             ->add('taxRate.code', null, ['label' => 'Tax Code'])
-            ->add('taxRate.description', null, ['label' => 'Tax Description'])
             ->add('payCode.code', null, ['label' => 'Pay Code'])
             ->add('claimLimitDescription', null, ['label' => 'Limit Description'])
             ->add('claimLimit', null, ['label' => 'Claim Limit($)'])
