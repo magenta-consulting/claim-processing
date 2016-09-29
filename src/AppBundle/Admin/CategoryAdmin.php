@@ -22,7 +22,7 @@ class CategoryAdmin extends BaseAdmin
 
 
         $formMapper
-            ->with('Group A', array('class' => 'col-md-6'))
+            ->with('Employee Group', array('class' => 'col-md-6'))
             ->add('companyGetRule', 'sonata_type_model', array(
                 'property' => 'name',
                 'query' => $this->filterCompanyBycompany(),
@@ -70,12 +70,28 @@ class CategoryAdmin extends BaseAdmin
                 'required' => false,
                 'btn_add' => false
             ))
-            ->end()
-            ->with('Group B', array('class' => 'col-md-6'))
             ->add('employeeType', 'sonata_type_model', array(
                 'property' => 'code',
                 'query' => $this->filterEmployeeTypeBycompany(),
                 'placeholder' => 'Select Employee Type',
+                'empty_data' => null,
+                'required' => false,
+                'btn_add' => false
+            ))
+            ->end()
+            ->with('Claim Details', array('class' => 'col-md-6'))
+            ->add('claimType', 'sonata_type_model', array(
+                'property' => 'code',
+                'query' => $this->filterClaimTypeBycompany(),
+                'placeholder' => 'Select Type',
+                'empty_data' => null,
+                'required' => false,
+                'btn_add' => false
+            ))
+            ->add('claimCategory', 'sonata_type_model', array(
+                'property' => 'code',
+                'query' => $this->filterClaimCategoryBycompany(),
+                'placeholder' => 'Select Category',
                 'empty_data' => null,
                 'required' => false,
                 'btn_add' => false
@@ -96,25 +112,11 @@ class CategoryAdmin extends BaseAdmin
                 'required' => false,
                 'btn_add' => false
             ))
-            ->add('claimType', 'sonata_type_model', array(
-                'property' => 'code',
-                'query' => $this->filterClaimTypeBycompany(),
-                'placeholder' => 'Select Type',
-                'empty_data' => null,
-                'required' => false,
-                'btn_add' => false
-            ))
-            ->add('claimCategory', 'sonata_type_model', array(
-                'property' => 'code',
-                'query' => $this->filterClaimCategoryBycompany(),
-                'placeholder' => 'Select Category',
-                'empty_data' => null,
-                'required' => false,
-                'btn_add' => false
-            ))
-            ->add('claimLimit', 'number', array(
+
+            ->add('claimLimit', 'money', array(
                 'label' => 'Claim Limit($)',
-                'required' => false
+                'required' => false,
+                'currency'=>'USD'
             ))
             ->add('limitPerYear', null, array(
                 'label' => 'Limit Per Year',

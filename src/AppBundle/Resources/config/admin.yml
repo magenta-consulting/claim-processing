@@ -1,7 +1,7 @@
 services:
-    admin.user_fos:
-            class: AppBundle\Admin\UserAdmin
-            arguments: [~, AppBundle\Entity\User, ~]
+    admin.position:
+            class: AppBundle\Admin\PositionAdmin
+            arguments: [~, AppBundle\Entity\Position, ~]
             tags:
                 - { name: sonata.admin, manager_type: orm, label: User Management }
             calls:
@@ -50,7 +50,7 @@ services:
                 - { name: sonata.admin, manager_type: orm, label: Company Management }
             calls:
                 - [setContainer, ["@service_container"]]
-                - [addChild, ["@admin.user_fos"]]
+                - [addChild, ["@admin.position"]]
     admin.department:
             class: AppBundle\Admin\DepartmentAdmin
             arguments: [~, AppBundle\Entity\Department, ~]

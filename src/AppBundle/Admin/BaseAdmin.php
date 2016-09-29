@@ -71,15 +71,6 @@ class BaseAdmin extends AbstractAdmin
         return false;
     }
 
-    public function isCs()
-    {
-        if ($this->getUser()) {
-            if ($this->getUser()->hasRole('ROLE_CS_ADMIN')) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public function isHr()
     {
@@ -90,6 +81,7 @@ class BaseAdmin extends AbstractAdmin
         }
         return false;
     }
+
 
     /*
     * add company when add new(not effect when update)

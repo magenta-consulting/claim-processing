@@ -17,6 +17,10 @@ services:
             public: false
             tags:
                 - { name: twig.extension }
+    app.security.authentication_handler:
+            class: AppBundle\Handler\AuthenticationHandler
+            public: false
+            arguments: ['@security.http_utils','@service_container','@security.token_storage']
 
 
 

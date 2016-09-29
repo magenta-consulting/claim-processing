@@ -2,6 +2,7 @@
 namespace AppBundle\Admin;
 
 use AppBundle\Admin\Transformer\RolesTransformer;
+use AppBundle\Entity\Position;
 use AppBundle\Entity\User;
 use Doctrine\ORM\Query\Expr;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -11,15 +12,9 @@ use Sonata\AdminBundle\Form\FormMapper;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-class UserAdmin extends BaseAdmin
+class PositionAdmin extends BaseAdmin
 {
     protected $parentAssociationMapping = 'company';
-
-    public function preUpdate($user)
-    {
-        $this->getUserManager()->updateCanonicalFields($user);
-        $this->getUserManager()->updatePassword($user);
-    }
 
     public function setUserManager(UserManagerInterface $userManager)
     {
@@ -33,10 +28,38 @@ class UserAdmin extends BaseAdmin
     {
         return $this->userManager;
     }
+    public function updateUser(){
+        $plainPassword =  $this->getForm()->get('plainPassword')->getData();
+        $email = $this->getForm()->get('email')->getData();
+        $user = $this->getUserManager()->findUserByEmail($email);
+        if(!$user){
+            $user = $this->getUserManager()->createUser();
+            $user->setUsername($email);
+            $user->setEmail($email);
+            $user->setPlainPassword($plainPassword);
+            $user->setEnabled(true);
+            $this->getUserManager()->updateUser($user);
+        }else{
+            $this->getUserManager()->updateCanonicalFields($user);
+            $this->getUserManager()->updatePassword($user);
+        }
+        return $user;
+    }
+    public function preUpdate($position)
+    {
+        $user = $this->updateUser();
+        $position->setUser($user);
+    }
+    public function prePersist($position)
+    {
+        $user = $this->updateUser();
+        $position->setUser($user);
+        parent::prePersist($position);
+    }
+
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $company =1;
         $formMapper
             ->tab('Personal Particulars')
             ->with('Group A',array('class' => 'col-md-6'))
@@ -121,8 +144,7 @@ class UserAdmin extends BaseAdmin
             ])
 //                   }
 //
-            ->add('plainPassword', 'text')
-            ->add('enabled', null, array('required' => false))
+            ->add('plainPassword', 'text',array('mapped'=>false))
             ->end()
             ->end()
 //            /**-------------------**/
@@ -137,18 +159,16 @@ class UserAdmin extends BaseAdmin
             ->add('proxySubmiters', 'sonata_type_model_autocomplete', array(
                 'property' => 'email',
                 'multiple'=>true,
+                'required' => false,
             ))
             ->end()
             ->end();
-        $formMapper->get('roles')->addModelTransformer(new RolesTransformer());
-
 
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('email')
-            ->add('enabled');
+        $datagridMapper->add('email');
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -160,8 +180,6 @@ class UserAdmin extends BaseAdmin
             ->add('username')
             ->add('firstName')
             ->add('lastName')
-            ->add('image')
-            ->add('enabled', null, array('editable' => true))
             ->add('_action', null, array(
                 'actions' => array(
                     'delete' => array(),
@@ -171,7 +189,7 @@ class UserAdmin extends BaseAdmin
 
     public function toString($object)
     {
-        return $object instanceof User
+        return $object instanceof Position
             ? $object->getEmail()
             : 'User'; // shown in the breadcrumb on the create view
     }

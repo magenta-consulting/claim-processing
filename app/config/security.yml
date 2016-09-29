@@ -12,14 +12,6 @@ security:
             id: fos_user.user_provider.username_email
 
     firewalls:
-        api:
-            pattern: ^/api
-            anonymous: ~
-            logout: ~
-
-            guard:
-                authenticators:
-                    - app.api_authenticator
         main:
             pattern: ^/
             form_login:
@@ -29,14 +21,16 @@ security:
                 # csrf_provider: form.csrf_provider
                 default_target_path: /admin/dashboard
                 use_referer: true
+                success_handler: app.security.authentication_handler
+#                failure_handler: app.security.authentication_handler
 
-            logout:       true
+            logout:
+                success_handler: app.security.authentication_handler
             anonymous:    true
 
     access_control:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/doc, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_HR_ADMIN }
-        - { path: ^/api/, role: ROLE_USER }
+        - { path: ^/switch-user, role: IS_AUTHENTICATED_FULLY }

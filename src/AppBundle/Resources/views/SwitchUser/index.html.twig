@@ -1,0 +1,8 @@
+<form method="post">
+    <select name="company">
+        {% for position in positions %}
+        <option value="{{ position.company.id }}">{{ position.company.name }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Submit</button>
+</form>

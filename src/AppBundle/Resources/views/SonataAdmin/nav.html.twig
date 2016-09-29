@@ -81,7 +81,7 @@
     {% elseif app.user.hasRole('ROLE_HR_ADMIN') %}
         <li data-route="admin_app_company_show" class="first"><a href="{{ path('admin_app_company_show',{'id':app.user.company.id}) }}"><i class="fa fa-angle-double-right"></i>My Company</a>
         </li>
-        <li data-route="admin_app_company_user_list" class="last"><a href="{{ path('admin_app_company_user_list',{'id':app.user.company.id}) }}"><i class="fa fa-angle-double-right"></i>My Employees</a>
+        <li data-route="admin_app_company_position_list" class="last"><a href="{{ path('admin_app_company_position_list',{'id':app.user.company.id}) }}"><i class="fa fa-angle-double-right"></i>My Employees</a>
         </li>
     {% endif %}
 </ul>

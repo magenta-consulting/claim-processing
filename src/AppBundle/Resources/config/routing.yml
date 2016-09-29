@@ -1,10 +1,4 @@
-app_company:
-    type: rest
-    resource: AppBundle\Controller\Api\CompanyController
-
-
-app_claim:
-    type: rest
-    parent: app_company
-    resource: AppBundle\Controller\Api\ClaimController
+app_switch_user:
+    path: /switch-user
+    defaults: { _controller: AppBundle:SwitchUser:index}
 
