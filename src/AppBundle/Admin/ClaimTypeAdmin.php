@@ -15,17 +15,7 @@ use Doctrine\ORM\Query\Expr;
 
 class ClaimTypeAdmin extends BaseAdmin
 {
-    public function filterClaimTypeTypeBycompany(){
-        $em = $this->container->get('doctrine')->getManager();
-        $qb = $em->createQueryBuilder();
-        $expr = new Expr();
-        $qb->select('claimTypeType')
-            ->from('AppBundle\Entity\ClaimTypeType','claimTypeType')
-            ->where($expr->eq('claimTypeType.company', ':company'))
-            ->andWhere($expr->eq('claimTypeType.enabled', true))
-            ->setParameter('company', $this->getCompany());
-        return $qb;
-    }
+
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper->add('code', 'text',['label'=>'Claim Type Code']);

@@ -16,28 +16,6 @@ use Doctrine\ORM\Query\Expr;
 
 class ApprovalAmountPoliciesAdmin extends BaseAdmin
 {
-    public function filterClaimTypeBycompany(){
-        $em = $this->container->get('doctrine')->getManager();
-        $qb = $em->createQueryBuilder();
-        $expr = new Expr();
-        $qb->select('claimType')
-            ->from('AppBundle\Entity\ClaimType','claimType')
-            ->where($expr->eq('claimType.company', ':company'))
-            ->andWhere($expr->eq('claimType.enabled', true))
-            ->setParameter('company', $this->getCompany());
-        return $qb;
-    }
-    public function filterCostCentreBycompany(){
-        $em = $this->container->get('doctrine')->getManager();
-        $qb = $em->createQueryBuilder();
-        $expr = new Expr();
-        $qb->select('costCentre')
-            ->from('AppBundle\Entity\CostCentre','costCentre')
-            ->where($expr->eq('costCentre.company', ':company'))
-            ->andWhere($expr->eq('costCentre.enabled', true))
-            ->setParameter('company', $this->getCompany());
-        return $qb;
-    }
 
     protected function configureFormFields(FormMapper $formMapper)
     {

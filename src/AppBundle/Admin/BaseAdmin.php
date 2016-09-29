@@ -173,5 +173,179 @@ class BaseAdmin extends AbstractAdmin
         return $query;
     }
 
+    public function filterCompanyBycompany()
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder();
+        $expr = new Expr();
+        $qb->select('company')
+            ->from('AppBundle\Entity\Company', 'company')
+            ->where(
+                $expr->orX(
+                    $expr->eq('company.parent', ':company'),
+                    $expr->eq('company', ':company')
+                )
+            )
+            ->setParameter('company', $this->getCompany());
+        return $qb;
+    }
+
+    public function filterCostCentreBycompany()
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder();
+        $expr = new Expr();
+        $qb->select('costCentre')
+            ->from('AppBundle\Entity\CostCentre', 'costCentre')
+            ->where($expr->eq('costCentre.company', ':company'))
+            ->andWhere($expr->eq('costCentre.enabled', true))
+            ->setParameter('company', $this->getCompany());
+        return $qb;
+    }
+
+    public function filterRegionBycompany()
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder();
+        $expr = new Expr();
+        $qb->select('region')
+            ->from('AppBundle\Entity\Region', 'region')
+            ->where($expr->eq('region.company', ':company'))
+            ->andWhere($expr->eq('region.enabled', true))
+            ->setParameter('company', $this->getCompany());
+        return $qb;
+    }
+
+    public function filterBranchBycompany()
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder();
+        $expr = new Expr();
+        $qb->select('branch')
+            ->from('AppBundle\Entity\Branch', 'branch')
+            ->where($expr->eq('branch.company', ':company'))
+            ->andWhere($expr->eq('branch.enabled', true))
+            ->setParameter('company', $this->getCompany());
+        return $qb;
+    }
+
+    public function filterDepartmentBycompany()
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder();
+        $expr = new Expr();
+        $qb->select('department')
+            ->from('AppBundle\Entity\Department', 'department')
+            ->where($expr->eq('department.company', ':company'))
+            ->andWhere($expr->eq('department.enabled', true))
+            ->setParameter('company', $this->getCompany());
+        return $qb;
+    }
+
+    public function filterSectionBycompany(){
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder();
+        $expr = new Expr();
+        $qb->select('section')
+            ->from('AppBundle\Entity\Section','section')
+            ->where($expr->eq('section.company', ':company'))
+            ->andWhere($expr->eq('section.enabled', true))
+            ->setParameter('company', $this->getCompany());
+        return $qb;
+    }
+
+    public function filterEmployeeTypeBycompany(){
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder();
+        $expr = new Expr();
+        $qb->select('employeeType')
+            ->from('AppBundle\Entity\EmployeeType','employeeType')
+            ->where($expr->eq('employeeType.company', ':company'))
+            ->setParameter('company', $this->getCompany());
+        return $qb;
+    }
+
+    public function filterClaimTypeBycompany()
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder();
+        $expr = new Expr();
+        $qb->select('claimType')
+            ->from('AppBundle\Entity\ClaimType', 'claimType')
+            ->where($expr->eq('claimType.company', ':company'))
+            ->andWhere($expr->eq('claimType.enabled', true))
+            ->setParameter('company', $this->getCompany());
+        return $qb;
+    }
+
+    public function filterClaimCategoryBycompany()
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder();
+        $expr = new Expr();
+        $qb->select('claimCategory')
+            ->from('AppBundle\Entity\ClaimCategory', 'claimCategory')
+            ->where($expr->eq('claimCategory.company', ':company'))
+            ->setParameter('company', $this->getCompany());
+        return $qb;
+    }
+
+    public function filterTaxRateBycompany()
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder();
+        $expr = new Expr();
+        $qb->select('taxRate')
+            ->from('AppBundle\Entity\TaxRate', 'taxRate')
+            ->where($expr->eq('taxRate.company', ':company'))
+            ->setParameter('company', $this->getCompany());
+        return $qb;
+    }
+
+    public function filterPayCostBycompany()
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder();
+        $expr = new Expr();
+        $qb->select('payCode')
+            ->from('AppBundle\Entity\PayCode', 'payCode')
+            ->where($expr->eq('payCode.company', ':company'))
+            ->andWhere($expr->eq('payCode.enabled', true))
+            ->setParameter('company', $this->getCompany());
+        return $qb;
+    }
+    public function filterClaimTypeTypeBycompany(){
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder();
+        $expr = new Expr();
+        $qb->select('claimTypeType')
+            ->from('AppBundle\Entity\ClaimTypeType','claimTypeType')
+            ->where($expr->eq('claimTypeType.company', ':company'))
+            ->andWhere($expr->eq('claimTypeType.enabled', true))
+            ->setParameter('company', $this->getCompany());
+        return $qb;
+    }
+    public function filterPayCodeTypeBycompany(){
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder();
+        $expr = new Expr();
+        $qb->select('payCodeType')
+            ->from('AppBundle\Entity\PayCodeType','payCodeType')
+            ->where($expr->eq('payCodeType.company', ':company'))
+            ->andWhere($expr->eq('payCodeType.enabled', true))
+            ->setParameter('company', $this->getCompany());
+        return $qb;
+    }
+    public function filterEmploymentTypeBycompany(){
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder();
+        $expr = new Expr();
+        $qb->select('employmentType')
+            ->from('AppBundle\Entity\EmploymentType','employmentType')
+            ->where($expr->eq('employmentType.company', ':company'))
+            ->setParameter('company', $this->getCompany());
+        return $qb;
+    }
+
 
 }

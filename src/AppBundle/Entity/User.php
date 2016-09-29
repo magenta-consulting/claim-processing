@@ -4,6 +4,7 @@
 namespace AppBundle\Entity;
 
 use Application\Sonata\MediaBundle\Entity\Media;
+use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -18,6 +19,7 @@ class User extends BaseUser
     public function __construct()
     {
         $this->createdDate = new \DateTime();
+        $this->proxySubmiters = new ArrayCollection();
         parent::__construct();
         // your own logic
     }
@@ -134,6 +136,31 @@ class User extends BaseUser
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Section")
      */
     private $section;
+
+    /**
+     * @var User
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User")
+     */
+    private $proxySubmiters;
+
+
+    /**
+     * @return User
+     */
+    public function getProxySubmiters()
+    {
+        return $this->proxySubmiters;
+    }
+
+    /**
+     * @param User $proxySubmiters
+     */
+    public function setProxySubmiters($proxySubmiters)
+    {
+        $this->proxySubmiters = $proxySubmiters;
+    }
+
+
 
     /**
      * @return string

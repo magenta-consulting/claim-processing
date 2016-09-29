@@ -17,17 +17,6 @@ class SectionAdmin extends BaseAdmin
 
 
     protected $parentAssociationMapping = 'department';
-    public function filterDepartmentBycompany(){
-        $em = $this->container->get('doctrine')->getManager();
-        $qb = $em->createQueryBuilder();
-        $expr = new Expr();
-        $qb->select('department')
-            ->from('AppBundle\Entity\Department','department')
-            ->where($expr->eq('department.company', ':company'))
-            ->andWhere($expr->eq('department.enabled', true))
-            ->setParameter('company', $this->getCompany());
-        return $qb;
-    }
 
     protected function configureFormFields(FormMapper $formMapper)
     {

@@ -13,17 +13,6 @@ use Doctrine\ORM\Query\Expr;
 class CompanyClaimPoliciesAdmin extends BaseAdmin
 {
 
-    public function filterClaimTypeBycompany(){
-        $em = $this->container->get('doctrine')->getManager();
-        $qb = $em->createQueryBuilder();
-        $expr = new Expr();
-        $qb->select('claimType')
-            ->from('AppBundle\Entity\ClaimType','claimType')
-            ->where($expr->eq('claimType.company', ':company'))
-            ->andWhere($expr->eq('claimType.enabled', true))
-            ->setParameter('company', $this->getCompany());
-        return $qb;
-    }
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper->add('claimType', 'sonata_type_model', array(

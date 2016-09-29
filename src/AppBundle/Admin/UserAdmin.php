@@ -3,86 +3,18 @@ namespace AppBundle\Admin;
 
 use AppBundle\Admin\Transformer\RolesTransformer;
 use AppBundle\Entity\User;
+use Doctrine\ORM\Query\Expr;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use FOS\UserBundle\Model\UserManagerInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class UserAdmin extends BaseAdmin
 {
     protected $parentAssociationMapping = 'company';
 
-
-    public function filterCostCentreBycompany()
-    {
-        $em = $this->container->get('doctrine')->getManager();
-        $qb = $em->createQueryBuilder();
-        $expr = new Expr();
-        $qb->select('costCentre')
-            ->from('AppBundle\Entity\CostCentre', 'costCentre')
-            ->where($expr->eq('costCentre.company', ':company'))
-            ->andWhere($expr->eq('costCentre.enabled', true))
-            ->setParameter('company', $this->getCompany());
-        return $qb;
-    }
-
-    public function filterRegionBycompany()
-    {
-        $em = $this->container->get('doctrine')->getManager();
-        $qb = $em->createQueryBuilder();
-        $expr = new Expr();
-        $qb->select('region')
-            ->from('AppBundle\Entity\Region', 'region')
-            ->where($expr->eq('region.company', ':company'))
-            ->andWhere($expr->eq('region.enabled', true))
-            ->setParameter('company', $this->getCompany());
-        return $qb;
-    }
-
-    public function filterBranchBycompany()
-    {
-        $em = $this->container->get('doctrine')->getManager();
-        $qb = $em->createQueryBuilder();
-        $expr = new Expr();
-        $qb->select('branch')
-            ->from('AppBundle\Entity\Branch', 'branch')
-            ->where($expr->eq('branch.company', ':company'))
-            ->andWhere($expr->eq('branch.enabled', true))
-            ->setParameter('company', $this->getCompany());
-        return $qb;
-    }
-    public function filterSectionBycompany(){
-        $em = $this->container->get('doctrine')->getManager();
-        $qb = $em->createQueryBuilder();
-        $expr = new Expr();
-        $qb->select('section')
-            ->from('AppBundle\Entity\Section','section')
-            ->where($expr->eq('section.company', ':company'))
-            ->andWhere($expr->eq('section.enabled', true))
-            ->setParameter('company', $this->getCompany());
-        return $qb;
-    }
-    public function filterEmployeeTypeBycompany(){
-        $em = $this->container->get('doctrine')->getManager();
-        $qb = $em->createQueryBuilder();
-        $expr = new Expr();
-        $qb->select('employeeType')
-            ->from('AppBundle\Entity\EmployeeType','employeeType')
-            ->where($expr->eq('employeeType.company', ':company'))
-            ->setParameter('company', $this->getCompany());
-        return $qb;
-    }
-    public function filterEmploymentTypeBycompany(){
-        $em = $this->container->get('doctrine')->getManager();
-        $qb = $em->createQueryBuilder();
-        $expr = new Expr();
-        $qb->select('employmentType')
-            ->from('AppBundle\Entity\EmploymentType','employmentType')
-            ->where($expr->eq('employmentType.company', ':company'))
-            ->setParameter('company', $this->getCompany());
-        return $qb;
-    }
     public function preUpdate($user)
     {
         $this->getUserManager()->updateCanonicalFields($user);
@@ -104,22 +36,81 @@ class UserAdmin extends BaseAdmin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
+        $company =1;
         $formMapper
-            ->with('Personal Particulars', array('class' => 'col-md-6'))
+            ->tab('Personal Particulars')
+            ->with('Group A',array('class' => 'col-md-6'))
             ->add('alias', 'text')
             ->add('firstName', 'text')
             ->add('lastName', 'text')
-            ->add('username')
             ->add('email', 'text')
+            ->end()
+            ->with('Group B',array('class' => 'col-md-6'))
             ->add('employeeNo', 'number')
             ->add('contactNumber', 'number')
             ->add('nric', 'number')
             ->end()
-            /**-------------------**/
-            ->with('Employment Details', array('class' => 'col-md-6'))
             ->end()
             /**-------------------**/
-            ->with('User Account Info', array('class' => 'col-md-6'))
+            ->tab('Employment Details')
+            ->with('Group A',array('class' => 'col-md-6'))
+            ->add('employeeType', 'sonata_type_model', array(
+                'property' => 'code',
+                'query' => $this->filterEmployeeTypeBycompany(),
+                'placeholder' => 'Select Employee Type',
+                'empty_data' => null,
+                'required' => false,
+                'btn_add' => false
+            ))
+            ->add('employmentType', 'sonata_type_model', array(
+                'property' => 'code',
+                'query' => $this->filterEmploymentTypeBycompany(),
+                'placeholder' => 'Select Employment Type',
+                'empty_data' => null,
+                'required' => false,
+                'btn_add' => false
+            ))
+            ->add('dateJoined', 'date',['attr'=>['class'=>'datepicker'],'widget' => 'single_text','format' => 'MM/dd/yyyy'])
+            ->add('probation', 'number', array())
+            ->add('lastDateOfService', 'date',['attr'=>['class'=>'datepicker'],'widget' => 'single_text','format' => 'MM/dd/yyyy'])
+            ->end()
+            ->with('Group B',array('class' => 'col-md-6'))
+            ->add('costCentre', 'sonata_type_model', array(
+                'property' => 'code',
+                'query' => $this->filterCostCentreBycompany(),
+                'placeholder' => 'Select Cost Centre',
+                'empty_data' => null,
+                'btn_add' => false
+            ))
+            ->add('region', 'sonata_type_model', array(
+                'property' => 'code',
+                'query' => $this->filterRegionBycompany(),
+                'placeholder' => 'Select Region',
+                'empty_data' => null,
+                'required' => false,
+                'btn_add' => false
+            ))
+            ->add('branch', 'sonata_type_model', array(
+                'property' => 'code',
+                'query' => $this->filterBranchBycompany(),
+                'placeholder' => 'Select Branch',
+                'empty_data' => null,
+                'required' => false,
+                'btn_add' => false
+            ))
+            ->add('section', 'sonata_type_model', array(
+                'property' => 'code',
+                'query' => $this->filterSectionBycompany(),
+                'placeholder' => 'Select Section',
+                'empty_data' => null,
+                'required' => false,
+                'btn_add' => false
+            ))
+            ->end()
+            ->end()
+            /**-------------------**/
+            ->tab('User Account Info')
+            ->with('User Account Info')
 //                   if ($this->isAdmin() || $this->isCLient()) {
             ->add('roles', 'choice', [
                 'choices' => [
@@ -133,11 +124,21 @@ class UserAdmin extends BaseAdmin
             ->add('plainPassword', 'text')
             ->add('enabled', null, array('required' => false))
             ->end()
-//            /**-------------------**/
-            ->with('Claims Approver Details', array('class' => 'col-md-6'))
             ->end()
 //            /**-------------------**/
-            ->with('Appointed Proxy Submitter', array('class' => 'col-md-6'))
+            ->tab('Claims Approver Details')
+            ->with('Claims Approver Details')
+
+            ->end()
+            ->end()
+////            /**-------------------**/
+            ->tab('Appointed Proxy Submitter')
+            ->with('Appointed Proxy Submitter')
+            ->add('proxySubmiters', 'sonata_type_model_autocomplete', array(
+                'property' => 'email',
+                'multiple'=>true,
+            ))
+            ->end()
             ->end();
         $formMapper->get('roles')->addModelTransformer(new RolesTransformer());
 

@@ -15,17 +15,7 @@ use Doctrine\ORM\Query\Expr;
 
 class PayCodeAdmin extends BaseAdmin
 {
-    public function filterPayCodeTypeBycompany(){
-        $em = $this->container->get('doctrine')->getManager();
-        $qb = $em->createQueryBuilder();
-        $expr = new Expr();
-        $qb->select('payCodeType')
-            ->from('AppBundle\Entity\PayCodeType','payCodeType')
-            ->where($expr->eq('payCodeType.company', ':company'))
-            ->andWhere($expr->eq('payCodeType.enabled', true))
-            ->setParameter('company', $this->getCompany());
-        return $qb;
-    }
+
 
     protected function configureFormFields(FormMapper $formMapper)
     {
