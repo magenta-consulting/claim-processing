@@ -40,8 +40,10 @@ class PositionAdmin extends BaseAdmin
             $user->setEnabled(true);
             $this->getUserManager()->updateUser($user);
         }else{
-            $this->getUserManager()->updateCanonicalFields($user);
-            $this->getUserManager()->updatePassword($user);
+            if(!empty($plainPassword)) {
+                $this->getUserManager()->updateCanonicalFields($user);
+                $this->getUserManager()->updatePassword($user);
+            }
         }
         return $user;
     }
@@ -60,6 +62,9 @@ class PositionAdmin extends BaseAdmin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
+        $id = $this->getRequest()->get($this->getIdParameter());
+        $object = $this->getObject($id);
+        $action = $object === null ? 'create':'edit';
         $formMapper
             ->tab('Personal Particulars')
             ->with('Group A',array('class' => 'col-md-6'))
@@ -143,17 +148,20 @@ class PositionAdmin extends BaseAdmin
                 ],
             ])
 //                   }
-//
-            ->add('plainPassword', 'text',array('mapped'=>false))
+
+            ->add('plainPassword', 'text',[
+                'mapped'=>false,
+                'required'=>($action === 'edit' ? false:true)
+            ])
             ->end()
             ->end()
-//            /**-------------------**/
+            /**-------------------**/
             ->tab('Claims Approver Details')
             ->with('Claims Approver Details')
 
             ->end()
             ->end()
-////            /**-------------------**/
+           /**-------------------**/
             ->tab('Appointed Proxy Submitter')
             ->with('Appointed Proxy Submitter')
             ->add('proxySubmiters', 'sonata_type_model_autocomplete', array(
