@@ -19,9 +19,9 @@ class CheckerAdmin extends BaseAdmin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-        
+
         $formMapper
-            ->with('Checker Setup', array('class' => 'col-md-12'))
+            ->with('Checker Setup', array('class' => 'col-md-6'))
             ->add('companySetupChecker', 'sonata_type_model', array(
                 'property' => 'name',
                 'query' => $this->filterCompanyBycompany(),
@@ -71,14 +71,14 @@ class CheckerAdmin extends BaseAdmin
             ))
             ->end()
 
-            ->with('Checker', array('class' => 'col-md-12'))
+            ->with('Checker', array('class' => 'col-md-6'))
             ->add('checker', 'sonata_type_model_autocomplete', array(
                 'property' => 'email',
                 'multiple' => false,
                 'required' => true,
             ))
             ->end()
-            ->with('Backup Checker', array('class' => 'col-md-12'))
+            ->with('Backup Checker', array('class' => 'col-md-6'))
             ->add('backupChecker', 'sonata_type_model_autocomplete', array(
                 'property' => 'email',
                 'multiple' => false,
