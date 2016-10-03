@@ -136,6 +136,9 @@ class User extends BaseUser implements EquatableInterface
         $this->company = $company;
     }
 
+    
+
+
 
 
 

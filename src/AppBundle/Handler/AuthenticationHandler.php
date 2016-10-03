@@ -15,7 +15,7 @@ use Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 
-class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, AuthenticationFailureHandlerInterface,LogoutSuccessHandlerInterface
+class AuthenticationHandler implements AuthenticationSuccessHandlerInterface,LogoutSuccessHandlerInterface
 {
 
     protected $httpUtils;
@@ -98,51 +98,28 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, Au
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {
-        $user = $token->getUser();
         $urlRedirect = $this->determineTargetUrl($request);
+        if($this->container->get('security.authorization_checker')->isGranted('ROLE_ADMIN', null)){
+            return $this->httpUtils->createRedirectResponse($request, $this->options['default_target_path']);
+        }
         if ($urlRedirect == $this->options['default_target_path']) {
             $urlRedirect = $this->container->get('router')->generate('app_switch_user', [], true);
         }
-        if ($request->isXmlHttpRequest()) {
-            $array = array('success' => true, 'urlTarget' => $urlRedirect); // data to return via JSON
-            $response = new JsonResponse($array);
-            return $response;
-        } else {
-            return $this->httpUtils->createRedirectResponse($request, $urlRedirect);
-        }
+        return $this->httpUtils->createRedirectResponse($request, $urlRedirect);
     }
 
-    /**
-     * onAuthenticationFailure
-     *
-     * @author    Joe Sexton <joe@webtipblog.com>
-     * @param    Request $request
-     * @param    AuthenticationException $exception
-     * @return    Response
-     */
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
-    {
-        // if AJAX login
-        if ($request->isXmlHttpRequest()) {
-            $array = array('success' => false, 'message' => $exception->getMessage()); // data to return via JSON
-            $response = new JsonResponse($array);
-            return $response;
 
-            // if form login
-        } else {
-            $urlRedirect = $this->container->get('router')->generate('fos_user_security_login', array(), true);
-            return new RedirectResponse($urlRedirect);
-        }
-    }
 
     public function onLogoutSuccess(Request $request)
     {
-        $em = $this->container->get('doctrine')->getManager();
-        $user = $this->tokenStorage->getToken()->getUser();
-        $user->setRoles([]);
-        $user->setCompany(null);
-        $em->persist($user);
-        $em->flush();
+        if(!$this->container->get('security.authorization_checker')->isGranted('ROLE_ADMIN', null)) {
+            $em = $this->container->get('doctrine')->getManager();
+            $user = $this->tokenStorage->getToken()->getUser();
+            $user->setRoles([]);
+            $user->setCompany(null);
+            $em->persist($user);
+            $em->flush();
+        }
         $urlRedirect = $this->container->get('router')->generate('fos_user_security_login', array(), true);
         return new RedirectResponse($urlRedirect);
     }

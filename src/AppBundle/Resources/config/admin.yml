@@ -153,3 +153,10 @@ services:
                 - { name: sonata.admin, manager_type: orm, label: Employment Type Management }
             calls:
                 - [setContainer, ["@service_container"]]
+    admin.checker:
+            class: AppBundle\Admin\CheckerAdmin
+            arguments: [~, AppBundle\Entity\Checker, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Checker Grouping }
+            calls:
+                - [setContainer, ["@service_container"]]

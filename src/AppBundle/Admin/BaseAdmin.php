@@ -48,7 +48,12 @@ class BaseAdmin extends AbstractAdmin
 
     public function getCompany()
     {
-        return $this->getContainer()->get('security.token_storage')->getToken()->getUser()->getCompany();
+        $company = $this->getContainer()->get('security.token_storage')->getToken()->getUser()->getCompany();
+        //is admin
+        if($company === null){
+
+        }
+        return $company;
     }
 
     public function isAdmin()

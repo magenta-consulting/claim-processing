@@ -28,30 +28,34 @@ class PositionAdmin extends BaseAdmin
     {
         return $this->userManager;
     }
-    public function updateUser(){
-        $plainPassword =  $this->getForm()->get('plainPassword')->getData();
+
+    public function updateUser()
+    {
+        $plainPassword = $this->getForm()->get('plainPassword')->getData();
         $email = $this->getForm()->get('email')->getData();
         $user = $this->getUserManager()->findUserByEmail($email);
-        if(!$user){
+        if (!$user) {
             $user = $this->getUserManager()->createUser();
             $user->setUsername($email);
             $user->setEmail($email);
             $user->setPlainPassword($plainPassword);
             $user->setEnabled(true);
             $this->getUserManager()->updateUser($user);
-        }else{
-            if(!empty($plainPassword)) {
+        } else {
+            if (!empty($plainPassword)) {
                 $this->getUserManager()->updateCanonicalFields($user);
                 $this->getUserManager()->updatePassword($user);
             }
         }
         return $user;
     }
+
     public function preUpdate($position)
     {
         $user = $this->updateUser();
         $position->setUser($user);
     }
+
     public function prePersist($position)
     {
         $user = $this->updateUser();
@@ -64,51 +68,67 @@ class PositionAdmin extends BaseAdmin
     {
         $id = $this->getRequest()->get($this->getIdParameter());
         $object = $this->getObject($id);
-        $action = $object === null ? 'create':'edit';
+        $action = $object === null ? 'create' : 'edit';
+        $require = $this->isAdmin() ? false:true;
+        if ($this->getCompany()->getParent()===null) {
+            //if this is a company client will have 3 role
+            $roles = [
+                'ROLE_CLIENT_ADMIN' => 'ROLE_CLIENT_ADMIN',
+                'ROLE_HR_ADMIN' => 'ROLE_HR_ADMIN',
+                'ROLE_USER' => 'ROLE_USER',
+            ];
+        } else {
+            //if this is a sub company will have 2 role
+            $roles = [
+                'ROLE_HR_ADMIN' => 'ROLE_HR_ADMIN',
+                'ROLE_USER' => 'ROLE_USER',
+            ];
+        }
         $formMapper
             ->tab('Personal Particulars')
-            ->with('Group A',array('class' => 'col-md-6'))
-            ->add('alias', 'text')
+            ->with('Group A', array('class' => 'col-md-6'))
+            ->add('alias', 'text',['required' => false])
             ->add('firstName', 'text')
             ->add('lastName', 'text')
             ->add('email', 'text')
             ->end()
-            ->with('Group B',array('class' => 'col-md-6'))
+            ->with('Group B', array('class' => 'col-md-6'))
             ->add('employeeNo', 'number')
-            ->add('contactNumber', 'number')
-            ->add('nric', 'number')
+            ->add('contactNumber', 'number',['required' => false])
+            ->add('nric', 'number',['label'=>'NRIC/Fin No'])
             ->end()
             ->end()
             /**-------------------**/
             ->tab('Employment Details')
-            ->with('Group A',array('class' => 'col-md-6'))
+            ->with('Group A', array('class' => 'col-md-6'))
             ->add('employeeType', 'sonata_type_model', array(
                 'property' => 'code',
                 'query' => $this->filterEmployeeTypeBycompany(),
                 'placeholder' => 'Select Employee Type',
                 'empty_data' => null,
-                'required' => false,
-                'btn_add' => false
+                'btn_add' => false,
+                'required'=>$require
             ))
             ->add('employmentType', 'sonata_type_model', array(
                 'property' => 'code',
                 'query' => $this->filterEmploymentTypeBycompany(),
                 'placeholder' => 'Select Employment Type',
                 'empty_data' => null,
-                'required' => false,
-                'btn_add' => false
+                'btn_add' => false,
+                'required'=>$require
             ))
-            ->add('dateJoined', 'date',['attr'=>['class'=>'datepicker'],'widget' => 'single_text','format' => 'MM/dd/yyyy'])
-            ->add('probation', 'number', array())
-            ->add('lastDateOfService', 'date',['attr'=>['class'=>'datepicker'],'widget' => 'single_text','format' => 'MM/dd/yyyy'])
+            ->add('dateJoined', 'date', ['attr' => ['class' => 'datepicker'], 'widget' => 'single_text', 'format' => 'MM/dd/yyyy','required'=>false])
+            ->add('probation', 'number',['label'=>'Probation (Month)','required'=>false])
+            ->add('lastDateOfService', 'date', ['attr' => ['class' => 'datepicker'], 'widget' => 'single_text', 'format' => 'MM/dd/yyyy','required'=>false])
             ->end()
-            ->with('Group B',array('class' => 'col-md-6'))
+            ->with('Group B', array('class' => 'col-md-6'))
             ->add('costCentre', 'sonata_type_model', array(
                 'property' => 'code',
                 'query' => $this->filterCostCentreBycompany(),
                 'placeholder' => 'Select Cost Centre',
                 'empty_data' => null,
-                'btn_add' => false
+                'btn_add' => false,
+                'required'=>$require
             ))
             ->add('region', 'sonata_type_model', array(
                 'property' => 'code',
@@ -139,38 +159,31 @@ class PositionAdmin extends BaseAdmin
             /**-------------------**/
             ->tab('User Account Info')
             ->with('User Account Info')
-//                   if ($this->isAdmin() || $this->isCLient()) {
             ->add('roles', 'choice', [
-                'choices' => [
-                    'ROLE_CLIENT_ADMIN' => 'ROLE_CLIENT_ADMIN',
-                    'ROLE_HR_ADMIN' => 'ROLE_HR_ADMIN',
-                    'ROLE_USER' => 'ROLE_USER',
-                ],
+                'choices' => $roles
             ])
-//                   }
-
-            ->add('plainPassword', 'text',[
-                'mapped'=>false,
-                'required'=>($action === 'edit' ? false:true)
+            ->add('plainPassword', 'text', [
+                'mapped' => false,
+                'required' => ($action === 'edit' ? false : true)
             ])
             ->end()
             ->end()
             /**-------------------**/
             ->tab('Claims Approver Details')
             ->with('Claims Approver Details')
-
             ->end()
             ->end()
-           /**-------------------**/
+            /**-------------------**/
             ->tab('Appointed Proxy Submitter')
             ->with('Appointed Proxy Submitter')
             ->add('proxySubmiters', 'sonata_type_model_autocomplete', array(
                 'property' => 'email',
-                'multiple'=>true,
+                'multiple' => true,
                 'required' => false,
             ))
             ->end()
             ->end();
+        $formMapper->get('roles')->addModelTransformer(new RolesTransformer());
 
     }
 
@@ -182,12 +195,15 @@ class PositionAdmin extends BaseAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('email', null, array(
+            ->addIdentifier('employeeNo', null, array(
+                'sortable' => 'email',
+            ))->add('email', null, array(
                 'sortable' => 'email',
             ))
-            ->add('username')
             ->add('firstName')
             ->add('lastName')
+            ->add('contactNumber')
+            ->add('nric',null,['label'=>'NRIC/Fin No'])
             ->add('_action', null, array(
                 'actions' => array(
                     'delete' => array(),

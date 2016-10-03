@@ -13,12 +13,13 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Position
 {
-
+    const ROLE_DEFAULT = 'ROLE_USER';
 
     public function __construct()
     {
         $this->createdDate = new \DateTime();
         $this->proxySubmiters = new ArrayCollection();
+        $this->roles = array();
         // your own logic
     }
     public function __toString()
@@ -71,7 +72,7 @@ class Position
 
     /**
      * @var string
-     * @ORM\Column(name="roles",type="string")
+     * @ORM\Column(name="roles",type="array")
      */
     private $roles;
     /**
@@ -117,19 +118,19 @@ class Position
 
     /**
      * @var \DateTime
-     * @ORM\Column(name="date_joined",type="date")
+     * @ORM\Column(name="date_joined",type="date",nullable=true)
      */
     private $dateJoined;
 
     /**
      * @var float
-     * @ORM\Column(name="probation",type="float")
+     * @ORM\Column(name="probation",type="float",nullable=true)
      */
     private $probation;
 
     /**
      * @var \DateTime
-     * @ORM\Column(name="last_date_of_service",type="date")
+     * @ORM\Column(name="last_date_of_service",type="date",nullable=true)
      */
     private $lastDateOfService;
 
@@ -500,20 +501,68 @@ class Position
     }
 
     /**
-     * @return string
+     * Returns the user roles
+     *
+     * @return array The roles
      */
     public function getRoles()
     {
-        return $this->roles;
+        $roles = $this->roles;
+
+        // we need to make sure to have at least one role
+        $roles[] = static::ROLE_DEFAULT;
+
+        return array_unique($roles);
+    }
+    public function setRoles(array $roles)
+    {
+        $this->roles = array();
+
+        foreach ($roles as $role) {
+            $this->addRole($role);
+        }
+
+        return $this;
+    }
+    /**
+     * Never use this to check if this user has access to anything!
+     *
+     * Use the SecurityContext, or an implementation of AccessDecisionManager
+     * instead, e.g.
+     *
+     *         $securityContext->isGranted('ROLE_USER');
+     *
+     * @param string $role
+     *
+     * @return boolean
+     */
+    public function hasRole($role)
+    {
+        return in_array(strtoupper($role), $this->getRoles(), true);
+    }
+    public function addRole($role)
+    {
+        $role = strtoupper($role);
+        if ($role === static::ROLE_DEFAULT) {
+            return $this;
+        }
+
+        if (!in_array($role, $this->roles, true)) {
+            $this->roles[] = $role;
+        }
+
+        return $this;
+    }
+    public function removeRole($role)
+    {
+        if (false !== $key = array_search(strtoupper($role), $this->roles, true)) {
+            unset($this->roles[$key]);
+            $this->roles = array_values($this->roles);
+        }
+
+        return $this;
     }
 
-    /**
-     * @param string $role
-     */
-    public function setRoles($roles)
-    {
-        $this->roles = $roles;
-    }
 
     /**
      * @return string
