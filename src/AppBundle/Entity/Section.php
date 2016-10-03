@@ -39,11 +39,6 @@ class Section
      * @ORM\Column(name="description",type="string")
      */
     private $description;
-    /**
-     * @var Department
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Department")
-     */
-    private $department;
 
     /**
      * @var Company
@@ -131,21 +126,6 @@ class Section
         $this->description = $description;
     }
 
-    /**
-     * @return Department
-     */
-    public function getDepartment()
-    {
-        return $this->department;
-    }
-
-    /**
-     * @param Department $department
-     */
-    public function setDepartment($department)
-    {
-        $this->department = $department;
-    }
 
     
 

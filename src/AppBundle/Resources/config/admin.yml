@@ -58,7 +58,6 @@ services:
                 - { name: sonata.admin, manager_type: orm, label: Department Management }
             calls:
                 - [setContainer, ["@service_container"]]
-                - [addChild, ["@admin.section"]]
     admin.section:
             class: AppBundle\Admin\SectionAdmin
             arguments: [~, AppBundle\Entity\Section, ~]
