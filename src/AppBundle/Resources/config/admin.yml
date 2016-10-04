@@ -7,6 +7,13 @@ services:
             calls:
                 - [setContainer, ["@service_container"]]
                 - [setUserManager, ["@fos_user.user_manager"]]
+    admin.position_submitter:
+            class: AppBundle\Admin\PositionSubmitterAdmin
+            arguments: [~, AppBundle\Entity\PositionSubmitter, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: User Management }
+            calls:
+                - [setContainer, ["@service_container"]]
     admin.claim:
             class: AppBundle\Admin\ClaimAdmin
             arguments: [~, AppBundle\Entity\Claim, ~]

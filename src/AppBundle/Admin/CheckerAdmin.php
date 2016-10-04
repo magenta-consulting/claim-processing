@@ -72,17 +72,15 @@ class CheckerAdmin extends BaseAdmin
             ->end()
 
             ->with('Checker', array('class' => 'col-md-6'))
-            ->add('checker', 'sonata_type_model_autocomplete', array(
-                'property' => 'email',
-                'multiple' => false,
+            ->add('checker', 'sonata_type_model_list', array(
                 'required' => true,
+                'btn_add'=>false,
             ))
             ->end()
             ->with('Backup Checker', array('class' => 'col-md-6'))
-            ->add('backupChecker', 'sonata_type_model_autocomplete', array(
-                'property' => 'email',
-                'multiple' => false,
+            ->add('backupChecker', 'sonata_type_model_list', array(
                 'required' => true,
+                'btn_add'=>false,
             ))
             ->end();
 

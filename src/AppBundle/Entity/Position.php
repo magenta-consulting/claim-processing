@@ -18,7 +18,8 @@ class Position
     public function __construct()
     {
         $this->createdDate = new \DateTime();
-        $this->proxySubmiters = new ArrayCollection();
+        $this->submissionBy = new ArrayCollection();
+        $this->submissionFor = new ArrayCollection();
         $this->roles = array();
         // your own logic
     }
@@ -160,9 +161,15 @@ class Position
 
     /**
      * @var Position
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Position")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PositionSubmitter",mappedBy="submissionByPosition",cascade={"all"})
      */
-    private $proxySubmiters;
+    private $submissionBy;
+
+    /**
+     * @var Position
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PositionSubmitter",mappedBy="submissionForPosition",cascade={"all"})
+     */
+    private $submissionFor;
 
     /**
      * @return mixed
@@ -171,14 +178,62 @@ class Position
     {
         return $this->id;
     }
+    public function addSubmissionBy(PositionSubmitter $submissionBy){
+        $this->submissionBy->add($submissionBy);
+        $submissionBy->setSubmissionByPosition($this);
+
+    }
+    public function removeSubmissionBy(PositionSubmitter $submissionBy)
+    {
+        $this->submissionBy->removeElement($submissionBy);
+        $submissionBy->setSubmissionByPosition($this);
+    }
+    public function addSubmissionFor(PositionSubmitter $submissionFor){
+        $this->submissionFor->add($submissionFor);
+        $submissionFor->setSubmissionForPosition($this);
+
+    }
+    public function removeSubmissionFor(PositionSubmitter $submissionFor)
+    {
+        $this->submissionFor->removeElement($submissionFor);
+        $submissionFor->setSubmissionForPosition($this);
+    }
 
     /**
-     * @param mixed $id
+     * @return Position
      */
-    public function setId($id)
+    public function getSubmissionBy()
     {
-        $this->id = $id;
+        return $this->submissionBy;
     }
+
+    /**
+     * @param Position $submissionBy
+     */
+    public function setSubmissionBy($submissionBy)
+    {
+        $this->submissionBy = $submissionBy;
+    }
+
+    /**
+     * @return Position
+     */
+    public function getSubmissionFor()
+    {
+        return $this->submissionFor;
+    }
+
+    /**
+     * @param Position $submissionFor
+     */
+    public function setSubmissionFor($submissionFor)
+    {
+        $this->submissionFor = $submissionFor;
+    }
+
+
+
+
 
     /**
      * @return string
@@ -468,21 +523,6 @@ class Position
         $this->section = $section;
     }
 
-    /**
-     * @return User
-     */
-    public function getProxySubmiters()
-    {
-        return $this->proxySubmiters;
-    }
-
-    /**
-     * @param User $proxySubmiters
-     */
-    public function setProxySubmiters($proxySubmiters)
-    {
-        $this->proxySubmiters = $proxySubmiters;
-    }
 
     /**
      * @return User
@@ -562,8 +602,6 @@ class Position
 
         return $this;
     }
-
-
     /**
      * @return string
      */
