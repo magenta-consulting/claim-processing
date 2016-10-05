@@ -7,6 +7,7 @@
  */
 
 namespace AppBundle\Entity;
+
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,8 +17,6 @@ use Doctrine\Common\Collections\Criteria;
  * @ORM\Entity
  * @ORM\Table(name="category")
  */
-
-
 class Category
 {
 
@@ -146,9 +145,6 @@ class Category
     }
 
 
-
-
-
     /**
      * @return boolean
      */
@@ -166,7 +162,6 @@ class Category
     }
 
 
-
     /**
      * @return string
      */
@@ -182,7 +177,6 @@ class Category
     {
         $this->claimLimitDescription = $claimLimitDescription;
     }
-
 
 
     /**
@@ -410,26 +404,51 @@ class Category
     }
 
 
-//    public function validate(ExecutionContextInterface $context, $payload)
-//    {
-//        $company = $this->getCompany();
-//        if($company->getCategories()) {
-//            $expr = Criteria::expr();
-//            $criteria = Criteria::create();
-//            $criteria->where($expr->eq('claimLimitDescription', $this->claimLimitDescription))
-//                ->andWhere($expr->neq('id', $this->id));
-//            $categories = $company->getCategories()->matching($criteria);
-//            if (count($categories)) {
-//                $context->buildViolation('This value is exist')
-////                ->atPath('employeeNo')
-//                    ->addViolation();
-//            }
-//        }
-//    }
+    public function validate(ExecutionContextInterface $context, $payload)
+    {
+        $company = $this->getCompany();
+        $this->claimLimitDescription = $this->buildRule($this);
+        $expr = Criteria::expr();
+        $criteria = Criteria::create();
+        $criteria->where($expr->eq('claimLimitDescription', $this->claimLimitDescription))
+            ->andWhere($expr->neq('id', $this->id));
+        $categories = $company->getCategories()->matching($criteria);
+        if (count($categories)) {
+            $context->buildViolation('This rule is exist')
+                ->addViolation();
+        }
+    }
 
+    public function buildRule(Category $category)
+    {
+        $listRule = [];
+        $listRule[] = $category->getCompanyGetRule()->getName();
+        $listRule[] = $category->getCostCentre()->getCode();
+        if ($category->getRegion()) {
+            $listRule[] = $category->getRegion()->getCode();
+        }
+        if ($category->getBranch()) {
+            $listRule[] = $category->getBranch()->getCode();
+        }
+        if ($category->getDepartment()) {
+            $listRule[] = $category->getDepartment()->getCode();
+        }
+        if ($category->getSection()) {
+            $listRule[] = $category->getSection()->getCode();
+        }
+        if ($category->getEmployeeType()) {
+            $listRule[] = $category->getEmployeeType()->getCode();
+        }
+        if ($category->getClaimType()) {
+            $listRule[] = $category->getClaimType()->getCode();
+        }
+        if ($category->getClaimCategory()) {
+            $listRule[] = $category->getClaimCategory()->getCode();
+        }
 
+        $listRuleStr = implode('>', $listRule);
+        return $listRuleStr;
+    }
 
-
-    
 
 }
