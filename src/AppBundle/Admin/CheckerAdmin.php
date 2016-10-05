@@ -100,13 +100,15 @@ class CheckerAdmin extends BaseAdmin
     {
         $listMapper
             ->addIdentifier('companySetupChecker.name', null, array(
+                'label'=>'Company'
             ))
-            ->add('costCentre.code')
-            ->add('region.code')
-            ->add('branch.code')
-            ->add('department.code')
-            ->add('checker.firstName')
-            ->add('backupChecker.firstName')
+            ->add('costCentre.code',null,['label'=>'Cost Centre'])
+            ->add('region.code',null,['label'=>'Region'])
+            ->add('branch.code',null,['label'=>'Branch'])
+            ->add('department.code',null,['lable'=>'Department'])
+            ->add('section.code',null,['lable'=>'Section'])
+            ->add('checker.firstName',null,['label'=>'Checker'])
+            ->add('backupChecker.firstName',null,['label'=>'Backup Checker'])
             ->add('_action', null, array(
                 'actions' => array(
                     'delete' => array(),

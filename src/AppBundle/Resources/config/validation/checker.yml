@@ -1,0 +1,3 @@
+AppBundle\Entity\Checker:
+    constraints:
+        - Callback: validate

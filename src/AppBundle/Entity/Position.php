@@ -3,6 +3,8 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\Criteria;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Application\Sonata\MediaBundle\Entity\Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -38,7 +40,7 @@ class Position
 
     /**
      * @var Media
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company",inversedBy="positions")
      */
     private $company;
 
@@ -89,13 +91,13 @@ class Position
     private $contactNumber;
     /**
      * @var integer
-     * @ORM\Column(name="employee_no",type="integer")
+     * @ORM\Column(name="employee_no",type="string")
      */
     private $employeeNo;
 
     /**
      * @var integer
-     * @ORM\Column(name="nric",type="integer")
+     * @ORM\Column(name="nric",type="string",nullable=true)
      */
     private $nric;
 
@@ -154,6 +156,12 @@ class Position
     private $branch;
 
     /**
+     * @var Department
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Department")
+     */
+    private $department;
+
+    /**
      * @var Section
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Section")
      */
@@ -161,15 +169,16 @@ class Position
 
     /**
      * @var Position
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PositionSubmitter",mappedBy="submissionByPosition",cascade={"all"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PositionSubmitter",mappedBy="submissionByPosition",cascade={"all"},orphanRemoval=true)
      */
     private $submissionBy;
 
     /**
      * @var Position
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PositionSubmitter",mappedBy="submissionForPosition",cascade={"all"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PositionSubmitter",mappedBy="submissionForPosition",cascade={"all"},orphanRemoval=true)
      */
     private $submissionFor;
+
 
     /**
      * @return mixed
@@ -186,7 +195,7 @@ class Position
     public function removeSubmissionBy(PositionSubmitter $submissionBy)
     {
         $this->submissionBy->removeElement($submissionBy);
-        $submissionBy->setSubmissionByPosition($this);
+        $submissionBy->setSubmissionByPosition(null);
     }
     public function addSubmissionFor(PositionSubmitter $submissionFor){
         $this->submissionFor->add($submissionFor);
@@ -196,7 +205,7 @@ class Position
     public function removeSubmissionFor(PositionSubmitter $submissionFor)
     {
         $this->submissionFor->removeElement($submissionFor);
-        $submissionFor->setSubmissionForPosition($this);
+        $submissionFor->setSubmissionForPosition(null);
     }
 
     /**
@@ -616,6 +625,49 @@ class Position
     public function setEmail($email)
     {
         $this->email = $email;
+    }
+
+    /**
+     * @return Department
+     */
+    public function getDepartment()
+    {
+        return $this->department;
+    }
+
+    /**
+     * @param Department $department
+     */
+    public function setDepartment($department)
+    {
+        $this->department = $department;
+    }
+
+
+
+    public function validate(ExecutionContextInterface $context, $payload)
+    {
+        $company = $this->getCompany();
+        $expr = Criteria::expr();
+        $criteria = Criteria::create();
+        $criteria->where($expr->eq('employeeNo',$this->employeeNo))
+                ->andWhere($expr->neq('id',$this->id));
+        $positions = $company->getPositions()->matching($criteria);
+        if(count($positions)) {
+            $context->buildViolation('This value is exist')
+                ->atPath('employeeNo')
+                ->addViolation();
+        }
+        $proxySubmitters = $this->getSubmissionBy();
+        foreach ($proxySubmitters as $proxySubmitter){
+            $position = $proxySubmitter->getSubmissionForPosition();
+            if($position && $position->getId() === $this->getId()){
+                $context->buildViolation('Proxy submitter must be difference with current employee')
+                    ->atPath('submissionBy')
+                    ->addViolation();
+                break;
+            }
+        }
     }
 
 

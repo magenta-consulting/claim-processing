@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -50,26 +51,58 @@ class Company
 
 
     /**
-     * @var Company
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     * @var Position
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Position",mappedBy="company")
      */
-    private $user;
+    private $positions;
+
 
     /**
-     * @return Company
+     * @var Category
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Category",mappedBy="company")
      */
-    public function getUser()
+    private $categories;
+
+    public function __construct()
     {
-        return $this->user;
+        $this->positions = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     /**
-     * @param Company $user
+     * @return Category
      */
-    public function setUser($user)
+    public function getCategories()
     {
-        $this->user = $user;
+        return $this->categories;
     }
+
+    /**
+     * @param Category $categories
+     */
+    public function setCategories($categories)
+    {
+        $this->categories = $categories;
+    }
+
+
+
+    /**
+     * @return Position
+     */
+    public function getPositions()
+    {
+        return $this->positions;
+    }
+
+    /**
+     * @param Position $positions
+     */
+    public function setPositions($positions)
+    {
+        $this->positions = $positions;
+    }
+
 
 
     /**

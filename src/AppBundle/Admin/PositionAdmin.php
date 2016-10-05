@@ -50,7 +50,8 @@ class PositionAdmin extends BaseAdmin
         }
         return $user;
     }
-    private function addSubmissionBy($position,$submissionBy)
+
+    private function addSubmissionBy($position, $submissionBy)
     {
         foreach ($submissionBy as $submissionBy) {
             $position->addSubmissionBy($submissionBy);
@@ -63,7 +64,7 @@ class PositionAdmin extends BaseAdmin
         $user = $this->updateUser();
         $position->setUser($user);
         //proxy position(bug sonata admin)
-        $this->addSubmissionBy($position,$position->getSubmissionBy());
+        $this->addSubmissionBy($position, $position->getSubmissionBy());
 
     }
 
@@ -74,16 +75,12 @@ class PositionAdmin extends BaseAdmin
         $user = $this->updateUser();
         $position->setUser($user);
         //proxy position(bug sonata admin)
-        $this->addSubmissionBy($position,$position->getSubmissionBy());
+        $this->addSubmissionBy($position, $position->getSubmissionBy());
     }
+
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-        if ($this->hasParentFieldDescription()) {
-            $parameters = $this->getParentFieldDescription()->getOption('link_parameters', array());
-        }else{
-            $parameters=[];
-        }
         $id = $this->getRequest()->get($this->getIdParameter());
         $object = $this->getObject($id);
         $action = $object === null ? 'create' : 'edit';
@@ -101,121 +98,180 @@ class PositionAdmin extends BaseAdmin
                 'ROLE_USER' => 'ROLE_USER',
             ];
         }
-            $formMapper
-                ->tab('Personal Particulars')
+        $formMapper
+            ->tab('Personal Particulars')
+            ->with('Group A', array('class' => 'col-md-6'))
+            ->add('alias', 'text', ['required' => false])
+            ->add('firstName', 'text')
+            ->add('lastName', 'text')
+            ->add('email', 'text')
+            ->end()
+            ->with('Group B', array('class' => 'col-md-6'))
+            ->add('employeeNo', 'text')
+            ->add('contactNumber', 'number', ['required' => false])
+            ->add('nric', 'text', ['label' => 'NRIC/Fin No', 'required' => false])
+            ->end()
+            ->end();
+        /**-------------------**/
+        if ($this->isCLient() || $this->isHr()) {
+            $formMapper->tab('Employment Details')
                 ->with('Group A', array('class' => 'col-md-6'))
-                ->add('alias', 'text', ['required' => false])
-                ->add('firstName', 'text')
-                ->add('lastName', 'text')
-                ->add('email', 'text')
+                ->add('employeeType', 'sonata_type_model', array(
+                    'property' => 'code',
+                    'query' => $this->filterEmployeeTypeBycompany(),
+                    'placeholder' => 'Select Employee Type',
+                    'empty_data' => null,
+                    'btn_add' => false,
+                ))
+                ->add('employmentType', 'sonata_type_model', array(
+                    'property' => 'code',
+                    'query' => $this->filterEmploymentTypeBycompany(),
+                    'placeholder' => 'Select Employment Type',
+                    'empty_data' => null,
+                    'btn_add' => false,
+                ))
+                ->add('dateJoined', 'date', ['attr' => ['class' => 'datepicker'], 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'required' => false])
+                ->add('probation', 'number', ['label' => 'Probation (Month)', 'required' => false])
+                ->add('lastDateOfService', 'date', ['attr' => ['class' => 'datepicker'], 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'required' => false])
                 ->end()
                 ->with('Group B', array('class' => 'col-md-6'))
-                ->add('employeeNo', 'number')
-                ->add('contactNumber', 'number', ['required' => false])
-                ->add('nric', 'number', ['label' => 'NRIC/Fin No'])
+                ->add('costCentre', 'sonata_type_model', array(
+                    'property' => 'code',
+                    'query' => $this->filterCostCentreBycompany(),
+                    'placeholder' => 'Select Cost Centre',
+                    'empty_data' => null,
+                    'btn_add' => false,
+                ))
+                ->add('region', 'sonata_type_model', array(
+                    'property' => 'code',
+                    'query' => $this->filterRegionBycompany(),
+                    'placeholder' => 'Select Region',
+                    'empty_data' => null,
+                    'required' => false,
+                    'btn_add' => false
+                ))
+                ->add('branch', 'sonata_type_model', array(
+                    'property' => 'code',
+                    'query' => $this->filterBranchBycompany(),
+                    'placeholder' => 'Select Branch',
+                    'empty_data' => null,
+                    'required' => false,
+                    'btn_add' => false
+                ))
+                ->add('department', 'sonata_type_model', array(
+                    'property' => 'code',
+                    'query' => $this->filterDepartmentBycompany(),
+                    'placeholder' => 'Select Department',
+                    'empty_data' => null,
+                    'required' => false,
+                    'btn_add' => false
+                ))
+                ->add('section', 'sonata_type_model', array(
+                    'property' => 'code',
+                    'query' => $this->filterSectionBycompany(),
+                    'placeholder' => 'Select Section',
+                    'empty_data' => null,
+                    'required' => false,
+                    'btn_add' => false
+                ))
                 ->end()
                 ->end();
-            /**-------------------**/
-            if ($this->isCLient() || $this->isHr()) {
-                $formMapper->tab('Employment Details')
-                    ->with('Group A', array('class' => 'col-md-6'))
-                    ->add('employeeType', 'sonata_type_model', array(
-                        'property' => 'code',
-                        'query' => $this->filterEmployeeTypeBycompany(),
-                        'placeholder' => 'Select Employee Type',
-                        'empty_data' => null,
-                        'btn_add' => false,
-                    ))
-                    ->add('employmentType', 'sonata_type_model', array(
-                        'property' => 'code',
-                        'query' => $this->filterEmploymentTypeBycompany(),
-                        'placeholder' => 'Select Employment Type',
-                        'empty_data' => null,
-                        'btn_add' => false,
-                    ))
-                    ->add('dateJoined', 'date', ['attr' => ['class' => 'datepicker'], 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'required' => false])
-                    ->add('probation', 'number', ['label' => 'Probation (Month)', 'required' => false])
-                    ->add('lastDateOfService', 'date', ['attr' => ['class' => 'datepicker'], 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'required' => false])
-                    ->end()
-                    ->with('Group B', array('class' => 'col-md-6'))
-                    ->add('costCentre', 'sonata_type_model', array(
-                        'property' => 'code',
-                        'query' => $this->filterCostCentreBycompany(),
-                        'placeholder' => 'Select Cost Centre',
-                        'empty_data' => null,
-                        'btn_add' => false,
-                    ))
-                    ->add('region', 'sonata_type_model', array(
-                        'property' => 'code',
-                        'query' => $this->filterRegionBycompany(),
-                        'placeholder' => 'Select Region',
-                        'empty_data' => null,
-                        'required' => false,
-                        'btn_add' => false
-                    ))
-                    ->add('branch', 'sonata_type_model', array(
-                        'property' => 'code',
-                        'query' => $this->filterBranchBycompany(),
-                        'placeholder' => 'Select Branch',
-                        'empty_data' => null,
-                        'required' => false,
-                        'btn_add' => false
-                    ))
-                    ->add('section', 'sonata_type_model', array(
-                        'property' => 'code',
-                        'query' => $this->filterSectionBycompany(),
-                        'placeholder' => 'Select Section',
-                        'empty_data' => null,
-                        'required' => false,
-                        'btn_add' => false
-                    ))
-                    ->end()
-                    ->end();
-            }
+        }
 
+        /**-------------------**/
+        $formMapper->tab('User Account Info')
+            ->with('User Account Info')
+            ->add('roles', 'choice', [
+                'choices' => $roles
+            ])
+            ->add('plainPassword', 'text', [
+                'mapped' => false,
+                'required' => ($action === 'edit' ? false : true)
+            ])
+            ->end()
+            ->end();
+
+        if ($this->isCLient() || $this->isHr()) {
             /**-------------------**/
-            $formMapper->tab('User Account Info')
-                ->with('User Account Info')
-                ->add('roles', 'choice', [
-                    'choices' => $roles
-                ])
-                ->add('plainPassword', 'text', [
-                    'mapped' => false,
-                    'required' => ($action === 'edit' ? false : true)
-                ])
+            $formMapper->tab('Claims Approver Details')
+                ->with('Claims Approver Details')
                 ->end()
                 ->end();
+        }
 
-            if ($this->isCLient() || $this->isHr()) {
-                /**-------------------**/
-                $formMapper->tab('Claims Approver Details')
-                    ->with('Claims Approver Details')
-                    ->end()
-                    ->end();
-            }
-
-            /**-------------------**/
-            $formMapper->tab('Appointed Proxy Submitter')
-                ->with('Appointed Proxy Submitter')
-
-                ->add('submissionBy', 'sonata_type_collection', array('required' => false,
-                ), array(
-                        'edit' => 'inline',
-                        'inline' => 'table',
-//                        'sortable' => 'email',
-                        'link_parameters' => [],
-                        'admin_code' => 'admin.position_submitter',
-                    )
+        /**-------------------**/
+        $formMapper->tab('Appointed Proxy Submitter')
+            ->with('Appointed Proxy Submitter')
+            ->add('submissionBy', 'sonata_type_collection', array('required' => false,
+            ), array(
+                    'edit' => 'inline',
+                    'inline' => 'table',
+                    'link_parameters' => [],
+                    'admin_code' => 'admin.position_submitter',
                 )
-                ->end()
-                ->end();
-            $formMapper->get('roles')->addModelTransformer(new RolesTransformer());
+            )
+            ->end()
+            ->end();
+        $formMapper->get('roles')->addModelTransformer(new RolesTransformer());
 
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('email');
+        $datagridMapper->add('search_by', 'doctrine_orm_callback', array(
+            'callback' => function ($queryBuilder, $alias, $field, $value) {
+                if (!$value['value']) {
+                    return;
+                }
+                $expr = new Expr();
+                $queryBuilder->andWhere($expr->orX(
+                    $alias . '.email LIKE :email',
+                    $alias . '.firstName LIKE :firstName',
+                    $alias . '.employeeNo LIKE :employeeNo',
+                    $alias . '.contactNumber LIKE :contactNumber'
+                ));
+                $queryBuilder->setParameter('email', '%' . $value['value'] . '%');
+                $queryBuilder->setParameter('firstName', '%' . $value['value'] . '%');
+                $queryBuilder->setParameter('employeeNo', '%' . $value['value'] . '%');
+                $queryBuilder->setParameter('contactNumber', '%' . $value['value'] . '%');
+
+                return true;
+            },
+            'field_type' => 'text',
+            'field_options'=>['attr'=>['placeholder' => 'Name, Email, Employee No, NRIC/Fin']],
+
+        ));
+        $datagridMapper->add('company', null, array(), 'entity', array(
+            'class' => 'AppBundle\Entity\Company',
+            'choice_label' => 'name',
+            'query_builder' => $this->filterCompanyBycompany(),
+        ));
+        $datagridMapper->add('costCentre', null, array(), 'entity', array(
+            'class' => 'AppBundle\Entity\CostCentre',
+            'choice_label' => 'code',
+            'query_builder' => $this->filterCostCentreBycompany(),
+        ));
+        $datagridMapper->add('region', null, array(), 'entity', array(
+            'class' => 'AppBundle\Entity\Region',
+            'choice_label' => 'code',
+            'query_builder' => $this->filterRegionBycompany(),
+        ));
+        $datagridMapper->add('branch', null, array(), 'entity', array(
+            'class' => 'AppBundle\Entity\Branch',
+            'choice_label' => 'code',
+            'query_builder' => $this->filterBranchBycompany(),
+        ));
+        $datagridMapper->add('department', null, array(), 'entity', array(
+            'class' => 'AppBundle\Entity\Department',
+            'choice_label' => 'code',
+            'query_builder' => $this->filterDepartmentBycompany(),
+        ));
+        $datagridMapper->add('section', null, array(), 'entity', array(
+            'class' => 'AppBundle\Entity\Section',
+            'choice_label' => 'code',
+            'query_builder' => $this->filterSectionBycompany(),
+        ));
+
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -228,7 +284,7 @@ class PositionAdmin extends BaseAdmin
             ))
             ->add('firstName')
             ->add('lastName')
-            ->add('contactNumber')
+            ->add('contactNumber', 'text')
             ->add('nric', null, ['label' => 'NRIC/Fin No'])
             ->add('_action', null, array(
                 'actions' => array(

@@ -3,6 +3,7 @@
 
 namespace AppBundle\Entity;
 
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Application\Sonata\MediaBundle\Entity\Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -262,6 +263,19 @@ class Checker
     public function setDepartment($department)
     {
         $this->department = $department;
+    }
+
+    public function validate(ExecutionContextInterface $context, $payload)
+    {
+        if($this->getBackupChecker()) {
+            if($this->getChecker()){
+                if($this->getBackupChecker()->getId() === $this->getChecker()->getId()) {
+                    $context->buildViolation('Backup Checker must be difference with checker')
+                        ->atPath('backupChecker')
+                        ->addViolation();
+                }
+            }
+        }
     }
 
 

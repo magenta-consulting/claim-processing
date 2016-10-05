@@ -7,8 +7,10 @@
  */
 
 namespace AppBundle\Entity;
-use Application\Sonata\MediaBundle\Entity\Media;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * @ORM\Entity
@@ -30,7 +32,7 @@ class Category
 
     /**
      * @var Company
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company",inversedBy="categories")
      */
     private $company;
 
@@ -406,6 +408,24 @@ class Category
     {
         $this->claimLimit = $claimLimit;
     }
+
+
+//    public function validate(ExecutionContextInterface $context, $payload)
+//    {
+//        $company = $this->getCompany();
+//        if($company->getCategories()) {
+//            $expr = Criteria::expr();
+//            $criteria = Criteria::create();
+//            $criteria->where($expr->eq('claimLimitDescription', $this->claimLimitDescription))
+//                ->andWhere($expr->neq('id', $this->id));
+//            $categories = $company->getCategories()->matching($criteria);
+//            if (count($categories)) {
+//                $context->buildViolation('This value is exist')
+////                ->atPath('employeeNo')
+//                    ->addViolation();
+//            }
+//        }
+//    }
 
 
 

@@ -1,4 +1,5 @@
 services:
+
     admin.position:
             class: AppBundle\Admin\PositionAdmin
             arguments: [~, AppBundle\Entity\Position, ~]
