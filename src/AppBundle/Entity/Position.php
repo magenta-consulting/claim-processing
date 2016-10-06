@@ -648,24 +648,26 @@ class Position
     public function validate(ExecutionContextInterface $context, $payload)
     {
         $company = $this->getCompany();
-        $expr = Criteria::expr();
-        $criteria = Criteria::create();
-        $criteria->where($expr->eq('employeeNo',$this->employeeNo))
-                ->andWhere($expr->neq('id',$this->id));
-        $positions = $company->getPositions()->matching($criteria);
-        if(count($positions)) {
-            $context->buildViolation('This value is exist')
-                ->atPath('employeeNo')
-                ->addViolation();
-        }
-        $proxySubmitters = $this->getSubmissionBy();
-        foreach ($proxySubmitters as $proxySubmitter){
-            $position = $proxySubmitter->getSubmissionForPosition();
-            if($position && $position->getId() === $this->getId()){
-                $context->buildViolation('Proxy submitter must be difference with current employee')
-                    ->atPath('submissionBy')
+        if($company) {
+            $expr = Criteria::expr();
+            $criteria = Criteria::create();
+            $criteria->where($expr->eq('employeeNo', $this->employeeNo))
+                ->andWhere($expr->neq('id', $this->id));
+            $positions = $company->getPositions()->matching($criteria);
+            if (count($positions)) {
+                $context->buildViolation('This value is exist')
+                    ->atPath('employeeNo')
                     ->addViolation();
-                break;
+            }
+            $proxySubmitters = $this->getSubmissionBy();
+            foreach ($proxySubmitters as $proxySubmitter) {
+                $position = $proxySubmitter->getSubmissionForPosition();
+                if ($position && $position->getId() === $this->getId()) {
+                    $context->buildViolation('Proxy submitter must be difference with current employee')
+                        ->atPath('submissionBy')
+                        ->addViolation();
+                    break;
+                }
             }
         }
     }
