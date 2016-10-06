@@ -12,6 +12,8 @@ use Sonata\AdminBundle\Form\FormMapper;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Sonata\CoreBundle\Validator\ErrorElement;
+use libphonenumber\PhoneNumberFormat;
+use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
 
 class PositionAdmin extends BaseAdmin
 {
@@ -108,7 +110,7 @@ class PositionAdmin extends BaseAdmin
             ->end()
             ->with('Group B', array('class' => 'col-md-6'))
             ->add('employeeNo', 'text')
-            ->add('contactNumber', 'number', ['required' => false])
+            ->add('contactNumber', PhoneNumberType::class, array('widget' => PhoneNumberType::WIDGET_COUNTRY_CHOICE, 'country_choices' => array('SG'), 'preferred_country_choices' => array('SG')))
             ->add('nric', 'text', ['label' => 'NRIC/Fin No', 'required' => false])
             ->end()
             ->end();
@@ -284,7 +286,7 @@ class PositionAdmin extends BaseAdmin
             ))
             ->add('firstName')
             ->add('lastName')
-            ->add('contactNumber', 'text')
+            ->add('contactNumber')
             ->add('nric', null, ['label' => 'NRIC/Fin No'])
             ->add('_action', null, array(
                 'actions' => array(

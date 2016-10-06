@@ -38,10 +38,9 @@ class AppKernel extends Kernel
 
             new Liip\ImagineBundle\LiipImagineBundle(),
 
-            new FOS\RestBundle\FOSRestBundle(),
-            new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             new UserBundle\UserBundle(),
             new Sonata\IntlBundle\SonataIntlBundle(),
+            new Misd\PhoneNumberBundle\MisdPhoneNumberBundle(),
 
             new AppBundle\AppBundle(),
 

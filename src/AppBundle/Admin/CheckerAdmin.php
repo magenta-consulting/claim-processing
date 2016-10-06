@@ -22,7 +22,7 @@ class CheckerAdmin extends BaseAdmin
 
         $formMapper
             ->with('Checker Setup', array('class' => 'col-md-6'))
-            ->add('companySetupChecker', 'sonata_type_model', array(
+            ->add('companySetupApprover', 'sonata_type_model', array(
                 'property' => 'name',
                 'query' => $this->filterCompanyBycompany(),
                 'placeholder' => 'Select Company',
@@ -35,6 +35,7 @@ class CheckerAdmin extends BaseAdmin
                 'query' => $this->filterCostCentreBycompany(),
                 'placeholder' => 'Select Cost Centre',
                 'empty_data' => null,
+                'required' => false,
                 'btn_add' => false
             ))
             ->add('region', 'sonata_type_model', array(
@@ -88,12 +89,37 @@ class CheckerAdmin extends BaseAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('companySetupChecker.name', null, ['label' => 'Company']);
-        $datagridMapper->add('costCentre.code', null, ['label' => 'Cost Centre']);
-        $datagridMapper->add('region.code', null, ['label' => 'Region']);
-        $datagridMapper->add('branch.code', null, ['label' => 'Branch']);
-        $datagridMapper->add('department.code', null, ['label' => 'Department']);
-        $datagridMapper->add('section.code', null, ['label' => 'Section']);
+
+        $datagridMapper->add('companySetupChecker', null, array(), 'entity', array(
+            'class' => 'AppBundle\Entity\Company',
+            'choice_label' => 'name',
+            'query_builder' => $this->filterCompanyBycompany(),
+        ));
+        $datagridMapper->add('costCentre', null, array(), 'entity', array(
+            'class' => 'AppBundle\Entity\CostCentre',
+            'choice_label' => 'code',
+            'query_builder' => $this->filterCostCentreBycompany(),
+        ));
+        $datagridMapper->add('region', null, array(), 'entity', array(
+            'class' => 'AppBundle\Entity\Region',
+            'choice_label' => 'code',
+            'query_builder' => $this->filterRegionBycompany(),
+        ));
+        $datagridMapper->add('branch', null, array(), 'entity', array(
+            'class' => 'AppBundle\Entity\Branch',
+            'choice_label' => 'code',
+            'query_builder' => $this->filterBranchBycompany(),
+        ));
+        $datagridMapper->add('department', null, array(), 'entity', array(
+            'class' => 'AppBundle\Entity\Department',
+            'choice_label' => 'code',
+            'query_builder' => $this->filterDepartmentBycompany(),
+        ));
+        $datagridMapper->add('section', null, array(), 'entity', array(
+            'class' => 'AppBundle\Entity\Section',
+            'choice_label' => 'code',
+            'query_builder' => $this->filterSectionBycompany(),
+        ));
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -105,8 +131,8 @@ class CheckerAdmin extends BaseAdmin
             ->add('costCentre.code',null,['label'=>'Cost Centre'])
             ->add('region.code',null,['label'=>'Region'])
             ->add('branch.code',null,['label'=>'Branch'])
-            ->add('department.code',null,['lable'=>'Department'])
-            ->add('section.code',null,['lable'=>'Section'])
+            ->add('department.code',null,['label'=>'Department'])
+            ->add('section.code',null,['label'=>'Section'])
             ->add('checker.firstName',null,['label'=>'Checker'])
             ->add('backupChecker.firstName',null,['label'=>'Backup Checker'])
             ->add('_action', null, array(

@@ -86,7 +86,7 @@ class Position
 
     /**
      * @var integer
-     * @ORM\Column(name="contact_number",type="integer",nullable=true)
+     * @ORM\Column(name="contact_number",type="phone_number",nullable=true)
      */
     private $contactNumber;
     /**

@@ -16,45 +16,163 @@ use Doctrine\ORM\Mapping as ORM;
 class ApprovalAmountPolicies
 {
 
+
+    public function __construct()
+    {
+        $this->createdDate = new \DateTime();
+    }
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer",options={"unsigned":true})
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * @var CostCentre
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CostCentre")
-     */
-    private $costCentre;
-    /**
-     * @var ClaimType
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimType")
-     */
-    private $claimType;
-
-    /**
-     * @var float
-     * @ORM\Column(name="approval1max",type="float",nullable=true)
-     */
-    private $approval1Max;
-    /**
-     * @var float
-     * @ORM\Column(name="approval2max",type="float",nullable=true)
-     */
-    private $approval2Max;
-    /**
-     * @var float
-     * @ORM\Column(name="approval3max",type="float",nullable=true)
-     */
-    private $approval3Max;
-
     /**
      * @var Company
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
      */
     private $company;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="created_date",type="datetime")
+     */
+    private $createdDate;
+
+    /**
+     * @var Media
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
+     */
+    private $companySetupApproval;
+    /**
+     * @var CostCentre
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CostCentre")
+     */
+    private $costCentre;
+
+    /**
+     * @var Region
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Region")
+     */
+    private $region;
+
+    /**
+     * @var Branch
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Branch")
+     */
+    private $branch;
+
+    /**
+     * @var Section
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Department")
+     */
+    private $department;
+    /**
+     * @var Section
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Section")
+     */
+    private $section;
+
+    /**
+     * @var EmployeeType
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\EmployeeType")
+     */
+    private $employeeType;
+
+    /**
+     * @var Position
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     */
+    private $approver1;
+    /**
+     * @var Position
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     */
+    private $approver2;
+    /**
+     * @var Position
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     */
+    private $approver3;
+
+    /**
+     * @var Position
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     */
+    private $backupApprover1;
+    /**
+     * @var Position
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     */
+    private $backupApprover2;
+    /**
+     * @var Position
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     */
+    private $backupApprover3;
+
+    /**
+     * @var Position
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     */
+    private $overrideApprover1;
+    /**
+     * @var Position
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     */
+    private $overrideApprover2;
+    /**
+     * @var Position
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     */
+    private $overrideApprover3;
+
+    /**
+     * @var float
+     * @ORM\Column(name="approval1amount",type="float",nullable=true)
+     */
+    private $approval1Amount;
+    /**
+     * @var float
+     * @ORM\Column(name="approval2amount",type="float",nullable=true)
+     */
+    private $approval2Amount;
+    /**
+     * @var float
+     * @ORM\Column(name="approval3amount",type="float",nullable=true)
+     */
+    private $approval3Amount;
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="approval1amount_status",type="boolean")
+     */
+    private $approval1AmountStatus;
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="approval2amount_status",type="boolean")
+     */
+    private $approval2AmountStatus;
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="approval3amount_status",type="boolean")
+     */
+    private $approval3AmountStatus;
+
+
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+
 
     /**
      * @return Company
@@ -73,19 +191,35 @@ class ApprovalAmountPolicies
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
-    public function getId()
+    public function getCreatedDate()
     {
-        return $this->id;
+        return $this->createdDate;
     }
 
     /**
-     * @param mixed $id
+     * @param \DateTime $createdDate
      */
-    public function setId($id)
+    public function setCreatedDate($createdDate)
     {
-        $this->id = $id;
+        $this->createdDate = $createdDate;
+    }
+
+    /**
+     * @return Media
+     */
+    public function getCompanySetupApproval()
+    {
+        return $this->companySetupApproval;
+    }
+
+    /**
+     * @param Media $companySetupApproval
+     */
+    public function setCompanySetupApproval($companySetupApproval)
+    {
+        $this->companySetupApproval = $companySetupApproval;
     }
 
     /**
@@ -105,68 +239,334 @@ class ApprovalAmountPolicies
     }
 
     /**
-     * @return ClaimType
+     * @return Region
      */
-    public function getClaimType()
+    public function getRegion()
     {
-        return $this->claimType;
+        return $this->region;
     }
 
     /**
-     * @param ClaimType $claimType
+     * @param Region $region
      */
-    public function setClaimType($claimType)
+    public function setRegion($region)
     {
-        $this->claimType = $claimType;
+        $this->region = $region;
     }
 
     /**
-     * @return string
+     * @return Branch
      */
-    public function getApproval1Max()
+    public function getBranch()
     {
-        return $this->approval1Max;
+        return $this->branch;
     }
 
     /**
-     * @param string $approval1Max
+     * @param Branch $branch
      */
-    public function setApproval1Max($approval1Max)
+    public function setBranch($branch)
     {
-        $this->approval1Max = $approval1Max;
+        $this->branch = $branch;
     }
 
     /**
-     * @return string
+     * @return Section
      */
-    public function getApproval2Max()
+    public function getDepartment()
     {
-        return $this->approval2Max;
+        return $this->department;
     }
 
     /**
-     * @param string $approval2Max
+     * @param Section $department
      */
-    public function setApproval2Max($approval2Max)
+    public function setDepartment($department)
     {
-        $this->approval2Max = $approval2Max;
+        $this->department = $department;
     }
 
     /**
-     * @return string
+     * @return Section
      */
-    public function getApproval3Max()
+    public function getSection()
     {
-        return $this->approval3Max;
+        return $this->section;
     }
 
     /**
-     * @param string $approval3Max
+     * @param Section $section
      */
-    public function setApproval3Max($approval3Max)
+    public function setSection($section)
     {
-        $this->approval3Max = $approval3Max;
+        $this->section = $section;
     }
+
+    /**
+     * @return EmployeeType
+     */
+    public function getEmployeeType()
+    {
+        return $this->employeeType;
+    }
+
+    /**
+     * @param EmployeeType $employeeType
+     */
+    public function setEmployeeType($employeeType)
+    {
+        $this->employeeType = $employeeType;
+    }
+
+    /**
+     * @return Position
+     */
+    public function getApprover1()
+    {
+        return $this->approver1;
+    }
+
+    /**
+     * @param Position $approver1
+     */
+    public function setApprover1($approver1)
+    {
+        $this->approver1 = $approver1;
+    }
+
+    /**
+     * @return Position
+     */
+    public function getApprover2()
+    {
+        return $this->approver2;
+    }
+
+    /**
+     * @param Position $approver2
+     */
+    public function setApprover2($approver2)
+    {
+        $this->approver2 = $approver2;
+    }
+
+    /**
+     * @return Position
+     */
+    public function getApprover3()
+    {
+        return $this->approver3;
+    }
+
+    /**
+     * @param Position $approver3
+     */
+    public function setApprover3($approver3)
+    {
+        $this->approver3 = $approver3;
+    }
+
+    /**
+     * @return Position
+     */
+    public function getBackupApprover1()
+    {
+        return $this->backupApprover1;
+    }
+
+    /**
+     * @param Position $backupApprover1
+     */
+    public function setBackupApprover1($backupApprover1)
+    {
+        $this->backupApprover1 = $backupApprover1;
+    }
+
+    /**
+     * @return Position
+     */
+    public function getBackupApprover2()
+    {
+        return $this->backupApprover2;
+    }
+
+    /**
+     * @param Position $backupApprover2
+     */
+    public function setBackupApprover2($backupApprover2)
+    {
+        $this->backupApprover2 = $backupApprover2;
+    }
+
+    /**
+     * @return Position
+     */
+    public function getBackupApprover3()
+    {
+        return $this->backupApprover3;
+    }
+
+    /**
+     * @param Position $backupApprover3
+     */
+    public function setBackupApprover3($backupApprover3)
+    {
+        $this->backupApprover3 = $backupApprover3;
+    }
+
+    /**
+     * @return float
+     */
+    public function getApproval1Amount()
+    {
+        return $this->approval1Amount;
+    }
+
+    /**
+     * @param float $approval1Amount
+     */
+    public function setApproval1Amount($approval1Amount)
+    {
+        $this->approval1Amount = $approval1Amount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getApproval2Amount()
+    {
+        return $this->approval2Amount;
+    }
+
+    /**
+     * @param float $approval2Amount
+     */
+    public function setApproval2Amount($approval2Amount)
+    {
+        $this->approval2Amount = $approval2Amount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getApproval3Amount()
+    {
+        return $this->approval3Amount;
+    }
+
+    /**
+     * @param float $approval3Amount
+     */
+    public function setApproval3Amount($approval3Amount)
+    {
+        $this->approval3Amount = $approval3Amount;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isApproval1AmountStatus()
+    {
+        return $this->approval1AmountStatus;
+    }
+
+    /**
+     * @param boolean $approval1AmountStatus
+     */
+    public function setApproval1AmountStatus($approval1AmountStatus)
+    {
+        $this->approval1AmountStatus = $approval1AmountStatus;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isApproval2AmountStatus()
+    {
+        return $this->approval2AmountStatus;
+    }
+
+    /**
+     * @param boolean $approval2AmountStatus
+     */
+    public function setApproval2AmountStatus($approval2AmountStatus)
+    {
+        $this->approval2AmountStatus = $approval2AmountStatus;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isApproval3AmountStatus()
+    {
+        return $this->approval3AmountStatus;
+    }
+
+    /**
+     * @param boolean $approval3AmountStatus
+     */
+    public function setApproval3AmountStatus($approval3AmountStatus)
+    {
+        $this->approval3AmountStatus = $approval3AmountStatus;
+    }
+
+    /**
+     * @return Position
+     */
+    public function getOverrideApprover1()
+    {
+        return $this->overrideApprover1;
+    }
+
+    /**
+     * @param Position $overrideApprover1
+     */
+    public function setOverrideApprover1($overrideApprover1)
+    {
+        $this->overrideApprover1 = $overrideApprover1;
+    }
+
+    /**
+     * @return Position
+     */
+    public function getOverrideApprover2()
+    {
+        return $this->overrideApprover2;
+    }
+
+    /**
+     * @param Position $overrideApprover2
+     */
+    public function setOverrideApprover2($overrideApprover2)
+    {
+        $this->overrideApprover2 = $overrideApprover2;
+    }
+
+    /**
+     * @return Position
+     */
+    public function getOverrideApprover3()
+    {
+        return $this->overrideApprover3;
+    }
+
+    /**
+     * @param Position $overrideApprover3
+     */
+    public function setOverrideApprover3($overrideApprover3)
+    {
+        $this->overrideApprover3 = $overrideApprover3;
+    }
+
+
+
+
+
+
+
+
+
+
 
     
 

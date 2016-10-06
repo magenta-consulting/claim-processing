@@ -125,7 +125,9 @@ class BaseAdmin extends AbstractAdmin
         if ($this->isCLient()) {
             /*because client manage many sub company so when create position ,it belong company is selected not ($this->getCompany() from user login)*/
             if (!$object instanceof Company && !$object instanceof Position) {
-                $object->setCompany($this->getCompany());
+                if (method_exists($object, 'setCompany')) {
+                    $object->setCompany($this->getCompany());
+                }
             } elseif ($object instanceof Company) {
                 if ($object->getId() !== $this->getCompany()->getId()) {
                     $object->setParent($this->getCompany());
@@ -133,7 +135,9 @@ class BaseAdmin extends AbstractAdmin
             }
         }
         if ($this->isHr()) {
-            $object->setCompany($this->getCompany());
+            if (method_exists($object, 'setCompany')) {
+                $object->setCompany($this->getCompany());
+            }
         }
         return $object;
     }
