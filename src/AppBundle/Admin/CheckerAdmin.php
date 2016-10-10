@@ -22,7 +22,7 @@ class CheckerAdmin extends BaseAdmin
 
         $formMapper
             ->with('Checker Setup', array('class' => 'col-md-6'))
-            ->add('companySetupApprover', 'sonata_type_model', array(
+            ->add('companySetupChecker', 'sonata_type_model', array(
                 'property' => 'name',
                 'query' => $this->filterCompanyBycompany(),
                 'placeholder' => 'Select Company',
