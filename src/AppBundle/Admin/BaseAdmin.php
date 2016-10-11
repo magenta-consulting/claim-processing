@@ -181,6 +181,7 @@ class BaseAdmin extends AbstractAdmin
         return $query;
     }
 
+
     public function filterCompanyBycompany()
     {
         $em = $this->container->get('doctrine')->getManager();
@@ -359,6 +360,16 @@ class BaseAdmin extends AbstractAdmin
         $qb->select('employmentType')
             ->from('AppBundle\Entity\EmploymentType', 'employmentType')
             ->where($expr->eq('employmentType.company', ':company'))
+            ->setParameter('company', $this->getCompany());
+        return $qb;
+    }
+    public function filterCurrencyExchangeBycompany(){
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder();
+        $expr = new Expr();
+        $qb->select('currencyExchange')
+            ->from('AppBundle\Entity\CurrencyExchange','currencyExchange')
+            ->where($expr->eq('currencyExchange.company', ':company'))
             ->setParameter('company', $this->getCompany());
         return $qb;
     }

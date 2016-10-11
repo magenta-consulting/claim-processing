@@ -11,74 +11,127 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Doctrine\ORM\Query\Expr;
 use AppBundle\Admin\BaseAdmin;
+use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class ClaimAdmin extends BaseAdmin
 {
 
-    public function filterCategoryBycompany(){
-        $em = $this->container->get('doctrine')->getManager();
-        $qb = $em->createQueryBuilder();
-        $expr = new Expr();
-        $qb->select('category')
-            ->from('AppBundle\Entity\Category','category')
-            ->where($expr->eq('category.company', ':company'))
-            ->setParameter('company', $this->getCompany());
-        return $qb;
-    }
-    public function filterCurrencyExchangeBycompany(){
-        $em = $this->container->get('doctrine')->getManager();
-        $qb = $em->createQueryBuilder();
-        $expr = new Expr();
-        $qb->select('currencyExchange')
-            ->from('AppBundle\Entity\CurrencyExchange','currencyExchange')
-            ->where($expr->eq('currencyExchange.company', ':company'))
-            ->setParameter('company', $this->getCompany());
-        return $qb;
-    }
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('category', 'sonata_type_model', array(
+        $formMapper->add('companyGetClaim', 'sonata_type_model', array(
             'property' => 'name',
-            'query'=>$this->filterCategoryBycompany(),
-            'placeholder' => 'Select Category',
-            'empty_data'  => null
-        ));
-        $formMapper->add('currencyExchange', 'sonata_type_model', array(
-            'property' => 'code',
-            'query'=>$this->filterCurrencyExchangeBycompany(),
-            'placeholder' => 'Select Currency',
-            'empty_data'  => null
-        ));
-        $formMapper->add('amount', 'number');
-        $formMapper->add('purposeExpenses', 'textarea');
-        $formMapper->add('receiptDate', 'date',['attr'=>['class'=>'datepicker'],'widget' => 'single_text','format' => 'MM/dd/yyyy']);
-        $formMapper->add('image','sonata_media_type',[
-            'provider' => 'sonata.media.provider.image',
-            'context' => 'default',
-            'required' => false,
-            'label' => 'Image',
-        ]);
+            'query' => $this->filterCompanyBycompany(),
+            'placeholder' => 'Select Company',
+            'empty_data' => null,
+            'label' => 'Company',
+            'btn_add' => false
+        ))
+            ->add('claimType', 'sonata_type_model', array(
+                'property' => 'code',
+                'query' => $this->filterClaimTypeBycompany(),
+                'placeholder' => 'Select Type',
+                'empty_data' => null,
+                'btn_add' => false
+            ))
+            ->add('claimCategory', 'sonata_type_model', array(
+                'property' => 'code',
+                'query' => $this->filterClaimCategoryBycompany(),
+                'placeholder' => 'Select Category',
+                'empty_data' => null,
+                'btn_add' => false,
+                'label'=>'Category'
+            ))
+            ->add('gst',ChoiceType::class,[
+                'choices'  => array(
+                    'No' => false,
+                    'Yes' => true,
+                ),
+                'label'=>'GST'
+            ])
+            ->add('claimAmount', 'number')
+            ->add('gstAmount', 'number',['label'=>'GST Amount','required'=>false])
+            ->add('amountWithoutGst', 'number',['label'=>'Amount Without GST','required'=>false])
+            ->add('currencyExchange', 'sonata_type_model', array(
+                'property' => 'code',
+                'query' => $this->filterCurrencyExchangeBycompany(),
+                'placeholder' => 'Select Currency',
+                'empty_data' => null,
+                'btn_add' => false,
+                'label'=>'Currency',
+                'required'=>false
+            ))
+            ->add('receiptDate', 'date', ['attr' => ['class' => 'datepicker'], 'widget' => 'single_text', 'format' => 'MM/dd/yyyy'])
+        ->add('submissionRemarks', 'textarea',['required'=>false])
+            ->add('claimImages', 'sonata_type_collection', array(
+                'type_options' => array(
+                    // Prevents the "Delete" option from being displayed
+                    'delete' => false,
+                    'delete_options' => array(
+                        // You may otherwise choose to put the field but hide it
+                        'type'         => 'hidden',
+                        // In that case, you need to fill in the options as well
+                        'type_options' => array(
+                            'required' => false,
+                        )
+                    )
+                )
+            ), array(
+                'edit' => 'inline',
+                'inline' => 'table',
+                'sortable' => 'position',
+            ));
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('user.username');
-        $datagridMapper->add('category.name');
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('user.username',null,['lable'=>'Username'])
-            ->add('category.name')
-            ->add('currencyExchange.code')
-            ->add('amount')
-            ->add('receiptDate')
+            ->addIdentifier('position.employeeNo', null, ['lable' => 'Username'])
+            ->add('position.user.firstName')
+            ->add('companyGetClaim.name')
+            ->add('claimType.code')
+            ->add('claimCategory.code')
+            ->add('createdAt')
+            ->add('claimAmount')
             ->add('_action', null, array(
                 'actions' => array(
                     'delete' => array(),
+                    'show' => array(),
                 )
             ));
+    }
+    /**
+     * @param ShowMapper $show
+     */
+    protected function configureShowFields(ShowMapper $show)
+    {
+        $show->add('position.user.firstName', 'text',['label'=>'Company Name']);
+        $show->add('companyGetClaim.name', 'text');
+        $show->add('claimType.code', 'text');
+        $show->add('claimCategory.code', 'text');
+    }
+
+    private function addImages($claim, $images)
+    {
+        foreach ($images as $image) {
+            $claim->addClaimImage($image);
+        }
+    }
+    public function prePersist($object)
+    {
+        $this->addImages($object,$object->getClaimImages());
+
+        $object->setPosition($this->getUser()->getLoginWithPosition());
+        parent::prePersist($object); // TODO: Change the autogenerated stub
+    }
+    public function preUpdate($object)
+    {
+        $this->addImages($object,$object->getClaimImages());
+        parent::preUpdate($object); // TODO: Change the autogenerated stub
     }
 
     public function toString($object)
@@ -87,7 +140,6 @@ class ClaimAdmin extends BaseAdmin
             ? $object->getId()
             : 'Claim'; // shown in the breadcrumb on the create view
     }
-
 
 
 }

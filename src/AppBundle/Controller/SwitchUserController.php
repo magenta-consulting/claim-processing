@@ -19,6 +19,7 @@ class SwitchUserController extends Controller
             $company = $position->getCompany();
             $user->setCompany($company);
             $user->setRoles($position->getRoles());
+            $user->setLoginWithPosition($position);
             $em->persist($user);
             $em->flush();
             return $this->redirectToRoute('sonata_admin_dashboard');
@@ -28,6 +29,7 @@ class SwitchUserController extends Controller
             $position = $em->getRepository('AppBundle\Entity\Position')->findOneBy(['company'=>$company,'user'=>$user]);
             $user->setCompany($company);
             $user->setRoles($position->getRoles());
+            $user->setLoginWithPosition($position);
             $em->persist($user);
             $em->flush();
             return $this->redirectToRoute('sonata_admin_dashboard');

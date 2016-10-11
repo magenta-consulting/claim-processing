@@ -65,12 +65,35 @@ class User extends BaseUser implements EquatableInterface
     private $company;
 
     /**
+     * @var Position
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     */
+    private $loginWithPosition;
+
+    /**
      * @return mixed
      */
     public function getId()
     {
         return $this->id;
     }
+
+    /**
+     * @return Position
+     */
+    public function getLoginWithPosition()
+    {
+        return $this->loginWithPosition;
+    }
+
+    /**
+     * @param Position $loginWithPosition
+     */
+    public function setLoginWithPosition($loginWithPosition)
+    {
+        $this->loginWithPosition = $loginWithPosition;
+    }
+
 
     /**
      * @return Position

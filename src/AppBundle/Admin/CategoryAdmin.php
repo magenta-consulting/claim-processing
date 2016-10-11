@@ -36,6 +36,7 @@ class CategoryAdmin extends BaseAdmin
                 'query' => $this->filterCostCentreBycompany(),
                 'placeholder' => 'Select Cost Centre',
                 'empty_data' => null,
+                'required' => false,
                 'btn_add' => false
             ))
             ->add('region', 'sonata_type_model', array(

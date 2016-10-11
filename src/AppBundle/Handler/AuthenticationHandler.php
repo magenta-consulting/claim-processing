@@ -117,6 +117,7 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface,Log
             $user = $this->tokenStorage->getToken()->getUser();
             $user->setRoles([]);
             $user->setCompany(null);
+            $user->setLoginWithPosition(null);
             $em->persist($user);
             $em->flush();
         }

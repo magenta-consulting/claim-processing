@@ -30,6 +30,8 @@ class Media extends BaseMedia
      */
     protected $id;
 
+
+    private $claim;
     /**
      * Get id
      *
@@ -39,4 +41,8 @@ class Media extends BaseMedia
     {
         return $this->id;
     }
+
+
+
+
 }

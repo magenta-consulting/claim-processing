@@ -16,6 +16,8 @@
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
-
+        <many-to-one field="claim" target-entity="AppBundle\Entity\Claim" inversed-by="claimImages">
+            <join-column name="claim_id" referenced-column-name="id" on-delete="CASCADE"/>
+        </many-to-one>
     </entity>
 </doctrine-mapping>
