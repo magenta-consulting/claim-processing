@@ -3,6 +3,7 @@ namespace AppBundle\Admin;
 
 use AppBundle\Entity\Claim;
 use AppBundle\Entity\ClaimCategory;
+use AppBundle\Entity\ClaimType;
 use AppBundle\Entity\CompanyClaimPolicies;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -13,9 +14,37 @@ use Doctrine\ORM\Query\Expr;
 use AppBundle\Admin\BaseAdmin;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 
 class ClaimAdmin extends BaseAdmin
 {
+
+    public function filterClaimCategoryByClaimType($claimType)
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder();
+        $expr = new Expr();
+        $rules = $em->createQueryBuilder()
+            ->select('category')
+            ->from('AppBundle\Entity\Category', 'category')
+            ->where($expr->eq('category.claimType', ':claimType'))
+            ->setParameter('claimType', $claimType)
+            ->getQuery()
+            ->getResult();
+        $listCategory = [];
+        foreach ($rules as $rule) {
+            $listCategory[] = $rule->getClaimCategory()->getId();
+        }
+        $listCategory = count($listCategory) ? $listCategory : [0];
+        $qb->select('claimCategory')
+            ->from('AppBundle\Entity\ClaimCategory', 'claimCategory')
+            ->where($expr->eq('claimCategory.company', ':company'))
+            ->setParameter('company', $this->getCompany())
+            ->andWhere($expr->in('claimCategory.id', $listCategory));//if $listCategory
+        return $qb;
+    }
 
     protected function configureFormFields(FormMapper $formMapper)
     {
@@ -25,62 +54,79 @@ class ClaimAdmin extends BaseAdmin
             'placeholder' => 'Select Company',
             'empty_data' => null,
             'label' => 'Company',
+            'data' => $this->getCompany(),
             'btn_add' => false
-        ))
-            ->add('claimType', 'sonata_type_model', array(
+        ));
+        $formMapper->add('claimType', 'sonata_type_model', array(
+            'property' => 'code',
+            'query' => $this->filterClaimTypeBycompany(),
+            'placeholder' => 'Select Type',
+            'empty_data' => null,
+            'btn_add' => false
+        ));
+        $formModifier = function (FormInterface $form, $claimType = null) {
+            $form->add('claimCategory', 'sonata_type_model', array(
                 'property' => 'code',
-                'query' => $this->filterClaimTypeBycompany(),
-                'placeholder' => 'Select Type',
-                'empty_data' => null,
-                'btn_add' => false
-            ))
-            ->add('claimCategory', 'sonata_type_model', array(
-                'property' => 'code',
-                'query' => $this->filterClaimCategoryBycompany(),
+                'query' => $this->filterClaimCategoryByClaimType($claimType),
                 'placeholder' => 'Select Category',
                 'empty_data' => null,
                 'btn_add' => false,
-                'label'=>'Category'
-            ))
-            ->add('gst',ChoiceType::class,[
-                'choices'  => array(
-                    'No' => false,
-                    'Yes' => true,
-                ),
-                'label'=>'GST'
-            ])
-            ->add('claimAmount', 'number')
-            ->add('gstAmount', 'number',['label'=>'GST Amount','required'=>false])
-            ->add('amountWithoutGst', 'number',['label'=>'Amount Without GST','required'=>false])
-            ->add('currencyExchange', 'sonata_type_model', array(
-                'property' => 'code',
-                'query' => $this->filterCurrencyExchangeBycompany(),
-                'placeholder' => 'Select Currency',
-                'empty_data' => null,
-                'btn_add' => false,
-                'label'=>'Currency',
-                'required'=>false
-            ))
-            ->add('receiptDate', 'date', ['attr' => ['class' => 'datepicker'], 'widget' => 'single_text', 'format' => 'MM/dd/yyyy'])
-        ->add('submissionRemarks', 'textarea',['required'=>false])
-            ->add('claimImages', 'sonata_type_collection', array(
-                'type_options' => array(
-                    // Prevents the "Delete" option from being displayed
-                    'delete' => false,
-                    'delete_options' => array(
-                        // You may otherwise choose to put the field but hide it
-                        'type'         => 'hidden',
-                        // In that case, you need to fill in the options as well
-                        'type_options' => array(
-                            'required' => false,
-                        )
-                    )
-                )
-            ), array(
-                'edit' => 'inline',
-                'inline' => 'table',
-                'sortable' => 'position',
+                'label' => 'Category',
+                'model_manager' => $this->getModelManager(),
+                'class' => 'AppBundle\Entity\ClaimCategory'
             ));
+        };
+        $formMapper->getFormBuilder()->addEventListener(
+            FormEvents::PRE_SET_DATA,
+            function (FormEvent $event) use ($formModifier) {
+                // this would be your entity, i.e. SportMeetup
+                $claim = $event->getData();
+                $claimType = $claim === null ? null : $claim->getClaimType();
+                $formModifier($event->getForm(), $claimType);
+            }
+        );
+        $formMapper->getFormBuilder()->get('claimType')->addEventListener(
+            FormEvents::POST_SUBMIT,
+            function (FormEvent $event) use ($formModifier) {
+                $claimType = $event->getForm()->getData();
+                $formModifier($event->getForm()->getParent(), $claimType);
+            }
+        );
+
+        $formMapper->add('gst', ChoiceType::class, [
+            'choices' => array(
+                'No' => false,
+                'Yes' => true,
+            ),
+            'label' => 'GST'
+        ]);
+
+        $formMapper->add('claimAmount', 'number', ['label' => 'Claim Amount', 'required' => false]);
+        $formMapper->add('gstAmount', 'number', ['label' => 'GST Amount', 'required' => false]);
+        $formMapper->add('amountWithoutGst', 'number', ['label' => 'Amount Without GST', 'required' => false]);
+
+
+        $formMapper->add('currencyExchange', 'sonata_type_model', array(
+            'property' => 'code',
+            'query' => $this->filterCurrencyExchangeBycompany(),
+            'placeholder' => 'Select Currency',
+            'empty_data' => null,
+            'btn_add' => false,
+            'label' => 'Currency',
+            'required' => false
+        ));
+        $formMapper->add('receiptDate', 'date', ['attr' => ['class' => 'datepicker'], 'widget' => 'single_text', 'format' => 'MM/dd/yyyy'])
+            ->add('submissionRemarks', 'textarea', ['required' => false])
+            ->add('claimMedias', 'sonata_type_collection', array(
+                'label' => ' ',
+                'required' => false,
+            ),
+                array(
+                    'edit' => 'inline',
+                    'inline' => 'table',
+                ));
+
+
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -104,33 +150,36 @@ class ClaimAdmin extends BaseAdmin
                 )
             ));
     }
+
     /**
      * @param ShowMapper $show
      */
     protected function configureShowFields(ShowMapper $show)
     {
-        $show->add('position.user.firstName', 'text',['label'=>'Company Name']);
+        $show->add('position.user.firstName', 'text', ['label' => 'Company Name']);
         $show->add('companyGetClaim.name', 'text');
         $show->add('claimType.code', 'text');
         $show->add('claimCategory.code', 'text');
     }
 
-    private function addImages($claim, $images)
+    private function addMedias($claim, $medias)
     {
-        foreach ($images as $image) {
-            $claim->addClaimImage($image);
+        foreach ($medias as $media) {
+            $claim->addClaimMedia($media);
         }
     }
+
     public function prePersist($object)
     {
-        $this->addImages($object,$object->getClaimImages());
+        $this->addMedias($object, $object->getClaimMedias());
 
         $object->setPosition($this->getUser()->getLoginWithPosition());
         parent::prePersist($object); // TODO: Change the autogenerated stub
     }
+
     public function preUpdate($object)
     {
-        $this->addImages($object,$object->getClaimImages());
+        $this->addMedias($object, $object->getClaimMedias());
         parent::preUpdate($object); // TODO: Change the autogenerated stub
     }
 

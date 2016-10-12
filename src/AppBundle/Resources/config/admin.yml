@@ -22,6 +22,14 @@ services:
                 - { name: sonata.admin, manager_type: orm, label: Claim }
             calls:
                 - [setContainer, ["@service_container"]]
+                - [setTemplate,[edit,AppBundle:SonataAdmin/CRUD:edit_claim.html.twig]]
+    admin.claim_media:
+            class: AppBundle\Admin\ClaimMediaAdmin
+            arguments: [~, AppBundle\Entity\ClaimMedia, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Claim Media }
+            calls:
+                - [setContainer, ["@service_container"]]
     admin.category:
             class: AppBundle\Admin\CategoryAdmin
             arguments: [~, AppBundle\Entity\Category, ~]

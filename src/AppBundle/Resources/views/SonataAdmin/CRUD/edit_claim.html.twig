@@ -1,0 +1,94 @@
+{% extends 'SonataAdminBundle:CRUD:edit.html.twig' %}
+
+        {% block stylesheets %}
+            {{ parent() }}
+            <link rel="stylesheet"
+                  href="{{ asset('themes/homer/vendor/bootstrap-datepicker-master/dist/css/bootstrap-datepicker3.min.css') }}"/>
+        {% endblock %}
+        {% block javascripts %}
+            {{ parent() }}
+            <script src="{{ asset('themes/homer/vendor/moment/moment.js') }}"></script>
+            <script src="{{ asset('themes/homer/vendor/bootstrap-datepicker-master/dist/js/bootstrap-datepicker.min.js') }}"></script>
+            <script type="text/javascript">
+                $(function () {
+                    $(".datepicker").datepicker({autoclose: true});
+                });
+            </script>
+            <script type="text/javascript">
+                $(function () {
+                    // When sport gets selected ...
+                    $claimType = $('.claim-type')
+                    $claimType.change(function () {
+                        var $form = $(this).closest('form');
+                        var data = {};
+                        data[$claimType.attr('name')] = $claimType.val();
+                        $.ajax({
+                            url: $form.attr('action'),
+                            type: $form.attr('method'),
+                            data: data,
+                            success: function (html) {
+                                $('.claim-category').replaceWith(
+                                        $(html).find('.claim-category')
+                                );
+                            }
+                        });
+                    });
+                    $('.claim-currency-display').hide();
+                    $('.claim-type').change(function () {
+                        loadDependOnClaimType();
+                    });
+                    loadDependOnClaimType();
+                    function loadDependOnClaimType() {
+                        if ($('.claim-type option:selected').text().trim() === 'Overseas') {
+                            $('.claim-currency-display').show();
+                        }else {
+                            $('.claim-currency-display').hide();
+                        }
+                    }
+
+                    $('.claim-gst-display').hide();
+                    $('.claim-gst').change(function () {
+                        loadDependOnClaimGST();
+                    });
+                    loadDependOnClaimGST();
+                    function loadDependOnClaimGST() {
+                        if ($('.claim-gst option:selected').text().trim() === 'Yes') {
+                            $('.claim-gst-display').show();
+                        }else {
+                            $('.claim-gst-display').hide();
+                        }
+                    }
+
+
+                });
+            </script>
+        {% endblock %}
+            {% block sonata_tab_content %}
+                <div class="col-md-12">
+                    <div class="col-md-12">
+                        <div class="box box-primary">
+                            <div class="box-header">
+                                <h4 class="box-title">
+                                    Claim
+                                </h4>
+                            </div>
+                            <div class="box-body">
+                                <div class="sonata-ba-collapsed-fields">
+                                    {{ form_row(form.companyGetClaim) }}
+                                    {{ form_row(form.claimType ,{'attr': {'class': 'claim-type'}}) }}
+                                    {{ form_row(form.claimCategory,{'attr': {'class': 'claim-category'}}) }}
+                                    {{ form_row(form.gst,{'attr': {'class': 'claim-gst'}}) }}
+                                    {{ form_row(form.claimAmount) }}
+                                    {{ form_row(form.gstAmount,{'attr': {'class': 'claim-gst-display'},'label_attr':{'class': 'claim-gst-display'}}) }}
+                                    {{ form_row(form.amountWithoutGst,{'attr': {'class': 'claim-gst-display'},'label_attr':{'class': 'claim-gst-display'}}) }}
+                                    {{ form_row(form.currencyExchange,{'attr': {'class': 'claim-currency-display'},'label_attr':{'class': 'claim-currency-display'}}) }}
+                                    {{ form_row(form.receiptDate) }}
+                                    {{ form_row(form.submissionRemarks) }}
+                                    {{ form_row(form.claimMedias) }}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            {% endblock %}

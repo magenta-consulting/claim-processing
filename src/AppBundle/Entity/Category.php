@@ -423,7 +423,9 @@ class Category
     {
         $listRule = [];
         $listRule[] = $category->getCompanyGetRule()->getName();
-        $listRule[] = $category->getCostCentre()->getCode();
+        if ($category->getCostCentre()) {
+            $listRule[] = $category->getCostCentre()->getCode();
+        }
         if ($category->getRegion()) {
             $listRule[] = $category->getRegion()->getCode();
         }

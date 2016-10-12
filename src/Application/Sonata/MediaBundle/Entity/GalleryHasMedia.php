@@ -30,7 +30,6 @@ class GalleryHasMedia extends BaseGalleryHasMedia
      */
     protected $id;
 
-    private $claim;
 
     /**
      * Get id
@@ -42,20 +41,6 @@ class GalleryHasMedia extends BaseGalleryHasMedia
         return $this->id;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getClaim()
-    {
-        return $this->claim;
-    }
 
-    /**
-     * @param mixed $claim
-     */
-    public function setClaim($claim)
-    {
-        $this->claim = $claim;
-    }
 
 }

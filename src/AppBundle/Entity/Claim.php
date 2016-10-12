@@ -99,10 +99,10 @@ class Claim
     private $position;
 
     /**
-     * @var Gallery
-     * @ORM\OneToMany(targetEntity="Application\Sonata\MediaBundle\Entity\GalleryHasMedia",mappedBy="claim",cascade={"persist","remove"})
+     * @var ClaimMedia
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ClaimMedia",mappedBy="claim",cascade={"persist","remove"},orphanRemoval=true)
      */
-    private $claimImages;
+    private $claimMedias;
 
 
     /**
@@ -114,7 +114,7 @@ class Claim
     public function __construct()
     {
         $this->createdAt = new \DateTime();
-        $this->claimImages = new ArrayCollection();
+        $this->claimMedias = new ArrayCollection();
     }
 
     /**
@@ -335,24 +335,31 @@ class Claim
     }
 
     /**
-     * @return Gallery
+     * @return ClaimMedia
      */
-    public function getClaimImages()
+    public function getClaimMedias()
     {
-        return $this->claimImages;
+        return $this->claimMedias;
     }
 
     /**
-     * @param Gallery $claimImages
+     * @param ClaimMedia $claimMedias
      */
-    public function setClaimImages($claimImages)
+    public function setClaimMedias($claimMedias)
     {
-        $this->claimImages = $claimImages;
+        $this->claimMedias = $claimMedias;
     }
-    public function addClaimImage($claimImage){
-        $this->claimImages->add($claimImage);
-        $claimImage->setClaim($this);
+
+
+    public function addClaimMedia($claimMedia){
+        $this->claimMedias->add($claimMedia);
+        $claimMedia->setClaim($this);
         return $this;
+    }
+
+    public function removeClaimMedia($claimMedia){
+        $this->claimMedias->removeElement($claimMedia);
+        $claimMedia->setClaim(null);
     }
 
 

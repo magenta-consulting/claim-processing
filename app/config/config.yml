@@ -180,6 +180,8 @@ sonata_block:
         sonata.admin.block.admin_list:
             contexts: [admin]
 sonata_admin:
+    options:
+        use_select2:    false # disable select2
     templates:
         layout:                         AppBundle:SonataAdmin:standard_layout.html.twig
         edit:                           AppBundle:SonataAdmin/CRUD:edit.html.twig
