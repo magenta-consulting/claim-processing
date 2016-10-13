@@ -27,6 +27,9 @@ class TwigExtension extends \Twig_Extension
 
     }
 
+    public function getUrlMedia($media){
+        return $this->container->get('app.media.retriever')->getPublicURL($media);
+    }
 
 
     public function getFunctions()
@@ -34,6 +37,7 @@ class TwigExtension extends \Twig_Extension
         return array(
             'getParameter' => new \Twig_Function_Method($this, 'getParameter', array('is_safe' => array('html'))),
             'getNumberDecimalDigits' => new \Twig_Function_Method($this, 'getNumberDecimalDigits', array('is_safe' => array('html'))),
+            'getUrlMedia' => new \Twig_Function_Method($this, 'getUrlMedia', array('is_safe' => array('html'))),
         );
     }
 

@@ -224,6 +224,9 @@ sonata_doctrine_orm_admin:
                 url:        SonataAdminBundle:CRUD:list_url.html.twig
 
             show:
+                show_approver:      AppBundle:SonataAdmin/CRUD:show_approver.html.twig
+                show_checker:      AppBundle:SonataAdmin/CRUD:show_checker.html.twig
+                show_image:      AppBundle:SonataAdmin/CRUD:show_image.html.twig
                 array:      SonataAdminBundle:CRUD:show_array.html.twig
                 boolean:    SonataAdminBundle:CRUD:show_boolean.html.twig
                 date:       SonataAdminBundle:CRUD:show_date.html.twig
@@ -246,8 +249,8 @@ sonata_media:
     #    media: MyVendor\MediaBundle\Entity\Media
     #    gallery: MyVendor\MediaBundle\Entity\Gallery
     #    gallery_has_media: MyVendor\MediaBundle\Entity\GalleryHasMedia
-    default_context: default
-    db_driver: doctrine_orm # or doctrine_mongodb, doctrine_phpcr
+    db_driver: doctrine_orm # or doctrine_mongodb, doctrine_phpcr it is mandatory to choose one here
+    default_context: default # you need to set a context
     contexts:
         default:  # the default context is mandatory
             providers:
@@ -255,42 +258,48 @@ sonata_media:
                 - sonata.media.provider.youtube
                 - sonata.media.provider.image
                 - sonata.media.provider.file
+                - sonata.media.provider.vimeo
 
             formats:
-                small: { width: 50 ,height: 50, quality: 70}
-                big:   { width: 500 , quality: 70}
-                medium:   { width: 100 , height: 100, quality: 70}
+                small: { width: 100 , quality: 100}
+                medium:   { width: 500 , quality: 100}
+                big:  { width: 1200 , quality: 100}
+
+#    cdn:
+#        server:
+#            path: /uploads/media # http://media.sonata-project.org/
 
     filesystem:
         local:
             directory:  %kernel.root_dir%/../web/uploads/media
             create:     false
+#        Amazon s3
         s3:
             bucket: %s3_bucket_name%
             accessKey: %s3_access_key%
             secretKey: %s3_secret_key%
             region: %s3_region%
             directory: %s3_directory%
+            version:     %s3_version% # latest by default (cf. https://docs.aws.amazon.com/aws-sdk-php/v3/guide/guide/configuration.html#version)
+            sdk_version: %s3_sdk_version% # 2 by default
 
+# Amazon s3
     providers:
         image:
             resizer: sonata.media.resizer.square
-#            filesystem: sonata.media.filesystem.s3
-#            thumbnail:  sonata.media.thumbnail.liip_imagine
-            filesystem: sonata.media.filesystem.local
-            allowed_extensions: ['png','jpg']
-            allowed_mime_types: ['image/png','image/jpg','image/jpeg']
+            filesystem: %s3_filesystem%
         file:
             resizer: false
-#            filesystem: sonata.media.filesystem.s3
-            filesystem: sonata.media.filesystem.local
+            filesystem: %s3_filesystem%
             service:    sonata.media.provider.file
-            allowed_extensions: ['pdf', 'txt', 'rtf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'odt', 'odg', 'odp', 'ods', 'odc', 'odf', 'odb', 'csv', 'xml','png','jpg']
-            allowed_mime_types: ['application/pdf', 'application/x-pdf', 'application/rtf', 'text/html', 'text/rtf', 'text/plain','application/json','image/png','image/jpg','image/jpeg','application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.presentationml.presentation','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
+            allowed_extensions: ['pdf', 'txt', 'rtf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'odt', 'odg', 'odp', 'ods', 'odc', 'odf', 'odb', 'csv', 'xml','png','jpg','jpeg','webm','wav','blob','','mp4']
+            allowed_mime_types: ['application/pdf', 'application/x-pdf', 'application/rtf', 'text/html', 'text/rtf', 'text/plain','application/json','image/png','image/jpg','image/jpeg','application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.presentationml.presentation','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','audio/x-wav','video/webm','application/octet-stream','video/mp4','binary/octet-stream']
+
     cdn:
         server:
-#            path: http://%s3_region%/%s3_bucket_name% # this is not run because it use default url
-            path:      /uploads/media # http://media.sonata-project.org
+#            path: http://%s3_region%/%s3_bucket_name% # this one is working
+            path: %s3_cdn_server_path%
+
 
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'

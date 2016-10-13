@@ -1,0 +1,46 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% extends admin.getTemplate('base_list_field') %}
+
+{% block field %}
+    {% if object.claimMedias|length %}
+        <div class="row show-image">
+            {% set url = getUrlMedia(object.claimMedias[0].media) %}
+            <a href="{{ url }}" target="_blank"><img width="400px" src="{{ url }}"></a>
+        </div>
+        <div class="row link-image">
+            {% for claimMedia in object.claimMedias %}
+                <a href="javascript:void(0);" class="{{ loop.index == 1 ? 'active-image':''  }}" rel="{{ getUrlMedia(claimMedia.media) }}">Image {{ loop.index }}</a><br>
+            {% endfor %}
+        </div>
+    {% else %}
+        None
+    {% endif %}
+    <script>
+        $(function () {
+            $('.link-image a').click(function () {
+                var url = $(this).attr('rel');
+                $('.link-image a').removeClass('active-image');
+                $(this).addClass('active-image');
+                $('.show-image img').attr('src', url);
+                $('.show-image a').attr('href', url);
+            });
+        });
+
+    </script>
+    <style>
+        .active-image {
+            font-weight: bold;
+            text-decoration: underline;
+        }
+    </style>
+{% endblock %}

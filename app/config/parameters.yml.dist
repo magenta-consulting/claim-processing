@@ -22,10 +22,14 @@ parameters:
     pagination_limit: 2
 
     #s3
-    s3_bucket_name:
-    s3_access_key:
-    s3_secret_key:
-    s3_region:
-    s3_directory:
+    s3_bucket_name: 33
+    s3_access_key: 33
+    s3_secret_key: 33
+    s3_region: ap-southeast-1
+    s3_directory: 33
+    s3_version: latest
+    s3_sdk_version: 3
+    s3_cdn_server_path: /uploads/media
+    s3_filesystem: sonata.media.filesystem.local
 
 

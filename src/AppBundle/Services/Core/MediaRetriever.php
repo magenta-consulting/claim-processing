@@ -5,9 +5,11 @@ namespace AppBundle\Services\Core;
 
 use Sonata\MediaBundle\Model\Media;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class MediaRetriever extends ControllerService
+class MediaRetriever
 {
+    use ContainerAwareTrait;
 
     /**
      * @param int $id
@@ -19,20 +21,21 @@ class MediaRetriever extends ControllerService
         return $mediaManager->findOneBy(array('id' => $id));
     }
 
-    public function getPublicURL(Media $media,$context='default',$format='medium')
+    public function getPublicURL(Media $media, $context = 'default', $format = 'reference')
     {
-        $provider = $this->get('sonata.media.provider.image');
-        $urlNotTrue =  $provider->generatePublicUrl($media,$context.'_'.$format);
-        $dir = $this->getParameter('s3_directory');
-        $region = $this->getParameter('s3_region');
-        $host = 'https://s3-'.$region.'.amazonaws.com';
-        $bucket = $this->getParameter('s3_bucket_name');
+//        $provider = $this->get('sonata.media.provider.image');
+//        $urlNotTrue =  $provider->generatePublicUrl($media,$format);
+//        $dir = $this->getParameter('s3_directory');
+//        $region = $this->getParameter('s3_region');
+//        $host = 'https://s3-'.$region.'.amazonaws.com';
+//        $bucket = $this->getParameter('s3_bucket_name');
+//        $arr= explode($bucket,$urlNotTrue);
+//        $endUrl =  $arr[1];
+//        return $host.'/'.$bucket.'/'.$dir .($media->getContext()===null?'/':''). $endUrl;
 
-
-        $arr= explode($bucket,$urlNotTrue);
-        $endUrl =  $arr[1];
-        return $host.'/'.$bucket.'/'.$dir . $endUrl;
-
+        //local
+        $provider = $this->container->get('sonata.media.provider.image');
+        return $provider->generatePublicUrl($media, $format);
     }
 
 

@@ -1,0 +1,31 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% extends admin.getTemplate('base_list_field') %}
+
+{% block field %}
+    <div class="row" style="border-bottom: 1px solid #f4f4f4; margin-bottom: 10px;padding-bottom: 10px;">
+
+        <div class="col-md-2">
+            1
+        </div>
+        <div class="col-md-10">
+            {% if object.checker.checker %}
+                Name: {{ object.checker.checker.firstName }}<br>
+                Employee No: {{ object.checker.checker.employeeNo }}<br>
+                COmpany: {{ object.checker.checker.company.name }}<br>
+            {% else %}
+                None
+            {% endif %}
+        </div>
+
+    </div>
+{% endblock %}
