@@ -481,15 +481,17 @@ class Claim
 
     public function setPeriod()
     {
-        $claimPolicy = $this->getClaimType()->getCompanyClaimPolicies();
-        if ($claimPolicy) {
-            $claimable = $claimPolicy->getClaimablePeriod();
+        if($this->getClaimType()) {
+            $claimPolicy = $this->getClaimType()->getCompanyClaimPolicies();
+            if ($claimPolicy) {
+                $claimable = $claimPolicy->getClaimablePeriod();
 
-            $periodTo = new \DateTime('NOW');
-            $clone = clone $periodTo;
-            $periodFrom = $clone->modify('-' . $claimable . ' month');
-            $this->setPeriodFrom($periodFrom);
-            $this->setPeriodTo($periodTo);
+                $periodTo = new \DateTime('NOW');
+                $clone = clone $periodTo;
+                $periodFrom = $clone->modify('-' . $claimable . ' month');
+                $this->setPeriodFrom($periodFrom);
+                $this->setPeriodTo($periodTo);
+            }
         }
     }
     public function validate(ExecutionContextInterface $context, $payload)
