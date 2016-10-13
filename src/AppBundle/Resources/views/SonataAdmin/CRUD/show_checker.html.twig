@@ -18,7 +18,7 @@ file that was distributed with this source code.
             1
         </div>
         <div class="col-md-10">
-            {% if object.checker.checker %}
+            {% if object.checker and object.checker.checker %}
                 Name: {{ object.checker.checker.firstName }}<br>
                 Employee No: {{ object.checker.checker.employeeNo }}<br>
                 COmpany: {{ object.checker.checker.company.name }}<br>

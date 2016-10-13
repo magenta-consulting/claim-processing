@@ -18,7 +18,7 @@ file that was distributed with this source code.
             1
         </div>
         <div class="col-md-10">
-            {% if object.approver.approver1 %}
+            {% if object.approver and object.approver.approver1 %}
                 Name: {{ object.approver.approver1.firstName }}<br>
                 Employee No: {{ object.approver.approver1.employeeNo }}<br>
                 COmpany: {{ object.approver.approver1.company.name }}<br>
@@ -33,7 +33,7 @@ file that was distributed with this source code.
             2
         </div>
         <div class="col-md-10">
-            {% if object.approver.approver2 %}
+            {% if object.approver and  object.approver.approver2 %}
                 Name: {{ object.approver.approver2.firstName }}<br>
                 Employee No: {{ object.approver.approver2.employeeNo }}<br>
                 COmpany: {{ object.approver.approver2.company.name }}<br>
@@ -47,7 +47,7 @@ file that was distributed with this source code.
             3
         </div>
         <div class="col-md-10">
-            {% if object.approver.approver3 %}
+            {% if object.approver and  object.approver.approver3 %}
                 Name: {{ object.approver.approver3.firstName }}<br>
                 Employee No: {{ object.approver.approver3.employeeNo }}<br>
                 COmpany: {{ object.approver.approver3.company.name }}<br>
