@@ -37,6 +37,8 @@ twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
 
+    form_themes:
+        - 'ApplicationSonataMediaBundle:Form:media_widgets.html.twig'
 # Doctrine Configuration
 doctrine:
     dbal:

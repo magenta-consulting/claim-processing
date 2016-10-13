@@ -30,7 +30,7 @@ class ClaimMedia
 
     /**
      * @var Media
-     * @ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media",cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media",cascade={"remove","persist"})
      */
     private $media;
 
