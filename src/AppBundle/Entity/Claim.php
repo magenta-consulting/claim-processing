@@ -12,6 +12,7 @@ use Application\Sonata\MediaBundle\Entity\Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use DoctrineExtensions\Query\Mysql\Date;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @ORM\Entity
@@ -22,6 +23,7 @@ use DoctrineExtensions\Query\Mysql\Date;
 class Claim
 {
 
+    const STATUS_PENDING = 'PENDING';
 
     /**
      * @ORM\Id
@@ -135,10 +137,17 @@ class Claim
      */
     private $createdAt;
 
+    /**
+     * @var string
+     * @ORM\Column(name="status",type="string")
+     */
+    private $status;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
         $this->claimMedias = new ArrayCollection();
+        $this->status = self::STATUS_PENDING;
     }
 
     /**
@@ -148,6 +157,23 @@ class Claim
     {
         return $this->id;
     }
+
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param string $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
 
     /**
      * @return Date
@@ -450,6 +476,32 @@ class Claim
     public function removeClaimMedia($claimMedia){
         $this->claimMedias->removeElement($claimMedia);
         $claimMedia->setClaim(null);
+    }
+
+
+    public function setPeriod()
+    {
+        $claimPolicy = $this->getClaimType()->getCompanyClaimPolicies();
+        if ($claimPolicy) {
+            $claimable = $claimPolicy->getClaimablePeriod();
+
+            $periodTo = new \DateTime('NOW');
+            $clone = clone $periodTo;
+            $periodFrom = $clone->modify('-' . $claimable . ' month');
+            $this->setPeriodFrom($periodFrom);
+            $this->setPeriodTo($periodTo);
+        }
+    }
+    public function validate(ExecutionContextInterface $context, $payload)
+    {
+        $this->setPeriod();
+        if($this->getPeriodFrom()) {
+            if($this->getReceiptDate() < $this->getPeriodFrom() || $this->getReceiptDate() > $this->getPeriodTo()){
+                $context->buildViolation('This receipt date is invalid')
+                    ->atPath('receiptDate')
+                    ->addViolation();
+            }
+        }
     }
 
 

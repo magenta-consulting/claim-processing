@@ -35,7 +35,8 @@ class CompanyClaimPolicies
     private $claimablePeriod;
     /**
      * @var ClaimType
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimType")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\ClaimType")
+     * @ORM\JoinColumn(name="claim_type_id", referencedColumnName="id")
      */
     private $claimType;
 
@@ -70,6 +71,8 @@ class CompanyClaimPolicies
     {
         return $this->id;
     }
+
+
 
     /**
      * @param mixed $id

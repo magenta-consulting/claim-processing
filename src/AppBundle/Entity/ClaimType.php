@@ -47,12 +47,36 @@ class ClaimType
     private $company;
 
     /**
+     * @var CompanyClaimPolicies
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\CompanyClaimPolicies",mappedBy="claimType")
+     */
+    private $companyClaimPolicies;
+
+    /**
      * @return mixed
      */
     public function getId()
     {
         return $this->id;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCompanyClaimPolicies()
+    {
+        return $this->companyClaimPolicies;
+    }
+
+    /**
+     * @param mixed $companyClaimPolicies
+     */
+    public function setCompanyClaimPolicies($companyClaimPolicies)
+    {
+        $this->companyClaimPolicies = $companyClaimPolicies;
+    }
+
+
 
     /**
      * @param mixed $id
