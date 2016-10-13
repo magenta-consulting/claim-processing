@@ -23,12 +23,12 @@ class MediaRetriever
 
     public function getPublicURL(Media $media, $context = 'default', $format = 'reference')
     {
-        $provider = $this->get('sonata.media.provider.image');
+        $provider = $this->container->get('sonata.media.provider.image');
         $urlNotTrue =  $provider->generatePublicUrl($media,$format);
-        $dir = $this->getParameter('s3_directory');
-        $region = $this->getParameter('s3_region');
+        $dir = $this->container->getParameter('s3_directory');
+        $region = $this->container->getParameter('s3_region');
         $host = 'https://s3-'.$region.'.amazonaws.com';
-        $bucket = $this->getParameter('s3_bucket_name');
+        $bucket = $this->container->getParameter('s3_bucket_name');
         $arr= explode($bucket,$urlNotTrue);
         $endUrl =  $arr[1];
         return $host.'/'.$bucket.'/'.$dir .($media->getContext()===null?'/':''). $endUrl;
