@@ -7,6 +7,7 @@
  */
 
 namespace AppBundle\Entity;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,6 +21,7 @@ class ApprovalAmountPolicies
     public function __construct()
     {
         $this->createdDate = new \DateTime();
+        $this->claims = new ArrayCollection();
     }
 
     /**
@@ -162,7 +164,11 @@ class ApprovalAmountPolicies
      */
     private $approval3AmountStatus;
 
-
+    /**
+     * @var Claim
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Claim",mappedBy="approver")
+     */
+    private $claims;
 
     /**
      * @return mixed
@@ -172,6 +178,21 @@ class ApprovalAmountPolicies
         return $this->id;
     }
 
+    /**
+     * @return Claim
+     */
+    public function getClaims()
+    {
+        return $this->claims;
+    }
+
+    /**
+     * @param Claim $claims
+     */
+    public function setClaims($claims)
+    {
+        $this->claims = $claims;
+    }
 
 
     /**

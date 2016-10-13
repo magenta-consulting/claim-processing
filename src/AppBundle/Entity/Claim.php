@@ -11,6 +11,7 @@ use Application\Sonata\MediaBundle\Entity\Gallery;
 use Application\Sonata\MediaBundle\Entity\Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use DoctrineExtensions\Query\Mysql\Date;
 
 /**
  * @ORM\Entity
@@ -104,6 +105,29 @@ class Claim
      */
     private $claimMedias;
 
+    /**
+     * @var Checker
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Checker",cascade={"persist","remove"},inversedBy="claims")
+     */
+    private $checker;
+
+    /**
+     * @var ApprovalAmountPolicies
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ApprovalAmountPolicies",cascade={"persist","remove"},inversedBy="claims")
+     */
+    private $approver;
+
+    /**
+     * @var Date
+     * @ORM\Column(name="period_from",type="date")
+     */
+    private $periodFrom;
+    /**
+     * @var Date
+     * @ORM\Column(name="period_to",type="date")
+     */
+    private $periodTo;
+
 
     /**
      * @var \DateTime
@@ -124,6 +148,72 @@ class Claim
     {
         return $this->id;
     }
+
+    /**
+     * @return Date
+     */
+    public function getPeriodFrom()
+    {
+        return $this->periodFrom;
+    }
+
+    /**
+     * @param Date $periodFrom
+     */
+    public function setPeriodFrom($periodFrom)
+    {
+        $this->periodFrom = $periodFrom;
+    }
+
+    /**
+     * @return Date
+     */
+    public function getPeriodTo()
+    {
+        return $this->periodTo;
+    }
+
+    /**
+     * @param Date $periodTo
+     */
+    public function setPeriodTo($periodTo)
+    {
+        $this->periodTo = $periodTo;
+    }
+
+
+    /**
+     * @return Checker
+     */
+    public function getChecker()
+    {
+        return $this->checker;
+    }
+
+    /**
+     * @param Checker $checker
+     */
+    public function setChecker($checker)
+    {
+        $this->checker = $checker;
+    }
+
+    /**
+     * @return ApprovalAmountPolicies
+     */
+    public function getApprover()
+    {
+        return $this->approver;
+    }
+
+    /**
+     * @param ApprovalAmountPolicies $approver
+     */
+    public function setApprover($approver)
+    {
+        $this->approver = $approver;
+    }
+
 
     /**
      * @return Company

@@ -18,6 +18,7 @@ class Checker
     public function __construct()
     {
         $this->createdDate = new \DateTime();
+        $this->claims = new ArrayCollection();
         // your own logic
     }
 
@@ -89,6 +90,12 @@ class Checker
     private $backupChecker;
 
     /**
+     * @var Claim
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Claim",mappedBy="checker")
+     */
+    private $claims;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -97,11 +104,19 @@ class Checker
     }
 
     /**
-     * @param mixed $id
+     * @return Claim
      */
-    public function setId($id)
+    public function getClaims()
     {
-        $this->id = $id;
+        return $this->claims;
+    }
+
+    /**
+     * @param Claim $claims
+     */
+    public function setClaims($claims)
+    {
+        $this->claims = $claims;
     }
 
     /**
