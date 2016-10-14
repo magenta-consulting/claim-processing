@@ -17,7 +17,7 @@ services:
                 - [setContainer, ["@service_container"]]
     admin.claim:
             class: AppBundle\Admin\ClaimAdmin
-            arguments: [~, AppBundle\Entity\Claim, ~]
+            arguments: [~, AppBundle\Entity\Claim, AppBundle:Admin/Claim]
             tags:
                 - { name: sonata.admin, manager_type: orm, label: Claim }
             calls:

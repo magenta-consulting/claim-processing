@@ -7,6 +7,7 @@
  */
 
 namespace AppBundle\Entity;
+
 use Application\Sonata\MediaBundle\Entity\Gallery;
 use Application\Sonata\MediaBundle\Entity\Media;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -18,8 +19,6 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  * @ORM\Entity
  * @ORM\Table(name="claim")
  */
-
-
 class Claim
 {
 
@@ -50,6 +49,11 @@ class Claim
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimType")
      */
     private $claimType;
+    /**
+     * @var ClaimType
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimType")
+     */
+    private $claimTypeCurrent;
     /**
      * @var ClaimCategory
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimCategory")
@@ -109,13 +113,13 @@ class Claim
 
     /**
      * @var Checker
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Checker",cascade={"persist","remove"},inversedBy="claims")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Checker",cascade={"persist"},inversedBy="claims")
      */
     private $checker;
 
     /**
      * @var ApprovalAmountPolicies
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ApprovalAmountPolicies",cascade={"persist","remove"},inversedBy="claims")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ApprovalAmountPolicies",cascade={"persist"},inversedBy="claims")
      */
     private $approver;
 
@@ -288,6 +292,23 @@ class Claim
     {
         $this->claimType = $claimType;
     }
+
+    /**
+     * @return ClaimType
+     */
+    public function getClaimTypeCurrent()
+    {
+        return $this->claimTypeCurrent;
+    }
+
+    /**
+     * @param ClaimType $claimTypeCurrent
+     */
+    public function setClaimTypeCurrent($claimTypeCurrent)
+    {
+        $this->claimTypeCurrent = $claimTypeCurrent;
+    }
+
 
     /**
      * @return ClaimCategory
@@ -467,13 +488,15 @@ class Claim
     }
 
 
-    public function addClaimMedia($claimMedia){
+    public function addClaimMedia($claimMedia)
+    {
         $this->claimMedias->add($claimMedia);
         $claimMedia->setClaim($this);
         return $this;
     }
 
-    public function removeClaimMedia($claimMedia){
+    public function removeClaimMedia($claimMedia)
+    {
         $this->claimMedias->removeElement($claimMedia);
         $claimMedia->setClaim(null);
     }
@@ -481,39 +504,49 @@ class Claim
 
     public function setPeriod()
     {
-        if($this->getClaimType()) {
+        if ($this->getClaimType()) {
+            $this->setClaimTypeCurrent($this->getClaimType());
             $claimPolicy = $this->getClaimType()->getCompanyClaimPolicies();
             if ($claimPolicy) {
                 $claimable = $claimPolicy->getClaimablePeriod();
-
-                $periodTo = new \DateTime('NOW');
-                $clone = clone $periodTo;
-                $periodFrom = $clone->modify('-' . $claimable . ' month');
+                $cutOffdate = $claimPolicy->getCutOffDate();
+                $currentDate = date('d');
+                if ($currentDate <= $cutOffdate) {
+                    $periodTo = new \DateTime('NOW');
+                    $clone = clone $periodTo;
+                    $periodFrom = $clone->modify('-' . $claimable . ' month');
+                } else {
+                    $periodTo = new \DateTime('NOW');
+                    $periodTo->modify('+1 month');
+                    $clone = clone $periodTo;
+                    $periodFrom = $clone->modify('-' . $claimable . ' month');
+                }
+                $periodFrom->setDate($periodFrom->format('Y'),$periodFrom->format('m'),$cutOffdate+1);
+                $periodTo->setDate($periodTo->format('Y'),$periodTo->format('m'),$cutOffdate);
                 $this->setPeriodFrom($periodFrom);
                 $this->setPeriodTo($periodTo);
             }
         }
     }
+
     public function validate(ExecutionContextInterface $context, $payload)
     {
-        $this->setPeriod();
-        if($this->getPeriodFrom()) {
-            if($this->getReceiptDate() < $this->getPeriodFrom() || $this->getReceiptDate() > $this->getPeriodTo()){
+        if ($this->id === null) {
+            $this->setPeriod();
+        } else {
+            if ($this->getClaimType()->getId() !== $this->getClaimTypeCurrent()->getId()) {
+                $this->setPeriod();
+            }
+        }
+        if ($this->getPeriodFrom()) {
+            if ($this->getReceiptDate() < $this->getPeriodFrom() || $this->getReceiptDate() > $this->getPeriodTo()) {
                 $context->buildViolation('This receipt date is invalid')
                     ->atPath('receiptDate')
                     ->addViolation();
             }
         }
+
     }
-
-
-
-
-
-
-
-
-
 
 
 }

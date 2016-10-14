@@ -1,0 +1,248 @@
+{% extends 'SonataAdminBundle::standard_layout.html.twig' %}
+
+{% block sonata_page_content_header %}
+    <div class="sticky-wrapper"><nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+
+                <div class="navbar-collapse">
+                    <div class="navbar-left">
+                    </div>
+
+                    <div class="nav navbar-right btn-group">
+                        <a href="/app_dev.php/admin/app/claimtype/list?_list_mode=list" class="btn btn-default navbar-btn btn-sm active"><i class="fa fa-list fa-fw"></i></a>
+                        <a href="/app_dev.php/admin/app/claimtype/list?_list_mode=mosaic" class="btn btn-default navbar-btn btn-sm"><i class="fa fa-th-large fa-fw"></i></a>
+                    </div>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a class="sonata-action-element" href="/app_dev.php/admin/app/claimtype/create"><i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                Add new</a></li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </nav></div>
+    {% endblock %}
+{% block sonata_admin_content %}
+    <div class="row">
+        <div class="col-xs-12 col-md-12">
+            <form action="/app_dev.php/admin/app/claim/batch?filter%5B_sort_order%5D=ASC&amp;filter%5B_sort_by%5D=id&amp;filter%5B_page%5D=1&amp;filter%5B_per_page%5D=32" method="POST">
+                <input type="hidden" name="_sonata_csrf_token" value="NVPhx9kofZAxi5nQaknHVXbSoe5uab4GS8XMchJ7OyQ">
+
+                <div class="box box-primary" style="margin-bottom: 100px;">
+                    <div class="box-body table-responsive no-padding">
+
+
+
+                        <table class="table table-bordered table-striped sonata-ba-list">
+                            <thead>
+                            <tr class="sonata-ba-list-field-header">
+                                <th class="sonata-ba-list-field-header sonata-ba-list-field-header-batch">
+                                    <div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" id="list_batch_checkbox" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>
+                                </th>
+
+                                <th class="sonata-ba-list-field-header-text  sonata-ba-list-field-header-order-asc "><a href="/app_dev.php/admin/app/claim/list?filter%5B_sort_order%5D=ASC&amp;filter%5B_sort_by%5D=position.employeeNo&amp;filter%5B_page%5D=1&amp;filter%5B_per_page%5D=32">                                                    Employee No
+                                    </a></th>
+                                <th class="sonata-ba-list-field-header-text  sonata-ba-list-field-header-order-asc "><a href="/app_dev.php/admin/app/claim/list?filter%5B_sort_order%5D=ASC&amp;filter%5B_sort_by%5D=position.user.firstName&amp;filter%5B_page%5D=1&amp;filter%5B_per_page%5D=32">                                                    Name
+                                    </a></th>
+                                <th class="sonata-ba-list-field-header-text  sonata-ba-list-field-header-order-asc "><a href="/app_dev.php/admin/app/claim/list?filter%5B_sort_order%5D=ASC&amp;filter%5B_sort_by%5D=companyGetClaim.name&amp;filter%5B_page%5D=1&amp;filter%5B_per_page%5D=32">                                                    Company
+                                    </a></th>
+                                <th class="sonata-ba-list-field-header-text  sonata-ba-list-field-header-order-asc "><a href="/app_dev.php/admin/app/claim/list?filter%5B_sort_order%5D=ASC&amp;filter%5B_sort_by%5D=claimType.code&amp;filter%5B_page%5D=1&amp;filter%5B_per_page%5D=32">                                                    Cost Centre
+                                    </a></th>
+                                <th class="sonata-ba-list-field-header-text  sonata-ba-list-field-header-order-asc "><a href="/app_dev.php/admin/app/claim/list?filter%5B_sort_order%5D=ASC&amp;filter%5B_sort_by%5D=claimCategory.code&amp;filter%5B_page%5D=1&amp;filter%5B_per_page%5D=32">                                                    Claim Category
+                                    </a></th>
+                                <th class="sonata-ba-list-field-header-date  sonata-ba-list-field-header-order-asc "><a href="/app_dev.php/admin/app/claim/list?filter%5B_sort_order%5D=ASC&amp;filter%5B_sort_by%5D=periodFrom&amp;filter%5B_page%5D=1&amp;filter%5B_per_page%5D=32">                                                    Period From
+                                    </a></th>
+                                <th class="sonata-ba-list-field-header-date  sonata-ba-list-field-header-order-asc "><a href="/app_dev.php/admin/app/claim/list?filter%5B_sort_order%5D=ASC&amp;filter%5B_sort_by%5D=periodTo&amp;filter%5B_page%5D=1&amp;filter%5B_per_page%5D=32">                                                    Period To
+                                    </a></th>
+                                <th class="sonata-ba-list-field-header-number  sonata-ba-list-field-header-order-asc "><a href="/app_dev.php/admin/app/claim/list?filter%5B_sort_order%5D=ASC&amp;filter%5B_sort_by%5D=claimAmount&amp;filter%5B_page%5D=1&amp;filter%5B_per_page%5D=32">                                                    Amount
+                                    </a></th>
+                                <th class="sonata-ba-list-field-header-text ">
+                                    Action
+                                </th>                                                                                                            </tr>
+                            </thead>
+
+                            <tbody>
+
+                            <tr>
+
+
+                                <!-- START
+                                    fieldName: batch
+                                    template: SonataAdminBundle:CRUD:list__batch.html.twig
+                                    compiled template: SonataAdminBundle:CRUD:list__batch.html.twig
+                                    -->
+
+                                <td class="sonata-ba-list-field sonata-ba-list-field-batch" objectid="6">
+
+
+                                    <div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" name="idx[]" value="6" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>
+
+                                </td>
+
+                                <!-- END - fieldName: batch -->
+
+                                <!-- START
+                                    fieldName: employeeNo
+                                    template: SonataAdminBundle:CRUD:base_list_field.html.twig
+                                    compiled template: SonataAdminBundle:CRUD:base_list_field.html.twig
+                                    -->
+
+                                <td class="sonata-ba-list-field sonata-ba-list-field-text" objectid="6">
+
+                                    <a class="sonata-link-identifier" href="/app_dev.php/admin/app/claim/6/edit">1</a>
+                                </td>
+
+                                <!-- END - fieldName: employeeNo -->
+
+                                <!-- START
+                                    fieldName: firstName
+                                    template: SonataAdminBundle:CRUD:base_list_field.html.twig
+                                    compiled template: SonataAdminBundle:CRUD:base_list_field.html.twig
+                                    -->
+
+                                <td class="sonata-ba-list-field sonata-ba-list-field-text" objectid="6">
+
+
+
+                                </td>
+
+                                <!-- END - fieldName: firstName -->
+
+                                <!-- START
+                                    fieldName: name
+                                    template: SonataAdminBundle:CRUD:base_list_field.html.twig
+                                    compiled template: SonataAdminBundle:CRUD:base_list_field.html.twig
+                                    -->
+
+                                <td class="sonata-ba-list-field sonata-ba-list-field-text" objectid="6">
+
+
+                                    CLIENT 1
+                                </td>
+
+                                <!-- END - fieldName: name -->
+
+                                <!-- START
+                                    fieldName: code
+                                    template: SonataAdminBundle:CRUD:base_list_field.html.twig
+                                    compiled template: SonataAdminBundle:CRUD:base_list_field.html.twig
+                                    -->
+
+                                <td class="sonata-ba-list-field sonata-ba-list-field-text" objectid="6">
+
+
+                                    1
+                                </td>
+
+                                <!-- END - fieldName: code -->
+
+                                <!-- START
+                                    fieldName: code
+                                    template: SonataAdminBundle:CRUD:base_list_field.html.twig
+                                    compiled template: SonataAdminBundle:CRUD:base_list_field.html.twig
+                                    -->
+
+                                <td class="sonata-ba-list-field sonata-ba-list-field-text" objectid="6">
+
+
+                                    cat1
+                                </td>
+
+                                <!-- END - fieldName: code -->
+
+                                <!-- START
+                                    fieldName: periodFrom
+                                    template: SonataAdminBundle:CRUD:list_date.html.twig
+                                    compiled template: SonataAdminBundle:CRUD:list_date.html.twig
+                                    -->
+
+                                <td class="sonata-ba-list-field sonata-ba-list-field-date" objectid="6">
+
+
+                                    02 Oct 2016
+                                </td>
+
+                                <!-- END - fieldName: periodFrom -->
+
+                                <!-- START
+                                    fieldName: periodTo
+                                    template: SonataAdminBundle:CRUD:list_date.html.twig
+                                    compiled template: SonataAdminBundle:CRUD:list_date.html.twig
+                                    -->
+
+                                <td class="sonata-ba-list-field sonata-ba-list-field-date" objectid="6">
+
+
+                                    01 Nov 2016
+                                </td>
+
+                                <!-- END - fieldName: periodTo -->
+
+                                <!-- START
+                                    fieldName: claimAmount
+                                    template:
+                                    compiled template: SonataAdminBundle:CRUD:base_list_field.html.twig
+                                    -->
+
+                                <td class="sonata-ba-list-field sonata-ba-list-field-number" objectid="6">
+
+
+                                    44
+                                </td>
+
+                                <!-- END - fieldName: claimAmount -->
+
+                                <!-- START
+                                    fieldName: _action
+                                    template: SonataAdminBundle:CRUD:list__action.html.twig
+                                    compiled template: SonataAdminBundle:CRUD:list__action.html.twig
+                                    -->
+
+                                <td class="sonata-ba-list-field sonata-ba-list-field-text" objectid="6">
+
+
+                                    <div class="btn-group">
+
+                                        <a href="/app_dev.php/admin/app/claim/6/delete" class="btn btn-sm btn-default delete_link" title="Delete">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                            Delete
+                                        </a>
+
+                                        <a href="/app_dev.php/admin/app/claim/6/show" class="btn btn-sm btn-default view_link" title="Show">
+                                            <i class="fa fa-search-plus" aria-hidden="true"></i>
+                                            Show
+                                        </a>
+                                    </div>
+
+                                </td>
+
+                                <!-- END - fieldName: _action -->
+                            </tr>
+                            </tbody>
+
+                        </table>
+
+
+                    </div>
+                    <div class="box-footer">
+                        <div class="text-center">
+                            <ul class="pagination">
+
+                                <li><a href="/app_dev.php/admin/app/claimtype/list?filter%5B_sort_order%5D=ASC&amp;filter%5B_sort_by%5D=id&amp;filter%5B_page%5D=1&amp;filter%5B_per_page%5D=1" title="Previous">‹</a></li>
+
+                                <li><a href="/app_dev.php/admin/app/claimtype/list?filter%5B_sort_order%5D=ASC&amp;filter%5B_sort_by%5D=id&amp;filter%5B_page%5D=1&amp;filter%5B_per_page%5D=1">1</a></li>
+                                <li class="active"><a href="/app_dev.php/admin/app/claimtype/list?filter%5B_sort_order%5D=ASC&amp;filter%5B_sort_by%5D=id&amp;filter%5B_page%5D=2&amp;filter%5B_per_page%5D=1">2</a></li>
+                                <li><a href="/app_dev.php/admin/app/claimtype/list?filter%5B_sort_order%5D=ASC&amp;filter%5B_sort_by%5D=id&amp;filter%5B_page%5D=3&amp;filter%5B_per_page%5D=1">3</a></li>
+
+                                <li><a href="/app_dev.php/admin/app/claimtype/list?filter%5B_sort_order%5D=ASC&amp;filter%5B_sort_by%5D=id&amp;filter%5B_page%5D=3&amp;filter%5B_per_page%5D=1" title="Next">›</a></li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+{% endblock %}

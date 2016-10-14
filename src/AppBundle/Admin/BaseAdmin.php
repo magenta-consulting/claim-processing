@@ -62,7 +62,7 @@ class BaseAdmin extends AbstractAdmin
 
     public function isAdmin()
     {
-        if ($this->isGranted('ROLE_ADMIN')) {
+        if ($this->getContainer()->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             return true;
         }
         return false;
@@ -70,7 +70,7 @@ class BaseAdmin extends AbstractAdmin
 
     public function isCLient()
     {
-        if ($this->isGranted('ROLE_CLIENT_ADMIN')) {
+        if ($this->getContainer()->get('security.authorization_checker')->isGranted('ROLE_CLIENT_ADMIN')) {
             return true;
         }
         return false;
@@ -78,7 +78,7 @@ class BaseAdmin extends AbstractAdmin
 
     public function isUser()
     {
-        if ($this->isGranted('ROLE_USER')) {
+        if ($this->getContainer()->get('security.authorization_checker')->isGranted('ROLE_USER')) {
             return true;
         }
         return false;
@@ -87,7 +87,7 @@ class BaseAdmin extends AbstractAdmin
 
     public function isHr()
     {
-        if ($this->isGranted('ROLE_HR_ADMIN')) {
+        if ($this->getContainer()->get('security.authorization_checker')->isGranted('ROLE_HR_ADMIN')) {
             return true;
         }
         return false;
