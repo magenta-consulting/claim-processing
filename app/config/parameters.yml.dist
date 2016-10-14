@@ -31,5 +31,7 @@ parameters:
     s3_sdk_version: 3
     s3_cdn_server_path: /uploads/media
     s3_filesystem: sonata.media.filesystem.local
+    sonata.media.provider.image.class: Application\Sonata\MediaBundle\Provider\AppImageProvider
+    sonata.media.provider.file.class: Application\Sonata\MediaBundle\Provider\AppFileProvider
 
 
