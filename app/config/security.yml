@@ -5,8 +5,8 @@ security:
     role_hierarchy:
         ROLE_USER: ROLE_SONATA_ADMIN
         ROLE_HR_ADMIN: ROLE_USER
-        ROLE_CLIENT_ADMIN: ROLE_HR_ADMIN
-        ROLE_ADMIN:    [ROLE_CLIENT_ADMIN,ROLE_CS_ADMIN]
+        ROLE_CLIENT_ADMIN: ROLE_USER
+        ROLE_ADMIN:  ROLE_SONATA_ADMIN
     providers:
         fos_userbundle:
             id: fos_user.user_provider.username_email
@@ -31,5 +31,5 @@ security:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/, role: ROLE_HR_ADMIN }
+        - { path: ^/admin/, role: ROLE_USER }
         - { path: ^/switch-user, role: IS_AUTHENTICATED_FULLY }

@@ -23,14 +23,8 @@ class ClaimMediaAdmin extends BaseAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $claimMedia = $this->getSubject();
         $fileFieldOptions = array('label' => 'Images','provider' => 'sonata.media.provider.image','context'  => 'default');
-        if ($this->hasSubject() && $claimMedia->getMedia()) {
-            $container = $this->getConfigurationPool()->getContainer();
-            $fullPath = $container->get('app.media.retriever')->getPublicURL($claimMedia->getMedia());
-            $fileFieldOptions['help'] = '<img src="'.$fullPath.'" class="admin-preview" />';
-        }
-        $formMapper->add('media', 'sonata_media_type',$fileFieldOptions,$fileFieldOptions);
+        $formMapper->add('media', 'sonata_media_type',$fileFieldOptions);
 
         $formMapper->get('media')->remove('unlink');
     }

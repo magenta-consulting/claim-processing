@@ -46,6 +46,9 @@ class BaseAdmin extends AbstractAdmin
 
         return $user;
     }
+    public function getPosition(){
+        return $this->getUser()->getLoginWithPosition();
+    }
 
     public function getCompany()
     {
@@ -59,20 +62,24 @@ class BaseAdmin extends AbstractAdmin
 
     public function isAdmin()
     {
-        if ($this->getUser()) {
-            if ($this->getUser()->hasRole('ROLE_ADMIN')) {
-                return true;
-            }
+        if ($this->isGranted('ROLE_ADMIN')) {
+            return true;
         }
         return false;
     }
 
     public function isCLient()
     {
-        if ($this->getUser()) {
-            if ($this->getUser()->hasRole('ROLE_CLIENT_ADMIN')) {
-                return true;
-            }
+        if ($this->isGranted('ROLE_CLIENT_ADMIN')) {
+            return true;
+        }
+        return false;
+    }
+
+    public function isUser()
+    {
+        if ($this->isGranted('ROLE_USER')) {
+            return true;
         }
         return false;
     }
@@ -80,10 +87,8 @@ class BaseAdmin extends AbstractAdmin
 
     public function isHr()
     {
-        if ($this->getUser()) {
-            if ($this->getUser()->hasRole('ROLE_HR_ADMIN')) {
-                return true;
-            }
+        if ($this->isGranted('ROLE_HR_ADMIN')) {
+            return true;
         }
         return false;
     }
@@ -150,9 +155,10 @@ class BaseAdmin extends AbstractAdmin
         $query = parent::createQuery($context);
         $class = $this->getClass();
         $company = $this->getCompany();
+        $position =$this->getPosition();
         $expr = new Expr();
         if ($this->isCLient()) {
-            if ($company instanceof $class) {
+            if ($class === 'AppBundle\Entity\Company') {
                 $query->andWhere(
                     $expr->orX(
                         $expr->eq($query->getRootAliases()[0] . '.parent', ':company'),
@@ -176,6 +182,18 @@ class BaseAdmin extends AbstractAdmin
                 $expr->eq($query->getRootAliases()[0] . '.company', ':company')
             );
             $query->setParameter('company', $company);
+        }
+        if ($this->isUser()) {
+            if ($class === 'AppBundle\Entity\Claim') {
+                $query->andWhere(
+                    $expr->eq($query->getRootAliases()[0] . '.company', ':company')
+                );
+                $query->andWhere(
+                    $expr->eq($query->getRootAliases()[0] . '.position', ':position')
+                );
+                $query->setParameter('company', $company);
+                $query->setParameter('position', $position);
+            }
         }
 
         return $query;
@@ -363,12 +381,14 @@ class BaseAdmin extends AbstractAdmin
             ->setParameter('company', $this->getCompany());
         return $qb;
     }
-    public function filterCurrencyExchangeBycompany(){
+
+    public function filterCurrencyExchangeBycompany()
+    {
         $em = $this->container->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder();
         $expr = new Expr();
         $qb->select('currencyExchange')
-            ->from('AppBundle\Entity\CurrencyExchange','currencyExchange')
+            ->from('AppBundle\Entity\CurrencyExchange', 'currencyExchange')
             ->where($expr->eq('currencyExchange.company', ':company'))
             ->setParameter('company', $this->getCompany());
         return $qb;
