@@ -38,6 +38,17 @@ class TwigExtension extends \Twig_Extension
 
         return $qb->getQuery()->getSingleScalarResult();
     }
+    public function isShowMenuForChecker($position){
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder('claim');
+        $qb->select($qb->expr()->count('claim.id'));
+        $qb->from('AppBundle:Claim','claim');
+        $qb->join('claim.checker','checker');
+        $qb->where('checker.checker = :position');
+        $qb->setParameter('position', $position);
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
 
     public function getUrlMedia($media){
         return $this->container->get('app.media.retriever')->getPublicURL($media);
@@ -51,6 +62,7 @@ class TwigExtension extends \Twig_Extension
             'getNumberDecimalDigits' => new \Twig_Function_Method($this, 'getNumberDecimalDigits', array('is_safe' => array('html'))),
             'getUrlMedia' => new \Twig_Function_Method($this, 'getUrlMedia', array('is_safe' => array('html'))),
             'getNumberClaim' => new \Twig_Function_Method($this, 'getNumberClaim', array('is_safe' => array('html'))),
+            'isShowMenuForChecker' => new \Twig_Function_Method($this, 'isShowMenuForChecker', array('is_safe' => array('html'))),
         );
     }
 
