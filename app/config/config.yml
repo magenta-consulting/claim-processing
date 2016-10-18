@@ -207,6 +207,8 @@ sonata_doctrine_orm_admin:
         types:
             list:
                 exrate:      AppBundle:SonataAdmin/CRUD:list_exrate.html.twig
+                number_claim:      AppBundle:SonataAdmin/CRUD:list_number_claim.html.twig
+                submission_date_claim:      AppBundle:SonataAdmin/CRUD:list_submission_date_claim.html.twig
                 array:      SonataAdminBundle:CRUD:list_array.html.twig
                 boolean:    SonataAdminBundle:CRUD:list_boolean.html.twig
                 date:       SonataAdminBundle:CRUD:list_date.html.twig

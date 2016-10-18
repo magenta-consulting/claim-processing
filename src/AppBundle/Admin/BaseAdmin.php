@@ -46,7 +46,9 @@ class BaseAdmin extends AbstractAdmin
 
         return $user;
     }
-    public function getPosition(){
+
+    public function getPosition()
+    {
         return $this->getUser()->getLoginWithPosition();
     }
 
@@ -155,7 +157,7 @@ class BaseAdmin extends AbstractAdmin
         $query = parent::createQuery($context);
         $class = $this->getClass();
         $company = $this->getCompany();
-        $position =$this->getPosition();
+        $position = $this->getPosition();
         $expr = new Expr();
         if ($this->isCLient()) {
             if ($class === 'AppBundle\Entity\Company') {
@@ -185,14 +187,43 @@ class BaseAdmin extends AbstractAdmin
         }
         if ($this->isUser()) {
             if ($class === 'AppBundle\Entity\Claim') {
-                $query->andWhere(
-                    $expr->eq($query->getRootAliases()[0] . '.company', ':company')
-                );
-                $query->andWhere(
-                    $expr->eq($query->getRootAliases()[0] . '.position', ':position')
-                );
-                $query->setParameter('company', $company);
-                $query->setParameter('position', $position);
+                $request = $this->getRequest();
+                $type = $request->get('type');
+                switch ($type) {
+                    case 'checking':
+                        $query->join($query->getRootAliases()[0] . '.checker', 'checker');
+                        $query->andWhere(
+                            $expr->eq($query->getRootAliases()[0] . '.company', ':company')
+                        );
+                        $query->andWhere(
+                            $expr->eq('checker.checker', ':checker')
+                        );
+                        $query->groupBy($query->getRootAliases()[0] . '.position');
+                        $query->setParameter('company', $company);
+                        $query->setParameter('checker', $position);
+                        break;
+                    case 'checking-each-position':
+                        $positionId = $request->get('position-id');
+                        $query->join($query->getRootAliases()[0] . '.position', 'position');
+                        $query->andWhere(
+                            $expr->eq($query->getRootAliases()[0] . '.company', ':company')
+                        );
+                        $query->andWhere(
+                            $expr->eq('position.id', ':positionId')
+                        );
+                        $query->setParameter('company', $company);
+                        $query->setParameter('positionId', $positionId);
+                        break;
+                    default:
+                        $query->andWhere(
+                            $expr->eq($query->getRootAliases()[0] . '.company', ':company')
+                        );
+                        $query->andWhere(
+                            $expr->eq($query->getRootAliases()[0] . '.position', ':position')
+                        );
+                        $query->setParameter('company', $company);
+                        $query->setParameter('position', $position);
+                }
             }
         }
 

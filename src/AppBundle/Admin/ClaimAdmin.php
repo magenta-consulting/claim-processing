@@ -18,6 +18,8 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
+use Knp\Menu\ItemInterface;
+use Sonata\AdminBundle\Admin\AdminInterface;
 
 class ClaimAdmin extends BaseAdmin
 {
@@ -137,21 +139,101 @@ class ClaimAdmin extends BaseAdmin
 
     protected function configureListFields(ListMapper $listMapper)
     {
-        $listMapper
-            ->addIdentifier('position.employeeNo', null, ['label' => 'Employee No'])
-            ->add('position.user.firstName', null, ['label' => 'Name'])
-            ->add('companyGetClaim.name', null, ['label' => 'Company'])
-            ->add('claimType.code', null, ['label' => 'Cost Centre'])
-            ->add('claimCategory.code', null, ['label' => 'Claim Category'])
-            ->add('periodFrom', 'date', ['label' => 'Period From', 'format' => 'd M Y'])
-            ->add('periodTo', null, ['label' => 'Period To', 'format' => 'd M Y'])
-            ->add('claimAmount', null, ['label' => 'Amount'])
-            ->add('_action', null, array(
-                'actions' => array(
-                    'delete' => array(),
-                    'show' => array(),
-                )
+        $request = $this->getRequest();
+        $type = $request->get('type');
+        switch ($type) {
+            case 'checking':
+                $listMapper->add('position.employeeNo', null, ['label' => 'Employee No'])
+                    ->add('position.firstName', null, ['label' => 'Name'])
+                    ->add('companyGetClaim.name', null, ['label' => 'Company'])
+                    ->add('position.costCentre.code', null, ['label' => 'Cost Centre'])
+                    ->add('2', 'number_claim', ['label' => 'No. Pending Claims'])
+                    ->add('4', 'submission_date_claim', ['label' => 'Initial Submission Date'])
+                    ->add('periodFrom', 'date', ['label' => 'Period From', 'format' => 'd M Y'])
+                    ->add('periodTo', null, ['label' => 'Period To', 'format' => 'd M Y'])
+                    ->add('_action', null, array(
+                        'actions' => array(
+                            'claimEachPositionForCheck' => array(
+                                'template' => 'AppBundle:SonataAdmin/CustomActions:_list-action-claim-each-position.html.twig'
+                            ),
+                        )
+                    ));
+                break;
+            case 'checking-each-position':
+                $listMapper
+                    ->add('position.employeeNo', null, ['label' => 'Employee No'])
+                    ->add('position.firstName', null, ['label' => 'Name'])
+                    ->add('companyGetClaim.name', null, ['label' => 'Company'])
+                    ->add('position.costCentre.code', null, ['label' => 'Cost Centre'])
+                    ->add('claimType.code', null, ['label' => 'Claim Type'])
+                    ->add('claimCategory.code', null, ['label' => 'Claim Category'])
+                    ->add('periodFrom', 'date', ['label' => 'Period From', 'format' => 'd M Y'])
+                    ->add('periodTo', null, ['label' => 'Period To', 'format' => 'd M Y'])
+                    ->add('status', null, ['label' => 'Status'])
+                    ->add('createdAt', null, ['label' => 'Submission Date', 'format' => 'd M Y'])
+                    ->add('claimAmount', null, ['label' => 'Amount'])
+                    ->add('_action', null, array(
+                        'actions' => array(
+                            'checkerViewClaim' => array(
+                                'template' => 'AppBundle:SonataAdmin/CustomActions:_list-action-checker-view-claim.html.twig'
+                            ),
+                        )
+                    ));
+                break;
+            default:
+                $listMapper
+                    ->addIdentifier('position.employeeNo', null, ['label' => 'Employee No'])
+                    ->add('position.firstName', null, ['label' => 'Name'])
+                    ->add('companyGetClaim.name', null, ['label' => 'Company'])
+                    ->add('position.costCentre.code', null, ['label' => 'Cost Centre'])
+                    ->add('claimType.code', null, ['label' => 'Claim Type'])
+                    ->add('claimCategory.code', null, ['label' => 'Claim Category'])
+                    ->add('periodFrom', 'date', ['label' => 'Period From', 'format' => 'd M Y'])
+                    ->add('periodTo', null, ['label' => 'Period To', 'format' => 'd M Y'])
+                    ->add('claimAmount', null, ['label' => 'Amount'])
+                    ->add('_action', null, array(
+                        'actions' => array(
+                            'delete' => array(),
+                            'show' => array(),
+                        )
+                    ));
+        }
+
+    }
+
+    protected function configureSideMenu(ItemInterface $menu, $action, AdminInterface $childAdmin = null)
+    {
+        parent::configureSideMenu($menu, $action, $childAdmin); // TODO: Change the autogenerated stub
+        $request = $this->getRequest();
+        $type = $request->get('type');
+
+        if ('show' === $action && $type === 'checker-view-claim') {
+            $claim = $this->getSubject();
+            $menu->addChild('admin_app_claim_checkerApprove', array(
+                'label' => 'Approve',
+                'attributes' => array('class' => 'btn btn-success'),
+                'route' => 'admin_app_claim_checkerApprove',
+                'routeParameters' => array(
+                    'id' => $claim->getId(),
+                ),
             ));
+            $menu->addChild('admin_app_claim_checkerReject', array(
+                'label' => 'Reject',
+                'attributes' => array('class' => 'btn btn-danger'),
+                'route' => 'admin_app_claim_checkerReject',
+                'routeParameters' => array(
+                    'id' => $claim->getId(),
+                ),
+            ));
+        }
+    }
+
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->add('claimEachPositionForCheck', 'list');
+        $collection->add('checkerViewClaim', 'show');
+        $collection->add('checkerApprove', $this->getRouterIdParameter() . '/checker-approve');
+        $collection->add('checkerReject', $this->getRouterIdParameter() . '/checker-reject');
     }
 
     /**
@@ -159,31 +241,77 @@ class ClaimAdmin extends BaseAdmin
      */
     protected function configureShowFields(ShowMapper $show)
     {
-        $show->tab('Claim Details')
-            ->with('Claim Details', array('class' => 'col-md-6'))
-            ->add('claimAmount', null, ['label' => 'Amount'])
-            ->add('currencyExchange.code', null, ['label' => 'Currency'])
-            ->add('gstAmount', null, ['lable' => 'GST Amount'])
-            ->add('amountWithoutGst', null, ['lable' => 'Amount Without GST'])
-            ->add('gst', null, ['lable' => 'GST'])
-            ->add('claimType.code', 'text', ['label' => 'Claim Type'])
-            ->add('claimCategory.code', 'text', ['label' => 'Claim Category'])
-            ->add('status', 'text', ['label' => 'Status'])
-            ->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y'])
-            ->add('submissionRemarks', null, ['label' => 'Claimant Submission Remarks'])
-            ->end()
-            ->with('Claim Images', array('class' => 'col-md-6'))
-            ->add('claimMedias', 'show_image', ['label' => 'Claim Images'])
-            ->end()
-            ->end()
-            ->tab('Checker And Approver')
-            ->with('Checker', array('class' => 'col-md-6'))
-            ->add('checker', 'show_checker', ['label' => 'Company'])
-            ->end()
-            ->with('Approver', array('class' => 'col-md-6'))
-            ->add('approver', 'show_approver', ['label' => 'Company'])
-            ->end()
-            ->end();
+        $request = $this->getRequest();
+        $type = $request->get('type');
+        switch ($type) {
+            case 'checker-view-claim':
+                $show->tab('Claim Details')
+                    ->with('Claim Details', array('class' => 'col-md-6'))
+                    ->add('claimAmount', null, ['label' => 'Amount'])
+                    ->add('currencyExchange.code', null, ['label' => 'Currency'])
+                    ->add('gstAmount', null, ['lable' => 'GST Amount'])
+                    ->add('amountWithoutGst', null, ['lable' => 'Amount Without GST'])
+                    ->add('gst', null, ['lable' => 'GST'])
+                    ->add('claimType.code', 'text', ['label' => 'Claim Type'])
+                    ->add('claimCategory.code', 'text', ['label' => 'Claim Category'])
+                    ->add('status', 'text', ['label' => 'Status'])
+                    ->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y'])
+                    ->add('submissionRemarks', null, ['label' => 'Claimant Submission Remarks'])
+                    ->end()
+                    ->with('Claim Images', array('class' => 'col-md-6'))
+                    ->add('claimMedias', 'show_image', ['label' => 'Claim Images'])
+                    ->end()
+                    ->end()
+                    ->tab('Submission, Employment Details')
+                    ->with('Submission Details', array('class' => 'col-md-6'))
+//                    ->add('position.firstName',null,['label'=>'Submitted By'])
+                    ->add('createdAt', null, ['label' => 'Date Submitted', 'format' => 'd M Y'])
+                    ->add('position.firstName', null, ['label' => 'Claimant First Name'])
+                    ->add('position.lastName', null, ['label' => 'Claimant Last Name'])
+                    ->add('position.employeeNo', null, ['label' => 'Employee No.'])
+                    ->add('position.contactNumber', null, ['label' => 'Contact No.'])
+                    ->end()
+                    ->with('Employment Details', array('class' => 'col-md-6'))
+                    ->add('position.company.name', null, ['label' => 'Company'])
+                    ->add('position.costCentre.code', null, ['label' => 'Cost Centre'])
+                    ->add('position.region.code', null, ['label' => 'Region'])
+                    ->add('position.branch.code', null, ['label' => 'Branch'])
+                    ->add('position.department.code', null, ['label' => 'Department'])
+                    ->add('position.section.code', null, ['label' => 'Section'])
+                    ->add('position.employeeType.code', null, ['label' => 'Employee Type'])
+                    ->add('position.employmentType.code', null, ['label' => 'Employment Type'])
+                    ->end()
+                    ->end();
+                break;
+            default:
+                $show->tab('Claim Details')
+                    ->with('Claim Details', array('class' => 'col-md-6'))
+                    ->add('claimAmount', null, ['label' => 'Amount'])
+                    ->add('currencyExchange.code', null, ['label' => 'Currency'])
+                    ->add('gstAmount', null, ['lable' => 'GST Amount'])
+                    ->add('amountWithoutGst', null, ['lable' => 'Amount Without GST'])
+                    ->add('gst', null, ['lable' => 'GST'])
+                    ->add('claimType.code', 'text', ['label' => 'Claim Type'])
+                    ->add('claimCategory.code', 'text', ['label' => 'Claim Category'])
+                    ->add('status', 'text', ['label' => 'Status'])
+                    ->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y'])
+                    ->add('submissionRemarks', null, ['label' => 'Claimant Submission Remarks'])
+                    ->end()
+                    ->with('Claim Images', array('class' => 'col-md-6'))
+                    ->add('claimMedias', 'show_image', ['label' => 'Claim Images'])
+                    ->end()
+                    ->end()
+                    ->tab('Checker And Approver')
+                    ->with('Checker', array('class' => 'col-md-6'))
+                    ->add('checker', 'show_checker', ['label' => 'Company'])
+                    ->end()
+                    ->with('Approver', array('class' => 'col-md-6'))
+                    ->add('approver', 'show_approver', ['label' => 'Company'])
+                    ->end()
+                    ->end();
+                break;
+
+        }
 
     }
 
@@ -242,11 +370,6 @@ class ClaimAdmin extends BaseAdmin
     }
 
 
-    protected function configureRoutes(RouteCollection $collection)
-    {
-        $collection->add('listForCheck','list-for-check');
-        $collection->add('listForApproval','list-for-approval');
-    }
     public function toString($object)
     {
         return $object instanceof Claim

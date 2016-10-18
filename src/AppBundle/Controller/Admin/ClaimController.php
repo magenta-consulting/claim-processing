@@ -3,42 +3,31 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Entity\Claim;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Sonata\AdminBundle\Controller\CRUDController as Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class ClaimController extends Controller
 {
-    public function listForCheckAction()
+    public function checkerApproveAction()
     {
-        $request = $this->getRequest();
+        $object = $this->admin->getSubject();
+        $object->setStatus(Claim::STATUS_CHECKER_APPROVED);
+        $this->admin->update($object);
 
-        $this->admin->checkAccess('list');
+        $this->addFlash('sonata_flash_success', 'Approved successfully');
 
-        $preResponse = $this->preList($request);
-        if ($preResponse !== null) {
-            return $preResponse;
-        }
-
-        if ($listMode = $request->get('_list_mode')) {
-            $this->admin->setListMode($listMode);
-        }
-
-        $datagrid = $this->admin->getDatagrid();
-        $formView = $datagrid->getForm()->createView();
-
-        // set the theme for the current Admin Form
-        $this->get('twig')->getExtension('form')->renderer->setTheme($formView, $this->admin->getFilterTheme());
-
-        return $this->render('AppBundle:SonataAdmin/Claim:list_for_check.html.twig', array(
-            'action' => 'list',
-            'form' => $formView,
-            'datagrid' => $datagrid,
-            'csrf_token' => $this->getCsrfToken('sonata.batch'),
-        ), null, $request);
+        return new RedirectResponse($this->admin->generateUrl('list',['type'=>'checking-each-position','position-id'=>$object->getPosition()->getId()]));
     }
-    public function listForApprovalAction()
+    public function checkerRejectAction()
     {
-        echo 2;die;
+        $object = $this->admin->getSubject();
+
+        $object->setStatus(Claim::STATUS_APPROVER_REJECTED);
+        $this->admin->update($object);
+        $this->addFlash('sonata_flash_success', 'Rejected successfully');
+
+        return new RedirectResponse($this->admin->generateUrl('list',['type'=>'checking-each-position','position-id'=>$object->getPosition()->getId()]));
     }
 }
