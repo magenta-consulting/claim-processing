@@ -211,7 +211,7 @@ class ClaimAdmin extends BaseAdmin
             $claim = $this->getSubject();
             $menu->addChild('admin_app_claim_checkerApprove', array(
                 'label' => 'Approve',
-                'attributes' => array('class' => 'btn btn-success'),
+                'attributes' => array('class' => 'checker-approve'),
                 'route' => 'admin_app_claim_checkerApprove',
                 'routeParameters' => array(
                     'id' => $claim->getId(),
@@ -219,7 +219,7 @@ class ClaimAdmin extends BaseAdmin
             ));
             $menu->addChild('admin_app_claim_checkerReject', array(
                 'label' => 'Reject',
-                'attributes' => array('class' => 'btn btn-danger'),
+                'attributes' => array('class' => 'checker-reject'),
                 'route' => 'admin_app_claim_checkerReject',
                 'routeParameters' => array(
                     'id' => $claim->getId(),
