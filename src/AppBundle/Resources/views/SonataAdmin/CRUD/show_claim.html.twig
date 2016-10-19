@@ -14,7 +14,7 @@ file that was distributed with this source code.
 {% import 'SonataAdminBundle:CRUD:base_show_macro.html.twig' as show_helper %}
 
 {%- block actions -%}
-    {% include 'SonataAdminBundle:CRUD:action_buttons.html.twig' %}
+    {% include 'AppBundle:SonataAdmin/CRUD:action_buttons_claim.html.twig' %}
 {%- endblock -%}
 
 
@@ -29,7 +29,6 @@ file that was distributed with this source code.
         {% if has_tab %}
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs" role="tablist">
-                    {% if app.request.get('type') == 'checker-view-claim' %}
                         {% for name, show_tab in admin.showtabs %}
                             <li{% if loop.first %} class="active"{% endif %}>
                                 <a href="#tab_{{ admin.uniqid }}_{{ loop.index }}" data-toggle="tab">
@@ -38,9 +37,6 @@ file that was distributed with this source code.
                                 </a>
                             </li>
                         {% endfor %}
-                    {% else %}
-
-                    {% endif %}
                 </ul>
 
                 <div class="tab-content">

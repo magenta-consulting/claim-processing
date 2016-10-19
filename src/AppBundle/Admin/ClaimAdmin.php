@@ -212,13 +212,11 @@ class ClaimAdmin extends BaseAdmin
 
         $collection->add('delete');
         $collection->add('create');
-        $collection->add('edit');
         $request = $this->getConfigurationPool()->getContainer()->get('request_stack')->getCurrentRequest();
         $type = $request->get('type');
         if($type != ''){
             $collection->remove('delete');
             $collection->remove('create');
-            $collection->remove('edit');
         }
     }
 
