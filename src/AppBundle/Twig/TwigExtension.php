@@ -27,6 +27,7 @@ class TwigExtension extends \Twig_Extension
 
     }
     public function getNumberClaim($position,$checker){
+        return 1;
         $em = $this->container->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder('claim');
         $qb->select($qb->expr()->count('claim.id'));
@@ -36,9 +37,10 @@ class TwigExtension extends \Twig_Extension
         $qb->setParameter('position', $position);
         $qb->setParameter('checker', $checker);
 
-        return $qb->getQuery()->getScalarResult();
+        return $qb->getQuery()->getSingleScalarResult();
     }
     public function isShowMenuForChecker($position){
+        return 1;
         $em = $this->container->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder('claim');
         $qb->select($qb->expr()->count('claim.id'));
@@ -47,7 +49,7 @@ class TwigExtension extends \Twig_Extension
         $qb->where('checker.checker = :position');
         $qb->setParameter('position', $position);
 
-        return $qb->getQuery()->getScalarResult();
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
     public function getUrlMedia($media){
