@@ -198,6 +198,12 @@ sonata_admin:
 #                              - admin.company
 
 #    title_logo: bundles/app/images/fancy_acme_logo.png
+
+    admin_services:
+        id.of.admin.service:
+            route_generator: app.admin.route.generator
+
+
 sonata_doctrine_orm_admin:
     templates:
         form:

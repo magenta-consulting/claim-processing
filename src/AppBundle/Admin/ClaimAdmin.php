@@ -234,6 +234,11 @@ class ClaimAdmin extends BaseAdmin
         $collection->add('checkerViewClaim', 'show');
         $collection->add('checkerApprove', $this->getRouterIdParameter() . '/checker-approve');
         $collection->add('checkerReject', $this->getRouterIdParameter() . '/checker-reject');
+
+//        $collection->remove('delete');
+//        $collection->remove('create');
+//        $request1 = $this->getConfigurationPool()->getContainer()->get('request_stack')->getCurrentRequest();
+//        $request2 = $this->getRequest();
     }
 
     /**

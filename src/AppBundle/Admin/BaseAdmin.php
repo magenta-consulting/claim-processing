@@ -141,7 +141,7 @@ class BaseAdmin extends AbstractAdmin
                 }
             }
         }
-        if ($this->isHr()) {
+        if ($this->isUser()) {
             if (method_exists($object, 'setCompany')) {
                 $object->setCompany($this->getCompany());
             }

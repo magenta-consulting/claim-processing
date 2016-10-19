@@ -21,6 +21,12 @@ services:
             class: AppBundle\Handler\AuthenticationHandler
             public: false
             arguments: ['@security.http_utils','@service_container','@security.token_storage']
+    app.admin.route.generator:
+            class: AppBundle\Route\RouteGenerator
+            arguments: ['@router','@app.admin.route.no_cache']
+    app.admin.route.no_cache:
+            class: AppBundle\Route\RoutesCache
+            arguments: ['%kernel.cache_dir%/sonata/admin','%kernel.debug%']
 
 
 
