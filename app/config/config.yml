@@ -212,6 +212,7 @@ sonata_doctrine_orm_admin:
             - SonataDoctrineORMAdminBundle:Form:filter_admin_fields.html.twig
         types:
             list:
+                debug:      AppBundle:SonataAdmin/CRUD:list_debug.html.twig
                 exrate:      AppBundle:SonataAdmin/CRUD:list_exrate.html.twig
                 number_claim:      AppBundle:SonataAdmin/CRUD:list_number_claim.html.twig
                 submission_date_claim:      AppBundle:SonataAdmin/CRUD:list_submission_date_claim.html.twig

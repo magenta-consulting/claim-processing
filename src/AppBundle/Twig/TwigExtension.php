@@ -53,6 +53,9 @@ class TwigExtension extends \Twig_Extension
     public function getUrlMedia($media){
         return $this->container->get('app.media.retriever')->getPublicURL($media);
     }
+    public function getRuleForClaim($claim){
+        return $this->container->get('app.claim_rule')->getRuleForClaim($claim);
+    }
 
 
     public function getFunctions()
@@ -63,6 +66,7 @@ class TwigExtension extends \Twig_Extension
             'getUrlMedia' => new \Twig_Function_Method($this, 'getUrlMedia', array('is_safe' => array('html'))),
             'getNumberClaim' => new \Twig_Function_Method($this, 'getNumberClaim', array('is_safe' => array('html'))),
             'isShowMenuForChecker' => new \Twig_Function_Method($this, 'isShowMenuForChecker', array('is_safe' => array('html'))),
+            'getRuleForClaim' => new \Twig_Function_Method($this, 'getRuleForClaim', array('is_safe' => array('html'))),
         );
     }
 

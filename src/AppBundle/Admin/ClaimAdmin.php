@@ -191,6 +191,7 @@ class ClaimAdmin extends BaseAdmin
                     ->add('periodFrom', 'date', ['label' => 'Period From', 'format' => 'd M Y'])
                     ->add('periodTo', null, ['label' => 'Period To', 'format' => 'd M Y'])
                     ->add('claimAmount', null, ['label' => 'Amount'])
+                    ->add('a', 'debug', ['label' => 'DEBUG'])
                     ->add('_action', null, array(
                         'actions' => array(
                             'delete' => array(),
@@ -329,30 +330,8 @@ class ClaimAdmin extends BaseAdmin
 
     public function setCheckerAndApprover($claim)
     {
-        $position = $this->getUser()->getLoginWithPosition();
-        $company = $position->getCompany();
-        $costCentre = $position->getCostCentre();
-        $region = $position->getRegion();
-        $branch = $position->getBranch();
-        $department = $position->getDepartment();
-        $section = $position->getSection();
-        $em = $this->container->get('doctrine')->getManager();
-        $checker = $em->getRepository('AppBundle\Entity\Checker')->findOneBy([
-            'companySetupChecker' => $company,
-            'costCentre' => $costCentre,
-            'region' => $region,
-            'branch' => $branch,
-            'department' => $department,
-            'section' => $section,
-        ]);
-        $approver = $em->getRepository('AppBundle\Entity\ApprovalAmountPolicies')->findOneBy([
-            'companySetupApproval' => $company,
-            'costCentre' => $costCentre,
-            'region' => $region,
-            'branch' => $branch,
-            'department' => $department,
-            'section' => $section,
-        ]);
+        $checker = $this->getContainer()->get('app.claim_rule')->getChecker($claim);
+        $approver = $this->getContainer()->get('app.claim_rule')->getApprover($claim);
         $claim->setChecker($checker);
         $claim->setApprover($approver);
     }

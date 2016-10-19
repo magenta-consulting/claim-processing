@@ -7,6 +7,10 @@ services:
         class: AppBundle\Services\Core\MediaRetriever
         calls:
             - [setContainer,["@service_container"]]
+    app.claim_rule:
+        class: AppBundle\Services\Core\ClaimRule
+        calls:
+            - [setContainer,["@service_container"]]
     app.api_authenticator:
         class: AppBundle\Security\ApiAuthenticator
         arguments: ['@doctrine.orm.entity_manager','@service_container']
