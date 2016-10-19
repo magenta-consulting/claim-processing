@@ -150,6 +150,11 @@ class Claim
      * @ORM\Column(name="status",type="string")
      */
     private $status;
+    /**
+     * @var string
+     * @ORM\Column(name="checker_remark",type="string",nullable=true)
+     */
+    private $checkerRemark;
 
     public function __construct()
     {
@@ -165,6 +170,23 @@ class Claim
     {
         return $this->id;
     }
+
+    /**
+     * @return string
+     */
+    public function getCheckerRemark()
+    {
+        return $this->checkerRemark;
+    }
+
+    /**
+     * @param string $checkerRemark
+     */
+    public function setCheckerRemark($checkerRemark)
+    {
+        $this->checkerRemark = $checkerRemark;
+    }
+
 
     /**
      * @return string

@@ -23,6 +23,7 @@ services:
             calls:
                 - [setContainer, ["@service_container"]]
                 - [setTemplate,[edit,AppBundle:SonataAdmin/CRUD:edit_claim.html.twig]]
+                - [setTemplate,[show,AppBundle:SonataAdmin/CRUD:show_claim.html.twig]]
     admin.claim_media:
             class: AppBundle\Admin\ClaimMediaAdmin
             arguments: [~, AppBundle\Entity\ClaimMedia, ~]

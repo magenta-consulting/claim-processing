@@ -20,28 +20,8 @@ use Symfony\Component\Config\Resource\FileResource;
  *
  * @author  Thomas Rabaix <thomas.rabaix@sonata-project.org>
  */
-class RoutesCache
+class RoutesCache extends \Sonata\AdminBundle\Route\RoutesCache
 {
-    /**
-     * @var string
-     */
-    protected $cacheFolder;
-
-    /**
-     * @var bool
-     */
-    protected $debug;
-
-    /**
-     * @param string $cacheFolder
-     * @param bool   $debug
-     */
-    public function __construct($cacheFolder, $debug)
-    {
-        $this->cacheFolder = $cacheFolder;
-        $this->debug = $debug;
-    }
-
     /**
      * @param AdminInterface $admin
      *
@@ -51,38 +31,10 @@ class RoutesCache
      */
     public function load(AdminInterface $admin)
     {
-        $filename = $this->cacheFolder.'/route_'.md5($admin->getCode());
-
-        $cache = new ConfigCache($filename, $this->debug);
-        if (1) {
-            $resources = array();
-            $routes = array();
-
-            $reflection = new \ReflectionObject($admin);
-            if (file_exists($reflection->getFileName())) {
-                $resources[] = new FileResource($reflection->getFileName());
-            }
-
-            if (!$admin->getRoutes()) {
-                throw new \RuntimeException('Invalid data type, AdminInterface::getRoutes must return a RouteCollection');
-            }
-
-            foreach ($admin->getRoutes()->getElements() as $code => $route) {
-                $routes[$code] = $route->getDefault('_sonata_name');
-            }
-
-            if (!is_array($admin->getExtensions())) {
-                throw new \RuntimeException('extensions must be an array');
-            }
-
-            foreach ($admin->getExtensions() as $extension) {
-                $reflection = new \ReflectionObject($extension);
-                $resources[] = new FileResource($reflection->getFileName());
-            }
-
-            $cache->write(serialize($routes), $resources);
+        $routes = array();
+        foreach ($admin->getRoutes()->getElements() as $code => $route) {
+            $routes[$code] = $route->getDefault('_sonata_name');
         }
-
-//        return unserialize(file_get_contents($filename));
+        return $routes;
     }
 }

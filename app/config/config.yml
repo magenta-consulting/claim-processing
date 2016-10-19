@@ -200,7 +200,7 @@ sonata_admin:
 #    title_logo: bundles/app/images/fancy_acme_logo.png
 
     admin_services:
-        id.of.admin.service:
+        admin.claim:
             route_generator: app.admin.route.generator
 
 
