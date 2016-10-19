@@ -36,7 +36,7 @@ class TwigExtension extends \Twig_Extension
         $qb->setParameter('position', $position);
         $qb->setParameter('checker', $checker);
 
-        return $qb->getQuery()->getSingleScalarResult();
+        return $qb->getQuery()->getScalarResult();
     }
     public function isShowMenuForChecker($position){
         $em = $this->container->get('doctrine')->getManager();
@@ -47,7 +47,7 @@ class TwigExtension extends \Twig_Extension
         $qb->where('checker.checker = :position');
         $qb->setParameter('position', $position);
 
-        return $qb->getQuery()->getSingleScalarResult();
+        return $qb->getQuery()->getScalarResult();
     }
 
     public function getUrlMedia($media){
