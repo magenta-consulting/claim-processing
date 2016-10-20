@@ -67,23 +67,24 @@
                 <div class="col-md-12">
                     <div class="col-md-12">
                         <div class="box box-primary">
-                            <div class="box-header">
+                            <div class="box-header" style="text-align: center">
                                 <h4 class="box-title">
-                                    Claim
+                                    {{ app.user.loginWithPosition.firstName ~' '~ app.user.loginWithPosition.lastName}}<br>
+                                    <small>{{ app.user.loginWithPosition.company.name }}</small>
                                 </h4>
                             </div>
                             <div class="box-body">
                                 <div class="sonata-ba-collapsed-fields">
-                                    {{ form_row(form.companyGetClaim) }}
+                                    {#{{ form_row(form.companyGetClaim) }}#}
                                     {{ form_row(form.claimType ,{'attr': {'class': 'claim-type'}}) }}
                                     {{ form_row(form.claimCategory,{'attr': {'class': 'claim-category'}}) }}
-                                    {{ form_row(form.gst,{'attr': {'class': 'claim-gst'}}) }}
+                                    {#{{ form_row(form.gst,{'attr': {'class': 'claim-gst'}}) }}#}
                                     {{ form_row(form.claimAmount) }}
-                                    {{ form_row(form.gstAmount,{'attr': {'class': 'claim-gst-display'},'label_attr':{'class': 'claim-gst-display'}}) }}
-                                    {{ form_row(form.amountWithoutGst,{'attr': {'class': 'claim-gst-display'},'label_attr':{'class': 'claim-gst-display'}}) }}
-                                    {{ form_row(form.currencyExchange,{'attr': {'class': 'claim-currency-display'},'label_attr':{'class': 'claim-currency-display'}}) }}
+                                    {#{{ form_row(form.gstAmount,{'attr': {'class': 'claim-gst-display'},'label_attr':{'class': 'claim-gst-display'}}) }}#}
+                                    {#{{ form_row(form.amountWithoutGst,{'attr': {'class': 'claim-gst-display'},'label_attr':{'class': 'claim-gst-display'}}) }}#}
                                     {{ form_row(form.receiptDate) }}
-                                    {{ form_row(form.submissionRemarks) }}
+                                    {{ form_row(form.currencyExchange,{'attr': {'class': 'claim-currency-display'},'label_attr':{'class': 'claim-currency-display'}}) }}
+                                    {#{{ form_row(form.submissionRemarks) }}#}
                                     {{ form_row(form.claimMedias) }}
                                 </div>
                             </div>
@@ -92,3 +93,10 @@
                     </div>
                 </div>
             {% endblock %}
+  {% block formactions %}
+      <div class="sonata-ba-form-actions well well-small form-actions" style="text-align: center">
+          {% block sonata_form_actions %}
+              <button style="width: 100%;" class="btn btn-success" type="submit" name="btn_create_and_edit"><i class="fa fa-save" aria-hidden="true"></i> NEXT</button>
+          {% endblock %}
+      </div>
+  {% endblock formactions %}

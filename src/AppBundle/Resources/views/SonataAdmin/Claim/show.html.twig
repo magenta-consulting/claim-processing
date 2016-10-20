@@ -1,0 +1,5 @@
+{% if app.request.get('type') == 'checker-view-claim' %}
+    {% include 'AppBundle:SonataAdmin/Claim/Checker:show.html.twig' %}
+{% else %}
+    {% include 'AppBundle:SonataAdmin/Claim/Employee:show.html.twig' %}
+{% endif %}

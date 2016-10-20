@@ -51,19 +51,19 @@ class ClaimAdmin extends BaseAdmin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('companyGetClaim', 'sonata_type_model', array(
-            'property' => 'name',
-            'query' => $this->filterCompanyBycompany(),
-            'placeholder' => 'Select Company',
-            'empty_data' => null,
-            'label' => 'Company',
-            'data' => $this->getCompany(),
-            'btn_add' => false
-        ));
+//        $formMapper->add('companyGetClaim', 'sonata_type_model', array(
+//            'property' => 'name',
+//            'query' => $this->filterCompanyBycompany(),
+//            'placeholder' => 'Select Company',
+//            'empty_data' => null,
+//            'label' => 'Company',
+//            'data' => $this->getCompany(),
+//            'btn_add' => false
+//        ));
         $formMapper->add('claimType', 'sonata_type_model', array(
             'property' => 'code',
             'query' => $this->filterClaimTypeBycompany(),
-            'placeholder' => 'Select Type',
+            'placeholder' => 'Select Claims Type',
             'empty_data' => null,
             'btn_add' => false
         ));
@@ -96,17 +96,17 @@ class ClaimAdmin extends BaseAdmin
             }
         );
 
-        $formMapper->add('gst', ChoiceType::class, [
-            'choices' => array(
-                'No' => false,
-                'Yes' => true,
-            ),
-            'label' => 'GST'
-        ]);
+//        $formMapper->add('gst', ChoiceType::class, [
+//            'choices' => array(
+//                'No' => false,
+//                'Yes' => true,
+//            ),
+//            'label' => 'GST'
+//        ]);
 
-        $formMapper->add('claimAmount', 'number', ['label' => 'Claim Amount', 'required' => false]);
-        $formMapper->add('gstAmount', 'number', ['label' => 'GST Amount', 'required' => false]);
-        $formMapper->add('amountWithoutGst', 'number', ['label' => 'Amount Without GST', 'required' => false]);
+        $formMapper->add('claimAmount', 'number', ['label' => 'Enter Receipt Amount']);
+//        $formMapper->add('gstAmount', 'number', ['label' => 'GST Amount', 'required' => false]);
+//        $formMapper->add('amountWithoutGst', 'number', ['label' => 'Amount Without GST', 'required' => false]);
 
 
         $formMapper->add('currencyExchange', 'sonata_type_model', array(
@@ -119,7 +119,7 @@ class ClaimAdmin extends BaseAdmin
             'required' => false
         ));
         $formMapper->add('receiptDate', 'date', ['attr' => ['class' => 'datepicker'], 'widget' => 'single_text', 'format' => 'MM/dd/yyyy'])
-            ->add('submissionRemarks', 'textarea', ['required' => false])
+//            ->add('submissionRemarks', 'textarea', ['required' => false])
             ->add('claimMedias', 'sonata_type_collection', array(
                 'label' => ' ',
                 'required' => false,
@@ -165,16 +165,16 @@ class ClaimAdmin extends BaseAdmin
                 break;
             default:
                 $listMapper
-                    ->addIdentifier('position.employeeNo', null, ['label' => 'Employee No'])
-                    ->add('position.firstName', null, ['label' => 'Name'])
-                    ->add('companyGetClaim.name', null, ['label' => 'Company'])
-                    ->add('position.costCentre.code', null, ['label' => 'Cost Centre'])
+//                    ->addIdentifier('position.employeeNo', null, ['label' => 'Employee No'])
+//                    ->add('position.firstName', null, ['label' => 'Name'])
+//                    ->add('companyGetClaim.name', null, ['label' => 'Company'])
+//                    ->add('position.costCentre.code', null, ['label' => 'Cost Centre'])
                     ->add('claimType.code', null, ['label' => 'Claim Type'])
                     ->add('claimCategory.code', null, ['label' => 'Claim Category'])
-                    ->add('periodFrom', 'date', ['label' => 'Period From', 'format' => 'd M Y'])
-                    ->add('periodTo', null, ['label' => 'Period To', 'format' => 'd M Y'])
+//                    ->add('periodFrom', 'date', ['label' => 'Period From', 'format' => 'd M Y'])
+//                    ->add('periodTo', null, ['label' => 'Period To', 'format' => 'd M Y'])
                     ->add('claimAmount', null, ['label' => 'Amount'])
-                    ->add('a', 'debug', ['label' => 'DEBUG'])
+//                    ->add('a', 'debug', ['label' => 'DEBUG'])
                     ->add('_action', null, array(
                         'actions' => array(
                             'delete' => array(),
@@ -193,15 +193,17 @@ class ClaimAdmin extends BaseAdmin
         $collection->add('checkerApprove', $this->getRouterIdParameter() . '/checker-approve');
         $collection->add('checkerReject', $this->getRouterIdParameter() . '/checker-reject');
 
-        $collection->add('delete');
         $collection->add('create');
+        $collection->add('delete');
+        $collection->remove('export');
+//        $collection->remove('batch');
 
         $request = $this->getConfigurationPool()->getContainer()->get('request_stack')->getCurrentRequest();
         if($request) {
             $type = $request->get('type');
             if ($type != '') {
-                $collection->remove('delete');
                 $collection->remove('create');
+                $collection->remove('delete');
             }
         }
     }
@@ -254,7 +256,11 @@ class ClaimAdmin extends BaseAdmin
                     ->end();
                 break;
             default:
-                $show->tab('Claim Details')
+                $show
+                    ->with('Claim Images', array('class' => 'col-md-6'))
+                    ->add('claimMedias', 'show_image', ['label' => 'Claim Images'])
+                    ->end()
+
                     ->with('Claim Details', array('class' => 'col-md-6'))
                     ->add('claimAmount', null, ['label' => 'Amount'])
                     ->add('currencyExchange.code', null, ['label' => 'Currency'])
@@ -267,17 +273,13 @@ class ClaimAdmin extends BaseAdmin
                     ->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y'])
                     ->add('submissionRemarks', null, ['label' => 'Claimant Submission Remarks'])
                     ->end()
-                    ->with('Claim Images', array('class' => 'col-md-6'))
-                    ->add('claimMedias', 'show_image', ['label' => 'Claim Images'])
-                    ->end()
-                    ->end()
-                    ->tab('Checker And Approver')
+
                     ->with('Checker', array('class' => 'col-md-6'))
                     ->add('checker', 'show_checker', ['label' => 'Company'])
                     ->end()
+
                     ->with('Approver', array('class' => 'col-md-6'))
                     ->add('approver', 'show_approver', ['label' => 'Company'])
-                    ->end()
                     ->end();
                 break;
 

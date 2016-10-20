@@ -1,0 +1,5 @@
+{% if app.request.get('type') == 'checking-each-position' %}
+    {% include 'AppBundle:SonataAdmin/Claim/Checker:list.html.twig' %}
+{% else %}
+    {% include 'AppBundle:SonataAdmin/Claim/Employee:list.html.twig' %}
+{% endif %}
