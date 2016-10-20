@@ -202,6 +202,8 @@ sonata_admin:
     admin_services:
         admin.claim:
             route_generator: app.admin.route.generator
+        admin.position:
+            route_generator: app.admin.route.generator
 
 
 sonata_doctrine_orm_admin:

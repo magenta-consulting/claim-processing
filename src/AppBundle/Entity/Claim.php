@@ -105,7 +105,7 @@ class Claim
 
     /**
      * @var User
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position",inversedBy="claims")
      */
     private $position;
 

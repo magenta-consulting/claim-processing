@@ -179,6 +179,12 @@ class Position
      */
     private $submissionFor;
 
+    /**
+     * @var Claim
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Claim",mappedBy="position")
+     */
+    private $claims;
+
 
     /**
      * @return mixed
@@ -238,6 +244,22 @@ class Position
     public function setSubmissionFor($submissionFor)
     {
         $this->submissionFor = $submissionFor;
+    }
+
+    /**
+     * @return Claim
+     */
+    public function getClaims()
+    {
+        return $this->claims;
+    }
+
+    /**
+     * @param Claim $claims
+     */
+    public function setClaims($claims)
+    {
+        $this->claims = $claims;
     }
 
 

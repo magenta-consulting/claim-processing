@@ -14,6 +14,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Sonata\CoreBundle\Validator\ErrorElement;
 use libphonenumber\PhoneNumberFormat;
 use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
+use Sonata\AdminBundle\Route\RouteCollection;
 
 class PositionAdmin extends BaseAdmin
 {
@@ -240,7 +241,7 @@ class PositionAdmin extends BaseAdmin
                 return true;
             },
             'field_type' => 'text',
-            'field_options'=>['attr'=>['placeholder' => 'Name, Email, Employee No, NRIC/Fin']],
+            'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin']],
 
         ));
         $datagridMapper->add('company', null, array(), 'entity', array(
@@ -278,21 +279,60 @@ class PositionAdmin extends BaseAdmin
 
     protected function configureListFields(ListMapper $listMapper)
     {
-        $listMapper
-            ->addIdentifier('employeeNo', null, array(
-                'sortable' => 'email',
-            ))->add('email', null, array(
-                'sortable' => 'email',
-            ))
-            ->add('firstName')
-            ->add('lastName')
-            ->add('contactNumber')
-            ->add('nric', null, ['label' => 'NRIC/Fin No'])
-            ->add('_action', null, array(
-                'actions' => array(
-                    'delete' => array(),
-                )
-            ));
+
+        $request = $this->getRequest();
+        $type = $request->get('type');
+        switch ($type) {
+            case 'checking':
+                $listMapper->add('employeeNo', null, ['label' => 'Employee No'])
+                    ->add('firstName', null, ['label' => 'Name'])
+                    ->add('company.name', null, ['label' => 'Company'])
+                    ->add('costCentre.code', null, ['label' => 'Cost Centre'])
+                    ->add('2', 'number_claim', ['label' => 'No. Pending Claims'])
+                    ->add('4', 'submission_date_claim', ['label' => 'Initial Submission Date'])
+//                    ->add('periodFrom', 'date', ['label' => 'Period From', 'format' => 'd M Y'])
+//                    ->add('periodTo', null, ['label' => 'Period To', 'format' => 'd M Y'])
+                    ->add('_action', null, array(
+                        'actions' => array(
+                            'claimEachPositionForCheck' => array(
+                                'template' => 'AppBundle:SonataAdmin/CustomActions:_list-action-claim-each-position.html.twig'
+                            ),
+                        )
+                    ));
+                break;
+            default:
+                $listMapper->
+                addIdentifier('employeeNo', null, array(
+                    'sortable' => 'email',
+                ))->add('email', null, array(
+                    'sortable' => 'email',
+                ))
+                    ->add('firstName')
+                    ->add('lastName')
+                    ->add('contactNumber')
+                    ->add('nric', null, ['label' => 'NRIC/Fin No'])
+                    ->add('_action', null, array(
+                        'actions' => array(
+                            'delete' => array(),
+                        )
+                    ));
+        }
+    }
+
+    protected function configureRoutes(RouteCollection $collection)
+    {
+
+        $collection->add('delete');
+        $collection->add('create');
+
+        $request = $this->getConfigurationPool()->getContainer()->get('request_stack')->getCurrentRequest();
+        if($request) {
+            $type = $request->get('type');
+            if ($type != '') {
+                $collection->remove('delete');
+                $collection->remove('create');
+            }
+        }
     }
 
     public function toString($object)

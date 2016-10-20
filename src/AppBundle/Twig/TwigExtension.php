@@ -26,21 +26,20 @@ class TwigExtension extends \Twig_Extension
         return count($value[1]);
 
     }
-    public function getNumberClaim($position,$checker){
-        return 1;
+    public function getNumberClaim($position,$positionChecker){
         $em = $this->container->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder('claim');
         $qb->select($qb->expr()->count('claim.id'));
         $qb->from('AppBundle:Claim','claim');
+        $qb->join('claim.checker','checker');
         $qb->where('claim.position = :position');
-        $qb->andWhere('claim.checker = :checker');
+        $qb->andWhere('checker.checker = :positionChecker');
         $qb->setParameter('position', $position);
-        $qb->setParameter('checker', $checker);
+        $qb->setParameter('positionChecker', $positionChecker);
 
         return $qb->getQuery()->getSingleScalarResult();
     }
     public function isShowMenuForChecker($position){
-        return 1;
         $em = $this->container->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder('claim');
         $qb->select($qb->expr()->count('claim.id'));

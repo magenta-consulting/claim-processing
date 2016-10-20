@@ -96,8 +96,8 @@
                     class="fa fa-angle-double-right"></i>My Claims</a>
     </li>
     {% if isShowMenuForChecker(app.user.loginWithPosition) %}
-        <li data-route="admin_app_claim_list" class="last"><a
-                    href="{{ path('admin_app_claim_list',{'type':'checking'}) }}"><i
+        <li data-route="admin_app_position_list" class="last"><a
+                    href="{{ path('admin_app_position_list',{'type':'checking'}) }}"><i
                         class="fa fa-angle-double-right"></i>Claims For Checking</a>
         </li>
     {% endif %}

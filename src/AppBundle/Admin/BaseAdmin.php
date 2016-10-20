@@ -190,18 +190,6 @@ class BaseAdmin extends AbstractAdmin
                 $request = $this->getRequest();
                 $type = $request->get('type');
                 switch ($type) {
-                    case 'checking':
-                        $query->join($query->getRootAliases()[0] . '.checker', 'checker');
-                        $query->andWhere(
-                            $expr->eq($query->getRootAliases()[0] . '.company', ':company')
-                        );
-                        $query->andWhere(
-                            $expr->eq('checker.checker', ':checker')
-                        );
-                        $query->groupBy($query->getRootAliases()[0] . '.position');
-                        $query->setParameter('company', $company);
-                        $query->setParameter('checker', $position);
-                        break;
                     case 'checking-each-position':
                         $positionId = $request->get('position-id');
                         $query->join($query->getRootAliases()[0] . '.position', 'position');
@@ -223,6 +211,24 @@ class BaseAdmin extends AbstractAdmin
                         );
                         $query->setParameter('company', $company);
                         $query->setParameter('position', $position);
+                }
+            }
+            if ($class === 'AppBundle\Entity\Position') {
+                $request = $this->getRequest();
+                $type = $request->get('type');
+                switch ($type) {
+                    case 'checking':
+                        $query->leftJoin($query->getRootAliases()[0] . '.claims', 'claim');
+                        $query->leftJoin('claim.checker', 'checker');
+                        $query->andWhere(
+                            $expr->eq($query->getRootAliases()[0] . '.company', ':company')
+                        );
+                        $query->andWhere(
+                            $expr->eq('checker.checker', ':checker')
+                        );
+                        $query->setParameter('checker', $position);
+                        $query->setParameter('company', $company);
+                        break;
                 }
             }
         }

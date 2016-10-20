@@ -142,23 +142,6 @@ class ClaimAdmin extends BaseAdmin
         $request = $this->getRequest();
         $type = $request->get('type');
         switch ($type) {
-            case 'checking':
-                $listMapper->add('position.employeeNo', null, ['label' => 'Employee No'])
-                    ->add('position.firstName', null, ['label' => 'Name'])
-                    ->add('companyGetClaim.name', null, ['label' => 'Company'])
-                    ->add('position.costCentre.code', null, ['label' => 'Cost Centre'])
-                    ->add('2', 'number_claim', ['label' => 'No. Pending Claims'])
-                    ->add('4', 'submission_date_claim', ['label' => 'Initial Submission Date'])
-                    ->add('periodFrom', 'date', ['label' => 'Period From', 'format' => 'd M Y'])
-                    ->add('periodTo', null, ['label' => 'Period To', 'format' => 'd M Y'])
-                    ->add('_action', null, array(
-                        'actions' => array(
-                            'claimEachPositionForCheck' => array(
-                                'template' => 'AppBundle:SonataAdmin/CustomActions:_list-action-claim-each-position.html.twig'
-                            ),
-                        )
-                    ));
-                break;
             case 'checking-each-position':
                 $listMapper
                     ->add('position.employeeNo', null, ['label' => 'Employee No'])
@@ -213,14 +196,14 @@ class ClaimAdmin extends BaseAdmin
         $collection->add('delete');
         $collection->add('create');
 
-//        $request = $this->getConfigurationPool()->getContainer()->get('request_stack')->getCurrentRequest();
-//        if($request) {
-//            $type = $request->get('type');
-//            if ($type != '') {
-//                $collection->remove('delete');
-//                $collection->remove('create');
-//            }
-//        }
+        $request = $this->getConfigurationPool()->getContainer()->get('request_stack')->getCurrentRequest();
+        if($request) {
+            $type = $request->get('type');
+            if ($type != '') {
+                $collection->remove('delete');
+                $collection->remove('create');
+            }
+        }
     }
 
     /**

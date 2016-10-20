@@ -12,5 +12,5 @@ file that was distributed with this source code.
 {% extends admin.getTemplate('base_list_field') %}
 
 {% block field %}
- {{ object.createdAt | date('d M Y') }}
+ {{ object.claims[0].createdAt | date('d M Y') }}
 {% endblock %}
