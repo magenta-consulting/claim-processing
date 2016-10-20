@@ -540,12 +540,12 @@ class Claim
                 if ($currentDate <= $cutOffdate) {
                     $periodTo = new \DateTime('NOW');
                     $clone = clone $periodTo;
-                    $periodFrom = $clone->modify('-' . $claimable . ' month');
+                    $periodFrom = $clone->modify('-1 month');
                 } else {
                     $periodTo = new \DateTime('NOW');
                     $periodTo->modify('+1 month');
                     $clone = clone $periodTo;
-                    $periodFrom = $clone->modify('-' . $claimable . ' month');
+                    $periodFrom = $clone->modify('-1 month');
                 }
                 $periodFrom->setDate($periodFrom->format('Y'),$periodFrom->format('m'),$cutOffdate+1);
                 $periodTo->setDate($periodTo->format('Y'),$periodTo->format('m'),$cutOffdate);
@@ -565,7 +565,10 @@ class Claim
             }
         }
         if ($this->getPeriodFrom()) {
-            if ($this->getReceiptDate() < $this->getPeriodFrom() || $this->getReceiptDate() > $this->getPeriodTo()) {
+            $to = $this->getPeriodTo();
+            $clone = clone $to;
+            $from = $clone->modify('-'.$this->getClaimType()->getCompanyClaimPolicies()->getClaimablePeriod().' month');
+            if ($this->getReceiptDate() < $from || $this->getReceiptDate() > $to) {
                 $context->buildViolation('This receipt date is invalid')
                     ->atPath('receiptDate')
                     ->addViolation();
