@@ -22,6 +22,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 class Claim
 {
 
+    const STATUS_DRAFT = 'DRAFT';
     const STATUS_PENDING = 'PENDING';
     const STATUS_CHECKER_APPROVED = 'CHECKER_APPROVED';
     const STATUS_CHECKER_REJECTED = 'CHECKER_REJECTED';
@@ -42,11 +43,6 @@ class Claim
     private $company;
 
 
-    /**
-     * @var Company
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
-     */
-    private $companyGetClaim;
 
     /**
      * @var ClaimType
@@ -54,42 +50,23 @@ class Claim
      */
     private $claimType;
     /**
-     * @var ClaimType
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimType")
+     * @var CurrencyExchange
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CurrencyExchange")
      */
-    private $claimTypeCurrent;
+    private $currencyExchange;
     /**
      * @var ClaimCategory
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimCategory")
      */
     private $claimCategory;
 
-    /**
-     * @var bool
-     * @ORM\Column(name="gst",type="boolean",options={"default":false})
-     */
-    private $gst;
 
     /**
      * @var float
      * @ORM\Column(name="claim_amount",type="float",nullable=true)
      */
     private $claimAmount;
-    /**
-     * @var float
-     * @ORM\Column(name="gst_amount",type="float",nullable=true)
-     */
-    private $gstAmount;
-    /**
-     * @var float
-     * @ORM\Column(name="amount_without_gst",type="float",nullable=true)
-     */
-    private $amountWithoutGst;
-    /**
-     * @var CurrencyExchange
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CurrencyExchange")
-     */
-    private $currencyExchange;
+
 
     /**
      * @var date
@@ -128,6 +105,23 @@ class Claim
     private $approver;
 
     /**
+     * @var TaxRate
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TaxRate")
+     */
+    private $taxRate;
+    /**
+     * @var Category
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Category")
+     */
+    private $limitRule;
+
+    /**
+     * @var float
+     * @ORM\Column(name="tax_amount",type="float",nullable=true)
+     */
+    private $taxAmount;
+
+    /**
      * @var Date
      * @ORM\Column(name="period_from",type="date")
      */
@@ -160,7 +154,7 @@ class Claim
     {
         $this->createdAt = new \DateTime();
         $this->claimMedias = new ArrayCollection();
-        $this->status = self::STATUS_PENDING;
+        $this->status = self::STATUS_DRAFT;
     }
 
     /**
@@ -170,6 +164,24 @@ class Claim
     {
         return $this->id;
     }
+
+    /**
+     * @return Category
+     */
+    public function getLimitRule()
+    {
+        return $this->limitRule;
+    }
+
+    /**
+     * @param Category $limitRule
+     */
+    public function setLimitRule($limitRule)
+    {
+        $this->limitRule = $limitRule;
+    }
+
+
 
     /**
      * @return string
@@ -287,21 +299,6 @@ class Claim
         $this->company = $company;
     }
 
-    /**
-     * @return Company
-     */
-    public function getCompanyGetClaim()
-    {
-        return $this->companyGetClaim;
-    }
-
-    /**
-     * @param Company $companyGetClaim
-     */
-    public function setCompanyGetClaim($companyGetClaim)
-    {
-        $this->companyGetClaim = $companyGetClaim;
-    }
 
     /**
      * @return ClaimType
@@ -317,22 +314,6 @@ class Claim
     public function setClaimType($claimType)
     {
         $this->claimType = $claimType;
-    }
-
-    /**
-     * @return ClaimType
-     */
-    public function getClaimTypeCurrent()
-    {
-        return $this->claimTypeCurrent;
-    }
-
-    /**
-     * @param ClaimType $claimTypeCurrent
-     */
-    public function setClaimTypeCurrent($claimTypeCurrent)
-    {
-        $this->claimTypeCurrent = $claimTypeCurrent;
     }
 
 
@@ -352,21 +333,7 @@ class Claim
         $this->claimCategory = $claimCategory;
     }
 
-    /**
-     * @return boolean
-     */
-    public function isGst()
-    {
-        return $this->gst;
-    }
 
-    /**
-     * @param boolean $gst
-     */
-    public function setGst($gst)
-    {
-        $this->gst = $gst;
-    }
 
     /**
      * @return float
@@ -384,37 +351,7 @@ class Claim
         $this->claimAmount = $claimAmount;
     }
 
-    /**
-     * @return float
-     */
-    public function getGstAmount()
-    {
-        return $this->gstAmount;
-    }
 
-    /**
-     * @param float $gstAmount
-     */
-    public function setGstAmount($gstAmount)
-    {
-        $this->gstAmount = $gstAmount;
-    }
-
-    /**
-     * @return float
-     */
-    public function getAmountWithoutGst()
-    {
-        return $this->amountWithoutGst;
-    }
-
-    /**
-     * @param float $amountWithoutGst
-     */
-    public function setAmountWithoutGst($amountWithoutGst)
-    {
-        $this->amountWithoutGst = $amountWithoutGst;
-    }
 
     /**
      * @return CurrencyExchange
@@ -498,6 +435,40 @@ class Claim
     }
 
     /**
+     * @return TaxRate
+     */
+    public function getTaxRate()
+    {
+        return $this->taxRate;
+    }
+
+    /**
+     * @param TaxRate $taxRate
+     */
+    public function setTaxRate($taxRate)
+    {
+        $this->taxRate = $taxRate;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTaxAmount()
+    {
+        return $this->taxAmount;
+    }
+
+    /**
+     * @param float $taxAmount
+     */
+    public function setTaxAmount($taxAmount)
+    {
+        $this->taxAmount = $taxAmount;
+    }
+
+
+
+    /**
      * @return ClaimMedia
      */
     public function getClaimMedias()
@@ -531,10 +502,8 @@ class Claim
     public function setPeriod()
     {
         if ($this->getClaimType()) {
-            $this->setClaimTypeCurrent($this->getClaimType());
             $claimPolicy = $this->getClaimType()->getCompanyClaimPolicies();
             if ($claimPolicy) {
-                $claimable = $claimPolicy->getClaimablePeriod();
                 $cutOffdate = $claimPolicy->getCutOffDate();
                 $currentDate = date('d');
                 if ($currentDate <= $cutOffdate) {
@@ -559,15 +528,11 @@ class Claim
     {
         if ($this->id === null) {
             $this->setPeriod();
-        } else {
-            if ($this->getClaimType()->getId() !== $this->getClaimTypeCurrent()->getId()) {
-                $this->setPeriod();
-            }
         }
-        if ($this->getPeriodFrom()) {
+        if ($this->getReceiptDate()) {
             $to = $this->getPeriodTo();
             $clone = clone $to;
-            $from = $clone->modify('-'.$this->getClaimType()->getCompanyClaimPolicies()->getClaimablePeriod().' month');
+            $from = $clone->modify('-'.$this->getClaimType()->getCompanyClaimPolicies()->getClaimablePeriod().' month +1 day');
             if ($this->getReceiptDate() < $from || $this->getReceiptDate() > $to) {
                 $context->buildViolation('This receipt date is invalid')
                     ->atPath('receiptDate')

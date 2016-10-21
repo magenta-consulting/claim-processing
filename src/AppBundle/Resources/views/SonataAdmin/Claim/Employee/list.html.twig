@@ -27,11 +27,11 @@ file that was distributed with this source code.
         <div class="box box-primary" {% if admin.datagrid.pager.lastPage == 1 %}style="margin-bottom: 100px;"{% endif %}>
             <div class="box-header" style="text-align: center">
                 <h4 class="box-title">
-                    Catherine Choong<br>
-                    <small>Magenta Consulting Services Pte Ltd</small><br>
+                    {{ app.user.loginWithPosition.firstName ~ ' ' ~ app.user.loginWithPosition.lastName }}<br>
+                    <small>{{ app.user.loginWithPosition.company.name }}</small><br>
                     <p style="border-top: 1px solid black; margin-top: 10px;"></p>
                     <strong>Claims Submission Summary</strong><br>
-                    <small>Claims Period: 23 August – 22 September</small>
+                    <small>Claims Period: {{ getCurrentClaimPeriod('from')| date('d M') }} – {{ getCurrentClaimPeriod('to')| date('d M') }}</small>
                 </h4>
             </div>
             <div class="box-body {% if admin.datagrid.results|length > 0 %}table-responsive no-padding{% endif %}">
@@ -183,6 +183,12 @@ file that was distributed with this source code.
         {% if admin.hasRoute('batch') and batchactions|length %}
             </form>
         {% endif %}
+    </div>
+
+    <div class="sonata-ba-form-actions well well-small form-actions" style="text-align: center;margin-left: 0px;">
+        {% block sonata_form_actions %}
+            <a href="{{ path('admin_app_claim_create')}}" class="btn btn-success btn-claim btn-list-create" type="submit" name="btn_create_and_edit"> Submit Claims</a>
+        {% endblock %}
     </div>
 {% endblock %}
 

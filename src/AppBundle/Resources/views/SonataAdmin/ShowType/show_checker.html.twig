@@ -14,18 +14,28 @@ file that was distributed with this source code.
 {% block field %}
     <div class="row" style=" margin-bottom: 10px;padding-bottom: 10px;">
 
-        <div class="col-md-2">
-            1
-        </div>
-        <div class="col-md-10">
-            {% if object.checker and object.checker.checker %}
-                Name: {{ object.checker.checker.firstName }}<br>
-                Employee No: {{ object.checker.checker.employeeNo }}<br>
-                COmpany: {{ object.checker.checker.company.name }}<br>
-            {% else %}
-                None
-            {% endif %}
-        </div>
+        {% if object.checker and object.checker.checker %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Checker</th>
+                <th>Date Time Stamp</th>
+                <th>Action</th>
+                <th>Remarks</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ object.checker.checker.firstName ~' '~ object.checker.checker.lastName }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+        {% else %}
+            None
+        {% endif %}
 
     </div>
 {% endblock %}

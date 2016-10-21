@@ -14,47 +14,43 @@ file that was distributed with this source code.
 {% block field %}
     <div class="row" style="border-bottom: 1px solid #f4f4f4; margin-bottom: 10px;padding-bottom: 10px;">
 
-        <div class="col-md-2">
-            1
-        </div>
-        <div class="col-md-10">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Approver</th>
+                <th>Date Time Stamp</th>
+                <th>Action</th>
+                <th>Remarks</th>
+            </tr>
+            </thead>
+            <tbody>
             {% if object.approver and object.approver.approver1 %}
-                Name: {{ object.approver.approver1.firstName }}<br>
-                Employee No: {{ object.approver.approver1.employeeNo }}<br>
-                COmpany: {{ object.approver.approver1.company.name }}<br>
-            {% else %}
-                None
+                <tr>
+                    <td>{{ object.approver.approver1.firstName ~' '~ object.approver.approver1.lastName }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
             {% endif %}
-        </div>
+            {% if object.approver and object.approver.approver2 %}
+                <tr>
+                    <td>{{ object.approver.approver2.firstName ~' '~ object.approver.approver2.lastName }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            {% endif %}
+            {% if object.approver and object.approver.approver3 %}
+                <tr>
+                    <td>{{ object.approver.approver3.firstName ~' '~ object.approver.approver3.lastName }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
 
-    </div>
-    <div class="row" style="border-bottom: 1px solid #f4f4f4; margin-bottom: 10px;padding-bottom: 10px;">
-        <div class="col-md-2">
-            2
-        </div>
-        <div class="col-md-10">
-            {% if object.approver and  object.approver.approver2 %}
-                Name: {{ object.approver.approver2.firstName }}<br>
-                Employee No: {{ object.approver.approver2.employeeNo }}<br>
-                COmpany: {{ object.approver.approver2.company.name }}<br>
-            {% else %}
-                None
-            {% endif %}
-        </div>
-    </div>
-    <div class="row" style="margin-bottom: 10px;padding-bottom: 10px;">
-        <div class="col-md-2">
-            3
-        </div>
-        <div class="col-md-10">
-            {% if object.approver and  object.approver.approver3 %}
-                Name: {{ object.approver.approver3.firstName }}<br>
-                Employee No: {{ object.approver.approver3.employeeNo }}<br>
-                COmpany: {{ object.approver.approver3.company.name }}<br>
-            {% else %}
-                None
-            {% endif %}
-        </div>
     </div>
 
 {% endblock %}

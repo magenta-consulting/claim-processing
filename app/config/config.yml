@@ -185,12 +185,13 @@ sonata_admin:
     options:
         use_select2:    false # disable select2
     templates:
+        dashboard:                      AppBundle:SonataAdmin/Core:dashboard.html.twig
         layout:                         AppBundle:SonataAdmin:standard_layout.html.twig
         edit:                           AppBundle:SonataAdmin/CRUD:edit.html.twig
     title:      Claims
-    dashboard:
-        groups:
-                      Companies:
+#    dashboard:
+#        groups:
+#                      Companies:
 #                          on_top:               true
 #                          label:                ~
 #                          label_catalogue:      ~

@@ -30,6 +30,51 @@ class ClaimRule
         return $user;
     }
 
+    public function getCurrentClaimPeriod($key){
+        $em = $this->container->get('doctrine')->getManager();
+        $claimType = $em->getRepository('AppBundle\Entity\ClaimType')->findOneBy([]);
+        $claimPolicy = $claimType->getCompanyClaimPolicies();
+        $cutOffdate = $claimPolicy->getCutOffDate();
+        $currentDate = date('d');
+        if ($currentDate <= $cutOffdate) {
+            $periodTo = new \DateTime('NOW');
+            $clone = clone $periodTo;
+            $periodFrom = $clone->modify('-1 month');
+        } else {
+            $periodTo = new \DateTime('NOW');
+            $periodTo->modify('+1 month');
+            $clone = clone $periodTo;
+            $periodFrom = $clone->modify('-1 month');
+        }
+        $periodFrom->setDate($periodFrom->format('Y'),$periodFrom->format('m'),$cutOffdate+1);
+        $periodTo->setDate($periodTo->format('Y'),$periodTo->format('m'),$cutOffdate);
+        $period = ['from'=>$periodFrom,'to'=>$periodTo];
+        return $period[$key];
+    }
+
+    public function isExceedLimitRule($claim){
+        $periodFrom = $this->getCurrentClaimPeriod('from');
+        $periodTo = $this->getCurrentClaimPeriod('to');
+        $limitRule = $this->getRuleForClaim($claim);
+        if(!$limitRule->isHasClaimLimit()){
+            return false;
+        }
+        $em = $this->container->get('doctrine')->getManager();
+        $claims = $em->getRepository('AppBundle\Entity\Claim')->findBy([
+            'position'=>$this->getUser()->getLoginWithPosition(),
+            'limitRule'=>$limitRule,
+            'periodFrom'=>$periodFrom,
+            'periodTo'=>$periodTo,
+        ]);
+        $totalAmount =0 ;
+        foreach ($claims as $claim){
+            $totalAmount+= $claim->getClaimAmount();
+        }
+        if($totalAmount > $limitRule->getClaimLimit()){
+            return true;
+        }
+        return false;
+    }
     public function getRuleForClaim(Claim $claim){
         $position = $this->getUser()->getLoginWithPosition();
         $company = $position->getCompany();
@@ -72,7 +117,7 @@ class ClaimRule
             $filter = array_merge($filter1,$filter2);
             $rule = $em->getRepository('AppBundle\Entity\Category')->findOneBy($filter);
             if($rule){
-                return $rule->getClaimLimitDescription();
+                return $rule;
             }
             unset($filter1[$index[$i]]);
         }

@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Admin;
 
+use AppBundle\Entity\Claim;
 use AppBundle\Entity\Company;
 use AppBundle\Entity\CostCentre;
 use AppBundle\Entity\PayCodeType;
@@ -200,16 +201,34 @@ class BaseAdmin extends AbstractAdmin
                         $query->andWhere(
                             $expr->eq('position.id', ':positionId')
                         );
+                        $query->andWhere(
+                            $expr->neq($query->getRootAliases()[0] . '.status', ':status')
+                        );
+                        $query->setParameter('status', Claim::STATUS_DRAFT);
                         $query->setParameter('company', $company);
                         $query->setParameter('positionId', $positionId);
                         break;
                     default:
+                        $periodFrom = $this->getContainer()->get('app.claim_rule')->getCurrentClaimPeriod('from');
+                        $periodTo = $this->getContainer()->get('app.claim_rule')->getCurrentClaimPeriod('to');
                         $query->andWhere(
                             $expr->eq($query->getRootAliases()[0] . '.company', ':company')
                         );
                         $query->andWhere(
                             $expr->eq($query->getRootAliases()[0] . '.position', ':position')
                         );
+                        $query->andWhere(
+                            $expr->neq($query->getRootAliases()[0] . '.status', ':status')
+                        );
+                        $query->andWhere(
+                            $expr->eq($query->getRootAliases()[0] . '.periodFrom', ':periodFrom')
+                        );
+                        $query->andWhere(
+                            $expr->eq($query->getRootAliases()[0] . '.periodTo', ':periodTo')
+                        );
+                        $query->setParameter('periodFrom', $periodFrom->format('Y-m-d'));
+                        $query->setParameter('periodTo', $periodTo->format('Y-m-d'));
+                        $query->setParameter('status', Claim::STATUS_DRAFT);
                         $query->setParameter('company', $company);
                         $query->setParameter('position', $position);
                 }

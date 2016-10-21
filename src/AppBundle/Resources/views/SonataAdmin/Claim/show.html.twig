@@ -1,5 +1,7 @@
 {% if app.request.get('type') == 'checker-view-claim' %}
     {% include 'AppBundle:SonataAdmin/Claim/Checker:show.html.twig' %}
+{% elseif app.request.get('type') == 'employee-preview-claim' %}
+    {% include 'AppBundle:SonataAdmin/Claim/Employee:show_preview.html.twig' %}
 {% else %}
     {% include 'AppBundle:SonataAdmin/Claim/Employee:show.html.twig' %}
 {% endif %}

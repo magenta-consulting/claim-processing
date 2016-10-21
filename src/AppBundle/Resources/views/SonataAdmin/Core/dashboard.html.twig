@@ -1,0 +1,65 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% extends base_template %}
+
+{% block title %}{{ 'title_dashboard'|trans({}, 'SonataAdminBundle') }}{% endblock %}
+{% block breadcrumb %}{% endblock %}
+{% block content %}
+
+    {% if is_granted('ROLE_USER') and not is_granted('ROLE_CLIENT_ADMIN') and not is_granted('ROLE_HR_ADMIN') %}
+        <div class="row">
+
+
+            <div class="col-md-6">
+                <div class="cms-block cms-block-element">
+
+                    <div class="box">
+                        <div class="box-header" style="text-align: center;">
+                            <h3 class="box-title">{{ app.user.loginWithPosition.firstName ~ ' ' ~ app.user.loginWithPosition.lastName }}
+                            </h3><br>
+                            <small>{{ app.user.loginWithPosition.company.name }}
+                            </small>
+                        </div>
+                        <div class="box-body">
+                            <a href="{{ path('admin_app_claim_create') }}" style="width: 100%;" class="btn btn-success"
+                               type="submit" name="btn_create_and_edit"> Submit New Claims <br>
+                                <small>Submission Deadline: {{ getCurrentClaimPeriod('to')| date('d M Y') }}
+                                </small>
+                            </a>
+                            <a href="#" style="width: 100%;margin-top: 5px;" class="btn btn-default" type="submit"
+                               name="btn_create_and_edit"> Claims Reports
+                                <br>
+                                <small>View past and current claims
+                                </small>
+                            </a>
+                            <a href="#" style="width: 100%;margin-top: 5px;" class="btn btn-default" type="submit"
+                               name="btn_create_and_edit"> Submit on Behalf
+                                <br>
+                                <small>(Only authorised employees)
+
+                                </small>
+                            </a>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6">
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

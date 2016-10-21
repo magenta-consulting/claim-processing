@@ -55,9 +55,18 @@ class TwigExtension extends \Twig_Extension
         return $this->container->get('app.media.retriever')->getPublicURL($media);
     }
     public function getRuleForClaim($claim){
-        return $this->container->get('app.claim_rule')->getRuleForClaim($claim);
+        $rule =  $this->container->get('app.claim_rule')->getRuleForClaim($claim);
+        if($rule){
+            return $rule->getClaimLimitDescription();
+        }
+        return null;
     }
-
+    public function getCurrentClaimPeriod($key){
+        return $this->container->get('app.claim_rule')->getCurrentClaimPeriod($key);
+    }
+    public function isExceedLimitRule($claim){
+        return $this->container->get('app.claim_rule')->isExceedLimitRule($claim);
+    }
 
     public function getFunctions()
     {
@@ -68,6 +77,8 @@ class TwigExtension extends \Twig_Extension
             'getNumberClaim' => new \Twig_Function_Method($this, 'getNumberClaim', array('is_safe' => array('html'))),
             'isShowMenuForChecker' => new \Twig_Function_Method($this, 'isShowMenuForChecker', array('is_safe' => array('html'))),
             'getRuleForClaim' => new \Twig_Function_Method($this, 'getRuleForClaim', array('is_safe' => array('html'))),
+            'getCurrentClaimPeriod' => new \Twig_Function_Method($this, 'getCurrentClaimPeriod', array('is_safe' => array('html'))),
+            'isExceedLimitRule' => new \Twig_Function_Method($this, 'isExceedLimitRule', array('is_safe' => array('html'))),
         );
     }
 

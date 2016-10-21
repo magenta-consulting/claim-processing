@@ -1,0 +1,100 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% extends base_template %}
+
+{% import 'SonataAdminBundle:CRUD:base_show_macro.html.twig' as show_helper %}
+
+{%- block actions -%}
+    {% include 'SonataAdminBundle:CRUD:action_buttons.html.twig' %}
+{%- endblock -%}
+
+{% block tab_menu %}
+    {{ knp_menu_render(admin.sidemenu(action), {
+        'currentClass' : 'active',
+        'template': sonata_admin.adminPool.getTemplate('tab_menu_template')
+    }, 'twig') }}
+{% endblock %}
+ {% block sonata_page_content_header %}
+
+ {% endblock %}
+{% block show %}
+    <div class="sonata-ba-view">
+
+        {{ sonata_block_render_event('sonata.admin.show.top', { 'admin': admin, 'object': object }) }}
+
+        {% set has_tab = (admin.showtabs|length == 1 and admin.showtabs|keys[0] != 'default') or admin.showtabs|length > 1 %}
+
+        {% if has_tab %}
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs" role="tablist">
+                    {% for name, show_tab in admin.showtabs %}
+                        <li{% if loop.first %} class="active"{% endif %}>
+                            <a href="#tab_{{ admin.uniqid }}_{{ loop.index }}" data-toggle="tab">
+                                <i class="fa fa-exclamation-circle has-errors hide" aria-hidden="true"></i>
+                                {{ name|trans({}, show_tab.translation_domain ?: admin.translationDomain) }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <div class="tab-content">
+                    {% for code, show_tab in admin.showtabs %}
+                        <div
+                                class="tab-pane fade{% if loop.first %} in active{% endif %}"
+                                id="tab_{{ admin.uniqid }}_{{ loop.index }}"
+                        >
+                            <div class="box-body  container-fluid">
+                                <div class="sonata-ba-collapsed-fields">
+                                    {% if show_tab.description != false %}
+                                        <p>{{ show_tab.description|raw }}</p>
+                                    {% endif %}
+
+                                    {{ show_helper.render_groups(admin, object, elements, show_tab.groups, has_tab) }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% elseif admin.showtabs is iterable %}
+            {{ show_helper.render_groups(admin, object, elements, admin.showtabs.default.groups, has_tab) }}
+        {% endif %}
+
+    </div>
+
+    <div class="sonata-ba-view">
+        <form method="post" action="{{ path('admin_app_claim_show',{'id':admin.id(object)}) }}">
+            {% if isExceedLimitRule(object) %}
+                <small style="color: red;">Claim amount exceeds monthly claim limit of <strong>{{ object.claimType.code~'/'~object.claimCategory.code }}</strong>
+                    Would you like to continue with this submission?
+                </small>
+                <div class="sonata-ba-field sonata-ba-field-standard-natural" style="margin-bottom: 10px;">
+                    <textarea required placeholder="Please enter additional remarks to justify the claim amount
+" name="employee-remark" class=" form-control">{{ object.checkerRemark }}</textarea>
+                </div>
+            {% endif %}
+            <div class="sonata-ba-form-actions well well-small form-actions" style="text-align: center;">
+                <button type="submit" class="btn btn-success btn-claim" name="btn_submit" value="1"> Submit</button>
+                <a href="{{ path('admin_app_claim_create') }}" class="btn btn-success btn-claim" name="btn_add"
+                   value="1"> Add New</a>
+                <a href="{{ path('admin_app_claim_edit',{'id':admin.id(object)}) }}" class="btn btn-default btn-claim"
+                   name="btn_edit" value="1"> Edit</a>
+                <a href="{{ path('admin_app_claim_list') }}" class="btn btn-danger btn-claim" name="btn_cancel"
+                   value="1"> Cancel</a>
+            </div>
+        </form>
+    </div>
+
+
+    {{ sonata_block_render_event('sonata.admin.show.bottom', { 'admin': admin, 'object': object }) }}
+{% endblock %}
+
