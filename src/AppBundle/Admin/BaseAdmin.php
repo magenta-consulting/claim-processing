@@ -218,9 +218,6 @@ class BaseAdmin extends AbstractAdmin
                             $expr->eq($query->getRootAliases()[0] . '.position', ':position')
                         );
                         $query->andWhere(
-                            $expr->neq($query->getRootAliases()[0] . '.status', ':status')
-                        );
-                        $query->andWhere(
                             $expr->eq($query->getRootAliases()[0] . '.periodFrom', ':periodFrom')
                         );
                         $query->andWhere(
@@ -228,7 +225,6 @@ class BaseAdmin extends AbstractAdmin
                         );
                         $query->setParameter('periodFrom', $periodFrom->format('Y-m-d'));
                         $query->setParameter('periodTo', $periodTo->format('Y-m-d'));
-                        $query->setParameter('status', Claim::STATUS_DRAFT);
                         $query->setParameter('company', $company);
                         $query->setParameter('position', $position);
                 }

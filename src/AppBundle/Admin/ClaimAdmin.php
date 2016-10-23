@@ -168,6 +168,9 @@ class ClaimAdmin extends BaseAdmin
                         'actions' => array(
                             'delete' => array(),
                             'show' => array(),
+                            'edit' => array(
+                                'template' => 'AppBundle:SonataAdmin/CustomActions:_list-action-employee-edit-claim.html.twig'
+                            ),
                         )
                     ));
         }
