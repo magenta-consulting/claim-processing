@@ -152,7 +152,7 @@ class ClaimAdmin extends BaseAdmin
                     ->add('claimAmount', null, ['label' => 'Amount'])
                     ->add('_action', null, array(
                         'actions' => array(
-                            'checkerViewClaim' => array(
+                            'show' => array(
                                 'template' => 'AppBundle:SonataAdmin/CustomActions:_list-action-checker-view-claim.html.twig'
                             ),
                         )
@@ -180,8 +180,6 @@ class ClaimAdmin extends BaseAdmin
 
     protected function configureRoutes(RouteCollection $collection)
     {
-        $collection->add('claimEachPositionForCheck', 'list');
-        $collection->add('checkerViewClaim', 'show');
         $collection->add('checkerApprove', $this->getRouterIdParameter() . '/checker-approve');
         $collection->add('checkerReject', $this->getRouterIdParameter() . '/checker-reject');
     }

@@ -294,7 +294,7 @@ class PositionAdmin extends BaseAdmin
 //                    ->add('periodTo', null, ['label' => 'Period To', 'format' => 'd M Y'])
                     ->add('_action', null, array(
                         'actions' => array(
-                            'claimEachPositionForCheck' => array(
+                            'list' => array(
                                 'template' => 'AppBundle:SonataAdmin/CustomActions:_list-action-claim-each-position.html.twig'
                             ),
                         )
@@ -322,17 +322,7 @@ class PositionAdmin extends BaseAdmin
     protected function configureRoutes(RouteCollection $collection)
     {
 
-        $collection->add('delete');
-        $collection->add('create');
 
-        $request = $this->getConfigurationPool()->getContainer()->get('request_stack')->getCurrentRequest();
-        if($request) {
-            $type = $request->get('type');
-            if ($type != '') {
-                $collection->remove('delete');
-                $collection->remove('create');
-            }
-        }
     }
 
     public function toString($object)
