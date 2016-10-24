@@ -116,14 +116,11 @@ class ClaimAdmin extends BaseAdmin
                 'label' => 'Tax Code',
                 'required' => false
             ));
-            $formMapper->add('claimMedias', 'sonata_type_collection', array(
+            $formMapper->add('images', 'file', array(
                 'label' => 'Receipt Images',
                 'required' => false,
-            ),
-                array(
-                    'edit' => 'inline',
-                    'inline' => 'table',
-                ));
+                'mapped'=>false
+            ));
         }
 
 
@@ -181,6 +178,8 @@ class ClaimAdmin extends BaseAdmin
 
     protected function configureRoutes(RouteCollection $collection)
     {
+        $collection->add('uploadImage', $this->getRouterIdParameter() . '/upload-image-claim');
+        $collection->add('deleteImage', $this->getRouterIdParameter() . '/{mediaId}/delete-image-claim');
         $collection->add('checkerApprove', $this->getRouterIdParameter() . '/checker-approve');
         $collection->add('checkerReject', $this->getRouterIdParameter() . '/checker-reject');
     }

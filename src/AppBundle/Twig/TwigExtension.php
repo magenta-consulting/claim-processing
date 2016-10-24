@@ -51,8 +51,8 @@ class TwigExtension extends \Twig_Extension
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function getUrlMedia($media){
-        return $this->container->get('app.media.retriever')->getPublicURL($media);
+    public function getUrlMedia($media, $context = 'default', $format = 'reference'){
+        return $this->container->get('app.media.retriever')->getPublicURL($media,$context,$format);
     }
     public function getRuleForClaim($claim){
         $rule =  $this->container->get('app.claim_rule')->getRuleForClaim($claim);

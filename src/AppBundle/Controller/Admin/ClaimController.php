@@ -4,12 +4,57 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Claim;
+use AppBundle\Entity\ClaimMedia;
+use Application\Sonata\MediaBundle\Entity\Media;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Sonata\AdminBundle\Controller\CRUDController as Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class ClaimController extends Controller
 {
+
+    public function uploadImageAction(){
+        $request = $this->getRequest();
+        if($request->isXmlHttpRequest()){
+            $em = $this->getDoctrine()->getManager();
+            $mediaManager = $this->get('sonata.media.manager.media');
+            $media = new Media();
+            $media->setContext('default');
+            $media->setProviderName('sonata.media.provider.image');
+            $media->setBinaryContent($request->files->get('image'));
+            $mediaManager->save($media);
+
+            $claim = $this->admin->getSubject();
+            $claimMedia = new ClaimMedia();
+            $claimMedia->setClaim($claim);
+            $claimMedia->setMedia($media);
+            $em->persist($claimMedia);
+            $em->flush();
+
+            return new JsonResponse([
+                'status'=>true,
+                'urlImage'=>$this->get('app.media.retriever')->getPublicURL($media,'default','default_small'),
+                'urlDelete'=>$this->generateUrl('admin_app_claim_deleteImage',['id'=>$claim->getId(),'mediaId'=>$media->getId()])
+            ]);
+        }
+    }
+    public function deleteImageAction(){
+        $request = $this->getRequest();
+        if($request->isXmlHttpRequest()){
+            $mediaManager = $this->get('sonata.media.manager.media');
+            $em = $this->getDoctrine()->getManager();
+            $claim = $this->admin->getSubject();
+            $media = $mediaManager->find($request->get('mediaId'));
+
+            $claimMedia = $em->getRepository('AppBundle:ClaimMedia')->findOneBy(['claim'=>$claim,'media'=>$media]);
+            $em->remove($claimMedia);
+            $em->flush();
+            return new JsonResponse([
+                'status'=>true,
+            ]);
+        }
+    }
     public function checkerApproveAction()
     {
         $object = $this->admin->getSubject();

@@ -34,6 +34,50 @@
                         });
                     });
                 });
+
+                $(function () {
+                    $(".claim-images").on("change", function () {
+                        var formData = new FormData();
+                        formData.append('image', $('input[type=file]')[0].files[0]);
+                        var href = $(".claim-images").data('href');
+                        $.ajax({
+                            type: 'POST',
+                            url: href,
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success: function (data) {
+                                console.log("success");
+                                console.log(data);
+                                var html = '<div class="col-md-4 col-sm-4 col-xs-4 claim-image-wrap"><img src ="' + data.urlImage + '"/><br><a href="' + data.urlDelete + '" class="delete-image-claim">Delete</a> </div>';
+                                $('.wrap-claim-images').append(html);
+                            },
+                            error: function (data) {
+                                console.log("error");
+                                console.log(data);
+                            }
+                        });
+                    });
+                    $("body").delegate("a.delete-image-claim", "click", function (e) {
+                        e.preventDefault();
+                        var href = $(this).attr('href');
+                        var image = $(this).parent('div.claim-image-wrap');
+                        $.ajax({
+                            type: 'GET',
+                            url: href,
+                            success: function (data) {
+                                console.log("success");
+                                console.log(data);
+                                image.remove();
+                            },
+                            error: function (data) {
+                                console.log("error");
+                                console.log(data);
+                            }
+                        });
+                    });
+                });
+
             </script>
         {% endblock %}
  {% block sonata_page_content_header %}
@@ -56,7 +100,16 @@
                                         {{ form_row(form.claimType ,{'attr': {'class': 'claim-type'}}) }}
                                         {{ form_row(form.claimCategory,{'attr': {'class': 'claim-category'}}) }}
                                     {% elseif app.request.attributes.get('_route') == 'admin_app_claim_edit' %}
-                                        {{ form_row(form.claimMedias) }}
+                                        {{ form_row(form.images,{'attr': {'class': 'claim-images','data-href':path('admin_app_claim_uploadImage',{'id':object.id})}}) }}
+                                        <div class="row wrap-claim-images">
+                                            {% for claimMedia in object.claimMedias %}
+                                                <div class="col-md-4 col-sm-4 col-xs-4 claim-image-wrap">
+                                                    <img src="{{ getUrlMedia(claimMedia.media,'default','default_small') }}"/><br>
+                                                    <a href="{{ path('admin_app_claim_deleteImage',{'id':object.id,'mediaId':claimMedia.media.id}) }}"
+                                                       class="delete-image-claim">Delete</a>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
                                         {{ form_row(form.claimAmount) }}
                                         {{ form_row(form.receiptDate) }}
                                         {{ form_row(form.taxRate) }}
@@ -75,15 +128,15 @@
   {% block formactions %}
       <div class="row" style="text-align: center;margin: 15px;">
           <div class="col-md-12 well">
-          {% block sonata_form_actions %}
-              {% if app.request.attributes.get('_route') == 'admin_app_claim_create' %}
-                  {% set nameBtn = 'btn_create_and_edit' %}
-              {% else %}
-                  {% set nameBtn = 'btn_edit_and_show' %}
-              {% endif %}
-              <button class="btn btn-success btn-claim" type="submit" name="{{ nameBtn }}">NEXT
-              </button>
-          {% endblock %}
-              </div>
+              {% block sonata_form_actions %}
+                  {% if app.request.attributes.get('_route') == 'admin_app_claim_create' %}
+                      {% set nameBtn = 'btn_create_and_edit' %}
+                  {% else %}
+                      {% set nameBtn = 'btn_edit_and_show' %}
+                  {% endif %}
+                  <button class="btn btn-success btn-claim" type="submit" name="{{ nameBtn }}">NEXT
+                  </button>
+              {% endblock %}
+          </div>
       </div>
   {% endblock formactions %}

@@ -188,7 +188,7 @@ sonata_admin:
         dashboard:                      AppBundle:SonataAdmin/Core:dashboard.html.twig
         layout:                         AppBundle:SonataAdmin:standard_layout.html.twig
         edit:                           AppBundle:SonataAdmin/CRUD:edit.html.twig
-    title:      Claims
+    title:      ClaimEx
 #    dashboard:
 #        groups:
 #                      Companies:
@@ -275,7 +275,7 @@ sonata_media:
                 - sonata.media.provider.vimeo
 
             formats:
-                small: { width: 100 , quality: 100}
+                small: { width: 70 ,height: 70, quality: 100}
                 medium:   { width: 500 , quality: 100}
                 big:  { width: 1200 , quality: 100}
 

@@ -14,12 +14,12 @@ file that was distributed with this source code.
 {% block field %}
     {% if object.claimMedias|length %}
         <div class="row show-image">
-            {% set url = getUrlMedia(object.claimMedias[0].media) %}
-            <a href="{{ url }}" target="_blank"><img width="400px" src="{{ url }}"></a>
+            {% set url = getUrlMedia(object.claimMedias[0].media,'default','default_medium') %}
+            <a href="{{ url }}" target="_blank"><img src="{{ url }}"></a>
         </div>
         <div class="row link-image">
             {% for claimMedia in object.claimMedias %}
-                <a href="javascript:void(0);" class="{{ loop.index == 1 ? 'active-image':''  }}" rel="{{ getUrlMedia(claimMedia.media) }}">Image {{ loop.index }}</a><br>
+                <a href="javascript:void(0);" class="{{ loop.index == 1 ? 'active-image':''  }}" rel="{{ getUrlMedia(claimMedia.media,'default','default_medium') }}">Image {{ loop.index }}</a><br>
             {% endfor %}
         </div>
     {% else %}
