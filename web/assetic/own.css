@@ -3,4 +3,12 @@
        width: 100%;
        margin-bottom: 2px;
    }
+    .show-image img{
+        width: 100%;
+    }
+}
+.claim-image-wrap{
+    text-align: center;
+    padding: 0px;
+    margin-bottom: 15px;
 }
