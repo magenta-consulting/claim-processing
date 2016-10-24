@@ -121,6 +121,16 @@ class ClaimAdmin extends BaseAdmin
                 'required' => false,
                 'mapped'=>false
             ));
+            $formMapper->add('imageFromLibrary', 'file', array(
+                'label' => 'Receipt Images',
+                'required' => false,
+                'mapped'=>false
+            ));
+            $formMapper->add('imageFromCamera', 'file', array(
+                'label' => 'Receipt Images',
+                'required' => false,
+                'mapped'=>false
+            ));
         }
 
 

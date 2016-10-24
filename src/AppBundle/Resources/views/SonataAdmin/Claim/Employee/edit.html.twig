@@ -38,7 +38,7 @@
                 $(function () {
                     $(".claim-images").on("change", function () {
                         var formData = new FormData();
-                        formData.append('image', $('input[type=file]')[0].files[0]);
+                        formData.append('image', $(this)[0].files[0]);
                         var href = $(".claim-images").data('href');
                         $.ajax({
                             type: 'POST',
@@ -49,7 +49,7 @@
                             success: function (data) {
                                 console.log("success");
                                 console.log(data);
-                                var html = '<div class="col-md-4 col-sm-4 col-xs-4 claim-image-wrap"><img src ="' + data.urlImage + '"/><br><a href="' + data.urlDelete + '" class="delete-image-claim"><i class="fa fa-times" aria-hidden="true"></i></a> </div>';
+                                var html = '<div class="col-md-2 col-sm-4 col-xs-4 claim-image-wrap"><img src ="' + data.urlImage + '"/><br><a href="' + data.urlDelete + '" class="delete-image-claim"><i class="fa fa-times" aria-hidden="true"></i></a> </div>';
                                 $('.wrap-claim-images').append(html);
                             },
                             error: function (data) {
@@ -106,14 +106,22 @@
                                         {{ form_row(form.claimType ,{'attr': {'class': 'claim-type'}}) }}
                                         {{ form_row(form.claimCategory,{'attr': {'class': 'claim-category'}}) }}
                                     {% elseif app.request.attributes.get('_route') == 'admin_app_claim_edit' %}
-                                        {{ form_row(form.images,{'attr': {'accept':'image/*','class': 'claim-images','data-href':path('admin_app_claim_uploadImage',{'id':object.id})}}) }}
+                                        <div class="row" style="margin: 15px;text-align: center;">
+                                            <div class="col-md-2 col-sm-6 col-xs-6 wrap-take-photo">
+                                                {{ form_widget(form.imageFromCamera,{'attr': {'accept':'image/*','capture':'camera','class': 'claim-images take-photo','data-href':path('admin_app_claim_uploadImage',{'id':object.id})}}) }}
+                                            </div>
+                                            <div class="col-md-2 col-sm-6 col-xs-6 wrap-photo-library">
+                                                {{ form_widget(form.imageFromLibrary,{'attr': {'accept':'image/*','class': 'claim-images photo-library','data-href':path('admin_app_claim_uploadImage',{'id':object.id})}}) }}
+                                            </div>
+                                        </div>
 
                                         <div class="row wrap-claim-images">
                                             {% for claimMedia in object.claimMedias %}
-                                                <div class="col-md-4 col-sm-4 col-xs-4 claim-image-wrap">
+                                                <div class="col-md-2 col-sm-4 col-xs-4 claim-image-wrap">
                                                     <img src="{{ getUrlMedia(claimMedia.media,'default','default_small') }}"/><br>
                                                     <a href="{{ path('admin_app_claim_deleteImage',{'id':object.id,'mediaId':claimMedia.media.id}) }}"
-                                                       class="delete-image-claim"><i class="fa fa-times" aria-hidden="true"></i></a>
+                                                       class="delete-image-claim"><i class="fa fa-times"
+                                                                                     aria-hidden="true"></i></a>
                                                 </div>
                                             {% endfor %}
                                         </div>
