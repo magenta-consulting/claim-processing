@@ -116,11 +116,6 @@ class ClaimAdmin extends BaseAdmin
                 'label' => 'Tax Code',
                 'required' => false
             ));
-            $formMapper->add('images', 'file', array(
-                'label' => 'Receipt Images',
-                'required' => false,
-                'mapped'=>false
-            ));
             $formMapper->add('imageFromLibrary', 'file', array(
                 'label' => 'Receipt Images',
                 'required' => false,
