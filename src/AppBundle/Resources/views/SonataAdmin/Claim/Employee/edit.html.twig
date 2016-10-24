@@ -49,7 +49,7 @@
                             success: function (data) {
                                 console.log("success");
                                 console.log(data);
-                                var html = '<div class="col-md-4 col-sm-4 col-xs-4 claim-image-wrap"><img src ="' + data.urlImage + '"/><br><a href="' + data.urlDelete + '" class="delete-image-claim">Delete</a> </div>';
+                                var html = '<div class="col-md-4 col-sm-4 col-xs-4 claim-image-wrap"><img src ="' + data.urlImage + '"/><br><a href="' + data.urlDelete + '" class="delete-image-claim"><i class="fa fa-times" aria-hidden="true"></i></a> </div>';
                                 $('.wrap-claim-images').append(html);
                             },
                             error: function (data) {
@@ -79,11 +79,17 @@
                 });
 
             </script>
+
+            <script>
+
+
+            </script>
         {% endblock %}
  {% block sonata_page_content_header %}
 
  {% endblock %}
             {% block sonata_tab_content %}
+
                 <div class="col-md-12">
                     <div class="col-md-12">
                         <div class="box box-primary">
@@ -100,13 +106,14 @@
                                         {{ form_row(form.claimType ,{'attr': {'class': 'claim-type'}}) }}
                                         {{ form_row(form.claimCategory,{'attr': {'class': 'claim-category'}}) }}
                                     {% elseif app.request.attributes.get('_route') == 'admin_app_claim_edit' %}
-                                        {{ form_row(form.images,{'attr': {'class': 'claim-images','data-href':path('admin_app_claim_uploadImage',{'id':object.id})}}) }}
+                                        {{ form_row(form.images,{'attr': {'accept':'image/*','capture':'camera','class': 'claim-images','data-href':path('admin_app_claim_uploadImage',{'id':object.id})}}) }}
+
                                         <div class="row wrap-claim-images">
                                             {% for claimMedia in object.claimMedias %}
                                                 <div class="col-md-4 col-sm-4 col-xs-4 claim-image-wrap">
                                                     <img src="{{ getUrlMedia(claimMedia.media,'default','default_small') }}"/><br>
                                                     <a href="{{ path('admin_app_claim_deleteImage',{'id':object.id,'mediaId':claimMedia.media.id}) }}"
-                                                       class="delete-image-claim">Delete</a>
+                                                       class="delete-image-claim"><i class="fa fa-times" aria-hidden="true"></i></a>
                                                 </div>
                                             {% endfor %}
                                         </div>
