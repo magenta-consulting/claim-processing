@@ -73,7 +73,8 @@
                 </div>
             {% endblock %}
   {% block formactions %}
-      <div class="sonata-ba-form-actions well well-small form-actions" style="text-align: center">
+      <div class="row" style="text-align: center">
+          <div class="col-md-12 well">
           {% block sonata_form_actions %}
               {% if app.request.attributes.get('_route') == 'admin_app_claim_create' %}
                   {% set nameBtn = 'btn_create_and_edit' %}
@@ -83,5 +84,6 @@
               <button class="btn btn-success btn-claim" type="submit" name="{{ nameBtn }}">NEXT
               </button>
           {% endblock %}
+              </div>
       </div>
   {% endblock formactions %}

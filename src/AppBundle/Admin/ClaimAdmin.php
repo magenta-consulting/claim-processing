@@ -159,6 +159,7 @@ class ClaimAdmin extends BaseAdmin
                     ));
                 break;
             default:
+
                 $listMapper
                     ->add('claimType.code', null, ['label' => 'Claim Type'])
                     ->add('claimCategory.code', null, ['label' => 'Claim Category'])
