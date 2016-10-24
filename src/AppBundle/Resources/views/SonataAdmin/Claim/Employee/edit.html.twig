@@ -106,7 +106,7 @@
                                         {{ form_row(form.claimType ,{'attr': {'class': 'claim-type'}}) }}
                                         {{ form_row(form.claimCategory,{'attr': {'class': 'claim-category'}}) }}
                                     {% elseif app.request.attributes.get('_route') == 'admin_app_claim_edit' %}
-                                        {{ form_row(form.images,{'attr': {'accept':'image/*','capture':'camera','class': 'claim-images','data-href':path('admin_app_claim_uploadImage',{'id':object.id})}}) }}
+                                        {{ form_row(form.images,{'attr': {'accept':'image/*','class': 'claim-images','data-href':path('admin_app_claim_uploadImage',{'id':object.id})}}) }}
 
                                         <div class="row wrap-claim-images">
                                             {% for claimMedia in object.claimMedias %}
