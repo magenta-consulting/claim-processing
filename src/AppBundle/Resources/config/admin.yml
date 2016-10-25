@@ -32,11 +32,25 @@ services:
                 - { name: sonata.admin, manager_type: orm, label: Claim Media }
             calls:
                 - [setContainer, ["@service_container"]]
-    admin.category:
-            class: AppBundle\Admin\CategoryAdmin
-            arguments: [~, AppBundle\Entity\Category, ~]
+    admin.limit_rule:
+            class: AppBundle\Admin\LimitRuleAdmin
+            arguments: [~, AppBundle\Entity\LimitRule, ~]
             tags:
                 - { name: sonata.admin, manager_type: orm, label: Claims Limit Rules }
+            calls:
+                - [setContainer, ["@service_container"]]
+    admin.employee_group:
+            class: AppBundle\Admin\EmployeeGroupAdmin
+            arguments: [~, AppBundle\Entity\EmployeeGroup, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Employee Group }
+            calls:
+                - [setContainer, ["@service_container"]]
+    admin.limit_rule_employee_group:
+            class: AppBundle\Admin\LimitRuleEmployeeGroupAdmin
+            arguments: [~, AppBundle\Entity\LimitRuleEmployeeGroup, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Limit Rule Employee Group }
             calls:
                 - [setContainer, ["@service_container"]]
 
@@ -155,6 +169,13 @@ services:
                 - { name: sonata.admin, manager_type: orm, label: Approval Amount Management }
             calls:
                 - [setContainer, ["@service_container"]]
+    admin.approval_amount_policies_employee_group:
+            class: AppBundle\Admin\ApprovalAmountPoliciesEmployeeGroupAdmin
+            arguments: [~, AppBundle\Entity\ApprovalAmountPoliciesEmployeeGroup, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Approval Amount Management }
+            calls:
+                - [setContainer, ["@service_container"]]
 
     admin.employee_type:
             class: AppBundle\Admin\EmployeeTypeAdmin
@@ -175,5 +196,12 @@ services:
             arguments: [~, AppBundle\Entity\Checker, ~]
             tags:
                 - { name: sonata.admin, manager_type: orm, label: Checker Grouping }
+            calls:
+                - [setContainer, ["@service_container"]]
+    admin.checker_employee_group:
+            class: AppBundle\Admin\CheckerEmployeeGroupAdmin
+            arguments: [~, AppBundle\Entity\CheckerEmployeeGroup, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Checker Employee Group }
             calls:
                 - [setContainer, ["@service_container"]]

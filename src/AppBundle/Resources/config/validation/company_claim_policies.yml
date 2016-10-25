@@ -1,3 +1,0 @@
-AppBundle\Entity\CompanyClaimPolicies:
-    constraints:
-        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: claimType

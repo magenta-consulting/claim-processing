@@ -19,6 +19,7 @@ class Checker
     {
         $this->createdDate = new \DateTime();
         $this->claims = new ArrayCollection();
+        $this->checkerEmployeeGroups = new ArrayCollection();
         // your own logic
     }
 
@@ -45,40 +46,6 @@ class Checker
     private $createdDate;
 
     /**
-     * @var Media
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
-     */
-    private $companySetupChecker;
-    /**
-     * @var CostCentre
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CostCentre")
-     */
-    private $costCentre;
-
-    /**
-     * @var Region
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Region")
-     */
-    private $region;
-
-    /**
-     * @var Branch
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Branch")
-     */
-    private $branch;
-
-    /**
-     * @var Section
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Department")
-     */
-    private $department;
-    /**
-     * @var Section
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Section")
-     */
-    private $section;
-
-    /**
      * @var User
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
      */
@@ -96,27 +63,17 @@ class Checker
     private $claims;
 
     /**
+     * @var CheckerEmployeeGroup
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\CheckerEmployeeGroup",mappedBy="checker",cascade={"all"})
+     */
+    private $checkerEmployeeGroups;
+
+    /**
      * @return mixed
      */
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return Claim
-     */
-    public function getClaims()
-    {
-        return $this->claims;
-    }
-
-    /**
-     * @param Claim $claims
-     */
-    public function setClaims($claims)
-    {
-        $this->claims = $claims;
     }
 
     /**
@@ -149,71 +106,6 @@ class Checker
     public function setCreatedDate($createdDate)
     {
         $this->createdDate = $createdDate;
-    }
-
-
-    /**
-     * @return CostCentre
-     */
-    public function getCostCentre()
-    {
-        return $this->costCentre;
-    }
-
-    /**
-     * @param CostCentre $costCentre
-     */
-    public function setCostCentre($costCentre)
-    {
-        $this->costCentre = $costCentre;
-    }
-
-    /**
-     * @return Region
-     */
-    public function getRegion()
-    {
-        return $this->region;
-    }
-
-    /**
-     * @param Region $region
-     */
-    public function setRegion($region)
-    {
-        $this->region = $region;
-    }
-
-    /**
-     * @return Branch
-     */
-    public function getBranch()
-    {
-        return $this->branch;
-    }
-
-    /**
-     * @param Branch $branch
-     */
-    public function setBranch($branch)
-    {
-        $this->branch = $branch;
-    }
-
-    /**
-     * @return Section
-     */
-    public function getSection()
-    {
-        return $this->section;
-    }
-
-    /**
-     * @param Section $section
-     */
-    public function setSection($section)
-    {
-        $this->section = $section;
     }
 
     /**
@@ -249,42 +141,56 @@ class Checker
     }
 
     /**
-     * @return Media
+     * @return Claim
      */
-    public function getCompanySetupChecker()
+    public function getClaims()
     {
-        return $this->companySetupChecker;
+        return $this->claims;
     }
 
     /**
-     * @param Media $companySetupChecker
+     * @param Claim $claims
      */
-    public function setCompanySetupChecker($companySetupChecker)
+    public function setClaims($claims)
     {
-        $this->companySetupChecker = $companySetupChecker;
+        $this->claims = $claims;
     }
 
     /**
-     * @return Section
+     * @return CheckerEmployeeGroup
      */
-    public function getDepartment()
+    public function getCheckerEmployeeGroups()
     {
-        return $this->department;
+        return $this->checkerEmployeeGroups;
     }
 
     /**
-     * @param Section $department
+     * @param CheckerEmployeeGroup $checkerEmployeeGroups
      */
-    public function setDepartment($department)
+    public function setCheckerEmployeeGroups($checkerEmployeeGroups)
     {
-        $this->department = $department;
+        $this->checkerEmployeeGroups = $checkerEmployeeGroups;
     }
+
+    public function addCheckerEmployeeGroup($checkerEmployeeGroups)
+    {
+        $this->checkerEmployeeGroups->add($checkerEmployeeGroups);
+        $checkerEmployeeGroups->setChecker($this);
+        return $this;
+    }
+
+    public function removeCheckerEmployeeGroup($checkerEmployeeGroups)
+    {
+        $this->checkerEmployeeGroups->removeElement($checkerEmployeeGroups);
+        $checkerEmployeeGroups->setChecker(null);
+    }
+
 
     public function validate(ExecutionContextInterface $context, $payload)
     {
-        if($this->getBackupChecker()) {
-            if($this->getChecker()){
-                if($this->getBackupChecker()->getId() === $this->getChecker()->getId()) {
+        if ($this->getBackupChecker()) {
+            if ($this->getChecker()) {
+                if ($this->getBackupChecker()->getId() === $this->getChecker()->getId()) {
                     $context->buildViolation('Backup Checker must be difference with checker')
                         ->atPath('backupChecker')
                         ->addViolation();
@@ -292,21 +198,6 @@ class Checker
             }
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

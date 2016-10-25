@@ -17,6 +17,12 @@ use Doctrine\ORM\Mapping as ORM;
 class ClaimType
 {
 
+    public function __construct()
+    {
+        $this->isDefault = false;
+        $this->enabled = true;
+    }
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer",options={"unsigned":true})
@@ -40,6 +46,12 @@ class ClaimType
      * @ORM\Column(name="enabled",type="boolean")
      */
     private $enabled;
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="is_default",type="boolean")
+     */
+    private $isDefault;
     /**
      * @var Company
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
@@ -150,6 +162,24 @@ class ClaimType
     {
         $this->company = $company;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isIsDefault()
+    {
+        return $this->isDefault;
+    }
+
+    /**
+     * @param boolean $isDefault
+     */
+    public function setIsDefault($isDefault)
+    {
+        $this->isDefault = $isDefault;
+    }
+
+
 
     
 

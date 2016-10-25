@@ -43,46 +43,6 @@ class ApprovalAmountPolicies
     private $createdDate;
 
     /**
-     * @var Media
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
-     */
-    private $companySetupApproval;
-    /**
-     * @var CostCentre
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CostCentre")
-     */
-    private $costCentre;
-
-    /**
-     * @var Region
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Region")
-     */
-    private $region;
-
-    /**
-     * @var Branch
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Branch")
-     */
-    private $branch;
-
-    /**
-     * @var Section
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Department")
-     */
-    private $department;
-    /**
-     * @var Section
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Section")
-     */
-    private $section;
-
-    /**
-     * @var EmployeeType
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\EmployeeType")
-     */
-    private $employeeType;
-
-    /**
      * @var Position
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
      */
@@ -169,6 +129,11 @@ class ApprovalAmountPolicies
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Claim",mappedBy="approver")
      */
     private $claims;
+    /**
+     * @var ApprovalAmountPoliciesEmployeeGroup
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ApprovalAmountPoliciesEmployeeGroup",mappedBy="approvalAmountPolicies",cascade={"all"})
+     */
+    private $approvalAmountPoliciesEmployeeGroups;
 
     /**
      * @return mixed
@@ -177,23 +142,6 @@ class ApprovalAmountPolicies
     {
         return $this->id;
     }
-
-    /**
-     * @return Claim
-     */
-    public function getClaims()
-    {
-        return $this->claims;
-    }
-
-    /**
-     * @param Claim $claims
-     */
-    public function setClaims($claims)
-    {
-        $this->claims = $claims;
-    }
-
 
     /**
      * @return Company
@@ -225,118 +173,6 @@ class ApprovalAmountPolicies
     public function setCreatedDate($createdDate)
     {
         $this->createdDate = $createdDate;
-    }
-
-    /**
-     * @return Media
-     */
-    public function getCompanySetupApproval()
-    {
-        return $this->companySetupApproval;
-    }
-
-    /**
-     * @param Media $companySetupApproval
-     */
-    public function setCompanySetupApproval($companySetupApproval)
-    {
-        $this->companySetupApproval = $companySetupApproval;
-    }
-
-    /**
-     * @return CostCentre
-     */
-    public function getCostCentre()
-    {
-        return $this->costCentre;
-    }
-
-    /**
-     * @param CostCentre $costCentre
-     */
-    public function setCostCentre($costCentre)
-    {
-        $this->costCentre = $costCentre;
-    }
-
-    /**
-     * @return Region
-     */
-    public function getRegion()
-    {
-        return $this->region;
-    }
-
-    /**
-     * @param Region $region
-     */
-    public function setRegion($region)
-    {
-        $this->region = $region;
-    }
-
-    /**
-     * @return Branch
-     */
-    public function getBranch()
-    {
-        return $this->branch;
-    }
-
-    /**
-     * @param Branch $branch
-     */
-    public function setBranch($branch)
-    {
-        $this->branch = $branch;
-    }
-
-    /**
-     * @return Section
-     */
-    public function getDepartment()
-    {
-        return $this->department;
-    }
-
-    /**
-     * @param Section $department
-     */
-    public function setDepartment($department)
-    {
-        $this->department = $department;
-    }
-
-    /**
-     * @return Section
-     */
-    public function getSection()
-    {
-        return $this->section;
-    }
-
-    /**
-     * @param Section $section
-     */
-    public function setSection($section)
-    {
-        $this->section = $section;
-    }
-
-    /**
-     * @return EmployeeType
-     */
-    public function getEmployeeType()
-    {
-        return $this->employeeType;
-    }
-
-    /**
-     * @param EmployeeType $employeeType
-     */
-    public function setEmployeeType($employeeType)
-    {
-        $this->employeeType = $employeeType;
     }
 
     /**
@@ -436,6 +272,54 @@ class ApprovalAmountPolicies
     }
 
     /**
+     * @return Position
+     */
+    public function getOverrideApprover1()
+    {
+        return $this->overrideApprover1;
+    }
+
+    /**
+     * @param Position $overrideApprover1
+     */
+    public function setOverrideApprover1($overrideApprover1)
+    {
+        $this->overrideApprover1 = $overrideApprover1;
+    }
+
+    /**
+     * @return Position
+     */
+    public function getOverrideApprover2()
+    {
+        return $this->overrideApprover2;
+    }
+
+    /**
+     * @param Position $overrideApprover2
+     */
+    public function setOverrideApprover2($overrideApprover2)
+    {
+        $this->overrideApprover2 = $overrideApprover2;
+    }
+
+    /**
+     * @return Position
+     */
+    public function getOverrideApprover3()
+    {
+        return $this->overrideApprover3;
+    }
+
+    /**
+     * @param Position $overrideApprover3
+     */
+    public function setOverrideApprover3($overrideApprover3)
+    {
+        $this->overrideApprover3 = $overrideApprover3;
+    }
+
+    /**
      * @return float
      */
     public function getApproval1Amount()
@@ -532,52 +416,51 @@ class ApprovalAmountPolicies
     }
 
     /**
-     * @return Position
+     * @return Claim
      */
-    public function getOverrideApprover1()
+    public function getClaims()
     {
-        return $this->overrideApprover1;
+        return $this->claims;
     }
 
     /**
-     * @param Position $overrideApprover1
+     * @param Claim $claims
      */
-    public function setOverrideApprover1($overrideApprover1)
+    public function setClaims($claims)
     {
-        $this->overrideApprover1 = $overrideApprover1;
+        $this->claims = $claims;
     }
 
     /**
-     * @return Position
+     * @return ApprovalAmountPoliciesEmployeeGroup
      */
-    public function getOverrideApprover2()
+    public function getApprovalAmountPoliciesEmployeeGroups()
     {
-        return $this->overrideApprover2;
+        return $this->approvalAmountPoliciesEmployeeGroups;
     }
 
     /**
-     * @param Position $overrideApprover2
+     * @param ApprovalAmountPoliciesEmployeeGroup $approvalAmountPoliciesEmployeeGroups
      */
-    public function setOverrideApprover2($overrideApprover2)
+    public function setApprovalAmountPoliciesEmployeeGroups($approvalAmountPoliciesEmployeeGroups)
     {
-        $this->overrideApprover2 = $overrideApprover2;
+        $this->approvalAmountPoliciesEmployeeGroups = $approvalAmountPoliciesEmployeeGroups;
     }
 
-    /**
-     * @return Position
-     */
-    public function getOverrideApprover3()
+    public function addApprovalAmountPoliciesEmployeeGroup($approvalAmountPoliciesEmployeeGroup)
     {
-        return $this->overrideApprover3;
+        $this->approvalAmountPoliciesEmployeeGroups->add($approvalAmountPoliciesEmployeeGroup);
+        $approvalAmountPoliciesEmployeeGroup->setApprovalAmountPolicies($this);
+        return $this;
     }
 
-    /**
-     * @param Position $overrideApprover3
-     */
-    public function setOverrideApprover3($overrideApprover3)
+    public function removeApprovalAmountPoliciesEmployeeGroup($approvalAmountPoliciesEmployeeGroup)
     {
-        $this->overrideApprover3 = $overrideApprover3;
+        $this->approvalAmountPoliciesEmployeeGroups->removeElement($approvalAmountPoliciesEmployeeGroup);
+        $approvalAmountPoliciesEmployeeGroup->setApprovalAmountPolicies(null);
     }
+
+
 
 
 

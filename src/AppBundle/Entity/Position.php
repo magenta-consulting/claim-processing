@@ -108,12 +108,6 @@ class Position
     private $createdDate;
 
     /**
-     * @var EmployeeType
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\EmployeeType")
-     */
-    private $employeeType;
-
-    /**
      * @var EmploymentType
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\EmploymentType")
      */
@@ -138,36 +132,6 @@ class Position
     private $lastDateOfService;
 
     /**
-     * @var CostCentre
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CostCentre")
-     */
-    private $costCentre;
-
-    /**
-     * @var Region
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Region")
-     */
-    private $region;
-
-    /**
-     * @var Branch
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Branch")
-     */
-    private $branch;
-
-    /**
-     * @var Department
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Department")
-     */
-    private $department;
-
-    /**
-     * @var Section
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Section")
-     */
-    private $section;
-
-    /**
      * @var Position
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\PositionSubmitter",mappedBy="submissionByPosition",cascade={"all"},orphanRemoval=true)
      */
@@ -184,6 +148,13 @@ class Position
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Claim",mappedBy="position")
      */
     private $claims;
+
+    /**
+     * @var EmployeeGroup
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\EmployeeGroup")
+     */
+    private $employeeGroup;
+
 
 
     /**
@@ -213,6 +184,23 @@ class Position
         $this->submissionFor->removeElement($submissionFor);
         $submissionFor->setSubmissionForPosition(null);
     }
+
+    /**
+     * @return EmployeeGroup
+     */
+    public function getEmployeeGroup()
+    {
+        return $this->employeeGroup;
+    }
+
+    /**
+     * @param EmployeeGroup $employeeGroup
+     */
+    public function setEmployeeGroup($employeeGroup)
+    {
+        $this->employeeGroup = $employeeGroup;
+    }
+
 
     /**
      * @return Position
@@ -410,21 +398,6 @@ class Position
         $this->createdDate = $createdDate;
     }
 
-    /**
-     * @return EmployeeType
-     */
-    public function getEmployeeType()
-    {
-        return $this->employeeType;
-    }
-
-    /**
-     * @param EmployeeType $employeeType
-     */
-    public function setEmployeeType($employeeType)
-    {
-        $this->employeeType = $employeeType;
-    }
 
     /**
      * @return EmploymentType
@@ -488,70 +461,6 @@ class Position
     public function setLastDateOfService($lastDateOfService)
     {
         $this->lastDateOfService = $lastDateOfService;
-    }
-
-    /**
-     * @return CostCentre
-     */
-    public function getCostCentre()
-    {
-        return $this->costCentre;
-    }
-
-    /**
-     * @param CostCentre $costCentre
-     */
-    public function setCostCentre($costCentre)
-    {
-        $this->costCentre = $costCentre;
-    }
-
-    /**
-     * @return Region
-     */
-    public function getRegion()
-    {
-        return $this->region;
-    }
-
-    /**
-     * @param Region $region
-     */
-    public function setRegion($region)
-    {
-        $this->region = $region;
-    }
-
-    /**
-     * @return Branch
-     */
-    public function getBranch()
-    {
-        return $this->branch;
-    }
-
-    /**
-     * @param Branch $branch
-     */
-    public function setBranch($branch)
-    {
-        $this->branch = $branch;
-    }
-
-    /**
-     * @return Section
-     */
-    public function getSection()
-    {
-        return $this->section;
-    }
-
-    /**
-     * @param Section $section
-     */
-    public function setSection($section)
-    {
-        $this->section = $section;
     }
 
 
@@ -647,22 +556,6 @@ class Position
     public function setEmail($email)
     {
         $this->email = $email;
-    }
-
-    /**
-     * @return Department
-     */
-    public function getDepartment()
-    {
-        return $this->department;
-    }
-
-    /**
-     * @param Department $department
-     */
-    public function setDepartment($department)
-    {
-        $this->department = $department;
     }
 
 

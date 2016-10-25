@@ -118,14 +118,7 @@ class PositionAdmin extends BaseAdmin
         /**-------------------**/
         if ($this->isCLient() || $this->isHr()) {
             $formMapper->tab('Employment Details')
-                ->with('Group A', array('class' => 'col-md-6'))
-                ->add('employeeType', 'sonata_type_model', array(
-                    'property' => 'code',
-                    'query' => $this->filterEmployeeTypeBycompany(),
-                    'placeholder' => 'Select Employee Type',
-                    'empty_data' => null,
-                    'btn_add' => false,
-                ))
+                ->with('Employment Details', array('class' => 'col-md-12'))
                 ->add('employmentType', 'sonata_type_model', array(
                     'property' => 'code',
                     'query' => $this->filterEmploymentTypeBycompany(),
@@ -136,46 +129,10 @@ class PositionAdmin extends BaseAdmin
                 ->add('dateJoined', 'date', ['attr' => ['class' => 'datepicker'], 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'required' => false])
                 ->add('probation', 'number', ['label' => 'Probation (Month)', 'required' => false])
                 ->add('lastDateOfService', 'date', ['attr' => ['class' => 'datepicker'], 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'required' => false])
-                ->end()
-                ->with('Group B', array('class' => 'col-md-6'))
-                ->add('costCentre', 'sonata_type_model', array(
-                    'property' => 'code',
-                    'query' => $this->filterCostCentreBycompany(),
-                    'placeholder' => 'Select Cost Centre',
-                    'empty_data' => null,
+                ->add('employeeGroup', 'sonata_type_model_list', array(
+                    'required' => true,
                     'btn_add' => false,
-                ))
-                ->add('region', 'sonata_type_model', array(
-                    'property' => 'code',
-                    'query' => $this->filterRegionBycompany(),
-                    'placeholder' => 'Select Region',
-                    'empty_data' => null,
-                    'required' => false,
-                    'btn_add' => false
-                ))
-                ->add('branch', 'sonata_type_model', array(
-                    'property' => 'code',
-                    'query' => $this->filterBranchBycompany(),
-                    'placeholder' => 'Select Branch',
-                    'empty_data' => null,
-                    'required' => false,
-                    'btn_add' => false
-                ))
-                ->add('department', 'sonata_type_model', array(
-                    'property' => 'code',
-                    'query' => $this->filterDepartmentBycompany(),
-                    'placeholder' => 'Select Department',
-                    'empty_data' => null,
-                    'required' => false,
-                    'btn_add' => false
-                ))
-                ->add('section', 'sonata_type_model', array(
-                    'property' => 'code',
-                    'query' => $this->filterSectionBycompany(),
-                    'placeholder' => 'Select Section',
-                    'empty_data' => null,
-                    'required' => false,
-                    'btn_add' => false
+                    'btn_delete' => false,
                 ))
                 ->end()
                 ->end();
@@ -244,36 +201,6 @@ class PositionAdmin extends BaseAdmin
             'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin']],
 
         ));
-        $datagridMapper->add('company', null, array(), 'entity', array(
-            'class' => 'AppBundle\Entity\Company',
-            'choice_label' => 'name',
-            'query_builder' => $this->filterCompanyBycompany(),
-        ));
-        $datagridMapper->add('costCentre', null, array(), 'entity', array(
-            'class' => 'AppBundle\Entity\CostCentre',
-            'choice_label' => 'code',
-            'query_builder' => $this->filterCostCentreBycompany(),
-        ));
-        $datagridMapper->add('region', null, array(), 'entity', array(
-            'class' => 'AppBundle\Entity\Region',
-            'choice_label' => 'code',
-            'query_builder' => $this->filterRegionBycompany(),
-        ));
-        $datagridMapper->add('branch', null, array(), 'entity', array(
-            'class' => 'AppBundle\Entity\Branch',
-            'choice_label' => 'code',
-            'query_builder' => $this->filterBranchBycompany(),
-        ));
-        $datagridMapper->add('department', null, array(), 'entity', array(
-            'class' => 'AppBundle\Entity\Department',
-            'choice_label' => 'code',
-            'query_builder' => $this->filterDepartmentBycompany(),
-        ));
-        $datagridMapper->add('section', null, array(), 'entity', array(
-            'class' => 'AppBundle\Entity\Section',
-            'choice_label' => 'code',
-            'query_builder' => $this->filterSectionBycompany(),
-        ));
 
     }
 
@@ -287,7 +214,7 @@ class PositionAdmin extends BaseAdmin
                 $listMapper->add('employeeNo', null, ['label' => 'Employee No'])
                     ->add('firstName', null, ['label' => 'Name'])
                     ->add('company.name', null, ['label' => 'Company'])
-                    ->add('costCentre.code', null, ['label' => 'Cost Centre'])
+//                    ->add('costCentre.code', null, ['label' => 'Cost Centre'])
                     ->add('2', 'number_claim', ['label' => 'No. Pending Claims'])
                     ->add('4', 'submission_date_claim', ['label' => 'Initial Submission Date'])
 //                    ->add('periodFrom', 'date', ['label' => 'Period From', 'format' => 'd M Y'])

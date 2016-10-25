@@ -59,31 +59,33 @@ class Company
 
     /**
      * @var Category
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Category",mappedBy="company")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\LimitRule",mappedBy="company")
      */
-    private $categories;
+    private $limitRules;
 
     public function __construct()
     {
         $this->positions = new ArrayCollection();
-        $this->categories = new ArrayCollection();
+        $this->limitRules = new ArrayCollection();
     }
 
     /**
      * @return Category
      */
-    public function getCategories()
+    public function getLimitRules()
     {
-        return $this->categories;
+        return $this->limitRules;
     }
 
     /**
-     * @param Category $categories
+     * @param Category $limitRules
      */
-    public function setCategories($categories)
+    public function setLimitRules($limitRules)
     {
-        $this->categories = $categories;
+        $this->limitRules = $limitRules;
     }
+
+
 
 
 

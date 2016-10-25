@@ -1,3 +1,0 @@
-AppBundle\Entity\Position:
-    constraints:
-        - Callback: validate

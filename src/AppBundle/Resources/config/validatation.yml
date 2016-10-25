@@ -1,0 +1,19 @@
+#AppBundle\Entity\Category:
+#    constraints:
+#        - Callback: validate
+#
+AppBundle\Entity\Checker:
+    constraints:
+        - Callback: validate
+
+AppBundle\Entity\Claim:
+    constraints:
+        - Callback: validate
+
+AppBundle\Entity\Position:
+    constraints:
+        - Callback: validate
+
+AppBundle\Entity\CompanyClaimPolicies:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: claimType

@@ -111,7 +111,7 @@ class Claim
     private $taxRate;
     /**
      * @var Category
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Category")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\LimitRule")
      */
     private $limitRule;
 

@@ -27,6 +27,7 @@ class ClaimTypeAdmin extends BaseAdmin
             'label'=>'Claim Type'
         ));
         $formMapper->add('enabled', 'checkbox', ['required' => false]);
+        $formMapper->add('isDefault', 'checkbox', ['required' => false]);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -41,6 +42,7 @@ class ClaimTypeAdmin extends BaseAdmin
             ->addIdentifier('code',null,['label'=>'Claim Type Code'])
             ->add('claimTypeType.name',null,['label'=>'Claim Type'])
             ->add('enabled', null, array('editable' => true))
+            ->add('isDefault', null, array('editable' => true))
             ->add('_action', null, array(
                 'actions' => array(
                     'delete' => array(),
