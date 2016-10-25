@@ -23,8 +23,20 @@
     overflow: hidden;
     padding: 5px;
 }
+.wrap-take-photo:hover {
+    background: url(images/take-photo-hover.png) 0 0 no-repeat;
+    border: none;
+    overflow: hidden;
+    padding: 5px;
+}
 .wrap-photo-library {
     background: url(images/photo-library.png) 0 0 no-repeat;
+    border: none;
+    overflow: hidden;
+    padding: 5px;
+}
+.wrap-photo-library:hover {
+    background: url(images/photo-library-hover.png) 0 0 no-repeat;
     border: none;
     overflow: hidden;
     padding: 5px;
