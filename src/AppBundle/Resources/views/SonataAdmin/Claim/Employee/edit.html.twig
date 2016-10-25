@@ -98,6 +98,9 @@
                                     {{ app.user.loginWithPosition.firstName ~' '~ app.user.loginWithPosition.lastName }}
                                     <br>
                                     <small>{{ app.user.loginWithPosition.company.name }}</small>
+                                    <p style="border-top: 1px solid black; margin-top: 10px;"></p>
+                                    <small>Claims Period: {{ getCurrentClaimPeriod('from')| date('d M') }}
+                                        – {{ getCurrentClaimPeriod('to')| date('d M') }}</small>
                                 </h4>
                             </div>
                             <div class="box-body">
@@ -106,11 +109,11 @@
                                         {{ form_row(form.claimType ,{'attr': {'class': 'claim-type'}}) }}
                                         {{ form_row(form.claimCategory,{'attr': {'class': 'claim-category'}}) }}
                                     {% elseif app.request.attributes.get('_route') == 'admin_app_claim_edit' %}
-                                        <div class="row" style="margin: 15px;text-align: center;">
-                                            <div class="col-md-2 col-sm-6 col-xs-6 wrap-take-photo">
+                                        <div class="row" style="margin: 0px;text-align: center;">
+                                            <div class="col-md-2 col-sm-6 col-xs-12 wrap-take-photo">
                                                 {{ form_widget(form.imageFromCamera,{'attr': {'accept':'image/*','capture':'camera','class': 'claim-images take-photo','data-href':path('admin_app_claim_uploadImage',{'id':object.id})}}) }}
                                             </div>
-                                            <div class="col-md-2 col-sm-6 col-xs-6 wrap-photo-library">
+                                            <div class="col-md-2 col-sm-6 col-xs-12 wrap-photo-library">
                                                 {{ form_widget(form.imageFromLibrary,{'attr': {'accept':'image/*','class': 'claim-images photo-library','data-href':path('admin_app_claim_uploadImage',{'id':object.id})}}) }}
                                             </div>
                                         </div>

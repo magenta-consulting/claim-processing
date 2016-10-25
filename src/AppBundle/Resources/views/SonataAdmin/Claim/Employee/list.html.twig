@@ -25,8 +25,7 @@ file that was distributed with this source code.
                 {% endif %}
 
                 {# Add a margin if no pager to prevent dropdown cropping on window #}
-                <div class="box box-primary"
-                     {% if admin.datagrid.pager.lastPage == 1 %}style="margin-bottom: 100px;"{% endif %}>
+                <div class="box box-primary">
                     <div class="box-header" style="text-align: center">
                         <h4 class="box-title">
                             {{ app.user.loginWithPosition.firstName ~ ' ' ~ app.user.loginWithPosition.lastName }}<br>

@@ -12,11 +12,7 @@
     padding: 0px;
     margin-bottom: 15px;
 }
-.wrap-take-photo:hover{
-    background: url(images/take-photo-hover.png) 0 0 no-repeat;
-    border: none;
-    overflow: hidden;
-}
+
 .claim-images{
     opacity: 0.0;
     opacity: 0.0;
@@ -25,14 +21,12 @@
     background: url(images/take-photo.png) 0 0 no-repeat;
     border: none;
     overflow: hidden;
+    padding: 5px;
 }
 .wrap-photo-library {
     background: url(images/photo-library.png) 0 0 no-repeat;
     border: none;
     overflow: hidden;
+    padding: 5px;
 }
-.wrap-photo-library:hover {
-    background: url(images/photo-library-hover.png) 0 0 no-repeat;
-    border: none;
-    overflow: hidden;
-}
+

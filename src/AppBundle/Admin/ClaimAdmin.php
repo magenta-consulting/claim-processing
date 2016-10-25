@@ -119,12 +119,12 @@ class ClaimAdmin extends BaseAdmin
             $formMapper->add('imageFromLibrary', 'file', array(
                 'label' => 'Receipt Images',
                 'required' => false,
-                'mapped'=>false
+                'mapped' => false
             ));
             $formMapper->add('imageFromCamera', 'file', array(
                 'label' => 'Receipt Images',
                 'required' => false,
-                'mapped'=>false
+                'mapped' => false
             ));
         }
 
@@ -187,6 +187,11 @@ class ClaimAdmin extends BaseAdmin
         $collection->add('deleteImage', $this->getRouterIdParameter() . '/{mediaId}/delete-image-claim');
         $collection->add('checkerApprove', $this->getRouterIdParameter() . '/checker-approve');
         $collection->add('checkerReject', $this->getRouterIdParameter() . '/checker-reject');
+    }
+
+    protected function configureBatchActions($actions)
+    {
+        return [];
     }
 
     /**
@@ -274,6 +279,7 @@ class ClaimAdmin extends BaseAdmin
         }
 
     }
+
     /** update for claim */
     private function addMedias($claim, $medias)
     {
@@ -289,7 +295,9 @@ class ClaimAdmin extends BaseAdmin
         $claim->setChecker($checker);
         $claim->setApprover($approver);
     }
-    public function setLimitRule($claim){
+
+    public function setLimitRule($claim)
+    {
         $rule = $this->getContainer()->get('app.claim_rule')->getRuleForClaim($claim);
         $claim->setLimitRule($rule);
     }
