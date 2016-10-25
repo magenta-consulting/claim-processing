@@ -57,7 +57,7 @@ class LimitRule
 
     /**
      * @var ClaimType
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimType")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimType",inversedBy="limitRules")
      */
     private $claimType;
     /**
@@ -68,7 +68,7 @@ class LimitRule
 
     /**
      * @var employeeGroup
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\LimitRuleEmployeeGroup",mappedBy="limitRule",cascade={"all"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\LimitRuleEmployeeGroup",mappedBy="limitRule",cascade={"all"},orphanRemoval=true)
      */
     private $limitRuleEmployeeGroups;
 

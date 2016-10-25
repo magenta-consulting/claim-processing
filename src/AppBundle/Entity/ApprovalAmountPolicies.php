@@ -131,7 +131,7 @@ class ApprovalAmountPolicies
     private $claims;
     /**
      * @var ApprovalAmountPoliciesEmployeeGroup
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ApprovalAmountPoliciesEmployeeGroup",mappedBy="approvalAmountPolicies",cascade={"all"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ApprovalAmountPoliciesEmployeeGroup",mappedBy="approvalAmountPolicies",cascade={"all"},orphanRemoval=true)
      */
     private $approvalAmountPoliciesEmployeeGroups;
 

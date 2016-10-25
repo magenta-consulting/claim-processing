@@ -65,12 +65,36 @@ class ClaimType
     private $companyClaimPolicies;
 
     /**
+     * @var LimitRule
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\LimitRule",mappedBy="claimType",cascade={"all"})
+     */
+    private $limitRules;
+
+    /**
      * @return mixed
      */
     public function getId()
     {
         return $this->id;
     }
+
+    /**
+     * @return LimitRule
+     */
+    public function getLimitRules()
+    {
+        return $this->limitRules;
+    }
+
+    /**
+     * @param LimitRule $limitRules
+     */
+    public function setLimitRules($limitRules)
+    {
+        $this->limitRules = $limitRules;
+    }
+
+
 
     /**
      * @return mixed

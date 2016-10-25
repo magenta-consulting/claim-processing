@@ -64,7 +64,7 @@ class Checker
 
     /**
      * @var CheckerEmployeeGroup
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\CheckerEmployeeGroup",mappedBy="checker",cascade={"all"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\CheckerEmployeeGroup",mappedBy="checker",cascade={"all"},orphanRemoval=true)
      */
     private $checkerEmployeeGroups;
 
