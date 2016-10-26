@@ -34,7 +34,6 @@ class LimitRuleEmployeeGroupAdmin extends BaseAdmin
             ->add('employeeGroup', 'sonata_type_model_list', array(
                 'required' => true,
                 'btn_add'=>false,
-                'btn_delete'=>false,
             ));
     }
 

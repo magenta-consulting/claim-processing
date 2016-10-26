@@ -24,6 +24,22 @@ use Sonata\AdminBundle\Admin\AdminInterface;
 class ClaimAdmin extends BaseAdmin
 {
 
+    public function filterClaimTypeBycompanyForUser()
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder();
+        $expr = new Expr();
+        $qb->select('claimType')
+            ->from('AppBundle\Entity\ClaimType', 'claimType')
+            ->join('claimType.limitRules','limitRule')
+            ->join('limitRule.limitRuleEmployeeGroups','limitRuleEmployeeGroup')
+            ->where($expr->eq('claimType.company', ':company'))
+            ->andWhere($expr->eq('claimType.enabled', true))
+            ->andWhere($expr->eq('limitRuleEmployeeGroup.employeeGroup', ':employeeGroup'))
+            ->setParameter('employeeGroup', $this->getPosition()->getEmployeeGroup())
+            ->setParameter('company', $this->getCompany());
+        return $qb;
+    }
     public function filterClaimCategoryByClaimType($claimType)
     {
         $em = $this->container->get('doctrine')->getManager();
@@ -32,8 +48,11 @@ class ClaimAdmin extends BaseAdmin
         $rules = $em->createQueryBuilder()
             ->select('limitRule')
             ->from('AppBundle\Entity\LimitRule', 'limitRule')
+            ->join('limitRule.limitRuleEmployeeGroups','limitRuleEmployeeGroup')
             ->where($expr->eq('limitRule.claimType', ':claimType'))
+            ->andWhere($expr->eq('limitRuleEmployeeGroup.employeeGroup', ':employeeGroup'))
             ->setParameter('claimType', $claimType)
+            ->setParameter('employeeGroup', $this->getPosition()->getEmployeeGroup())
             ->getQuery()
             ->getResult();
         $listCategory = [];

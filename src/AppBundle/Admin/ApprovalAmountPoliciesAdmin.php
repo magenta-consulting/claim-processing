@@ -20,6 +20,16 @@ class ApprovalAmountPoliciesAdmin extends BaseAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
+            ->with('Employee Groups', array('class' => 'col-md-12'))
+            ->add('approvalAmountPoliciesEmployeeGroups', 'sonata_type_collection', array(
+                'label' => 'Employee Groups',
+                'required' => false,
+            ),
+                array(
+                    'edit' => 'inline',
+                    'inline' => 'table',
+                ))
+            ->end()
             ->with('Approver 1', array('class' => 'col-md-12'))
             ->add('approver1', 'sonata_type_model_list', array(
                 'required' => false,
@@ -97,16 +107,6 @@ class ApprovalAmountPoliciesAdmin extends BaseAdmin
                 'required' => false,
                 'label' => 'Active'
             ])
-            ->end()
-            ->with('Employee Groups', array('class' => 'col-md-12'))
-            ->add('approvalAmountPoliciesEmployeeGroups', 'sonata_type_collection', array(
-                'label' => 'Employee Groups',
-                'required' => false,
-            ),
-                array(
-                    'edit' => 'inline',
-                    'inline' => 'table',
-                ))
             ->end();
 
     }
@@ -128,6 +128,7 @@ class ApprovalAmountPoliciesAdmin extends BaseAdmin
                 )
             ));
     }
+
     private function manualUpdate(ApprovalAmountPolicies $approvalAmountPolicies)
     {
         foreach ($approvalAmountPolicies->getApprovalAmountPoliciesEmployeeGroups() as $approvalAmountPoliciesEmployeeGroup) {
