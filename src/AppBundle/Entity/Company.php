@@ -63,11 +63,35 @@ class Company
      */
     private $limitRules;
 
+    /**
+     * @var Category
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ClaimType",mappedBy="company")
+     */
+    private $claimTypes;
+
     public function __construct()
     {
         $this->positions = new ArrayCollection();
         $this->limitRules = new ArrayCollection();
+        $this->claimTypes = new ArrayCollection();
     }
+
+    /**
+     * @return Category
+     */
+    public function getClaimTypes()
+    {
+        return $this->claimTypes;
+    }
+
+    /**
+     * @param Category $claimTypes
+     */
+    public function setClaimTypes($claimTypes)
+    {
+        $this->claimTypes = $claimTypes;
+    }
+
 
     /**
      * @return Category

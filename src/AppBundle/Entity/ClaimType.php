@@ -7,13 +7,16 @@
  */
 
 namespace AppBundle\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
+
+use Doctrine\Common\Collections\Criteria;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="claim_type")
  */
-
-
 class ClaimType
 {
 
@@ -95,7 +98,6 @@ class ClaimType
     }
 
 
-
     /**
      * @return mixed
      */
@@ -111,7 +113,6 @@ class ClaimType
     {
         $this->companyClaimPolicies = $companyClaimPolicies;
     }
-
 
 
     /**
@@ -203,8 +204,23 @@ class ClaimType
         $this->isDefault = $isDefault;
     }
 
+    public function validate(ExecutionContextInterface $context, $payload)
+    {
+        $company = $this->getCompany();
+        if($company) {
+            $expr = Criteria::expr();
+            $criteria = Criteria::create();
+            $criteria->where($expr->eq('isDefault',true))
+                ->andWhere($expr->neq('id', $this->id));
+            $claimTypes = $company->getClaimTypes()->matching($criteria);
+            if (count($claimTypes) && $this->isIsDefault()) {
+                $context->buildViolation('Only one value default at one time.')
+                    ->atPath('isDefault')
+                    ->addViolation();
+            }
+        }
 
+    }
 
-    
 
 }

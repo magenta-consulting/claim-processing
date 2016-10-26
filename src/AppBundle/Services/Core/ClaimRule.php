@@ -31,10 +31,23 @@ class ClaimRule
         return $user;
     }
 
+
+    public function getClaimTypeDefault()
+    {
+        $position = $this->getUser()->getLoginWithPosition();
+        $company = $position->getCompany();
+        $clientCompany = $company->getParent() ? $company->getParent() : $company;
+        $em = $this->container->get('doctrine')->getManager();
+        $claimType = $em->getRepository('AppBundle\Entity\ClaimType')->findOneBy(['isDefault'=>true,'company'=>$clientCompany]);
+        return $claimType;
+    }
+
     public function getCurrentClaimPeriod($key)
     {
         $em = $this->container->get('doctrine')->getManager();
+        //in the future will change with multiple cutofdate and claimable, currently just only one
         $claimType = $em->getRepository('AppBundle\Entity\ClaimType')->findOneBy([]);
+
         $claimPolicy = $claimType->getCompanyClaimPolicies();
         $cutOffdate = $claimPolicy->getCutOffDate();
         $currentDate = date('d');
@@ -74,7 +87,7 @@ class ClaimRule
             ->setParameter('claimCategory', $claim->getClaimCategory())
             ->setParameter('periodFrom', $periodFrom->format('Y-m-d'))
             ->setParameter('periodTo', $periodTo->format('Y-m-d'))
-            ->setParameter('statusList', [Claim::STATUS_DRAFT,Claim::STATUS_CHECKER_REJECTED,Claim::STATUS_APPROVER_REJECTED])
+            ->setParameter('statusList', [Claim::STATUS_DRAFT, Claim::STATUS_CHECKER_REJECTED, Claim::STATUS_APPROVER_REJECTED])
             ->getQuery()
             ->getResult();
 
@@ -82,12 +95,14 @@ class ClaimRule
         foreach ($claims as $claim) {
             $totalAmount += $claim->getClaimAmount();
         }
-        if($totalAmount > $this->getLimitAmount($claim)){
+        if ($totalAmount > $this->getLimitAmount($claim)) {
             return true;
         }
         return false;
     }
-    public function getLimitAmount(Claim $claim){
+
+    public function getLimitAmount(Claim $claim)
+    {
         $em = $this->container->get('doctrine')->getManager();
         $limitRule = $em->getRepository('AppBundle\Entity\LimitRule')->findOneBy([
             'claimType' => $claim->getClaimType(),

@@ -97,11 +97,15 @@ class BaseAdmin extends AbstractAdmin
     }
 
 
+    public function manualUpdate($object){
+
+    }
     /*
     * add company when add new(not effect when update)
     */
     public function prePersist($object)
     {
+        $this->manualUpdate($object);
         if ($this->isAdmin()) {
             //admin current only create a client company (parent = null)
             if ($object instanceof Company) {
@@ -125,6 +129,10 @@ class BaseAdmin extends AbstractAdmin
             }
         }
 
+    }
+    public function preUpdate($object)
+    {
+        $this->manualUpdate($object);
     }
 
 

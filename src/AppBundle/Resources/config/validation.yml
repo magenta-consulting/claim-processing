@@ -9,6 +9,9 @@ AppBundle\Entity\Checker:
 AppBundle\Entity\Claim:
     constraints:
         - Callback: validate
+AppBundle\Entity\ClaimType:
+    constraints:
+        - Callback: validate
 
 AppBundle\Entity\Position:
     constraints:
