@@ -96,7 +96,10 @@ class BaseAdmin extends AbstractAdmin
         return false;
     }
 
-
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->remove('export');
+    }
     public function manualUpdate($object){
 
     }

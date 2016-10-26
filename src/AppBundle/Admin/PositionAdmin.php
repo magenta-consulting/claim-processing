@@ -244,12 +244,19 @@ class PositionAdmin extends BaseAdmin
                     ));
         }
     }
-
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureBatchActions($actions)
     {
-
-
+        $request = $this->getRequest();
+        $type = $request->get('type');
+        if($type != '') {
+            return [];
+        }
+        return $actions;
     }
+//    protected function configureRoutes(RouteCollection $collection)
+//    {
+//        $collection->remove('export');
+//    }
 
     public function toString($object)
     {
