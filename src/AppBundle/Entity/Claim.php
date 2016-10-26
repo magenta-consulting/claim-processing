@@ -43,7 +43,6 @@ class Claim
     private $company;
 
 
-
     /**
      * @var ClaimType
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimType")
@@ -123,12 +122,12 @@ class Claim
 
     /**
      * @var Date
-     * @ORM\Column(name="period_from",type="date")
+     * @ORM\Column(name="period_from",type="date",nullable=true)
      */
     private $periodFrom;
     /**
      * @var Date
-     * @ORM\Column(name="period_to",type="date")
+     * @ORM\Column(name="period_to",type="date",nullable=true)
      */
     private $periodTo;
 
@@ -180,7 +179,6 @@ class Claim
     {
         $this->limitRule = $limitRule;
     }
-
 
 
     /**
@@ -334,7 +332,6 @@ class Claim
     }
 
 
-
     /**
      * @return float
      */
@@ -350,7 +347,6 @@ class Claim
     {
         $this->claimAmount = $claimAmount;
     }
-
 
 
     /**
@@ -467,7 +463,6 @@ class Claim
     }
 
 
-
     /**
      * @return ClaimMedia
      */
@@ -516,8 +511,8 @@ class Claim
                     $clone = clone $periodTo;
                     $periodFrom = $clone->modify('-1 month');
                 }
-                $periodFrom->setDate($periodFrom->format('Y'),$periodFrom->format('m'),$cutOffdate+1);
-                $periodTo->setDate($periodTo->format('Y'),$periodTo->format('m'),$cutOffdate);
+                $periodFrom->setDate($periodFrom->format('Y'), $periodFrom->format('m'), $cutOffdate + 1);
+                $periodTo->setDate($periodTo->format('Y'), $periodTo->format('m'), $cutOffdate);
                 $this->setPeriodFrom($periodFrom);
                 $this->setPeriodTo($periodTo);
             }
@@ -526,13 +521,11 @@ class Claim
 
     public function validate(ExecutionContextInterface $context, $payload)
     {
-        if ($this->id === null) {
-            $this->setPeriod();
-        }
-        if ($this->getReceiptDate()) {
+        $this->setPeriod();
+        if ($this->getReceiptDate() && $this->getPeriodFrom() && $this->getPeriodTo()) {
             $to = $this->getPeriodTo();
             $clone = clone $to;
-            $from = $clone->modify('-'.$this->getClaimType()->getCompanyClaimPolicies()->getClaimablePeriod().' month +1 day');
+            $from = $clone->modify('-' . $this->getClaimType()->getCompanyClaimPolicies()->getClaimablePeriod() . ' month +1 day');
             if ($this->getReceiptDate() < $from || $this->getReceiptDate() > $to) {
                 $context->buildViolation('This receipt date is invalid')
                     ->atPath('receiptDate')

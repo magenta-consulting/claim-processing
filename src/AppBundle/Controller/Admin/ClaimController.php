@@ -1,5 +1,4 @@
 <?php
-// src/AppBundle/Controller/CRUDController.php
 
 namespace AppBundle\Controller\Admin;
 
@@ -14,6 +13,11 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class ClaimController extends Controller
 {
 
+
+
+    public function firstPageCreateClaimAction(){
+        return $this->render("@App/SonataAdmin/Claim/first_page_create_claim.html.twig");
+    }
     public function uploadImageAction(){
         $request = $this->getRequest();
         if($request->isXmlHttpRequest()){

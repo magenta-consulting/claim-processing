@@ -187,6 +187,8 @@ class ClaimAdmin extends BaseAdmin
         $collection->add('deleteImage', $this->getRouterIdParameter() . '/{mediaId}/delete-image-claim');
         $collection->add('checkerApprove', $this->getRouterIdParameter() . '/checker-approve');
         $collection->add('checkerReject', $this->getRouterIdParameter() . '/checker-reject');
+        $collection->add('firstPageCreateClaim', 'create-claim');
+
     }
 
     protected function configureBatchActions($actions)
@@ -297,7 +299,7 @@ class ClaimAdmin extends BaseAdmin
 
     private function manualUpdate(Claim $claim)
     {
-
+        $claim->setPosition($this->getPosition());
     }
 
 

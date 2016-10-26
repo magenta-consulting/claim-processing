@@ -1,0 +1,42 @@
+
+
+        <div class="col-md-6">
+            <div class="cms-block cms-block-element">
+
+                <div class="box">
+                    <div class="box-header" style="text-align: center;">
+                        <h3 class="box-title">{{ app.user.loginWithPosition.firstName ~ ' ' ~ app.user.loginWithPosition.lastName }}
+                        </h3><br>
+                        <small>{{ app.user.loginWithPosition.company.name }}
+                        </small>
+                    </div>
+                    <div class="box-body">
+                        <a href="{{ path('admin_app_claim_create') }}" style="width: 100%;" class="btn btn-success"
+                           type="submit" name="btn_create_and_edit"> Submit New Claims <br>
+                            <small>Submission Deadline: {{ getCurrentClaimPeriod('to')| date('d M Y') }}
+                            </small>
+                        </a>
+                        <a href="#" style="width: 100%;margin-top: 5px;" class="btn btn-default" type="submit"
+                           name="btn_create_and_edit"> Claims Reports
+                            <br>
+                            <small>View past and current claims
+                            </small>
+                        </a>
+                        <a href="#" style="width: 100%;margin-top: 5px;" class="btn btn-default" type="submit"
+                           name="btn_create_and_edit"> Submit on Behalf
+                            <br>
+                            <small>(Only authorised employees)
+
+                            </small>
+                        </a>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6">
+        </div>

@@ -55,14 +55,14 @@ class ClaimRule
     public function isExceedLimitRule($claim){
         $periodFrom = $this->getCurrentClaimPeriod('from');
         $periodTo = $this->getCurrentClaimPeriod('to');
-        $limitRule = $this->getRuleForClaim($claim);
-        if(!$limitRule->isHasClaimLimit()){
-            return false;
-        }
+//        $limitRule = $this->getRuleForClaim($claim);
+//        if(!$limitRule->isHasClaimLimit()){
+//            return false;
+//        }
         $em = $this->container->get('doctrine')->getManager();
         $claims = $em->getRepository('AppBundle\Entity\Claim')->findBy([
             'position'=>$this->getUser()->getLoginWithPosition(),
-            'limitRule'=>$limitRule,
+//            'limitRule'=>$limitRule,
             'periodFrom'=>$periodFrom,
             'periodTo'=>$periodTo,
         ]);
@@ -70,135 +70,135 @@ class ClaimRule
         foreach ($claims as $claim){
             $totalAmount+= $claim->getClaimAmount();
         }
-        if($totalAmount > $limitRule->getClaimLimit()){
-            return true;
-        }
+//        if($totalAmount > $limitRule->getClaimLimit()){
+//            return true;
+//        }
         return false;
     }
     public function getRuleForClaim(Claim $claim){
-        $position = $this->getUser()->getLoginWithPosition();
-        $company = $position->getCompany();
-        $costCentre = $position->getCostCentre();
-        $region = $position->getRegion();
-        $branch = $position->getBranch();
-        $department = $position->getDepartment();
-        $section = $position->getSection();
-        $employeeType = $position->getEmployeeType();
-
-        $index =[
-                'companyGetRule',
-                'costCentre',
-                'employeeType',
-                'region',
-                'branch',
-                'department',
-                'section',
-        ];
-        $filter1 = [
-            'companyGetRule' => $company,
-            'costCentre' => $costCentre,
-            'employeeType'=>$employeeType,
-            'region' => $region,
-            'branch' => $branch,
-            'department' => $department,
-            'section' => $section,
-        ];
-
-        $claimType = $claim->getClaimType();
-        $claimCategory = $claim->getClaimCategory();
-        $filter2 = [
-            'claimType'=>$claimType,
-            'claimCategory'=>$claimCategory
-        ];
-
-        $em = $this->container->get('doctrine')->getManager();
-
-        for($i = count($filter1)-1 ;$i >=0 ;$i--){
-            $filter = array_merge($filter1,$filter2);
-            $rule = $em->getRepository('AppBundle\Entity\Category')->findOneBy($filter);
-            if($rule){
-                return $rule;
-            }
-            unset($filter1[$index[$i]]);
-        }
+//        $position = $this->getUser()->getLoginWithPosition();
+//        $company = $position->getCompany();
+//        $costCentre = $position->getCostCentre();
+//        $region = $position->getRegion();
+//        $branch = $position->getBranch();
+//        $department = $position->getDepartment();
+//        $section = $position->getSection();
+//        $employeeType = $position->getEmployeeType();
+//
+//        $index =[
+//                'companyGetRule',
+//                'costCentre',
+//                'employeeType',
+//                'region',
+//                'branch',
+//                'department',
+//                'section',
+//        ];
+//        $filter1 = [
+//            'companyGetRule' => $company,
+//            'costCentre' => $costCentre,
+//            'employeeType'=>$employeeType,
+//            'region' => $region,
+//            'branch' => $branch,
+//            'department' => $department,
+//            'section' => $section,
+//        ];
+//
+//        $claimType = $claim->getClaimType();
+//        $claimCategory = $claim->getClaimCategory();
+//        $filter2 = [
+//            'claimType'=>$claimType,
+//            'claimCategory'=>$claimCategory
+//        ];
+//
+//        $em = $this->container->get('doctrine')->getManager();
+//
+//        for($i = count($filter1)-1 ;$i >=0 ;$i--){
+//            $filter = array_merge($filter1,$filter2);
+//            $rule = $em->getRepository('AppBundle\Entity\Category')->findOneBy($filter);
+//            if($rule){
+//                return $rule;
+//            }
+//            unset($filter1[$index[$i]]);
+//        }
         return null;
     }
     public function getChecker(Claim $claim)
     {
-        $position = $this->getUser()->getLoginWithPosition();
-        $company = $position->getCompany();
-        $costCentre = $position->getCostCentre();
-        $region = $position->getRegion();
-        $branch = $position->getBranch();
-        $department = $position->getDepartment();
-        $section = $position->getSection();
-
-        $index =[
-            'companySetupChecker',
-            'costCentre',
-            'region',
-            'branch',
-            'department',
-            'section',
-        ];
-        $filter = [
-            'companySetupChecker' => $company,
-            'costCentre' => $costCentre,
-            'region' => $region,
-            'branch' => $branch,
-            'department' => $department,
-            'section' => $section,
-        ];
-        $em = $this->container->get('doctrine')->getManager();
-
-        for($i = count($filter)-1 ;$i >=0 ;$i--){
-            $checker = $em->getRepository('AppBundle\Entity\Checker')->findOneBy($filter);
-            if($checker){
-                return $checker;
-            }
-            unset($filter[$index[$i]]);
-        }
+//        $position = $this->getUser()->getLoginWithPosition();
+//        $company = $position->getCompany();
+//        $costCentre = $position->getCostCentre();
+//        $region = $position->getRegion();
+//        $branch = $position->getBranch();
+//        $department = $position->getDepartment();
+//        $section = $position->getSection();
+//
+//        $index =[
+//            'companySetupChecker',
+//            'costCentre',
+//            'region',
+//            'branch',
+//            'department',
+//            'section',
+//        ];
+//        $filter = [
+//            'companySetupChecker' => $company,
+//            'costCentre' => $costCentre,
+//            'region' => $region,
+//            'branch' => $branch,
+//            'department' => $department,
+//            'section' => $section,
+//        ];
+//        $em = $this->container->get('doctrine')->getManager();
+//
+//        for($i = count($filter)-1 ;$i >=0 ;$i--){
+//            $checker = $em->getRepository('AppBundle\Entity\Checker')->findOneBy($filter);
+//            if($checker){
+//                return $checker;
+//            }
+//            unset($filter[$index[$i]]);
+//        }
         return null;
     }
 
     public function getApprover(Claim $claim)
     {
-        $position = $this->getUser()->getLoginWithPosition();
-        $company = $position->getCompany();
-        $costCentre = $position->getCostCentre();
-        $region = $position->getRegion();
-        $branch = $position->getBranch();
-        $department = $position->getDepartment();
-        $section = $position->getSection();
-        $employeeType = $position->getEmployeeType();
-
-        $index =[
-            'companySetupApproval',
-            'costCentre',
-            'employeeType',
-            'region',
-            'branch',
-            'department',
-            'section',
-        ];
-        $filter = [
-            'companySetupApproval' => $company,
-            'costCentre' => $costCentre,
-            'employeeType'=>$employeeType,
-            'region' => $region,
-            'branch' => $branch,
-            'department' => $department,
-            'section' => $section,
-        ];
-        $em = $this->container->get('doctrine')->getManager();
-
-        for($i = count($filter)-1 ;$i >=0 ;$i--){
-            $approver = $em->getRepository('AppBundle\Entity\ApprovalAmountPolicies')->findOneBy($filter);
-            if($approver){
-                return $approver;
-            }
-            unset($filter[$index[$i]]);
-        }
+//        $position = $this->getUser()->getLoginWithPosition();
+//        $company = $position->getCompany();
+//        $costCentre = $position->getCostCentre();
+//        $region = $position->getRegion();
+//        $branch = $position->getBranch();
+//        $department = $position->getDepartment();
+//        $section = $position->getSection();
+//        $employeeType = $position->getEmployeeType();
+//
+//        $index =[
+//            'companySetupApproval',
+//            'costCentre',
+//            'employeeType',
+//            'region',
+//            'branch',
+//            'department',
+//            'section',
+//        ];
+//        $filter = [
+//            'companySetupApproval' => $company,
+//            'costCentre' => $costCentre,
+//            'employeeType'=>$employeeType,
+//            'region' => $region,
+//            'branch' => $branch,
+//            'department' => $department,
+//            'section' => $section,
+//        ];
+//        $em = $this->container->get('doctrine')->getManager();
+//
+//        for($i = count($filter)-1 ;$i >=0 ;$i--){
+//            $approver = $em->getRepository('AppBundle\Entity\ApprovalAmountPolicies')->findOneBy($filter);
+//            if($approver){
+//                return $approver;
+//            }
+//            unset($filter[$index[$i]]);
+//        }
         return null;
     }
 
