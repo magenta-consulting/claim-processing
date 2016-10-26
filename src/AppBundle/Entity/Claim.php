@@ -66,6 +66,12 @@ class Claim
      */
     private $claimAmount;
 
+    /**
+     * @var text
+     * @ORM\Column(name="description",type="text",nullable=true)
+     */
+    private $description;
+
 
     /**
      * @var date
@@ -108,11 +114,6 @@ class Claim
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TaxRate")
      */
     private $taxRate;
-    /**
-     * @var Category
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\LimitRule")
-     */
-    private $limitRule;
 
     /**
      * @var float
@@ -164,21 +165,6 @@ class Claim
         return $this->id;
     }
 
-    /**
-     * @return Category
-     */
-    public function getLimitRule()
-    {
-        return $this->limitRule;
-    }
-
-    /**
-     * @param Category $limitRule
-     */
-    public function setLimitRule($limitRule)
-    {
-        $this->limitRule = $limitRule;
-    }
 
 
     /**
@@ -214,6 +200,21 @@ class Claim
         $this->status = $status;
     }
 
+    /**
+     * @return text
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param text $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
 
     /**
      * @return Date

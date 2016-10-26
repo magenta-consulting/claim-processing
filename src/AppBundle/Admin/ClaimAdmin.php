@@ -124,6 +124,7 @@ class ClaimAdmin extends BaseAdmin
                 ));
             }
             $formMapper->add('claimAmount', 'number', ['label' => 'Receipt Amount']);
+            $formMapper->add('description', 'text', ['label' => 'Claim Description']);
             $formMapper->add('taxAmount', 'number', ['label' => 'Tax Amount', 'required' => false]);
             $formMapper->add('receiptDate', 'date', ['attr' => ['class' => 'datepicker'], 'widget' => 'single_text', 'format' => 'MM/dd/yyyy']);
             $formMapper->add('taxRate', 'sonata_type_model', array(
@@ -265,6 +266,7 @@ class ClaimAdmin extends BaseAdmin
                     ->add('claimMedias', 'show_image', ['label' => 'Claim Images'])
                     ->end()
                     ->with('Claim Details', array('class' => 'col-md-6'))
+                    ->add('description', 'text', ['label' => 'Description'])
                     ->add('claimType.code', 'text', ['label' => 'Claim Type'])
                     ->add('claimCategory.code', 'text', ['label' => 'Claim Category'])
                     ->add('claimAmount', null, ['label' => 'Receipt Amount'])
@@ -281,13 +283,19 @@ class ClaimAdmin extends BaseAdmin
                     ->add('claimMedias', 'show_image', ['label' => 'Claim Images'])
                     ->end()
                     ->with('Claim Details', array('class' => 'col-md-6'))
-                    ->add('claimAmount', null, ['label' => 'Amount'])
-                    ->add('currencyExchange.code', null, ['label' => 'Currency'])
                     ->add('claimType.code', 'text', ['label' => 'Claim Type'])
                     ->add('claimCategory.code', 'text', ['label' => 'Claim Category'])
+                    ->add('claimAmount', null, ['label' => 'Amount'])
+                    ->add('taxRate.code', null, ['label' => 'Tax Code'])
+                    ->add('taxAmount', null, ['label' => 'Tax Amount'])
+                    ->add('currencyExchange.code', null, ['label' => 'Currency'])
+                    ->add('1', null, ['label' => 'Ex Rate'])
+                    ->add('2', 'show_claim_limit', ['label' => 'Claim Limit'])
                     ->add('status', 'text', ['label' => 'Status'])
                     ->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y'])
-                    ->add('submissionRemarks', null, ['label' => 'Claimant Submission Remarks'])
+                    ->end()
+                    ->with('Claimant Submission Remarks', array('class' => 'col-md-6'))
+                    ->add('submissionRemarks', 'show_claim_submission_remarks')
                     ->end()
                     ->with('Checker', array('class' => 'col-md-6'))
                     ->add('checker', 'show_checker', ['label' => 'Company'])

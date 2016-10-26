@@ -1,0 +1,19 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+<th{% if(is_diff|default(false)) %} class="diff"{% endif %}>{% block name %}{{ field_description.label|trans({}, field_description.translationDomain ?: admin.translationDomain) }}{% endblock %}</th>
+
+{% block field_compare %}
+        <td>
+            {% set value = getLimitAmount(object) %}
+            {{ value }}
+        </td>
+{% endblock %}
+

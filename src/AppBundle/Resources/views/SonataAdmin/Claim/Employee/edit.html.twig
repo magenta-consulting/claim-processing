@@ -110,10 +110,10 @@
                                         {{ form_row(form.claimCategory,{'attr': {'class': 'claim-category'}}) }}
                                     {% elseif app.request.attributes.get('_route') == 'admin_app_claim_edit' %}
                                         <div class="row" style="margin: 0px;text-align: center;">
-                                            <div class="col-md-2 col-sm-6 col-xs-12 wrap-take-photo">
+                                            <div class="col-md-3 col-sm-6 col-xs-12 wrap-take-photo">
                                                 {{ form_widget(form.imageFromCamera,{'attr': {'accept':'image/*','capture':'camera','class': 'claim-images take-photo','data-href':path('admin_app_claim_uploadImage',{'id':object.id})}}) }}
                                             </div>
-                                            <div class="col-md-2 col-sm-6 col-xs-12 wrap-photo-library">
+                                            <div class="col-md-3 col-sm-6 col-xs-12 wrap-photo-library">
                                                 {{ form_widget(form.imageFromLibrary,{'attr': {'accept':'image/*','class': 'claim-images photo-library','data-href':path('admin_app_claim_uploadImage',{'id':object.id})}}) }}
                                             </div>
                                         </div>
@@ -128,6 +128,7 @@
                                                 </div>
                                             {% endfor %}
                                         </div>
+                                        {{ form_row(form.description) }}
                                         {{ form_row(form.claimAmount) }}
                                         {{ form_row(form.receiptDate) }}
                                         {{ form_row(form.taxRate) }}
