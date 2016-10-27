@@ -9,6 +9,8 @@
 namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Criteria;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @ORM\Entity
@@ -22,6 +24,7 @@ class ApprovalAmountPolicies
     {
         $this->createdDate = new \DateTime();
         $this->claims = new ArrayCollection();
+        $this->approvalAmountPoliciesEmployeeGroups = new ArrayCollection();
     }
 
     /**
@@ -460,6 +463,30 @@ class ApprovalAmountPolicies
         $approvalAmountPoliciesEmployeeGroup->setApprovalAmountPolicies(null);
     }
 
+    public function validate(ExecutionContextInterface $context, $payload)
+    {
+        //validate each employee only belong to a approver
+        $company = $this->getCompany();
+        if ($company) {
+            $expr = Criteria::expr();
+            $criteria = Criteria::create();
+            $criteria->where($expr->neq('id', $this->id));
+            $approvalAmountPolicies = $company->getApprovalAmountPolicies()->matching($criteria);
+            foreach ($approvalAmountPolicies as $approvalAmountPolicy) {
+                foreach ($approvalAmountPolicy->getApprovalAmountPoliciesEmployeeGroups() as $approvalAmountPoliciesEmployeeGroup1) {
+                    foreach ($this->getApprovalAmountPoliciesEmployeeGroups() as $approvalAmountPoliciesEmployeeGroup2) {
+                        if ($approvalAmountPoliciesEmployeeGroup1->getEmployeeGroup()->getId() == $approvalAmountPoliciesEmployeeGroup2->getEmployeeGroup()->getId()) {
+
+                            $context->buildViolation('This employee group (' . $approvalAmountPoliciesEmployeeGroup2->getEmployeeGroup()->getDescription() . ') has already been belong to another approval amount policy')
+                                ->atPath('approvalAmountPoliciesEmployeeGroups')
+                                ->addViolation();
+                        }
+                    }
+
+                }
+            }
+        }
+    }
 
 
 
@@ -472,6 +499,7 @@ class ApprovalAmountPolicies
 
 
 
-    
+
+
 
 }

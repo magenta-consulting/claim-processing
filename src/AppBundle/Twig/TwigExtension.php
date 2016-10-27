@@ -20,48 +20,41 @@ class TwigExtension extends \Twig_Extension
     {
         return $this->container->getParameter($name);
     }
-   public function getNumberDecimalDigits($value)
+
+    public function getNumberDecimalDigits($value)
     {
-        $value = explode('.',$value);
+        $value = explode('.', $value);
         return count($value[1]);
 
     }
-    public function getNumberClaim($position,$positionChecker){
-        $em = $this->container->get('doctrine')->getManager();
-        $qb = $em->createQueryBuilder('claim');
-        $qb->select($qb->expr()->count('claim.id'));
-        $qb->from('AppBundle:Claim','claim');
-        $qb->join('claim.checker','checker');
-        $qb->where('claim.position = :position');
-        $qb->andWhere('checker.checker = :positionChecker');
-        $qb->setParameter('position', $position);
-        $qb->setParameter('positionChecker', $positionChecker);
 
-        return $qb->getQuery()->getSingleScalarResult();
-    }
-    public function isShowMenuForChecker($position){
-        $em = $this->container->get('doctrine')->getManager();
-        $qb = $em->createQueryBuilder('claim');
-        $qb->select($qb->expr()->count('claim.id'));
-        $qb->from('AppBundle:Claim','claim');
-        $qb->join('claim.checker','checker');
-        $qb->where('checker.checker = :position');
-        $qb->setParameter('position', $position);
-
-        return $qb->getQuery()->getSingleScalarResult();
+    public function getNumberClaim($position, $positionChecker)
+    {
+        return $this->container->get('app.claim_rule')->getNumberClaim($position, $positionChecker);
     }
 
-    public function getUrlMedia($media, $context = 'default', $format = 'reference'){
-        return $this->container->get('app.media.retriever')->getPublicURL($media,$context,$format);
+    public function isShowMenuForChecker($position)
+    {
+        return $this->container->get('app.claim_rule')->isShowMenuForChecker($position);
     }
 
-    public function getCurrentClaimPeriod($key){
+    public function getUrlMedia($media, $context = 'default', $format = 'reference')
+    {
+        return $this->container->get('app.media.retriever')->getPublicURL($media, $context, $format);
+    }
+
+    public function getCurrentClaimPeriod($key)
+    {
         return $this->container->get('app.claim_rule')->getCurrentClaimPeriod($key);
     }
-    public function isExceedLimitRule($claim){
+
+    public function isExceedLimitRule($claim)
+    {
         return $this->container->get('app.claim_rule')->isExceedLimitRule($claim);
     }
-    public function getLimitAmount($claim){
+
+    public function getLimitAmount($claim)
+    {
         return $this->container->get('app.claim_rule')->getLimitAmount($claim);
     }
 

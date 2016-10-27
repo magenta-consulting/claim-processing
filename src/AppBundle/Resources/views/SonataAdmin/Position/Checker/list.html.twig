@@ -83,8 +83,7 @@ file that was distributed with this source code.
                 {% else %}
                     {% block no_result_content %}
                         <div class="info-box">
-                                <span class="info-box-text">{{ 'no_result'|trans({}, 'SonataAdminBundle') }}</span>
-
+                            <span class="info-box-text">{{ 'no_result'|trans({}, 'SonataAdminBundle') }}</span>
                         </div>
                     {% endblock %}
                 {% endif %}
@@ -173,27 +172,29 @@ file that was distributed with this source code.
                                     {% endif %}
 
                                     {% block pager_results %}
-                                        {#{% include admin.getTemplate('pager_results') %#}
+                                        {#{% include admin.getTemplate('pager_results') %}#}
                                         {% block num_pages %}
-                                    {{ admin.datagrid.pager.page }} / {{ admin.datagrid.pager.lastpage }}
-                                    &nbsp;-&nbsp;
-                                    {% endblock %}
+                                            {{ admin.datagrid.pager.page }} / {{ admin.datagrid.pager.lastpage }}
+                                            &nbsp;-&nbsp;
+                                        {% endblock %}
 
-                                    {% block num_results %}
-                                    {% transchoice admin.datagrid.pager.nbresults with {'%count%': admin.datagrid.pager.nbresults} from 'SonataAdminBundle' %}list_results_count{% endtranschoice %}
-                                &nbsp;-&nbsp;
-                                    {% endblock %}
+                                        {% block num_results %}
+                                            {% transchoice admin.datagrid.pager.nbresults with {'%count%': admin.datagrid.pager.nbresults} from 'SonataAdminBundle' %}list_results_count{% endtranschoice %}
+                                            &nbsp;-&nbsp;
+                                        {% endblock %}
 
-                                    {% block max_per_page %}
-                                    <label class="control-label" for="{{ admin.uniqid }}_per_page">{% trans from 'SonataAdminBundle' %}label_per_page{% endtrans %}</label>
-                                    <select class="per-page small form-control" id="{{ admin.uniqid }}_per_page" style="width: auto">
-                                        {% for per_page in admin.getperpageoptions %}
-                                            <option {% if per_page == admin.datagrid.pager.maxperpage %}selected="selected"{% endif %} value="{{ admin.generateUrl('list', {'type':'checking-each-position','position-id':app.request.get('position-id'),'filter': admin.datagrid.values|merge({'_page': 1, '_per_page': per_page})}) }}">
-                                                {{- per_page -}}
-                                            </option>
-                                        {% endfor %}
-                                    </select>
-                                    {% endblock %}}
+                                        {% block max_per_page %}
+                                            <label class="control-label" for="{{ admin.uniqid }}_per_page">{% trans from 'SonataAdminBundle' %}label_per_page{% endtrans %}</label>
+                                            <select class="per-page small form-control" id="{{ admin.uniqid }}_per_page" style="width: auto">
+                                                {% for per_page in admin.getperpageoptions %}
+                                                    <option {% if per_page == admin.datagrid.pager.maxperpage %}selected="selected"{% endif %} value="{{ admin.generateUrl('list', {'type':'checking','filter': admin.datagrid.values|merge({'_page': 1, '_per_page': per_page})}) }}">
+                                                        {{- per_page -}}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        {% endblock %}
+
+
                                     {% endblock %}
                                 </div>
                             {% endif %}
@@ -247,10 +248,9 @@ file that was distributed with this source code.
         <div class="col-xs-12 col-md-12 sonata-filters-box" style="display: {{ admin.datagrid.hasDisplayableFilters ? 'block' : 'none' }}" id="filter-container-{{ admin.uniqid() }}">
             <div class="box box-primary" >
                 <div class="box-body">
-                    <form class="sonata-filter-form form-horizontal {{ admin.isChild and 1 == admin.datagrid.filters|length ? 'hide' : '' }}" action="{{ admin.generateUrl('list') }}" method="GET" role="form">
+                    <form class="sonata-filter-form form-horizontal {{ admin.isChild and 1 == admin.datagrid.filters|length ? 'hide' : '' }}" action="{{ admin.generateUrl('list',{'type':'checking'}) }}" method="GET" role="form">
                         {{ form_errors(form) }}
-                        <input type="hidden" name="type" value="checking-each-position">
-                        <input type="hidden" name="position-id" value="{{ app.request.get('position-id') }}">
+                        <input type="hidden" name="type" value="checking">
                         <div class="row">
                             <div class="col-sm-9">
                                 {% set withAdvancedFilter = false %}
@@ -296,7 +296,7 @@ file that was distributed with this source code.
                                         <i class="fa fa-filter" aria-hidden="true"></i> {{ 'btn_filter'|trans({}, 'SonataAdminBundle') }}
                                     </button>
 
-                                    <a class="btn btn-default" href="{{ admin.generateUrl('list', {'type':'checking-each-position','position-id':app.request.get('position-id')}) }}">
+                                    <a class="btn btn-default" href="{{ admin.generateUrl('list', {'type': 'checking'}) }}">
                                         {{ 'link_reset_filter'|trans({}, 'SonataAdminBundle') }}
                                     </a>
                                 </div>

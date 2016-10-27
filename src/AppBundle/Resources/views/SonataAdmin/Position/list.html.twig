@@ -1,0 +1,5 @@
+{% if app.request.get('type') == 'checking' %}
+    {% include '@App/SonataAdmin/Position/Checker/list.html.twig' %}
+{% else %}
+    {% include '@App/SonataAdmin/Position/Admin/list.html.twig' %}
+{% endif %}

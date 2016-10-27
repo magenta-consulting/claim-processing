@@ -76,32 +76,32 @@ class EmployeeGroupAdmin extends BaseAdmin
                 )
             ));
     }
+    public function manualUpdate($employeeGroup)
+    {
+        if ($employeeGroup->getCompanyApply()) {
+            $name[] = $employeeGroup->getCompanyApply()->getName();
+        }
+        if ($employeeGroup->getCostCentre()) {
+            $name[] = $employeeGroup->getCostCentre()->getCode();
+        }
+        if ($employeeGroup->getDepartment()) {
+            $name[] = $employeeGroup->getDepartment()->getCode();
+        }
+        if ($employeeGroup->getEmployeeType()) {
+            $name[] = $employeeGroup->getEmployeeType()->getCode();
+        }
+        if (count($name)) {
+            $name = implode('>', $name);
+        } else {
+            $name = '';
+        }
+        $employeeGroup->setDescription($name);
+    }
 
     public function toString($object)
     {
-        if($object instanceof EmployeeGroup) {
-            if ($object->getCompanyApply()) {
-                $name[] = $object->getCompanyApply()->getName();
-            }
-            if ($object->getCostCentre()) {
-                $name[] = $object->getCostCentre()->getCode();
-            }
-            if ($object->getDepartment()) {
-                $name[] = $object->getDepartment()->getCode();
-            }
-            if ($object->getEmployeeType()) {
-                $name[] = $object->getEmployeeType()->getCode();
-            }
-            if (count($name)) {
-                $name = implode('>', $name);
-            } else {
-                $name = '';
-            }
-        }else{
-            $name = '';
-        }
         return $object instanceof EmployeeGroup
-            ? $name
+            ? $object->getDescription()
             : 'Employee Group Management'; // shown in the breadcrumb on the create view
     }
 

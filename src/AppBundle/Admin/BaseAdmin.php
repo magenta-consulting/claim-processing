@@ -30,37 +30,18 @@ class BaseAdmin extends AbstractAdmin
 
     public function getUser()
     {
-        if (!$this->container->has('security.token_storage')) {
-            return;
-        }
-
-        $tokenStorage = $this->container->get('security.token_storage');
-
-        if (!$token = $tokenStorage->getToken()) {
-            return;
-        }
-
-        $user = $token->getUser();
-        if (!is_object($user)) {
-            return;
-        }
-
-        return $user;
+        return $this->getContainer()->get('app.claim_rule')->getUser();
     }
 
     public function getPosition()
     {
-        return $this->getUser()->getLoginWithPosition();
+        return $this->getContainer()->get('app.claim_rule')->getPosition();
     }
 
     public function getCompany()
     {
-        $company = $this->getContainer()->get('security.token_storage')->getToken()->getUser()->getCompany();
-        //is admin
-        if ($company === null) {
-
-        }
-        return $company;
+        //admin will return null
+        return $this->getContainer()->get('app.claim_rule')->getCompany();
     }
 
     public function isAdmin()
@@ -206,6 +187,7 @@ class BaseAdmin extends AbstractAdmin
                     case 'checking-each-position':
                         $positionId = $request->get('position-id');
                         $query->join($query->getRootAliases()[0] . '.position', 'position');
+                        $query->join($query->getRootAliases()[0] . '.checker', 'checker');
                         $query->andWhere(
                             $expr->eq($query->getRootAliases()[0] . '.company', ':company')
                         );
@@ -213,11 +195,15 @@ class BaseAdmin extends AbstractAdmin
                             $expr->eq('position.id', ':positionId')
                         );
                         $query->andWhere(
+                            $expr->eq('checker.checker', ':checker')
+                        );
+                        $query->andWhere(
                             $expr->neq($query->getRootAliases()[0] . '.status', ':status')
                         );
                         $query->setParameter('status', Claim::STATUS_DRAFT);
                         $query->setParameter('company', $company);
                         $query->setParameter('positionId', $positionId);
+                        $query->setParameter('checker', $this->getPosition());
                         break;
                     default:
                         $periodFrom = $this->getContainer()->get('app.claim_rule')->getCurrentClaimPeriod('from');

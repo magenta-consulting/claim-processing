@@ -5,6 +5,9 @@
 AppBundle\Entity\Checker:
     constraints:
         - Callback: validate
+AppBundle\Entity\ApprovalAmountPolicies:
+    constraints:
+        - Callback: validate
 
 AppBundle\Entity\Claim:
     constraints:

@@ -7,6 +7,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Application\Sonata\MediaBundle\Entity\Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * @ORM\Entity
@@ -188,6 +189,28 @@ class Checker
 
     public function validate(ExecutionContextInterface $context, $payload)
     {
+        //validate each employee only belong to a checker
+        $company = $this->getCompany();
+        if ($company) {
+            $expr = Criteria::expr();
+            $criteria = Criteria::create();
+            $criteria->where($expr->neq('id', $this->id));
+            $checkers = $company->getCheckers()->matching($criteria);
+            foreach ($checkers as $checker) {
+                foreach ($checker->getCheckerEmployeeGroups() as $checkerEmployeeGroup1) {
+                    foreach ($this->getCheckerEmployeeGroups() as $checkerEmployeeGroup2) {
+                        if ($checkerEmployeeGroup1->getEmployeeGroup()->getId() == $checkerEmployeeGroup2->getEmployeeGroup()->getId()) {
+
+                            $context->buildViolation('This employee group (' . $checkerEmployeeGroup2->getEmployeeGroup()->getDescription() . ') has already been belong to another checker')
+                                ->atPath('checkerEmployeeGroups')
+                                ->addViolation();
+                        }
+                    }
+
+                }
+            }
+        }
+        //validate checker and backup checker must be difference
         if ($this->getBackupChecker()) {
             if ($this->getChecker()) {
                 if ($this->getBackupChecker()->getId() === $this->getChecker()->getId()) {

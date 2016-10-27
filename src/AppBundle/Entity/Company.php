@@ -69,12 +69,81 @@ class Company
      */
     private $claimTypes;
 
+    /**
+     * @var EmployeeGroup
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\EmployeeGroup",mappedBy="company")
+     */
+    private $employeeGroups;
+    /**
+     * @var Checker
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Checker",mappedBy="company")
+     */
+    private $checkers;
+
+    /**
+     * @var ApprovalAmountPolicies
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ApprovalAmountPolicies",mappedBy="company")
+     */
+    private $approvalAmountPolicies;
+
     public function __construct()
     {
         $this->positions = new ArrayCollection();
         $this->limitRules = new ArrayCollection();
         $this->claimTypes = new ArrayCollection();
+        $this->employeeGroups = new ArrayCollection();
     }
+
+    /**
+     * @return ApprovalAmountPolicies
+     */
+    public function getApprovalAmountPolicies()
+    {
+        return $this->approvalAmountPolicies;
+    }
+
+    /**
+     * @param ApprovalAmountPolicies $approvalAmountPolicies
+     */
+    public function setApprovalAmountPolicies($approvalAmountPolicies)
+    {
+        $this->approvalAmountPolicies = $approvalAmountPolicies;
+    }
+
+
+    /**
+     * @return Checker
+     */
+    public function getCheckers()
+    {
+        return $this->checkers;
+    }
+
+    /**
+     * @param Checker $checkers
+     */
+    public function setCheckers($checkers)
+    {
+        $this->checkers = $checkers;
+    }
+
+
+    /**
+     * @return EmployeeGroup
+     */
+    public function getEmployeeGroups()
+    {
+        return $this->employeeGroups;
+    }
+
+    /**
+     * @param EmployeeGroup $employeeGroups
+     */
+    public function setEmployeeGroups($employeeGroups)
+    {
+        $this->employeeGroups = $employeeGroups;
+    }
+
 
     /**
      * @return Category

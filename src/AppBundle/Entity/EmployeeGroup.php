@@ -28,6 +28,11 @@ class EmployeeGroup
      */
     private $id;
 
+    /**
+     * @var string
+     * @ORM\Column(name="description",type="text",nullable=true)
+     */
+    private $description;
 
     /**
      * @var Company
@@ -69,6 +74,23 @@ class EmployeeGroup
     {
         return $this->id;
     }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
 
     /**
      * @return Company

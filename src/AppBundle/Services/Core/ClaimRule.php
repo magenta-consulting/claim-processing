@@ -31,14 +31,29 @@ class ClaimRule
         return $user;
     }
 
+    public function getPosition()
+    {
+        return $this->getUser()->getLoginWithPosition();
+    }
+
+    public function getCompany()
+    {
+        $company = $this->container->get('security.token_storage')->getToken()->getUser()->getCompany();
+        //is admin
+        if ($company === null) {
+
+        }
+        return $company;
+    }
+
 
     public function getClaimTypeDefault()
     {
-        $position = $this->getUser()->getLoginWithPosition();
-        $company = $position->getCompany();
+        $position = $this->getPosition();
+        $company = $this->getCompany();
         $clientCompany = $company->getParent() ? $company->getParent() : $company;
         $em = $this->container->get('doctrine')->getManager();
-        $claimType = $em->getRepository('AppBundle\Entity\ClaimType')->findOneBy(['isDefault'=>true,'company'=>$clientCompany]);
+        $claimType = $em->getRepository('AppBundle\Entity\ClaimType')->findOneBy(['isDefault' => true, 'company' => $clientCompany]);
         return $claimType;
     }
 
@@ -67,6 +82,26 @@ class ClaimRule
         return $period[$key];
     }
 
+    public function getListClaimPeriodForFilter()
+    {
+        $position = $this->getPosition();
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder('claim');
+        $qb->select('claim');
+        $qb->from('AppBundle:Claim', 'claim');
+        $qb->join('claim.checker', 'checker');
+        $qb->where('checker.checker = :position');
+        $qb->orderBy('claim.createdAt', 'DESC');
+        $qb->setParameter('position', $position);
+        $claims = $qb->getQuery()->getResult();
+
+        $listPeriod = [];
+        foreach ($claims as $claim) {
+            $listPeriod[$claim->getPeriodFrom()->format('d M Y') . ' - ' . $claim->getPeriodTo()->format('d M Y')] = $claim->getPeriodFrom()->format('Y-m-d');
+        }
+        return $listPeriod;
+    }
+
     public function isExceedLimitRule(Claim $claim)
     {
         $em = $this->container->get('doctrine')->getManager();
@@ -82,7 +117,7 @@ class ClaimRule
             ->andWhere($expr->eq('claim.periodFrom', ':periodFrom'))
             ->andWhere($expr->eq('claim.periodTo', ':periodTo'))
             ->andWhere($expr->notIn('claim.status', ':statusList'))
-            ->setParameter('position', $this->getUser()->getLoginWithPosition())
+            ->setParameter('position', $this->getPosition())
             ->setParameter('claimType', $claim->getClaimType())
             ->setParameter('claimCategory', $claim->getClaimCategory())
             ->setParameter('periodFrom', $periodFrom->format('Y-m-d'))
@@ -91,14 +126,46 @@ class ClaimRule
             ->getQuery()
             ->getResult();
 
+        $limitAmount = $this->getLimitAmount($claim);
+        if (!$limitAmount) {
+            return false;
+        }
         $totalAmount = $claim->getClaimAmount();
         foreach ($claims as $claim) {
             $totalAmount += $claim->getClaimAmount();
         }
-        if ($totalAmount > $this->getLimitAmount($claim)) {
+        if ($totalAmount > $limitAmount) {
             return true;
         }
         return false;
+    }
+
+    public function getNumberClaim($position, $positionChecker)
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder('claim');
+        $qb->select($qb->expr()->count('claim.id'));
+        $qb->from('AppBundle:Claim', 'claim');
+        $qb->join('claim.checker', 'checker');
+        $qb->where('claim.position = :position');
+        $qb->andWhere('checker.checker = :positionChecker');
+        $qb->setParameter('position', $position);
+        $qb->setParameter('positionChecker', $positionChecker);
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function isShowMenuForChecker($position)
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder('claim');
+        $qb->select($qb->expr()->count('claim.id'));
+        $qb->from('AppBundle:Claim', 'claim');
+        $qb->join('claim.checker', 'checker');
+        $qb->where('checker.checker = :position');
+        $qb->setParameter('position', $position);
+
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
     public function getLimitAmount(Claim $claim)
@@ -108,21 +175,46 @@ class ClaimRule
             'claimType' => $claim->getClaimType(),
             'claimCategory' => $claim->getClaimCategory()
         ]);
+        if (!$limitRule) {
+            return null;
+        }
         $limitRuleEmployeeGroup = $em->getRepository('AppBundle\Entity\LimitRuleEmployeeGroup')->findOneBy([
             'limitRule' => $limitRule,
-            'employeeGroup' => $this->getUser()->getLoginWithPosition()->getEmployeeGroup()
+            'employeeGroup' => $this->getPosition()->getEmployeeGroup()
         ]);
+        if (!$limitRuleEmployeeGroup) {
+            return null;
+        }
         return $limitRuleEmployeeGroup->getClaimLimit();
     }
 
+
     public function getChecker(Claim $claim)
     {
-        return null;
+        $expr = new Expr();
+        $em = $this->container->get('doctrine')->getManager();
+        return $em->createQueryBuilder()
+            ->select('checker')
+            ->from('AppBundle\Entity\Checker', 'checker')
+            ->join('checker.checkerEmployeeGroups', 'checkerEmployeeGroup')
+            ->join('checkerEmployeeGroup.employeeGroup', 'employeeGroup')
+            ->where($expr->eq('employeeGroup', ':employeeGroup'))
+            ->setParameter('employeeGroup', $this->getPosition()->getEmployeeGroup())
+            ->getQuery()->getOneOrNullResult();
     }
 
     public function getApprover(Claim $claim)
     {
-        return null;
+        $expr = new Expr();
+        $em = $this->container->get('doctrine')->getManager();
+        return $em->createQueryBuilder()
+            ->select('approvalAmountPolicies')
+            ->from('AppBundle\Entity\ApprovalAmountPolicies', 'approvalAmountPolicies')
+            ->join('approvalAmountPolicies.approvalAmountPoliciesEmployeeGroups', 'approvalAmountPoliciesEmployeeGroup')
+            ->join('approvalAmountPoliciesEmployeeGroup.employeeGroup', 'employeeGroup')
+            ->where($expr->eq('employeeGroup', ':employeeGroup'))
+            ->setParameter('employeeGroup', $this->getPosition()->getEmployeeGroup())
+            ->getQuery()->getOneOrNullResult();
     }
 
 
