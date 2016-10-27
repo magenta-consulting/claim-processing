@@ -214,7 +214,7 @@ class ClaimAdmin extends BaseAdmin
                     ->add('claimType.code', null, ['label' => 'Claim Type'])
                     ->add('claimCategory.code', null, ['label' => 'Claim Category'])
                     ->add('claimAmount', null, ['label' => 'Amount'])
-//                    ->add('a', 'debug', ['label' => 'DEBUG'])
+                    ->add('a', 'debug', ['label' => 'DEBUG'])
                     ->add('_action', null, array(
                         'actions' => array(
                             'delete' => array(),
