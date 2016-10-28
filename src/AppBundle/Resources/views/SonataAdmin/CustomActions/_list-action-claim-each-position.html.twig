@@ -1,1 +1,9 @@
-<a class="btn btn-sm btn-default" href="{{ path('admin_app_claim_list', {'type':'checking-each-position','position-id':object.id,'filter': admin.filterParameters}) }}">View Claims Of This User</a>
+{% if app.request.get('type') == 'checking' %}
+    <a class="btn btn-sm btn-default"
+       href="{{ path('admin_app_claim_list', {'type':'checking-each-position','position-id':object.id,'filter': admin.filterParameters}) }}">View
+        Claims Of This User</a>
+{% else %}
+    <a class="btn btn-sm btn-default"
+       href="{{ path('admin_app_claim_list', {'type':'approving-each-position','position-id':object.id,'filter': admin.filterParameters}) }}">View
+        Claims Of This User</a>
+{% endif %}

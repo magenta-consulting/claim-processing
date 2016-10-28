@@ -10,7 +10,7 @@ class ClaimRule
 {
     use ContainerAwareTrait;
 
-
+/*1 global--------------------------------------*/
     public function getUser()
     {
         if (!$this->container->has('security.token_storage')) {
@@ -81,28 +81,25 @@ class ClaimRule
         $period = ['from' => $periodFrom, 'to' => $periodTo];
         return $period[$key];
     }
-
-    public function getListClaimPeriodForFilter()
+    public function getLimitAmount(Claim $claim)
     {
-        $expr = new Expr();
-        $position = $this->getPosition();
         $em = $this->container->get('doctrine')->getManager();
-        $qb = $em->createQueryBuilder('claim');
-        $qb->select('claim');
-        $qb->from('AppBundle:Claim', 'claim');
-        $qb->join('claim.checker', 'checker');
-        $qb->where($expr->orX('checker.checker = :position','checker.backupChecker = :position'));
-        $qb->orderBy('claim.createdAt', 'DESC');
-        $qb->setParameter('position', $position);
-        $claims = $qb->getQuery()->getResult();
-
-        $listPeriod = [];
-        foreach ($claims as $claim) {
-            $listPeriod[$claim->getPeriodFrom()->format('d M Y') . ' - ' . $claim->getPeriodTo()->format('d M Y')] = $claim->getPeriodFrom()->format('Y-m-d');
+        $limitRule = $em->getRepository('AppBundle\Entity\LimitRule')->findOneBy([
+            'claimType' => $claim->getClaimType(),
+            'claimCategory' => $claim->getClaimCategory()
+        ]);
+        if (!$limitRule) {
+            return null;
         }
-        return $listPeriod;
+        $limitRuleEmployeeGroup = $em->getRepository('AppBundle\Entity\LimitRuleEmployeeGroup')->findOneBy([
+            'limitRule' => $limitRule,
+            'employeeGroup' => $this->getPosition()->getEmployeeGroup()
+        ]);
+        if (!$limitRuleEmployeeGroup) {
+            return null;
+        }
+        return $limitRuleEmployeeGroup->getClaimLimit();
     }
-
     public function isExceedLimitRule(Claim $claim)
     {
         $em = $this->container->get('doctrine')->getManager();
@@ -141,7 +138,52 @@ class ClaimRule
         return false;
     }
 
-    public function getNumberClaim($position, $positionChecker)
+
+    /*2 for checker--------------------------------------*/
+    public function getChecker(Claim $claim)
+    {
+        $expr = new Expr();
+        $em = $this->container->get('doctrine')->getManager();
+        return $em->createQueryBuilder()
+            ->select('checker')
+            ->from('AppBundle\Entity\Checker', 'checker')
+            ->join('checker.checkerEmployeeGroups', 'checkerEmployeeGroup')
+            ->join('checkerEmployeeGroup.employeeGroup', 'employeeGroup')
+            ->where($expr->eq('employeeGroup', ':employeeGroup'))
+            ->setParameter('employeeGroup', $this->getPosition()->getEmployeeGroup())
+            ->getQuery()->getOneOrNullResult();
+    }
+    public function getListClaimPeriodForFilterChecker()
+    {
+        $expr = new Expr();
+        $position = $this->getPosition();
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder('claim');
+        $qb->select('claim');
+        $qb->from('AppBundle:Claim', 'claim');
+        $qb->join('claim.checker', 'checker');
+        $qb->where($expr->orX('checker.checker = :position','checker.backupChecker = :position'));
+        $qb->andWhere($expr->orX(
+            $expr->eq('claim.status',':statusPending'),
+            $expr->eq('claim.status',':statusCheckerRejected'),
+            $expr->eq('claim.status',':statusCheckerApproved')
+        ));
+        $qb->orderBy('claim.createdAt', 'DESC');
+
+        $qb->setParameter('statusPending', Claim::STATUS_PENDING);
+        $qb->setParameter('statusCheckerRejected', Claim::STATUS_CHECKER_REJECTED);
+        $qb->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
+        $qb->setParameter('position', $position);
+        $claims = $qb->getQuery()->getResult();
+
+        $listPeriod = [];
+        foreach ($claims as $claim) {
+            $listPeriod[$claim->getPeriodFrom()->format('d M Y') . ' - ' . $claim->getPeriodTo()->format('d M Y')] = $claim->getPeriodFrom()->format('Y-m-d');
+        }
+        return $listPeriod;
+    }
+
+    public function getNumberClaimEachEmployeeForChecker($position, $positionChecker)
     {
         $expr = new Expr();
         $em = $this->container->get('doctrine')->getManager();
@@ -151,8 +193,14 @@ class ClaimRule
         $qb->join('claim.checker', 'checker');
         $qb->where('claim.position = :position');
         $qb->andWhere($expr->orX('checker.checker = :positionChecker','checker.backupChecker = :positionChecker'));
-        $qb->andWhere('claim.status <> :status');
-        $qb->setParameter('status', Claim::STATUS_DRAFT);
+        $qb->andWhere($expr->orX(
+            $expr->eq('claim.status',':statusPending'),
+            $expr->eq('claim.status',':statusCheckerRejected'),
+            $expr->eq('claim.status',':statusCheckerApproved')
+        ));
+        $qb->setParameter('statusPending', Claim::STATUS_PENDING);
+        $qb->setParameter('statusCheckerRejected', Claim::STATUS_CHECKER_REJECTED);
+        $qb->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
         $qb->setParameter('position', $position);
         $qb->setParameter('positionChecker', $positionChecker);
 
@@ -167,50 +215,22 @@ class ClaimRule
         $qb->select($qb->expr()->count('claim.id'));
         $qb->from('AppBundle:Claim', 'claim');
         $qb->join('claim.checker', 'checker');
-        $qb->where('checker.checker = :position');
         $qb->where($expr->orX('checker.checker = :position','checker.backupChecker = :position'));
-        $qb->andWhere('claim.status <> :status');
-        $qb->setParameter('status', Claim::STATUS_DRAFT);
+        $qb->andWhere($expr->orX(
+            $expr->eq('claim.status',':statusPending'),
+            $expr->eq('claim.status',':statusCheckerRejected'),
+            $expr->eq('claim.status',':statusCheckerApproved')
+        ));
+        $qb->setParameter('statusPending', Claim::STATUS_PENDING);
+        $qb->setParameter('statusCheckerRejected', Claim::STATUS_CHECKER_REJECTED);
+        $qb->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
         $qb->setParameter('position', $position);
 
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function getLimitAmount(Claim $claim)
-    {
-        $em = $this->container->get('doctrine')->getManager();
-        $limitRule = $em->getRepository('AppBundle\Entity\LimitRule')->findOneBy([
-            'claimType' => $claim->getClaimType(),
-            'claimCategory' => $claim->getClaimCategory()
-        ]);
-        if (!$limitRule) {
-            return null;
-        }
-        $limitRuleEmployeeGroup = $em->getRepository('AppBundle\Entity\LimitRuleEmployeeGroup')->findOneBy([
-            'limitRule' => $limitRule,
-            'employeeGroup' => $this->getPosition()->getEmployeeGroup()
-        ]);
-        if (!$limitRuleEmployeeGroup) {
-            return null;
-        }
-        return $limitRuleEmployeeGroup->getClaimLimit();
-    }
 
-
-    public function getChecker(Claim $claim)
-    {
-        $expr = new Expr();
-        $em = $this->container->get('doctrine')->getManager();
-        return $em->createQueryBuilder()
-            ->select('checker')
-            ->from('AppBundle\Entity\Checker', 'checker')
-            ->join('checker.checkerEmployeeGroups', 'checkerEmployeeGroup')
-            ->join('checkerEmployeeGroup.employeeGroup', 'employeeGroup')
-            ->where($expr->eq('employeeGroup', ':employeeGroup'))
-            ->setParameter('employeeGroup', $this->getPosition()->getEmployeeGroup())
-            ->getQuery()->getOneOrNullResult();
-    }
-
+    /*3 for approver--------------------------------------*/
     public function getApprover(Claim $claim)
     {
         $expr = new Expr();
@@ -223,6 +243,149 @@ class ClaimRule
             ->where($expr->eq('employeeGroup', ':employeeGroup'))
             ->setParameter('employeeGroup', $this->getPosition()->getEmployeeGroup())
             ->getQuery()->getOneOrNullResult();
+    }
+    public function assignClaimToSpecificApprover(Claim $claim){
+        $approver =$this->getApprover($claim);
+        $amount =$claim->getClaimAmount();
+        if($approver){
+            //check approver1 can approve ?
+            if($approver->getApprover1() && $approver->isApproval1AmountStatus()){
+                if($approver->getApproval1Amount()){
+                    if($approver->getApproval1Amount() >= $amount){
+                        if($approver->getApprover1()->getId() != $this->getPosition()->getId()){
+                            $result['approverEmployee'] = $approver->getApprover1();
+                        }else{
+                            $result['approverEmployee'] = $approver->getOverrideApprover1();
+                        }
+                        $result['approverBackupEmployee'] = $approver->getBackupApprover1();
+                        return $result;
+                    }
+                }else{
+                    if($approver->getApprover1()->getId() != $this->getPosition()->getId()){
+                        $result['approverEmployee'] = $approver->getApprover1();
+                    }else{
+                        $result['approverEmployee'] = $approver->getOverrideApprover1();
+                    }
+                    $result['approverBackupEmployee'] = $approver->getBackupApprover1();
+                    return $result;
+                }
+            }
+            //check approver2 can approve ?
+            if($approver->getApprover2() && $approver->isApproval2AmountStatus()){
+                if($approver->getApproval2Amount()){
+                    if($approver->getApproval2Amount() >= $amount){
+                        if($approver->getApprover2()->getId() != $this->getPosition()->getId()){
+                            $result['approverEmployee'] = $approver->getApprover2();
+                        }else{
+                            $result['approverEmployee'] = $approver->getOverrideApprover2();
+                        }
+                        $result['approverBackupEmployee'] = $approver->getBackupApprover2();
+                        return $result;
+                    }
+                }else{
+                    if($approver->getApprover2()->getId() != $this->getPosition()->getId()){
+                        $result['approverEmployee'] = $approver->getApprover2();
+                    }else{
+                        $result['approverEmployee'] = $approver->getOverrideApprover2();
+                    }
+                    $result['approverBackupEmployee'] = $approver->getBackupApprover2();
+                    return $result;
+                }
+            }
+            //check approver3 can approve ?
+            if($approver->getApprover3() && $approver->isApproval3AmountStatus()){
+                if($approver->getApproval3Amount()){
+                    if($approver->getApproval3Amount() >= $amount){
+                        if($approver->getApprover3()->getId() != $this->getPosition()->getId()){
+                            $result['approverEmployee'] = $approver->getApprover3();
+                        }else{
+                            $result['approverEmployee'] = $approver->getOverrideApprover3();
+                        }
+                        $result['approverBackupEmployee'] = $approver->getBackupApprover3();
+                        return $result;
+                    }
+                }else{
+                    if($approver->getApprover3()->getId() != $this->getPosition()->getId()){
+                        $result['approverEmployee'] = $approver->getApprover3();
+                    }else{
+                        $result['approverEmployee'] = $approver->getOverrideApprover3();
+                    }
+                    $result['approverBackupEmployee'] = $approver->getBackupApprover3();
+                    return $result;
+                }
+            }
+        }
+        return ['approverEmployee'=>null,'approverBackupEmployee'=>null];
+    }
+    public function getListClaimPeriodForFilterApprover()
+    {
+        $expr = new Expr();
+        $position = $this->getPosition();
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder('claim');
+        $qb->select('claim');
+        $qb->from('AppBundle:Claim', 'claim');
+        $qb->where($expr->orX('claim.approverEmployee = :position','claim.approverBackupEmployee = :position'));
+        $qb->andWhere($expr->orX(
+            $expr->eq('claim.status',':statusCheckerApproved'),
+            $expr->eq('claim.status',':statusApproverRejected'),
+            $expr->eq('claim.status',':statusApproverApproved')
+        ));
+        $qb->orderBy('claim.createdAt', 'DESC');
+        $qb->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
+        $qb->setParameter('statusApproverRejected', Claim::STATUS_APPROVER_REJECTED);
+        $qb->setParameter('statusApproverApproved', Claim::STATUS_APPROVER_APPROVED);
+        $qb->setParameter('position', $position);
+        $claims = $qb->getQuery()->getResult();
+
+        $listPeriod = [];
+        foreach ($claims as $claim) {
+            $listPeriod[$claim->getPeriodFrom()->format('d M Y') . ' - ' . $claim->getPeriodTo()->format('d M Y')] = $claim->getPeriodFrom()->format('Y-m-d');
+        }
+        return $listPeriod;
+    }
+
+    public function getNumberClaimEachEmployeeForApprover($position, $positionApprover)
+    {
+        $expr = new Expr();
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder('claim');
+        $qb->select($qb->expr()->count('claim.id'));
+        $qb->from('AppBundle:Claim', 'claim');
+        $qb->where('claim.position = :position');
+        $qb->andWhere($expr->orX('claim.approverEmployee = :positionApprover','claim.approverBackupEmployee = :positionApprover'));
+        $qb->andWhere($expr->orX(
+            $expr->eq('claim.status',':statusCheckerApproved'),
+            $expr->eq('claim.status',':statusApproverRejected'),
+            $expr->eq('claim.status',':statusApproverApproved')
+        ));
+        $qb->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
+        $qb->setParameter('statusApproverRejected', Claim::STATUS_APPROVER_REJECTED);
+        $qb->setParameter('statusApproverApproved', Claim::STATUS_APPROVER_APPROVED);
+        $qb->setParameter('position', $position);
+        $qb->setParameter('positionApprover', $positionApprover);
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+    public function isShowMenuForApprover($position)
+    {
+        $expr = new Expr();
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder('claim');
+        $qb->select($qb->expr()->count('claim.id'));
+        $qb->from('AppBundle:Claim', 'claim');
+        $qb->where($expr->orX('claim.approverEmployee = :position','claim.approverBackupEmployee = :position'));
+        $qb->andWhere($expr->orX(
+            $expr->eq('claim.status',':statusCheckerApproved'),
+            $expr->eq('claim.status',':statusApproverRejected'),
+            $expr->eq('claim.status',':statusApproverApproved')
+        ));
+        $qb->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
+        $qb->setParameter('statusApproverRejected', Claim::STATUS_APPROVER_REJECTED);
+        $qb->setParameter('statusApproverApproved', Claim::STATUS_APPROVER_APPROVED);
+        $qb->setParameter('position', $position);
+
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
 

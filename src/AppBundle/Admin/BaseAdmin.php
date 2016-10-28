@@ -155,6 +155,7 @@ class BaseAdmin extends AbstractAdmin
         $query = parent::createQuery($context);
         $class = $this->getClass();
         $company = $this->getCompany();
+        $clientCompany = $company->getParent();
         $position = $this->getPosition();
         $expr = new Expr();
         if ($this->isCLient()) {
@@ -193,8 +194,29 @@ class BaseAdmin extends AbstractAdmin
                         $query->join($query->getRootAliases()[0] . '.position', 'position');
                         $query->join($query->getRootAliases()[0] . '.checker', 'checker');
                         $query->andWhere(
-                            $expr->eq($query->getRootAliases()[0] . '.company', ':company')
+                            $expr->eq('position.id', ':positionId')
                         );
+                        $query->andWhere(
+                            $expr->orX(
+                                $expr->eq('checker.checker', ':checker'),
+                                $expr->eq('checker.backupChecker', ':checker')
+                            )
+                        );
+                        $query->andWhere($expr->orX(
+                            $expr->eq($query->getRootAliases()[0] .'.status',':statusPending'),
+                            $expr->eq($query->getRootAliases()[0] .'.status',':statusCheckerRejected'),
+                            $expr->eq($query->getRootAliases()[0] .'.status',':statusCheckerApproved')
+                        ));
+                        $query->setParameter('statusPending', Claim::STATUS_PENDING);
+                        $query->setParameter('statusCheckerRejected', Claim::STATUS_CHECKER_REJECTED);
+                        $query->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
+                        $query->setParameter('positionId', $positionId);
+                        $query->setParameter('checker', $this->getPosition());
+                        break;
+                    case 'approving-each-position':
+                        $positionId = $request->get('position-id');
+                        $query->join($query->getRootAliases()[0] . '.position', 'position');
+                        $query->join($query->getRootAliases()[0] . '.checker', 'checker');
                         $query->andWhere(
                             $expr->eq('position.id', ':positionId')
                         );
@@ -204,32 +226,21 @@ class BaseAdmin extends AbstractAdmin
                                 $expr->eq('checker.backupChecker', ':checker')
                             )
                         );
-                        $query->andWhere(
-                            $expr->neq($query->getRootAliases()[0] . '.status', ':status')
-                        );
-                        $query->setParameter('status', Claim::STATUS_DRAFT);
-                        $query->setParameter('company', $company);
+                        $query->andWhere($expr->orX(
+                            $expr->eq($query->getRootAliases()[0] .'.status',':statusCheckerApproved'),
+                            $expr->eq($query->getRootAliases()[0] .'.status',':statusApproverRejected'),
+                            $expr->eq($query->getRootAliases()[0] .'.status',':statusApproverApproved')
+                        ));
+                        $query->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
+                        $query->setParameter('statusApproverRejected', Claim::STATUS_APPROVER_REJECTED);
+                        $query->setParameter('statusApproverApproved', Claim::STATUS_APPROVER_APPROVED);
                         $query->setParameter('positionId', $positionId);
                         $query->setParameter('checker', $this->getPosition());
                         break;
                     default:
-                        $periodFrom = $this->getContainer()->get('app.claim_rule')->getCurrentClaimPeriod('from');
-                        $periodTo = $this->getContainer()->get('app.claim_rule')->getCurrentClaimPeriod('to');
-                        $query->andWhere(
-                            $expr->eq($query->getRootAliases()[0] . '.company', ':company')
-                        );
                         $query->andWhere(
                             $expr->eq($query->getRootAliases()[0] . '.position', ':position')
                         );
-                        $query->andWhere(
-                            $expr->eq($query->getRootAliases()[0] . '.periodFrom', ':periodFrom')
-                        );
-                        $query->andWhere(
-                            $expr->eq($query->getRootAliases()[0] . '.periodTo', ':periodTo')
-                        );
-                        $query->setParameter('periodFrom', $periodFrom->format('Y-m-d'));
-                        $query->setParameter('periodTo', $periodTo->format('Y-m-d'));
-                        $query->setParameter('company', $company);
                         $query->setParameter('position', $position);
                 }
             }
@@ -240,8 +251,12 @@ class BaseAdmin extends AbstractAdmin
                     case 'checking':
                         $query->leftJoin($query->getRootAliases()[0] . '.claims', 'claim');
                         $query->leftJoin('claim.checker', 'checker');
+                        $query->leftJoin($query->getRootAliases()[0] . '.company', 'company');
                         $query->andWhere(
-                            $expr->eq($query->getRootAliases()[0] . '.company', ':company')
+                            $expr->orX(
+                                $expr->eq('company.parent', ':clientCompany'),
+                                $expr->eq('company' , ':company')
+                            )
                         );
                         $query->andWhere(
                             $expr->orX(
@@ -251,6 +266,26 @@ class BaseAdmin extends AbstractAdmin
                         );
                         $query->setParameter('checker', $position);
                         $query->setParameter('company', $company);
+                        $query->setParameter('clientCompany', $clientCompany);
+                        break;
+                    case 'approving':
+                        $query->leftJoin($query->getRootAliases()[0] . '.claims', 'claim');
+                        $query->leftJoin($query->getRootAliases()[0] . '.company', 'company');
+                        $query->andWhere(
+                            $expr->orX(
+                                $expr->eq('company.parent', ':clientCompany'),
+                                $expr->eq('company' , ':company')
+                            )
+                        );
+                        $query->andWhere(
+                            $expr->orX(
+                                $expr->eq('claim.approverEmployee', ':position'),
+                                $expr->eq('claim.approverBackupEmployee', ':position')
+                            )
+                        );
+                        $query->setParameter('position', $position);
+                        $query->setParameter('company', $company);
+                        $query->setParameter('clientCompany', $clientCompany);
                         break;
                 }
             }

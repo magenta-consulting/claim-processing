@@ -107,17 +107,25 @@ class ClaimController extends Controller
         $this->admin->setSubject($object);
 
         if ($request->isMethod('post')) {
-            if ($request->get('btn_approve') == 1) {
+            if ($request->get('btn_checker_approve') == 1) {
 
                 $urlRedirect = $this->admin->generateUrl('list', ['type' => 'checking-each-position', 'position-id' => $object->getPosition()->getId()]);
                 $object->setCheckerUpdatedAt(new \DateTime());
                 $object->setCheckerRemark($request->get('checker-remark'));
                 $object->setStatus(Claim::STATUS_CHECKER_APPROVED);
-            } else if ($request->get('btn_reject') == 1) {
+            } else if ($request->get('btn_checker_reject') == 1) {
                 $urlRedirect = $this->admin->generateUrl('list', ['type' => 'checking-each-position', 'position-id' => $object->getPosition()->getId()]);
                 $object->setCheckerUpdatedAt(new \DateTime());
                 $object->setCheckerRemark($request->get('checker-remark'));
                 $object->setStatus(Claim::STATUS_CHECKER_REJECTED);
+            } else if ($request->get('btn_approver_approve') == 1) {
+                $urlRedirect = $this->admin->generateUrl('list', ['type' => 'approving-each-position', 'position-id' => $object->getPosition()->getId()]);
+                $object->setCheckerUpdatedAt(new \DateTime());
+                $object->setStatus(Claim::STATUS_APPROVER_APPROVED);
+            } else if ($request->get('btn_approver_reject') == 1) {
+                $urlRedirect = $this->admin->generateUrl('list', ['type' => 'approving-each-position', 'position-id' => $object->getPosition()->getId()]);
+                $object->setCheckerUpdatedAt(new \DateTime());
+                $object->setStatus(Claim::STATUS_APPROVER_REJECTED);
             } else {
                 $urlRedirect = $this->admin->generateUrl('list');
                 $status = Claim::STATUS_PENDING;
@@ -126,7 +134,14 @@ class ClaimController extends Controller
             }
 
             $this->admin->update($object);
-
+            $this->addFlash(
+                'sonata_flash_success',
+                $this->trans(
+                    'flash_edit_success',
+                    array('%name%' => $this->escapeHtml($this->admin->toString($object))),
+                    'SonataAdminBundle'
+                )
+            );
             return new RedirectResponse($urlRedirect);
         }
 

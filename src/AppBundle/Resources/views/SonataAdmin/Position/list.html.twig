@@ -1,5 +1,7 @@
 {% if app.request.get('type') == 'checking' %}
     {% include '@App/SonataAdmin/Position/Checker/list.html.twig' %}
+{% elseif app.request.get('type') == 'approving' %}
+    {% include '@App/SonataAdmin/Position/Approver/list.html.twig' %}
 {% else %}
-    {% include '@App/SonataAdmin/Position/Admin/list.html.twig' %}
+    {% include'AppBundle:SonataAdmin/Position/Admin:list.html.twig' %}
 {% endif %}

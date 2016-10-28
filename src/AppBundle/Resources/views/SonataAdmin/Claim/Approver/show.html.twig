@@ -15,7 +15,7 @@ file that was distributed with this source code.
 
 {%- block actions -%}
     <li><a class="sonata-action-element"
-           href="{{ path('admin_app_claim_list',{'type':'checking-each-position','position-id':object.position.id}) }}"><i
+           href="{{ path('admin_app_claim_list',{'type':'approving-each-position','position-id':object.position.id}) }}"><i
                     class="fa fa-list" aria-hidden="true"></i>
             Return to list</a></li>
 {%- endblock -%}
@@ -67,31 +67,16 @@ file that was distributed with this source code.
 
     </div>
         <div class="sonata-ba-view">
-            <div class="box box-primary">
-                <div class="box-header">
-                    <h4 class="box-title">
-                        Checker Remarks
-                    </h4>
-                </div>
-                <div class="box-body">
-                    {% if isShowApproveRejectCheckerButtonForClaim(object) %}
-                        <form method="post" action="{{ path('admin_app_claim_show',{'id':admin.id(object)}) }}">
-                            <div class="sonata-ba-field sonata-ba-field-standard-natural" style="margin-bottom: 10px;">
-                                <textarea required="required" placeholder="Checker Remarks" name="checker-remark"
-                                          class=" form-control">{{ object.checkerRemark }}</textarea>
-                            </div>
-                            <div class="sonata-ba-form-actions well well-small form-actions">
-                                <button type="submit" class="btn btn-success" name="btn_checker_approve" value="1"> Approve
-                                </button>
-                                <button type="submit" class="btn btn-danger" name="btn_checker_reject" value="1"> Reject
-                                </button>
-                            </div>
-                        </form>
-                    {% else %}
-                        {{ object.checkerRemark }}
-                    {% endif %}
-                </div>
-            </div>
+            {% if isShowApproveRejectApproverButtonForClaim(object) %}
+                <form method="post" action="{{ path('admin_app_claim_show',{'id':admin.id(object)}) }}">
+                    <div class="sonata-ba-form-actions well well-small form-actions">
+                        <button type="submit" class="btn btn-success" name="btn_approver_approve" value="1"> Approve
+                        </button>
+                        <button type="submit" class="btn btn-danger" name="btn_approver_reject" value="1"> Reject
+                        </button>
+                    </div>
+                </form>
+            {% endif %}
         </div>
 
     {{ sonata_block_render_event('sonata.admin.show.bottom', { 'admin': admin, 'object': object }) }}

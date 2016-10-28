@@ -26,14 +26,22 @@ class TwigExtension extends \Twig_Extension
 
     }
 
-    public function getNumberClaim($position, $positionChecker)
+    public function getNumberClaimEachEmployeeForChecker($position, $positionChecker)
     {
-        return $this->container->get('app.claim_rule')->getNumberClaim($position, $positionChecker);
+        return $this->container->get('app.claim_rule')->getNumberClaimEachEmployeeForChecker($position, $positionChecker);
+    }
+    public function getNumberClaimEachEmployeeForApprover($position, $positionApprover)
+    {
+        return $this->container->get('app.claim_rule')->getNumberClaimEachEmployeeForApprover($position, $positionApprover);
     }
 
     public function isShowMenuForChecker($position)
     {
         return $this->container->get('app.claim_rule')->isShowMenuForChecker($position);
+    }
+    public function isShowMenuForApprover($position)
+    {
+        return $this->container->get('app.claim_rule')->isShowMenuForApprover($position);
     }
 
     public function getUrlMedia($media, $context = 'default', $format = 'reference')
@@ -79,6 +87,16 @@ class TwigExtension extends \Twig_Extension
         }
         return false;
     }
+    public function isShowApproveRejectApproverButtonForClaim(Claim $claim)
+    {
+        $listStatusAllow = [
+            Claim::STATUS_CHECKER_APPROVED,
+        ];
+        if(in_array($claim->getStatus(),$listStatusAllow)){
+            return true;
+        }
+        return false;
+    }
 
     public function getFunctions()
     {
@@ -86,13 +104,16 @@ class TwigExtension extends \Twig_Extension
             'getParameter' => new \Twig_Function_Method($this, 'getParameter', array('is_safe' => array('html'))),
             'getNumberDecimalDigits' => new \Twig_Function_Method($this, 'getNumberDecimalDigits', array('is_safe' => array('html'))),
             'getUrlMedia' => new \Twig_Function_Method($this, 'getUrlMedia', array('is_safe' => array('html'))),
-            'getNumberClaim' => new \Twig_Function_Method($this, 'getNumberClaim', array('is_safe' => array('html'))),
+            'getNumberClaimEachEmployeeForChecker' => new \Twig_Function_Method($this, 'getNumberClaimEachEmployeeForChecker', array('is_safe' => array('html'))),
+            'getNumberClaimEachEmployeeForApprover' => new \Twig_Function_Method($this, 'getNumberClaimEachEmployeeForApprover', array('is_safe' => array('html'))),
             'isShowMenuForChecker' => new \Twig_Function_Method($this, 'isShowMenuForChecker', array('is_safe' => array('html'))),
+            'isShowMenuForApprover' => new \Twig_Function_Method($this, 'isShowMenuForApprover', array('is_safe' => array('html'))),
             'getCurrentClaimPeriod' => new \Twig_Function_Method($this, 'getCurrentClaimPeriod', array('is_safe' => array('html'))),
             'isExceedLimitRule' => new \Twig_Function_Method($this, 'isExceedLimitRule', array('is_safe' => array('html'))),
             'getLimitAmount' => new \Twig_Function_Method($this, 'getLimitAmount', array('is_safe' => array('html'))),
             'isShowEditDeleteButtonForClaim' => new \Twig_Function_Method($this, 'isShowEditDeleteButtonForClaim', array('is_safe' => array('html'))),
             'isShowApproveRejectCheckerButtonForClaim' => new \Twig_Function_Method($this, 'isShowApproveRejectCheckerButtonForClaim', array('is_safe' => array('html'))),
+            'isShowApproveRejectApproverButtonForClaim' => new \Twig_Function_Method($this, 'isShowApproveRejectApproverButtonForClaim', array('is_safe' => array('html'))),
         );
     }
 

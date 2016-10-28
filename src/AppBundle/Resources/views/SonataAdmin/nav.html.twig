@@ -112,6 +112,12 @@
                         class="fa fa-angle-double-right"></i>Claims For Checking</a>
         </li>
     {% endif %}
+    {% if isShowMenuForApprover(app.user.loginWithPosition) %}
+        <li data-route="admin_app_position_list" class="last"><a
+                    href="{{ path('admin_app_position_list',{'type':'approving'}) }}"><i
+                        class="fa fa-angle-double-right"></i>Claims For Approval</a>
+        </li>
+    {% endif %}
 </ul>
 
 <script>

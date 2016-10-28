@@ -1,0 +1,5 @@
+{% if app.request.get('type') == 'checking-each-position' %}
+    <a class="btn btn-sm btn-default edit_link" href="{{ path('admin_app_claim_show', {'id':object.id,'type':'checker-view-claim'}) }}">show</a>
+{% else %}
+    <a class="btn btn-sm btn-default edit_link" href="{{ path('admin_app_claim_show', {'id':object.id,'type':'approving-view-claim'}) }}">show</a>
+{% endif %}

@@ -12,5 +12,9 @@ file that was distributed with this source code.
 {% extends admin.getTemplate('base_list_field') %}
 
 {% block field %}
- {{ getNumberClaim(object,app.user.loginWithPosition) }}
+    {% if app.request.get('type') == 'checking' %}
+        {{ getNumberClaimEachEmployeeForChecker(object,app.user.loginWithPosition) }}
+    {% else %}
+        {{ getNumberClaimEachEmployeeForApprover(object,app.user.loginWithPosition) }}
+    {% endif %}
 {% endblock %}

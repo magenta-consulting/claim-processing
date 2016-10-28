@@ -110,6 +110,17 @@ class Claim
     private $approver;
 
     /**
+     * @var Position
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     */
+    private $approverEmployee;
+    /**
+     * @var Position
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     */
+    private $approverBackupEmployee;
+
+    /**
      * @var TaxRate
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TaxRate")
      */
@@ -175,6 +186,40 @@ class Claim
     {
         return $this->id;
     }
+
+    /**
+     * @return Position
+     */
+    public function getApproverEmployee()
+    {
+        return $this->approverEmployee;
+    }
+
+    /**
+     * @param Position $approverEmployee
+     */
+    public function setApproverEmployee($approverEmployee)
+    {
+        $this->approverEmployee = $approverEmployee;
+    }
+
+    /**
+     * @return Position
+     */
+    public function getApproverBackupEmployee()
+    {
+        return $this->approverBackupEmployee;
+    }
+
+    /**
+     * @param Position $approverBackupEmployee
+     */
+    public function setApproverBackupEmployee($approverBackupEmployee)
+    {
+        $this->approverBackupEmployee = $approverBackupEmployee;
+    }
+
+
 
     /**
      * @return \DateTime
