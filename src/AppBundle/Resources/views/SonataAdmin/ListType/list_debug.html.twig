@@ -13,60 +13,29 @@ file that was distributed with this source code.
 
 {% block field %}
     <div class="row" style="border-bottom: 1px solid #f4f4f4; margin-bottom: 10px;padding-bottom: 10px;">
-        ###RULE ###<br>
+        ###LIMIT AMOUNT ###<br>
         {{ getLimitAmount(object) }}
         <br>###APPROVER###<br>
-        <div class="col-md-2">
-            1
-        </div>
+
         <div class="col-md-10">
-            {% if object.approver and object.approver.approver1 %}
-                Name: {{ object.approver.approver1.firstName }}<br>
-                Employee No: {{ object.approver.approver1.employeeNo }}<br>
-                COmpany: {{ object.approver.approver1.company.name }}<br>
+            {% if object.approver%}
+               <strong>Email: {{ object.approverEmployee.email }}</strong> <br>
+                <strong>Pass: p@ssword </strong> <br>
+                Employee No: {{ object.approverEmployee.employeeNo }}<br>
+                COmpany: {{ object.approverEmployee.company.name }}<br>
             {% else %}
                 None
             {% endif %}
         </div>
 
-    </div>
-    <div class="row" style="border-bottom: 1px solid #f4f4f4; margin-bottom: 10px;padding-bottom: 10px;">
-        <div class="col-md-2">
-            2
-        </div>
-        <div class="col-md-10">
-            {% if object.approver and  object.approver.approver2 %}
-                Name: {{ object.approver.approver2.firstName }}<br>
-                Employee No: {{ object.approver.approver2.employeeNo }}<br>
-                COmpany: {{ object.approver.approver2.company.name }}<br>
-            {% else %}
-                None
-            {% endif %}
-        </div>
-    </div>
-    <div class="row" style="margin-bottom: 10px;padding-bottom: 10px;">
-        <div class="col-md-2">
-            3
-        </div>
-        <div class="col-md-10">
-            {% if object.approver and  object.approver.approver3 %}
-                Name: {{ object.approver.approver3.firstName }}<br>
-                Employee No: {{ object.approver.approver3.employeeNo }}<br>
-                COmpany: {{ object.approver.approver3.company.name }}<br>
-            {% else %}
-                None
-            {% endif %}
-        </div>
     </div>
     ###CHECKER ###<br>
     <div class="row" style=" margin-bottom: 10px;padding-bottom: 10px;">
 
-        <div class="col-md-2">
-            1
-        </div>
         <div class="col-md-10">
             {% if object.checker and object.checker.checker %}
-                Name: {{ object.checker.checker.firstName }}<br>
+                <strong>Email: {{ object.checker.checker.email }}</strong><br>
+                <strong>Pass: p@ssword </strong><br>
                 Employee No: {{ object.checker.checker.employeeNo }}<br>
                 COmpany: {{ object.checker.checker.company.name }}<br>
             {% else %}
