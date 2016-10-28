@@ -222,8 +222,8 @@ class BaseAdmin extends AbstractAdmin
                         );
                         $query->andWhere(
                             $expr->orX(
-                                $expr->eq('claim.approverEmployee', ':approverEmployee'),
-                                $expr->eq('claim.approverBackupEmployee', ':approverEmployee')
+                                $expr->eq($query->getRootAliases()[0] .'.approverEmployee', ':approverEmployee'),
+                                $expr->eq($query->getRootAliases()[0] .'.approverBackupEmployee', ':approverEmployee')
                             )
                         );
                         $query->andWhere($expr->orX(
