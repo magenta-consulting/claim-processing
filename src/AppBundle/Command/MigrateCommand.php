@@ -29,13 +29,9 @@ class MigrateCommand extends ContainerAwareCommand
     {
         $em = $this->getContainer()->get('doctrine')->getManager();
 
-        $positions = $em->getRepository('AppBundle:Position')->findAll();
-        foreach ($positions as $position) {
-//            $phone = new PhoneNumber();
-//            $phone->setCountryCode(65);
-//            $phone->setNationalNumber(13232323);
-//            $position->setContactNumber($phone);
-//            $em->persist($position);
+        $claims = $em->getRepository('AppBundle\Entity\Claim')->findAll();
+        foreach ($claims as $claim) {
+            $em->remove($claim);
         }
         $em->flush();
         $output->writeln('Update successfully.');
