@@ -202,6 +202,7 @@ class BaseAdmin extends AbstractAdmin
                                 $expr->eq('checker.backupChecker', ':checker')
                             )
                         );
+
                         $query->andWhere($expr->orX(
                             $expr->eq($query->getRootAliases()[0] .'.status',':statusPending'),
                             $expr->eq($query->getRootAliases()[0] .'.status',':statusCheckerRejected'),
@@ -216,14 +217,13 @@ class BaseAdmin extends AbstractAdmin
                     case 'approving-each-position':
                         $positionId = $request->get('position-id');
                         $query->join($query->getRootAliases()[0] . '.position', 'position');
-                        $query->join($query->getRootAliases()[0] . '.checker', 'checker');
                         $query->andWhere(
                             $expr->eq('position.id', ':positionId')
                         );
                         $query->andWhere(
                             $expr->orX(
-                                $expr->eq('checker.checker', ':checker'),
-                                $expr->eq('checker.backupChecker', ':checker')
+                                $expr->eq('claim.approverEmployee', ':approverEmployee'),
+                                $expr->eq('claim.approverBackupEmployee', ':approverEmployee')
                             )
                         );
                         $query->andWhere($expr->orX(
@@ -235,7 +235,7 @@ class BaseAdmin extends AbstractAdmin
                         $query->setParameter('statusApproverRejected', Claim::STATUS_APPROVER_REJECTED);
                         $query->setParameter('statusApproverApproved', Claim::STATUS_APPROVER_APPROVED);
                         $query->setParameter('positionId', $positionId);
-                        $query->setParameter('checker', $this->getPosition());
+                        $query->setParameter('approverEmployee', $this->getPosition());
                         break;
                     default:
                         $query->andWhere(
