@@ -81,9 +81,12 @@ class BaseAdmin extends AbstractAdmin
     {
         $collection->remove('export');
     }
-    public function manualUpdate($object){
+
+    public function manualUpdate($object)
+    {
 
     }
+
     /*
     * add company when add new(not effect when update)
     */
@@ -114,6 +117,7 @@ class BaseAdmin extends AbstractAdmin
         }
 
     }
+
     public function preUpdate($object)
     {
         $this->manualUpdate($object);
@@ -195,7 +199,10 @@ class BaseAdmin extends AbstractAdmin
                             $expr->eq('position.id', ':positionId')
                         );
                         $query->andWhere(
-                            $expr->eq('checker.checker', ':checker')
+                            $expr->orX(
+                                $expr->eq('checker.checker', ':checker'),
+                                $expr->eq('checker.backupChecker', ':checker')
+                            )
                         );
                         $query->andWhere(
                             $expr->neq($query->getRootAliases()[0] . '.status', ':status')
@@ -237,7 +244,10 @@ class BaseAdmin extends AbstractAdmin
                             $expr->eq($query->getRootAliases()[0] . '.company', ':company')
                         );
                         $query->andWhere(
-                            $expr->eq('checker.checker', ':checker')
+                            $expr->orX(
+                                $expr->eq('checker.checker', ':checker'),
+                                $expr->eq('checker.backupChecker', ':checker')
+                            )
                         );
                         $query->setParameter('checker', $position);
                         $query->setParameter('company', $company);
@@ -444,8 +454,6 @@ class BaseAdmin extends AbstractAdmin
             ->setParameter('company', $this->getCompany());
         return $qb;
     }
-
-
 
 
 }

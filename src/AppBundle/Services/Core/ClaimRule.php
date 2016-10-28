@@ -84,13 +84,14 @@ class ClaimRule
 
     public function getListClaimPeriodForFilter()
     {
+        $expr = new Expr();
         $position = $this->getPosition();
         $em = $this->container->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder('claim');
         $qb->select('claim');
         $qb->from('AppBundle:Claim', 'claim');
         $qb->join('claim.checker', 'checker');
-        $qb->where('checker.checker = :position');
+        $qb->where($expr->orX('checker.checker = :position','checker.backupChecker = :position'));
         $qb->orderBy('claim.createdAt', 'DESC');
         $qb->setParameter('position', $position);
         $claims = $qb->getQuery()->getResult();
@@ -142,13 +143,14 @@ class ClaimRule
 
     public function getNumberClaim($position, $positionChecker)
     {
+        $expr = new Expr();
         $em = $this->container->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder('claim');
         $qb->select($qb->expr()->count('claim.id'));
         $qb->from('AppBundle:Claim', 'claim');
         $qb->join('claim.checker', 'checker');
         $qb->where('claim.position = :position');
-        $qb->andWhere('checker.checker = :positionChecker');
+        $qb->andWhere($expr->orX('checker.checker = :positionChecker','checker.backupChecker = :positionChecker'));
         $qb->andWhere('claim.status <> :status');
         $qb->setParameter('status', Claim::STATUS_DRAFT);
         $qb->setParameter('position', $position);
@@ -159,12 +161,14 @@ class ClaimRule
 
     public function isShowMenuForChecker($position)
     {
+        $expr = new Expr();
         $em = $this->container->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder('claim');
         $qb->select($qb->expr()->count('claim.id'));
         $qb->from('AppBundle:Claim', 'claim');
         $qb->join('claim.checker', 'checker');
         $qb->where('checker.checker = :position');
+        $qb->where($expr->orX('checker.checker = :position','checker.backupChecker = :position'));
         $qb->andWhere('claim.status <> :status');
         $qb->setParameter('status', Claim::STATUS_DRAFT);
         $qb->setParameter('position', $position);

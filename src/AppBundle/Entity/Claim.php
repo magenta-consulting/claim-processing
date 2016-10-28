@@ -150,6 +150,17 @@ class Claim
      */
     private $checkerRemark;
 
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="checker_updated_at",type="datetime",nullable=true)
+     */
+    private $checkerUpdatedAt;
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="approver_updated_at",type="datetime",nullable=true)
+     */
+    private $approverUpdatedAt;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
@@ -163,6 +174,38 @@ class Claim
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCheckerUpdatedAt()
+    {
+        return $this->checkerUpdatedAt;
+    }
+
+    /**
+     * @param \DateTime $checkerUpdatedAt
+     */
+    public function setCheckerUpdatedAt($checkerUpdatedAt)
+    {
+        $this->checkerUpdatedAt = $checkerUpdatedAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getApproverUpdatedAt()
+    {
+        return $this->approverUpdatedAt;
+    }
+
+    /**
+     * @param \DateTime $approverUpdatedAt
+     */
+    public function setApproverUpdatedAt($approverUpdatedAt)
+    {
+        $this->approverUpdatedAt = $approverUpdatedAt;
     }
 
 

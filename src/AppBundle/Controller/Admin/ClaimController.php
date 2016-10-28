@@ -14,13 +14,15 @@ class ClaimController extends Controller
 {
 
 
-
-    public function firstPageCreateClaimAction(){
+    public function firstPageCreateClaimAction()
+    {
         return $this->render("@App/SonataAdmin/Claim/first_page_create_claim.html.twig");
     }
-    public function uploadImageAction(){
+
+    public function uploadImageAction()
+    {
         $request = $this->getRequest();
-        if($request->isXmlHttpRequest()){
+        if ($request->isXmlHttpRequest()) {
             $em = $this->getDoctrine()->getManager();
             $mediaManager = $this->get('sonata.media.manager.media');
             $media = new Media();
@@ -37,28 +39,31 @@ class ClaimController extends Controller
             $em->flush();
 
             return new JsonResponse([
-                'status'=>true,
-                'urlImage'=>$this->get('app.media.retriever')->getPublicURL($media,'default','default_small'),
-                'urlDelete'=>$this->generateUrl('admin_app_claim_deleteImage',['id'=>$claim->getId(),'mediaId'=>$media->getId()])
+                'status' => true,
+                'urlImage' => $this->get('app.media.retriever')->getPublicURL($media, 'default', 'default_small'),
+                'urlDelete' => $this->generateUrl('admin_app_claim_deleteImage', ['id' => $claim->getId(), 'mediaId' => $media->getId()])
             ]);
         }
     }
-    public function deleteImageAction(){
+
+    public function deleteImageAction()
+    {
         $request = $this->getRequest();
-        if($request->isXmlHttpRequest()){
+        if ($request->isXmlHttpRequest()) {
             $mediaManager = $this->get('sonata.media.manager.media');
             $em = $this->getDoctrine()->getManager();
             $claim = $this->admin->getSubject();
             $media = $mediaManager->find($request->get('mediaId'));
 
-            $claimMedia = $em->getRepository('AppBundle:ClaimMedia')->findOneBy(['claim'=>$claim,'media'=>$media]);
+            $claimMedia = $em->getRepository('AppBundle:ClaimMedia')->findOneBy(['claim' => $claim, 'media' => $media]);
             $em->remove($claimMedia);
             $em->flush();
             return new JsonResponse([
-                'status'=>true,
+                'status' => true,
             ]);
         }
     }
+
     public function checkerApproveAction()
     {
         $object = $this->admin->getSubject();
@@ -102,20 +107,24 @@ class ClaimController extends Controller
         $this->admin->setSubject($object);
 
         if ($request->isMethod('post')) {
-            if($request->get('btn_approve') == 1 ){
+            if ($request->get('btn_approve') == 1) {
+
                 $urlRedirect = $this->admin->generateUrl('list', ['type' => 'checking-each-position', 'position-id' => $object->getPosition()->getId()]);
-                $status = Claim::STATUS_CHECKER_APPROVED;
-            }else if($request->get('btn_reject') == 1){
+                $object->setCheckerUpdatedAt(new \DateTime());
+                $object->setCheckerRemark($request->get('checker-remark'));
+                $object->setStatus(Claim::STATUS_CHECKER_APPROVED);
+            } else if ($request->get('btn_reject') == 1) {
                 $urlRedirect = $this->admin->generateUrl('list', ['type' => 'checking-each-position', 'position-id' => $object->getPosition()->getId()]);
-                $status = Claim::STATUS_APPROVER_REJECTED;
-            }else{
+                $object->setCheckerUpdatedAt(new \DateTime());
+                $object->setCheckerRemark($request->get('checker-remark'));
+                $object->setStatus(Claim::STATUS_CHECKER_REJECTED);
+            } else {
                 $urlRedirect = $this->admin->generateUrl('list');
                 $status = Claim::STATUS_PENDING;
+                $object->setStatus(Claim::STATUS_PENDING);
+                $object->setSubmissionRemarks($request->get('employee-remark'));
             }
-            $object->setStatus($status);
-            $object->setCheckerRemark($request->get('remark'));
-            $object->setCheckerRemark($request->get('checker-remark'));
-            $object->setSubmissionRemarks($request->get('employee-remark'));
+
             $this->admin->update($object);
 
             return new RedirectResponse($urlRedirect);
@@ -127,6 +136,7 @@ class ClaimController extends Controller
             'elements' => $this->admin->getShow(),
         ), null);
     }
+
     /**
      * Edit action.
      *
@@ -202,7 +212,7 @@ class ClaimController extends Controller
                 } catch (LockException $e) {
                     $this->addFlash('sonata_flash_error', $this->trans('flash_lock_error', array(
                         '%name%' => $this->escapeHtml($this->admin->toString($object)),
-                        '%link_start%' => '<a href="'.$this->admin->generateObjectUrl('edit', $object).'">',
+                        '%link_start%' => '<a href="' . $this->admin->generateObjectUrl('edit', $object) . '">',
                         '%link_end%' => '</a>',
                     ), 'SonataAdminBundle'));
                 }
@@ -238,7 +248,6 @@ class ClaimController extends Controller
             'object' => $object,
         ), null);
     }
-
 
 
     /**
@@ -374,7 +383,7 @@ class ClaimController extends Controller
             $url = $this->admin->generateObjectUrl('edit', $object);
         }
         if (null !== $request->get('btn_edit_and_show')) {
-            $url = $this->admin->generateObjectUrl('show', $object,['type'=>'employee-preview-claim']);
+            $url = $this->admin->generateObjectUrl('show', $object, ['type' => 'employee-preview-claim']);
         }
         if (null !== $request->get('btn_update_and_list')) {
             $url = $this->admin->generateUrl('list');
