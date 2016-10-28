@@ -14,7 +14,8 @@ file that was distributed with this source code.
 {% import 'SonataAdminBundle:CRUD:base_show_macro.html.twig' as show_helper %}
 
 {%- block actions -%}
-    <li><a class="sonata-action-element" href="{{ path('admin_app_claim_list',{'type':'checking-each-position','position-id':object.position.id}) }}"><i
+    <li><a class="sonata-action-element"
+           href="{{ path('admin_app_claim_list',{'type':'checking-each-position','position-id':object.position.id}) }}"><i
                     class="fa fa-list" aria-hidden="true"></i>
             Return to list</a></li>
 {%- endblock -%}
@@ -31,14 +32,14 @@ file that was distributed with this source code.
         {% if has_tab %}
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs" role="tablist">
-                        {% for name, show_tab in admin.showtabs %}
-                            <li{% if loop.first %} class="active"{% endif %}>
-                                <a href="#tab_{{ admin.uniqid }}_{{ loop.index }}" data-toggle="tab">
-                                    <i class="fa fa-exclamation-circle has-errors hide" aria-hidden="true"></i>
-                                    {{ name|trans({}, show_tab.translation_domain ?: admin.translationDomain) }}
-                                </a>
-                            </li>
-                        {% endfor %}
+                    {% for name, show_tab in admin.showtabs %}
+                        <li{% if loop.first %} class="active"{% endif %}>
+                            <a href="#tab_{{ admin.uniqid }}_{{ loop.index }}" data-toggle="tab">
+                                <i class="fa fa-exclamation-circle has-errors hide" aria-hidden="true"></i>
+                                {{ name|trans({}, show_tab.translation_domain ?: admin.translationDomain) }}
+                            </a>
+                        </li>
+                    {% endfor %}
                 </ul>
 
                 <div class="tab-content">
@@ -67,15 +68,31 @@ file that was distributed with this source code.
     </div>
     {% if app.request.get('type') == 'checker-view-claim' %}
         <div class="sonata-ba-view">
-            <form method="post" action="{{ path('admin_app_claim_show',{'id':admin.id(object)}) }}">
-                <div class="sonata-ba-field sonata-ba-field-standard-natural" style="margin-bottom: 10px;">
-                    <textarea required placeholder="Checker Remarks" name="checker-remark" class=" form-control">{{ object.checkerRemark }}</textarea>
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h4 class="box-title">
+                        Checker Remarks
+                    </h4>
                 </div>
-                <div class="sonata-ba-form-actions well well-small form-actions">
-                    <button type="submit" class="btn btn-success" name="btn_approve" value="1"> Approve</button>
-                    <button type="submit" class="btn btn-danger" name="btn_reject" value="1"> Reject</button>
+                <div class="box-body">
+                    {% if isShowApproveRejectCheckerButtonForClaim(object) %}
+                        <form method="post" action="{{ path('admin_app_claim_show',{'id':admin.id(object)}) }}">
+                            <div class="sonata-ba-field sonata-ba-field-standard-natural" style="margin-bottom: 10px;">
+                                <textarea required="required" placeholder="Checker Remarks" name="checker-remark"
+                                          class=" form-control">{{ object.checkerRemark }}</textarea>
+                            </div>
+                            <div class="sonata-ba-form-actions well well-small form-actions">
+                                <button type="submit" class="btn btn-success" name="btn_approve" value="1"> Approve
+                                </button>
+                                <button type="submit" class="btn btn-danger" name="btn_reject" value="1"> Reject
+                                </button>
+                            </div>
+                        </form>
+                    {% else %}
+                        {{ object.checkerRemark }}
+                    {% endif %}
                 </div>
-            </form>
+            </div>
         </div>
     {% endif %}
 

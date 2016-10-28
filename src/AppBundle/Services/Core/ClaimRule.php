@@ -149,6 +149,8 @@ class ClaimRule
         $qb->join('claim.checker', 'checker');
         $qb->where('claim.position = :position');
         $qb->andWhere('checker.checker = :positionChecker');
+        $qb->andWhere('claim.status <> :status');
+        $qb->setParameter('status', Claim::STATUS_DRAFT);
         $qb->setParameter('position', $position);
         $qb->setParameter('positionChecker', $positionChecker);
 
@@ -163,6 +165,8 @@ class ClaimRule
         $qb->from('AppBundle:Claim', 'claim');
         $qb->join('claim.checker', 'checker');
         $qb->where('checker.checker = :position');
+        $qb->andWhere('claim.status <> :status');
+        $qb->setParameter('status', Claim::STATUS_DRAFT);
         $qb->setParameter('position', $position);
 
         return $qb->getQuery()->getSingleScalarResult();

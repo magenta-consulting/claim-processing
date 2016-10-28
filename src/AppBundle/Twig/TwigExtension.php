@@ -3,9 +3,7 @@
 namespace AppBundle\Twig;
 
 
-use AppBundle\Entity\Booking\Booking;
-use AppBundle\Entity\Space\Location;
-use AppBundle\Entity\Space\Space;
+use AppBundle\Entity\Claim;
 use Application\Sonata\MediaBundle\Entity\Media;
 
 class TwigExtension extends \Twig_Extension
@@ -58,6 +56,30 @@ class TwigExtension extends \Twig_Extension
         return $this->container->get('app.claim_rule')->getLimitAmount($claim);
     }
 
+
+    public function isShowEditDeleteButtonForClaim(Claim $claim)
+    {
+        $listStatusAllow = [
+            Claim::STATUS_DRAFT,
+            Claim::STATUS_CHECKER_REJECTED,
+            Claim::STATUS_APPROVER_REJECTED
+        ];
+        if(in_array($claim->getStatus(),$listStatusAllow)){
+            return true;
+        }
+        return false;
+    }
+    public function isShowApproveRejectCheckerButtonForClaim(Claim $claim)
+    {
+        $listStatusAllow = [
+            Claim::STATUS_PENDING,
+        ];
+        if(in_array($claim->getStatus(),$listStatusAllow)){
+            return true;
+        }
+        return false;
+    }
+
     public function getFunctions()
     {
         return array(
@@ -69,6 +91,8 @@ class TwigExtension extends \Twig_Extension
             'getCurrentClaimPeriod' => new \Twig_Function_Method($this, 'getCurrentClaimPeriod', array('is_safe' => array('html'))),
             'isExceedLimitRule' => new \Twig_Function_Method($this, 'isExceedLimitRule', array('is_safe' => array('html'))),
             'getLimitAmount' => new \Twig_Function_Method($this, 'getLimitAmount', array('is_safe' => array('html'))),
+            'isShowEditDeleteButtonForClaim' => new \Twig_Function_Method($this, 'isShowEditDeleteButtonForClaim', array('is_safe' => array('html'))),
+            'isShowApproveRejectCheckerButtonForClaim' => new \Twig_Function_Method($this, 'isShowApproveRejectCheckerButtonForClaim', array('is_safe' => array('html'))),
         );
     }
 

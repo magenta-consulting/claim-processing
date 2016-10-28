@@ -1,3 +1,4 @@
-{% if object.status == constant('AppBundle\\Entity\\Claim::STATUS_DRAFT') %}
-<a class="btn btn-sm btn-default" href="{{ path('admin_app_claim_edit', {'id':object.id}) }}"><i class="fa fa-pencil" aria-hidden="true"></i> Complete Your Claim</a>
+{% if isShowEditDeleteButtonForClaim(object) %}
+    <a class="btn btn-sm btn-default" href="{{ path('admin_app_claim_edit', {'id':object.id}) }}"><i
+                class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
 {% endif %}

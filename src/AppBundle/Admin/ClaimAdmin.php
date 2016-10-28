@@ -213,11 +213,14 @@ class ClaimAdmin extends BaseAdmin
                 $listMapper
                     ->add('claimType.code', null, ['label' => 'Claim Type'])
                     ->add('claimCategory.code', null, ['label' => 'Claim Category'])
+                    ->add('status', null, ['label' => 'Status'])
                     ->add('claimAmount', null, ['label' => 'Amount'])
                     ->add('a', 'debug', ['label' => 'DEBUG'])
                     ->add('_action', null, array(
                         'actions' => array(
-                            'delete' => array(),
+                            'delete' => array(
+                                'template' => 'AppBundle:SonataAdmin/CustomActions:_list-action-employee-delete-claim.html.twig'
+                            ),
                             'show' => array(),
                             'edit' => array(
                                 'template' => 'AppBundle:SonataAdmin/CustomActions:_list-action-employee-edit-claim.html.twig'
@@ -255,13 +258,21 @@ class ClaimAdmin extends BaseAdmin
             case 'checker-view-claim':
                 $show->tab('Claim Details')
                     ->with('Claim Details', array('class' => 'col-md-6'))
-                    ->add('claimAmount', null, ['label' => 'Amount'])
-                    ->add('currencyExchange.code', null, ['label' => 'Currency'])
+                    ->add('description', 'text', ['label' => 'Description'])
                     ->add('claimType.code', 'text', ['label' => 'Claim Type'])
                     ->add('claimCategory.code', 'text', ['label' => 'Claim Category'])
+                    ->add('3', 'show_claim_limit', ['label' => 'Claim Limit'])
+                    ->add('claimAmount', null, ['label' => 'Amount'])
+                    ->add('currencyExchange.code', null, ['label' => 'Currency'])
+                    ->add('1', null, ['label' => 'Ex Rate'])
+                    ->add('2', null, ['label' => 'Conversion Value'])
+                    ->add('taxRate.code', null, ['label' => 'Tax Code'])
+                    ->add('taxAmount', null, ['label' => 'Tax Amount'])
                     ->add('status', 'text', ['label' => 'Status'])
                     ->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y'])
-                    ->add('submissionRemarks', null, ['label' => 'Claimant Submission Remarks'])
+                    ->end()
+                    ->with('Claimant Submission Remarks', array('class' => 'col-md-6'))
+                    ->add('submissionRemarks', 'show_claim_submission_remarks')
                     ->end()
                     ->with('Claim Images', array('class' => 'col-md-6'))
                     ->add('claimMedias', 'show_image', ['label' => 'Claim Images'])
@@ -269,7 +280,7 @@ class ClaimAdmin extends BaseAdmin
                     ->end()
                     ->tab('Submission, Employment Details')
                     ->with('Submission Details', array('class' => 'col-md-6'))
-//                    ->add('position.firstName',null,['label'=>'Submitted By'])
+                    ->add('4',null,['label'=>'Submitted By'])
                     ->add('createdAt', null, ['label' => 'Date Submitted', 'format' => 'd M Y'])
                     ->add('position.firstName', null, ['label' => 'Claimant First Name'])
                     ->add('position.lastName', null, ['label' => 'Claimant Last Name'])
@@ -277,13 +288,10 @@ class ClaimAdmin extends BaseAdmin
                     ->add('position.contactNumber', null, ['label' => 'Contact No.'])
                     ->end()
                     ->with('Employment Details', array('class' => 'col-md-6'))
-                    ->add('position.company.name', null, ['label' => 'Company'])
-                    ->add('position.costCentre.code', null, ['label' => 'Cost Centre'])
-                    ->add('position.region.code', null, ['label' => 'Region'])
-                    ->add('position.branch.code', null, ['label' => 'Branch'])
-                    ->add('position.department.code', null, ['label' => 'Department'])
-                    ->add('position.section.code', null, ['label' => 'Section'])
-                    ->add('position.employeeType.code', null, ['label' => 'Employee Type'])
+                    ->add('employeeGroup.company.name', null, ['label' => 'Company'])
+                    ->add('employeeGroup.costCentre.code', null, ['label' => 'Cost Centre'])
+                    ->add('employeeGroup.department.code', null, ['label' => 'Department'])
+                    ->add('employeeGroup.employeeType.code', null, ['label' => 'Employee Type'])
                     ->add('position.employmentType.code', null, ['label' => 'Employment Type'])
                     ->end()
                     ->end();
@@ -297,12 +305,15 @@ class ClaimAdmin extends BaseAdmin
                     ->add('description', 'text', ['label' => 'Description'])
                     ->add('claimType.code', 'text', ['label' => 'Claim Type'])
                     ->add('claimCategory.code', 'text', ['label' => 'Claim Category'])
-                    ->add('claimAmount', null, ['label' => 'Receipt Amount'])
-                    ->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y'])
+                    ->add('3', 'show_claim_limit', ['label' => 'Claim Limit'])
+                    ->add('claimAmount', null, ['label' => 'Amount'])
                     ->add('currencyExchange.code', null, ['label' => 'Currency'])
-                    ->add('1', null, ['label' => 'Conversion Value'])
+                    ->add('1', null, ['label' => 'Ex Rate'])
+                    ->add('2', null, ['label' => 'Conversion Value'])
                     ->add('taxRate.code', null, ['label' => 'Tax Code'])
                     ->add('taxAmount', null, ['label' => 'Tax Amount'])
+                    ->add('status', 'text', ['label' => 'Status'])
+                    ->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y'])
                     ->end();
                 break;
             default:
@@ -311,14 +322,16 @@ class ClaimAdmin extends BaseAdmin
                     ->add('claimMedias', 'show_image', ['label' => 'Claim Images'])
                     ->end()
                     ->with('Claim Details', array('class' => 'col-md-6'))
+                    ->add('description', 'text', ['label' => 'Description'])
                     ->add('claimType.code', 'text', ['label' => 'Claim Type'])
                     ->add('claimCategory.code', 'text', ['label' => 'Claim Category'])
+                    ->add('3', 'show_claim_limit', ['label' => 'Claim Limit'])
                     ->add('claimAmount', null, ['label' => 'Amount'])
-                    ->add('taxRate.code', null, ['label' => 'Tax Code'])
-                    ->add('taxAmount', null, ['label' => 'Tax Amount'])
                     ->add('currencyExchange.code', null, ['label' => 'Currency'])
                     ->add('1', null, ['label' => 'Ex Rate'])
-                    ->add('2', 'show_claim_limit', ['label' => 'Claim Limit'])
+                    ->add('2', null, ['label' => 'Conversion Value'])
+                    ->add('taxRate.code', null, ['label' => 'Tax Code'])
+                    ->add('taxAmount', null, ['label' => 'Tax Amount'])
                     ->add('status', 'text', ['label' => 'Status'])
                     ->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y'])
                     ->end()
