@@ -42,7 +42,13 @@ class PositionAdmin extends BaseAdmin
             $user = $this->getUserManager()->createUser();
             $user->setUsername($email);
             $user->setEmail($email);
-            $user->setPlainPassword($plainPassword);
+            if($plainPassword) {
+                //just only create a position have email not belong system
+                $user->setPlainPassword($plainPassword);
+            }else{
+                //when update email of position
+                $user->setPassword($this->getUser()->getPassword());
+            }
             $user->setEnabled(true);
             $this->getUserManager()->updateUser($user);
         } else {
@@ -54,10 +60,32 @@ class PositionAdmin extends BaseAdmin
         return $user;
     }
 
+    public function updateEmployeeGroupDescription(Position $position){
+        if ($position->getCompany()) {
+            $employeeGroupDescription[] = $position->getCompany()->getName();
+        }
+        if ($position->getCostCentre()) {
+            $employeeGroupDescription[] = $position->getCompany()->getName().'>'.$position->getCostCentre()->getCode();
+        }
+        if ($position->getDepartment()) {
+            $employeeGroupDescription[] = $position->getCompany()->getName().'>'.$position->getCostCentre()->getCode().'>'.$position->getDepartment()->getCode();
+        }
+        if ($position->getEmployeeType()) {
+            $employeeGroupDescription[] = $position->getEmployeeType()->getCode();
+        }
+        if (count($employeeGroupDescription)) {
+            $employeeGroupDescription = implode('>', $employeeGroupDescription);
+        } else {
+            $employeeGroupDescription = '';
+        }
+        $position->setEmployeeGroupDescription($employeeGroupDescription);
+    }
+
     public function manualUpdate($position)
     {
         $user = $this->updateUser();
         $position->setUser($user);
+        $this->updateEmployeeGroupDescription($position);
         //proxy position(bug sonata admin)
         foreach ($position->getSubmissionBy() as $submissionBy) {
             $position->addSubmissionBy($submissionBy);
@@ -102,7 +130,14 @@ class PositionAdmin extends BaseAdmin
         /**-------------------**/
         if ($this->isCLient() || $this->isHr()) {
             $formMapper->tab('Employment Details')
-                ->with('Employment Details', array('class' => 'col-md-12'))
+                ->with('Group A', array('class' => 'col-md-6'))
+                ->add('employeeType', 'sonata_type_model', array(
+                    'property' => 'code',
+                    'query' => $this->filterEmployeeTypeBycompany(),
+                    'placeholder' => 'Select Employee Type',
+                    'empty_data' => null,
+                    'btn_add' => false,
+                ))
                 ->add('employmentType', 'sonata_type_model', array(
                     'property' => 'code',
                     'query' => $this->filterEmploymentTypeBycompany(),
@@ -113,9 +148,46 @@ class PositionAdmin extends BaseAdmin
                 ->add('dateJoined', 'date', ['attr' => ['class' => 'datepicker'], 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'required' => false])
                 ->add('probation', 'number', ['label' => 'Probation (Month)', 'required' => false])
                 ->add('lastDateOfService', 'date', ['attr' => ['class' => 'datepicker'], 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'required' => false])
-                ->add('employeeGroup', 'sonata_type_model_list', array(
-                    'required' => true,
+                ->end()
+                ->with('Group B', array('class' => 'col-md-6'))
+                ->add('costCentre', 'sonata_type_model', array(
+                    'property' => 'code',
+                    'query' => $this->filterCostCentreBycompany(),
+                    'placeholder' => 'Select Cost Centre',
+                    'empty_data' => null,
                     'btn_add' => false,
+                ))
+                ->add('region', 'sonata_type_model', array(
+                    'property' => 'code',
+                    'query' => $this->filterRegionBycompany(),
+                    'placeholder' => 'Select Region',
+                    'empty_data' => null,
+                    'required' => false,
+                    'btn_add' => false
+                ))
+                ->add('branch', 'sonata_type_model', array(
+                    'property' => 'code',
+                    'query' => $this->filterBranchBycompany(),
+                    'placeholder' => 'Select Branch',
+                    'empty_data' => null,
+                    'required' => false,
+                    'btn_add' => false
+                ))
+                ->add('department', 'sonata_type_model', array(
+                    'property' => 'code',
+                    'query' => $this->filterDepartmentBycompany(),
+                    'placeholder' => 'Select Department',
+                    'empty_data' => null,
+                    'required' => false,
+                    'btn_add' => false
+                ))
+                ->add('section', 'sonata_type_model', array(
+                    'property' => 'code',
+                    'query' => $this->filterSectionBycompany(),
+                    'placeholder' => 'Select Section',
+                    'empty_data' => null,
+                    'required' => false,
+                    'btn_add' => false
                 ))
                 ->end()
                 ->end();
@@ -134,8 +206,8 @@ class PositionAdmin extends BaseAdmin
             ->end();
 
         if ($this->isCLient() || $this->isHr()) {
-            $formMapper->tab('Claims Approver Details')
-                ->with('Claims Approver Details')
+            $formMapper->tab('Claims Approver / Checker details')
+                ->with('Claims Approver / Checker details')
                 ->end()
                 ->end();
         }

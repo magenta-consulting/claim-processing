@@ -149,11 +149,45 @@ class Position
     private $claims;
 
     /**
-     * @var EmployeeGroup
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\EmployeeGroup")
+     * @var EmployeeType
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\EmployeeType")
      */
-    private $employeeGroup;
+    private $employeeType;
+    /**
+     * @var CostCentre
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CostCentre")
+     */
+    private $costCentre;
 
+    /**
+     * @var Region
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Region")
+     */
+    private $region;
+
+    /**
+     * @var Branch
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Branch")
+     */
+    private $branch;
+
+    /**
+     * @var Department
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Department")
+     */
+    private $department;
+
+    /**
+     * @var Section
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Section")
+     */
+    private $section;
+
+    /**
+     * @var string
+     * @ORM\Column(name="employee_group_description",type="text")
+     */
+    private $employeeGroupDescription;
 
 
     /**
@@ -185,19 +219,19 @@ class Position
     }
 
     /**
-     * @return EmployeeGroup
+     * @return string
      */
-    public function getEmployeeGroup()
+    public function getEmployeeGroupDescription()
     {
-        return $this->employeeGroup;
+        return $this->employeeGroupDescription;
     }
 
     /**
-     * @param EmployeeGroup $employeeGroup
+     * @param string $employeeGroupDescription
      */
-    public function setEmployeeGroup($employeeGroup)
+    public function setEmployeeGroupDescription($employeeGroupDescription)
     {
-        $this->employeeGroup = $employeeGroup;
+        $this->employeeGroupDescription = $employeeGroupDescription;
     }
 
 
@@ -556,6 +590,104 @@ class Position
     {
         $this->email = $email;
     }
+
+    /**
+     * @return EmployeeType
+     */
+    public function getEmployeeType()
+    {
+        return $this->employeeType;
+    }
+
+    /**
+     * @param EmployeeType $employeeType
+     */
+    public function setEmployeeType($employeeType)
+    {
+        $this->employeeType = $employeeType;
+    }
+
+    /**
+     * @return CostCentre
+     */
+    public function getCostCentre()
+    {
+        return $this->costCentre;
+    }
+
+    /**
+     * @param CostCentre $costCentre
+     */
+    public function setCostCentre($costCentre)
+    {
+        $this->costCentre = $costCentre;
+    }
+
+    /**
+     * @return Region
+     */
+    public function getRegion()
+    {
+        return $this->region;
+    }
+
+    /**
+     * @param Region $region
+     */
+    public function setRegion($region)
+    {
+        $this->region = $region;
+    }
+
+    /**
+     * @return Branch
+     */
+    public function getBranch()
+    {
+        return $this->branch;
+    }
+
+    /**
+     * @param Branch $branch
+     */
+    public function setBranch($branch)
+    {
+        $this->branch = $branch;
+    }
+
+    /**
+     * @return Department
+     */
+    public function getDepartment()
+    {
+        return $this->department;
+    }
+
+    /**
+     * @param Department $department
+     */
+    public function setDepartment($department)
+    {
+        $this->department = $department;
+    }
+
+    /**
+     * @return Section
+     */
+    public function getSection()
+    {
+        return $this->section;
+    }
+
+    /**
+     * @param Section $section
+     */
+    public function setSection($section)
+    {
+        $this->section = $section;
+    }
+
+
 
 
 

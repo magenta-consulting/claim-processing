@@ -27,16 +27,18 @@ class ClaimAdmin extends BaseAdmin
     public function filterClaimTypeBycompanyForUser()
     {
         $em = $this->container->get('doctrine')->getManager();
+        $employeeGroupBelongUser = $this->getContainer()->get('app.claim_rule')->getEmployeeGroupBelongToUser();
         $qb = $em->createQueryBuilder();
         $expr = new Expr();
         $qb->select('claimType')
             ->from('AppBundle\Entity\ClaimType', 'claimType')
             ->join('claimType.limitRules', 'limitRule')
             ->join('limitRule.limitRuleEmployeeGroups', 'limitRuleEmployeeGroup')
+            ->join('limitRuleEmployeeGroup.employeeGroup', 'employeeGroup')
             ->where($expr->eq('claimType.company', ':company'))
             ->andWhere($expr->eq('claimType.enabled', true))
-            ->andWhere($expr->eq('limitRuleEmployeeGroup.employeeGroup', ':employeeGroup'))
-            ->setParameter('employeeGroup', $this->getPosition()->getEmployeeGroup())
+            ->andWhere($expr->in('employeeGroup.description', ':employeeGroupBelongUser'))
+            ->setParameter('employeeGroupBelongUser', $employeeGroupBelongUser)
             ->setParameter('company', $this->getCompany());
         return $qb;
     }
@@ -44,16 +46,18 @@ class ClaimAdmin extends BaseAdmin
     public function filterClaimCategoryByClaimType($claimType)
     {
         $em = $this->container->get('doctrine')->getManager();
+        $employeeGroupBelongUser = $this->getContainer()->get('app.claim_rule')->getEmployeeGroupBelongToUser();
         $qb = $em->createQueryBuilder();
         $expr = new Expr();
         $rules = $em->createQueryBuilder()
             ->select('limitRule')
             ->from('AppBundle\Entity\LimitRule', 'limitRule')
             ->join('limitRule.limitRuleEmployeeGroups', 'limitRuleEmployeeGroup')
+            ->join('limitRuleEmployeeGroup.employeeGroup', 'employeeGroup')
             ->where($expr->eq('limitRule.claimType', ':claimType'))
-            ->andWhere($expr->eq('limitRuleEmployeeGroup.employeeGroup', ':employeeGroup'))
+            ->andWhere($expr->in('employeeGroup.description', ':employeeGroupBelongUser'))
+            ->setParameter('employeeGroupBelongUser', $employeeGroupBelongUser)
             ->setParameter('claimType', $claimType)
-            ->setParameter('employeeGroup', $this->getPosition()->getEmployeeGroup())
             ->getQuery()
             ->getResult();
         $listCategory = [];
@@ -280,7 +284,7 @@ class ClaimAdmin extends BaseAdmin
                     ->add('claimMedias', 'show_image', ['label' => 'Claim Images'])
                     ->end()
                     ->end()
-                    ->tab('Submission, Employment Details')
+                    ->tab('Submission / Employment Details')
                     ->with('Submission Details', array('class' => 'col-md-6'))
                     ->add('4', null, ['label' => 'Submitted By'])
                     ->add('createdAt', null, ['label' => 'Date Submitted', 'format' => 'd M Y'])
