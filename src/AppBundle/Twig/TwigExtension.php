@@ -30,6 +30,7 @@ class TwigExtension extends \Twig_Extension
     {
         return $this->container->get('app.claim_rule')->getNumberClaimEachEmployeeForChecker($position, $positionChecker);
     }
+
     public function getNumberClaimEachEmployeeForApprover($position, $positionApprover)
     {
         return $this->container->get('app.claim_rule')->getNumberClaimEachEmployeeForApprover($position, $positionApprover);
@@ -39,6 +40,7 @@ class TwigExtension extends \Twig_Extension
     {
         return $this->container->get('app.claim_rule')->isShowMenuForChecker($position);
     }
+
     public function isShowMenuForApprover($position)
     {
         return $this->container->get('app.claim_rule')->isShowMenuForApprover($position);
@@ -64,6 +66,16 @@ class TwigExtension extends \Twig_Extension
         return $this->container->get('app.claim_rule')->getLimitAmount($claim);
     }
 
+    public function getChecker($position)
+    {
+        return $this->container->get('app.claim_rule')->getChecker($position);
+    }
+
+    public function getApprover($position)
+    {
+        return $this->container->get('app.claim_rule')->getApprover($position);
+    }
+
 
     public function isShowEditDeleteButtonForClaim(Claim $claim)
     {
@@ -72,27 +84,29 @@ class TwigExtension extends \Twig_Extension
             Claim::STATUS_CHECKER_REJECTED,
             Claim::STATUS_APPROVER_REJECTED
         ];
-        if(in_array($claim->getStatus(),$listStatusAllow)){
+        if (in_array($claim->getStatus(), $listStatusAllow)) {
             return true;
         }
         return false;
     }
+
     public function isShowApproveRejectCheckerButtonForClaim(Claim $claim)
     {
         $listStatusAllow = [
             Claim::STATUS_PENDING,
         ];
-        if(in_array($claim->getStatus(),$listStatusAllow)){
+        if (in_array($claim->getStatus(), $listStatusAllow)) {
             return true;
         }
         return false;
     }
+
     public function isShowApproveRejectApproverButtonForClaim(Claim $claim)
     {
         $listStatusAllow = [
             Claim::STATUS_CHECKER_APPROVED,
         ];
-        if(in_array($claim->getStatus(),$listStatusAllow)){
+        if (in_array($claim->getStatus(), $listStatusAllow)) {
             return true;
         }
         return false;
@@ -114,6 +128,8 @@ class TwigExtension extends \Twig_Extension
             'isShowEditDeleteButtonForClaim' => new \Twig_Function_Method($this, 'isShowEditDeleteButtonForClaim', array('is_safe' => array('html'))),
             'isShowApproveRejectCheckerButtonForClaim' => new \Twig_Function_Method($this, 'isShowApproveRejectCheckerButtonForClaim', array('is_safe' => array('html'))),
             'isShowApproveRejectApproverButtonForClaim' => new \Twig_Function_Method($this, 'isShowApproveRejectApproverButtonForClaim', array('is_safe' => array('html'))),
+            'getChecker' => new \Twig_Function_Method($this, 'getChecker', array('is_safe' => array('html'))),
+            'getApprover' => new \Twig_Function_Method($this, 'getApprover', array('is_safe' => array('html'))),
         );
     }
 

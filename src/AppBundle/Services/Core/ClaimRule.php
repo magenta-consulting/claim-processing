@@ -46,9 +46,9 @@ class ClaimRule
         return $company;
     }
 
-    public function getEmployeeGroupBelongToUser()
+    public function getEmployeeGroupBelongToUser($position)
     {
-        $employeeGroupDescriptionStr = $this->getPosition()->getEmployeeGroupDescription();
+        $employeeGroupDescriptionStr = $position->getEmployeeGroupDescription();
         $employeeGroupDescriptionArr = explode('>', $employeeGroupDescriptionStr);
         $employeeGroupBelongUser = [];
         for ($i = 0; $i <= count($employeeGroupDescriptionArr) - 1; $i++) {
@@ -108,7 +108,7 @@ class ClaimRule
             return null;
         }
         //may be will have many limit amount, but the priority for more detail group
-        $employeeGroupBelongToUser = $this->getEmployeeGroupBelongToUser();
+        $employeeGroupBelongToUser = $this->getEmployeeGroupBelongToUser($this->getPosition());
         $expr = new Expr();
         for ($i = count($employeeGroupBelongToUser) - 1; $i >= 0; $i--) {
             $limitRuleEmployeeGroup = $em->createQueryBuilder()
@@ -165,12 +165,12 @@ class ClaimRule
 
 
     /*2 for checker--------------------------------------*/
-    public function getChecker(Claim $claim)
+    public function getChecker($position)
     {
         $expr = new Expr();
         $em = $this->container->get('doctrine')->getManager();
         //may be will have many checker, but the priority for more detail group
-        $employeeGroupBelongToUser = $this->getEmployeeGroupBelongToUser();
+        $employeeGroupBelongToUser = $this->getEmployeeGroupBelongToUser($position);
         for ($i = count($employeeGroupBelongToUser) - 1; $i >= 0; $i--) {
             $checker = $em->createQueryBuilder()
                 ->select('checker')
@@ -266,12 +266,12 @@ class ClaimRule
 
 
     /*3 for approver--------------------------------------*/
-    public function getApprover(Claim $claim)
+    public function getApprover($position)
     {
         $expr = new Expr();
         $em = $this->container->get('doctrine')->getManager();
         //may be will have many approver, but the priority for more detail group
-        $employeeGroupBelongToUser = $this->getEmployeeGroupBelongToUser();
+        $employeeGroupBelongToUser = $this->getEmployeeGroupBelongToUser($position);
         for ($i = count($employeeGroupBelongToUser) - 1; $i >= 0; $i--) {
             $approver = $em->createQueryBuilder()
                 ->select('approvalAmountPolicies')
@@ -291,7 +291,7 @@ class ClaimRule
 
     public function assignClaimToSpecificApprover(Claim $claim)
     {
-        $approver = $this->getApprover($claim);
+        $approver = $this->getApprover($this->getPosition());
         $amount = $claim->getClaimAmount();
         if ($approver) {
             //check approver1 can approve ?

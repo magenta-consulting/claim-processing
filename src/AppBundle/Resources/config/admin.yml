@@ -9,6 +9,7 @@ services:
                 - [setContainer, ["@service_container"]]
                 - [setUserManager, ["@fos_user.user_manager"]]
                 - [setTemplate,[list,AppBundle:SonataAdmin/Position:list.html.twig]]
+                - [setTemplate,[edit,AppBundle:SonataAdmin/Position:edit.html.twig]]
     admin.position_submitter:
             class: AppBundle\Admin\PositionSubmitterAdmin
             arguments: [~, AppBundle\Entity\PositionSubmitter, ~]
