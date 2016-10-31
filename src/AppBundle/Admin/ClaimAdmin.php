@@ -27,7 +27,7 @@ class ClaimAdmin extends BaseAdmin
     public function filterClaimTypeBycompanyForUser()
     {
         $em = $this->container->get('doctrine')->getManager();
-        $employeeGroupBelongUser = $this->getContainer()->get('app.claim_rule')->getEmployeeGroupBelongToUser();
+        $employeeGroupBelongUser = $this->getContainer()->get('app.claim_rule')->getEmployeeGroupBelongToUser($this->getPosition());
         $qb = $em->createQueryBuilder();
         $expr = new Expr();
         $qb->select('claimType')
@@ -46,7 +46,7 @@ class ClaimAdmin extends BaseAdmin
     public function filterClaimCategoryByClaimType($claimType)
     {
         $em = $this->container->get('doctrine')->getManager();
-        $employeeGroupBelongUser = $this->getContainer()->get('app.claim_rule')->getEmployeeGroupBelongToUser();
+        $employeeGroupBelongUser = $this->getContainer()->get('app.claim_rule')->getEmployeeGroupBelongToUser($this->getPosition());
         $qb = $em->createQueryBuilder();
         $expr = new Expr();
         $rules = $em->createQueryBuilder()
