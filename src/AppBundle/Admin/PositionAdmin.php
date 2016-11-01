@@ -65,10 +65,10 @@ class PositionAdmin extends BaseAdmin
             $employeeGroupDescription[] = $position->getCompany()->getName();
         }
         if ($position->getCostCentre()) {
-            $employeeGroupDescription[] = $position->getCompany()->getName().'>'.$position->getCostCentre()->getCode();
+            $employeeGroupDescription[] = $position->getCostCentre()->getCode();
         }
         if ($position->getDepartment()) {
-            $employeeGroupDescription[] = $position->getCompany()->getName().'>'.$position->getCostCentre()->getCode().'>'.$position->getDepartment()->getCode();
+            $employeeGroupDescription[] = $position->getDepartment()->getCode();
         }
         if ($position->getEmployeeType()) {
             $employeeGroupDescription[] = $position->getEmployeeType()->getCode();
