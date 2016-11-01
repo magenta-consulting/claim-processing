@@ -234,8 +234,6 @@ class PositionAdmin extends BaseAdmin
         $type = $request->get('type');
         switch ($type) {
             case 'checking':
-            case 'approving':
-
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
                         if (!$value['value']) {
@@ -250,6 +248,26 @@ class PositionAdmin extends BaseAdmin
                     'field_type' => 'choice',
                     'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
                         'choices'=>$this->getContainer()->get('app.claim_rule')->getListClaimPeriodForFilterChecker()
+                    ],
+                    'advanced_filter' => false,
+
+                ));
+                break;
+            case 'approving':
+                $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
+                    'callback' => function ($queryBuilder, $alias, $field, $value) {
+                        if (!$value['value']) {
+                            return;
+                        }
+                        $expr = new Expr();
+                        $queryBuilder->andWhere($expr->eq('claim.periodFrom',':periodFrom'));
+                        $queryBuilder->setParameter('periodFrom', $value['value']);
+
+                        return true;
+                    },
+                    'field_type' => 'choice',
+                    'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
+                        'choices'=>$this->getContainer()->get('app.claim_rule')->getListClaimPeriodForFilterApprover()
                     ],
                     'advanced_filter' => false,
 
