@@ -1,80 +1,99 @@
 {% macro render_groups(admin, form, groups, has_tab) %}
-    <div class="row">
+<div class="row">
 
     {% for code in groups if admin.formgroups[code] is defined %}
-        {% set form_group = admin.formgroups[code] %}
+    {% set form_group = admin.formgroups[code] %}
 
-        <div class="{{ form_group.class|default('col-md-12') }}">
-            <div class="{{ form_group.box_class }}">
-                <div class="box-header">
-                    <h4 class="box-title">
-                        {{ form_group.name|trans({}, form_group.translation_domain ?: admin.translationDomain) }}
-                    </h4>
-                </div>
-                <div class="box-body">
-                    <div class="sonata-ba-collapsed-fields">
-                        {% if form_group.description %}
-                            <p>{{ form_group.description|raw }}</p>
+    <div class="{{ form_group.class|default('col-md-12') }}">
+        <div class="{{ form_group.box_class }}">
+            <div class="box-header">
+                <h4 class="box-title">
+                    {{ form_group.name|trans({}, form_group.translation_domain ?: admin.translationDomain) }}
+                </h4>
+            </div>
+            <div class="box-body">
+                <div class="sonata-ba-collapsed-fields">
+                    {% if form_group.description %}
+                        <p>{{ form_group.description|raw }}</p>
+                    {% endif %}
+
+                    {% for field_name in form_group.fields if admin.formfielddescriptions[field_name] is defined %}
+                    {{ form_row(form[field_name]) }}
+                    {% else %}
+                    {% set approver = getApprover(admin.subject) %}
+                    {% set position = admin.subject %}
+                    <div class="row">
+
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Approver</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% if approver and approver.approver1 %}
+                            <tr>
+                                <td>
+                                    {% if approver.approver1.email != position.email %}
+                                    {{ approver.approver1.firstName ~' '~ approver.approver1.lastName ~' [ ' ~ approver.approver1.email ~' ]' }}
+                                    {% elseif approver.overrideApprover1  %}
+                                        {{ approver.overrideApprover1.firstName ~' '~ approver.overrideApprover1.lastName ~' [ ' ~ approver.overrideApprover1.email ~' ]' }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% if approver and approver.approver2 %}
+                                <tr>
+                                    <td>
+                                        {% if approver.approver2.email != position.email %}
+                                            {{ approver.approver2.firstName ~' '~ approver.approver2.lastName ~' [ ' ~ approver.approver2.email ~' ]' }}
+                                        {% elseif approver.overrideApprover2  %}
+                                            {{ approver.overrideApprover2.firstName ~' '~ approver.overrideApprover2.lastName ~' [ ' ~ approver.overrideApprover2.email ~' ]' }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                            {% if approver and approver.approver3 %}
+                                <tr>
+                                    <td>
+                                        {% if approver.approver3.email != position.email %}
+                                            {{ approver.approver3.firstName ~' '~ approver.approver3.lastName ~' [ ' ~ approver.approver3.email ~' ]' }}
+                                        {% elseif approver.overrideApprover3  %}
+                                            {{ approver.overrideApprover3.firstName ~' '~ approver.overrideApprover3.lastName ~' [ ' ~ approver.overrideApprover3.email ~' ]' }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                    {% set checker = getChecker(admin.subject) %}
+                    <div class="row">
+
+                        {% if checker and checker.checker %}
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Checker</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>{{ checker.checker.firstName ~' '~ checker.checker.lastName ~' [ ' ~ checker.checker.email ~ ' ]' }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        {% else %}
+                            None
                         {% endif %}
 
-                        {% for field_name in form_group.fields if admin.formfielddescriptions[field_name] is defined %}
-                            {{ form_row(form[field_name])}}
-                        {% else %}
-                            {% set approver = getApprover(admin.subject) %}
-                            <div class="row">
-
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <th>Approver</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% if approver and approver.approver1 %}
-                                        <tr>
-                                            <td>{{ approver.approver1.firstName ~' '~ approver.approver1.lastName ~' [ ' ~ approver.approver1.email ~' ]' }}</td>
-                                        </tr>
-                                    {% endif %}
-                                    {% if approver and approver.approver2 %}
-                                        <tr>
-                                            <td>{{ approver.approver2.firstName ~' '~ approver.approver2.lastName ~' [ ' ~ approver.approver2.email ~ ' ]'}}</td>
-                                        </tr>
-                                    {% endif %}
-                                    {% if approver and approver.approver3 %}
-                                        <tr>
-                                            <td>{{ approver.approver3.firstName ~' '~ approver.approver3.lastName ~ ' [ ' ~ approver.approver3.email ~ ' ]' }}</td>
-                                        </tr>
-                                    {% endif %}
-                                    </tbody>
-                                </table>
-
-                            </div>
-                            {% set checker = getChecker(admin.subject) %}
-                            <div class="row">
-
-                                {% if checker and checker.checker %}
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>Checker</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td>{{ checker.checker.firstName ~' '~ checker.checker.lastName ~' [ ' ~ checker.checker.email ~ ' ]'}}</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                {% else %}
-                                    None
-                                {% endif %}
-
-                            </div>
-                        {% endfor %}
                     </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
-    {% endfor %}
     </div>
+    {% endfor %}
+</div>
 {% endmacro %}
