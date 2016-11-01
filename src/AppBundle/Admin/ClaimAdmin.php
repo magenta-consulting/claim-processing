@@ -165,7 +165,6 @@ class ClaimAdmin extends BaseAdmin
         $type = $request->get('type');
         switch ($type) {
             case 'checking-each-position':
-            case 'approving-each-position':
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
                         if (!$value['value']) {
@@ -180,6 +179,46 @@ class ClaimAdmin extends BaseAdmin
                     'field_type' => 'choice',
                     'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
                         'choices' => $this->getContainer()->get('app.claim_rule')->getListClaimPeriodForFilterChecker()
+                    ],
+                    'advanced_filter' => false,
+
+                ));
+                break;
+            case 'approving-each-position':
+                $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
+                    'callback' => function ($queryBuilder, $alias, $field, $value) {
+                        if (!$value['value']) {
+                            return;
+                        }
+                        $dateFilter = new  \DateTime($value['value']);
+                        $expr = new Expr();
+                        $queryBuilder->andWhere($expr->eq($alias . '.periodFrom', ':periodFrom'));
+                        $queryBuilder->setParameter('periodFrom', $dateFilter->format('Y-m-d'));
+                        return true;
+                    },
+                    'field_type' => 'choice',
+                    'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
+                        'choices' => $this->getContainer()->get('app.claim_rule')->getListClaimPeriodForFilterApprover()
+                    ],
+                    'advanced_filter' => false,
+
+                ));
+                break;
+            case null:
+                $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
+                    'callback' => function ($queryBuilder, $alias, $field, $value) {
+                        if (!$value['value']) {
+                            return;
+                        }
+                        $dateFilter = new  \DateTime($value['value']);
+                        $expr = new Expr();
+                        $queryBuilder->andWhere($expr->eq($alias . '.periodFrom', ':periodFrom'));
+                        $queryBuilder->setParameter('periodFrom', $dateFilter->format('Y-m-d'));
+                        return true;
+                    },
+                    'field_type' => 'choice',
+                    'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
+                        'choices' => $this->getContainer()->get('app.claim_rule')->getListClaimPeriodForFilterEmployee()
                     ],
                     'advanced_filter' => false,
 
@@ -250,6 +289,7 @@ class ClaimAdmin extends BaseAdmin
         $collection->add('checkerApprove', $this->getRouterIdParameter() . '/checker-approve');
         $collection->add('checkerReject', $this->getRouterIdParameter() . '/checker-reject');
         $collection->add('firstPageCreateClaim', 'create-claim');
+        $collection->add('listOptionClaim', 'list-claim');
     }
 
     protected

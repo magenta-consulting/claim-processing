@@ -18,7 +18,7 @@ file that was distributed with this source code.
         <br>###APPROVER###<br>
 
         <div class="col-md-10">
-            {% if object.approver%}
+            {% if object.approver and object.approverEmployee%}
                <strong>Email: {{ object.approverEmployee.email }}</strong> <br>
                 <strong>Pass: p@ssword </strong> <br>
                 Employee No: {{ object.approverEmployee.employeeNo }}<br>

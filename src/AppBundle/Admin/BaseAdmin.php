@@ -186,6 +186,8 @@ class BaseAdmin extends AbstractAdmin
         }
         if ($this->isUser()) {
             if ($class === 'AppBundle\Entity\Claim') {
+                $periodFrom = $this->getContainer()->get('app.claim_rule')->getCurrentClaimPeriod('from');
+                $periodTo = $this->getContainer()->get('app.claim_rule')->getCurrentClaimPeriod('to');
                 $request = $this->getRequest();
                 $type = $request->get('type');
                 switch ($type) {
@@ -237,10 +239,67 @@ class BaseAdmin extends AbstractAdmin
                         $query->setParameter('positionId', $positionId);
                         $query->setParameter('approverEmployee', $this->getPosition());
                         break;
+                    case 'current':
+                        $query->andWhere(
+                            $expr->eq($query->getRootAliases()[0] . '.position', ':position')
+                        );
+                        $query->andWhere(
+                            $expr->eq($query->getRootAliases()[0] . '.status', ':status')
+                        );
+                        $query->andWhere(
+                            $expr->eq($query->getRootAliases()[0] . '.periodFrom', ':periodFrom')
+                        );
+                        $query->andWhere(
+                            $expr->eq($query->getRootAliases()[0] . '.periodTo', ':periodTo')
+                        );
+                        $query->setParameter('periodFrom', $periodFrom->format('Y-m-d'));
+                        $query->setParameter('periodTo', $periodTo->format('Y-m-d'));
+                        $query->setParameter('status', Claim::STATUS_PENDING);
+                        $query->setParameter('position', $position);
+                        break;
+                    case 'draft':
+                        $query->andWhere(
+                            $expr->eq($query->getRootAliases()[0] . '.position', ':position')
+                        );
+                        $query->andWhere(
+                            $expr->eq($query->getRootAliases()[0] . '.status', ':status')
+                        );
+                        $query->andWhere(
+                            $expr->eq($query->getRootAliases()[0] . '.periodFrom', ':periodFrom')
+                        );
+                        $query->andWhere(
+                            $expr->eq($query->getRootAliases()[0] . '.periodTo', ':periodTo')
+                        );
+                        $query->setParameter('periodFrom', $periodFrom->format('Y-m-d'));
+                        $query->setParameter('periodTo', $periodTo->format('Y-m-d'));
+                        $query->setParameter('status', Claim::STATUS_DRAFT);
+                        $query->setParameter('position', $position);
+                        break;
+                    case 'reject':
+                        $query->andWhere(
+                            $expr->eq($query->getRootAliases()[0] . '.position', ':position')
+                        );
+                        $query->andWhere(
+                            $expr->eq($query->getRootAliases()[0] . '.periodFrom', ':periodFrom')
+                        );
+                        $query->andWhere(
+                            $expr->eq($query->getRootAliases()[0] . '.periodTo', ':periodTo')
+                        );
+                        $query->andWhere($expr->orX(
+                            $expr->eq($query->getRootAliases()[0] .'.status',':statusCheckerRejected'),
+                            $expr->eq($query->getRootAliases()[0] .'.status',':statusApproverRejected')
+                        ));
+                        $query->setParameter('periodFrom', $periodFrom->format('Y-m-d'));
+                        $query->setParameter('periodTo', $periodTo->format('Y-m-d'));
+                        $query->setParameter('statusCheckerRejected', Claim::STATUS_CHECKER_REJECTED);
+                        $query->setParameter('statusApproverRejected', Claim::STATUS_APPROVER_REJECTED);
+                        $query->setParameter('position', $position);
+                        break;
                     default:
                         $query->andWhere(
                             $expr->eq($query->getRootAliases()[0] . '.position', ':position')
                         );
+
                         $query->setParameter('position', $position);
                 }
             }

@@ -18,6 +18,10 @@ class ClaimController extends Controller
     {
         return $this->render("@App/SonataAdmin/Claim/first_page_create_claim.html.twig");
     }
+    public function listOptionClaimAction()
+    {
+        return $this->render("@App/SonataAdmin/Claim/list_option_claim.html.twig");
+    }
 
     public function uploadImageAction()
     {

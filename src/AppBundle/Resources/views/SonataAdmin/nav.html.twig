@@ -101,8 +101,21 @@
             <li data-route="admin_app_claim_firstPageCreateClaim"><a href="{{ path('admin_app_claim_firstPageCreateClaim') }}"><i
                             class="fa fa-angle-double-right"></i>New Claims</a>
             </li>
-            <li data-route="admin_app_claim_list"><a href="{{ path('admin_app_claim_list') }}"><i
-                            class="fa fa-angle-double-right"></i>Claims Summary</a>
+            <li class="treeview"><a href="#"><i class="fa fa-folder"></i>Claims Summary</a>
+                <ul class="active treeview-menu menu_level_1" style="display: none;">
+                    <li data-route="admin_app_claim_list"><a href="{{ path('admin_app_claim_list',{'type':'current'}) }}"><i
+                                    class="fa fa-angle-double-right"></i>Current Claims</a>
+                    </li>
+                    <li data-route="admin_app_claim_list"><a href="{{ path('admin_app_claim_list',{'type':'draft'}) }}"><i
+                                    class="fa fa-angle-double-right"></i>Draft Claims </a>
+                    </li>
+                    <li data-route="admin_app_claim_list"><a href="{{ path('admin_app_claim_list',{'type':'reject'}) }}"><i
+                                    class="fa fa-angle-double-right"></i>Rejected Claims <strong style="color:red">( 1 )</strong> </a>
+                    </li>
+                    <li data-route="admin_app_claim_list"><a href="{{ path('admin_app_claim_list') }}"><i
+                                    class="fa fa-angle-double-right"></i>Past Claims </a>
+                    </li>
+                </ul>
             </li>
         </ul>
     </li>

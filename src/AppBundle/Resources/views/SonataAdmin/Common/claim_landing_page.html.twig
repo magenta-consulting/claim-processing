@@ -16,7 +16,7 @@
                             <small>Submission Deadline: {{ getCurrentClaimPeriod('to')| date('d M Y') }}
                             </small>
                         </a>
-                        <a href="#" style="width: 100%;margin-top: 5px;" class="btn btn-default" type="submit"
+                        <a href="{{ path('admin_app_claim_listOptionClaim') }}" style="width: 100%;margin-top: 5px;" class="btn btn-default" type="submit"
                            name="btn_create_and_edit"> Claims Reports
                             <br>
                             <small>View past and current claims

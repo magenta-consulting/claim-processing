@@ -440,5 +440,25 @@ class ClaimRule
         return $qb->getQuery()->getSingleScalarResult();
     }
 
+    /** employee */
+    public function getListClaimPeriodForFilterEmployee()
+    {
+        $expr = new Expr();
+        $position = $this->getPosition();
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder('claim');
+        $qb->select('claim');
+        $qb->from('AppBundle:Claim', 'claim');
+        $qb->orderBy('claim.createdAt', 'DESC');
+        $qb->where('claim.position = :position');
+        $qb->setParameter('position', $position);
+        $claims = $qb->getQuery()->getResult();
+
+        $listPeriod = [];
+        foreach ($claims as $claim) {
+            $listPeriod[$claim->getPeriodFrom()->format('d M Y') . ' - ' . $claim->getPeriodTo()->format('d M Y')] = $claim->getPeriodFrom()->format('Y-m-d');
+        }
+        return $listPeriod;
+    }
 
 }
