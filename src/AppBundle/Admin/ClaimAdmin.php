@@ -134,7 +134,7 @@ class ClaimAdmin extends BaseAdmin
             $formMapper->add('taxRate', 'sonata_type_model', array(
                 'property' => 'code',
                 'query' => $this->filterTaxRateBycompany(),
-                'placeholder' => 'Select Tax Code',
+                'placeholder' => 'None',
                 'empty_data' => null,
                 'btn_add' => false,
                 'label' => 'Tax Code',
@@ -275,11 +275,11 @@ class ClaimAdmin extends BaseAdmin
                     ->add('claimType.code', 'text', ['label' => 'Claim Type'])
                     ->add('claimCategory.code', 'text', ['label' => 'Claim Category'])
                     ->add('3', 'show_claim_limit', ['label' => 'Claim Limit'])
-                    ->add('claimAmount', null, ['label' => 'Amount'])
+                    ->add('claimAmount', 'show_currency', ['label' => 'Amount','currency'=>'USD'])
                     ->add('currencyExchange.code', null, ['label' => 'Currency'])
                     ->add('1', null, ['label' => 'Ex Rate'])
                     ->add('2', null, ['label' => 'Conversion Value'])
-                    ->add('taxRate.code', null, ['label' => 'Tax Code'])
+                    ->add('taxRate.code', 'show_tax_code', ['label' => 'Tax Code'])
                     ->add('taxAmount', null, ['label' => 'Tax Amount'])
                     ->add('status', 'text', ['label' => 'Status'])
                     ->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y'])
@@ -319,11 +319,11 @@ class ClaimAdmin extends BaseAdmin
                     ->add('claimType.code', 'text', ['label' => 'Claim Type'])
                     ->add('claimCategory.code', 'text', ['label' => 'Claim Category'])
                     ->add('3', 'show_claim_limit', ['label' => 'Claim Limit'])
-                    ->add('claimAmount', 'currency', ['label' => 'Amount','currency'=>'USD'])
+                    ->add('claimAmount', 'show_currency', ['label' => 'Amount','currency'=>'USD'])
                     ->add('currencyExchange.code', null, ['label' => 'Currency'])
                     ->add('1', null, ['label' => 'Ex Rate'])
                     ->add('2', null, ['label' => 'Conversion Value'])
-                    ->add('taxRate.code', null, ['label' => 'Tax Code'])
+                    ->add('taxRate.code', 'show_tax_code', ['label' => 'Tax Code'])
                     ->add('taxAmount', null, ['label' => 'Tax Amount'])
                     ->add('status', 'text', ['label' => 'Status'])
                     ->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y'])
@@ -339,12 +339,12 @@ class ClaimAdmin extends BaseAdmin
                     ->add('claimType.code', 'text', ['label' => 'Claim Type'])
                     ->add('claimCategory.code', 'text', ['label' => 'Claim Category'])
                     ->add('3', 'show_claim_limit', ['label' => 'Claim Limit'])
-                    ->add('claimAmount', 'currency', ['label' => 'Amount','currency'=>'$'])
+                    ->add('claimAmount', 'show_currency', ['label' => 'Amount','currency'=>'USD'])
                     ->add('currencyExchange.code', null, ['label' => 'Currency'])
                     ->add('1', null, ['label' => 'Ex Rate'])
                     ->add('2', null, ['label' => 'Conversion Value'])
-                    ->add('taxRate.code', null, ['label' => 'Tax Code'])
-                    ->add('taxAmount', null, ['label' => 'Tax Amount','currency'=>'$'])
+                    ->add('taxRate.code', 'show_tax_code', ['label' => 'Tax Code'])
+                    ->add('taxAmount', null, ['label' => 'Tax Amount'])
                     ->add('status', 'text', ['label' => 'Status'])
                     ->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y'])
                     ->end()
