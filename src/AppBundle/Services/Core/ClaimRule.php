@@ -46,6 +46,10 @@ class ClaimRule
         return $company;
     }
 
+    public function calculateTaxAmount($receiptAmount,$taxRate){
+        $taxAmount = $receiptAmount+$taxRate;
+        return $taxAmount;
+    }
     public function getEmployeeGroupBelongToUser($position)
     {
         $employeeGroupDescriptionStr = $position->getEmployeeGroupDescription();

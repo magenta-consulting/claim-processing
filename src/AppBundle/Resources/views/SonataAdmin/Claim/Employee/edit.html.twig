@@ -16,7 +16,7 @@
             </script>
             <script type="text/javascript">
                 $(function () {
-                    // When sport gets selected ...
+                    // update claim categorry when claim type change
                     $claimType = $('.claim-type')
                     $claimType.change(function () {
                         var $form = $(this).closest('form');
@@ -33,6 +33,30 @@
                             }
                         });
                     });
+                    //update tax amount when claim amount or tax rate change
+                    $('.claim-amount').change(function () {
+                        getTaxAmount($(this));
+                    });
+                    $('.tax-rate').change(function () {
+                        getTaxAmount($(this));
+                    });
+                    function getTaxAmount(selector) {
+                        var href = selector.data('href');
+                        var data = {};
+                        data['claim-amount'] = $('.claim-amount').val();
+                        data['tax-rate-id'] = $('.tax-rate').val();
+                        $.ajax({
+                            url: href,
+                            type: 'POST',
+                            data: data,
+                            success: function (result) {
+                               if(result.status){
+                                   $('.tax-amount').val(result.value);
+                               }
+                            }
+                        });
+                    }
+
                 });
 
                 $(function () {
@@ -129,10 +153,10 @@
                                             {% endfor %}
                                         </div>
                                         {{ form_row(form.description) }}
-                                        {{ form_row(form.claimAmount) }}
+                                        {{ form_row(form.claimAmount,{'attr': {'class': 'claim-amount','data-href':path('app_api_gettaxamount')}}) }}
                                         {{ form_row(form.receiptDate) }}
-                                        {{ form_row(form.taxRate) }}
-                                        {{ form_row(form.taxAmount) }}
+                                        {{ form_row(form.taxRate,{'attr': {'class': 'tax-rate','data-href':path('app_api_gettaxamount')}}) }}
+                                        {{ form_row(form.taxAmount,{'attr': {'class': 'tax-amount'}}) }}
                                         {% if object.claimType.code == 'Overseas' %}
                                             {{ form_row(form.currencyExchange) }}
                                         {% endif %}
