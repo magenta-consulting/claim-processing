@@ -245,10 +245,7 @@ file that was distributed with this source code.
                                 {% for filter in admin.datagrid.filters %}
                                     {% set filterActive = ((filter.isActive() and filter.options['show_filter'] is null) or (filter.options['show_filter'] is same as(true))) and not admin.isDefaultFilter(filter.formName) %}
                                     {% set filterVisible = filter.options['show_filter'] is same as(true) or filter.options['show_filter'] is null %}
-                                    <div class="form-group {% block sonata_list_filter_group_class %}{% endblock %}"
-                                         id="filter-{{ admin.uniqid }}-{{ filter.name }}"
-                                         sonata-filter="{{ filterVisible ? 'true' : 'false' }}"
-                                         style="display: {% if filterActive %}block{% else %}none{% endif %}">
+                                    <div class="form-group">
                                         {% if filter.label is not same as(false) %}
                                             <label for="{{ form.children[filter.formName].children['value'].vars.id }}"
                                                    class="col-sm-3 control-label">{{ filter.label|trans({}, filter.translationDomain ?: admin.translationDomain) }}</label>
