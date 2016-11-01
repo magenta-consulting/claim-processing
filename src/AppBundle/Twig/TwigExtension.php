@@ -111,6 +111,13 @@ class TwigExtension extends \Twig_Extension
         }
         return false;
     }
+    public function getNumberRejectedClaim(){
+        $number =  $this->container->get('app.claim_rule')->getNumberRejectedClaim();
+        if($number > 0){
+            return '<strong style="color:red">( '.$number.' )</strong>';
+        }
+        return '';
+    }
 
     public function getFunctions()
     {
@@ -130,6 +137,7 @@ class TwigExtension extends \Twig_Extension
             'isShowApproveRejectApproverButtonForClaim' => new \Twig_Function_Method($this, 'isShowApproveRejectApproverButtonForClaim', array('is_safe' => array('html'))),
             'getChecker' => new \Twig_Function_Method($this, 'getChecker', array('is_safe' => array('html'))),
             'getApprover' => new \Twig_Function_Method($this, 'getApprover', array('is_safe' => array('html'))),
+            'getNumberRejectedClaim' => new \Twig_Function_Method($this, 'getNumberRejectedClaim', array('is_safe' => array('html'))),
         );
     }
 

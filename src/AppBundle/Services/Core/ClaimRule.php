@@ -440,6 +440,35 @@ class ClaimRule
         return $qb->getQuery()->getSingleScalarResult();
     }
 
+    public function getNumberRejectedClaim(){
+        $expr = new Expr();
+        $periodFrom = $this->container->get('app.claim_rule')->getCurrentClaimPeriod('from');
+        $periodTo = $this->container->get('app.claim_rule')->getCurrentClaimPeriod('to');
+        $em = $this->container->get('doctrine')->getManager();
+        $query = $em->createQueryBuilder('claim');
+        $query->select($expr->count('claim.id'));
+        $query->from('AppBundle:Claim', 'claim');
+        $query->andWhere(
+            $expr->eq('claim.position', ':position')
+        );
+        $query->andWhere(
+            $expr->eq('claim.periodFrom', ':periodFrom')
+        );
+        $query->andWhere(
+            $expr->eq('claim.periodTo', ':periodTo')
+        );
+        $query->andWhere($expr->orX(
+            $expr->eq('claim.status',':statusCheckerRejected'),
+            $expr->eq('claim.status',':statusApproverRejected')
+        ));
+        $query->setParameter('periodFrom', $periodFrom->format('Y-m-d'));
+        $query->setParameter('periodTo', $periodTo->format('Y-m-d'));
+        $query->setParameter('statusCheckerRejected', Claim::STATUS_CHECKER_REJECTED);
+        $query->setParameter('statusApproverRejected', Claim::STATUS_APPROVER_REJECTED);
+        $query->setParameter('position', $this->getPosition());
+        return $query->getQuery()->getSingleScalarResult();
+    }
+
     /** employee */
     public function getListClaimPeriodForFilterEmployee()
     {

@@ -28,7 +28,7 @@
                             </small>
                         </a>
                         <a href="{{ path('admin_app_claim_list',{'type':'reject'}) }}" style="width: 100%;margin-top: 5px;" class="btn btn-default" type="submit"
-                           name=""> Rejected Claims <strong style="color:red">( 1 )</strong>
+                           name=""> Rejected Claims {{ getNumberRejectedClaim() }}
                             <br>
                             <small>Period {{ getCurrentClaimPeriod('to')| date('d M Y') }} -  {{ getCurrentClaimPeriod('to')| date('d M Y') }}
                             </small>
