@@ -1,0 +1,44 @@
+{% extends 'AppBundle:SonataAdmin:standard_layout.html.twig' %}
+
+{% block sonata_admin_content %}
+    <div>
+
+
+        <div class="col-md-6">
+            <div class="cms-block cms-block-element">
+
+                <div class="box">
+                    <div class="box-header" style="text-align: center;">
+                        <h3 class="box-title">Submit on behalf
+                        </h3><br>
+                        <small>Period {{ getCurrentClaimPeriod('to')| date('d M Y') }}
+                            - {{ getCurrentClaimPeriod('to')| date('d M Y') }}
+                        </small>
+                        <br>
+                        <small>Please select user you want ro submit on behalf
+                        </small>
+                    </div>
+                    <div class="box-body">
+                        {% for submissionFor in app.user.loginWithPosition.submissionFor %}
+                            {% set position = submissionFor.submissionByPosition %}
+                            <a href="{{ path('admin_app_claim_create',{'type':'onbehalf','position-id':position.id}) }}"
+                               style="width: 100%;margin-top: 5px;" class="btn btn-default" type="submit"
+                               name=""> {{ position.firstName ~' '~ position.lastName }}
+                            </a>
+                        {% endfor %}
+                        {% if app.user.loginWithPosition.submissionFor |length == 0 %}
+                            None
+                            {% endif %}
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6">
+        </div>
+    </div>
+{% endblock %}

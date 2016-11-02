@@ -56,14 +56,14 @@ class TwigExtension extends \Twig_Extension
         return $this->container->get('app.claim_rule')->getCurrentClaimPeriod($key);
     }
 
-    public function isExceedLimitRule($claim)
+    public function isExceedLimitRule($claim,$position)
     {
-        return $this->container->get('app.claim_rule')->isExceedLimitRule($claim);
+        return $this->container->get('app.claim_rule')->isExceedLimitRule($claim,$position);
     }
 
-    public function getLimitAmount($claim)
+    public function getLimitAmount($claim,$position)
     {
-        return $this->container->get('app.claim_rule')->getLimitAmount($claim);
+        return $this->container->get('app.claim_rule')->getLimitAmount($claim,$position);
     }
 
     public function getChecker($position)
@@ -74,6 +74,15 @@ class TwigExtension extends \Twig_Extension
     public function getApprover($position)
     {
         return $this->container->get('app.claim_rule')->getApprover($position);
+    }
+
+    public function getInforUserClaim($positionId){
+        if($positionId){
+            $position = $this->container->get('doctrine')->getManager()->getRepository('AppBundle\Entity\Position')->find($positionId);
+        }else{
+            $position = $this->container->get('app.claim_rule')->getPosition();
+        }
+        return $position;
     }
 
 
@@ -138,6 +147,7 @@ class TwigExtension extends \Twig_Extension
             'getChecker' => new \Twig_Function_Method($this, 'getChecker', array('is_safe' => array('html'))),
             'getApprover' => new \Twig_Function_Method($this, 'getApprover', array('is_safe' => array('html'))),
             'getNumberRejectedClaim' => new \Twig_Function_Method($this, 'getNumberRejectedClaim', array('is_safe' => array('html'))),
+            'getInforUserClaim' => new \Twig_Function_Method($this, 'getInforUserClaim', array('is_safe' => array('html'))),
         );
     }
 

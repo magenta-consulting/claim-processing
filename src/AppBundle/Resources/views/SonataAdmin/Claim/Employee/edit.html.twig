@@ -50,9 +50,9 @@
                             type: 'POST',
                             data: data,
                             success: function (result) {
-                               if(result.status){
-                                   $('.tax-amount').val(result.value);
-                               }
+                                if (result.status) {
+                                    $('.tax-amount').val(result.value);
+                                }
                             }
                         });
                     }
@@ -112,6 +112,14 @@
  {% block sonata_page_content_header %}
 
  {% endblock %}
+{% block sonata_form_action_url %}
+    {% if app.request.get('type') == 'onbehalf' %}
+        {{ admin.generateUrl(url, {'id': admin.id(object),'type':'onbehalf','position-id':app.request.get('position-id'), 'uniqid': admin.uniqid, 'subclass': app.request.get('subclass')}) }}
+    {% else %}
+        {{ admin.generateUrl(url, {'id': admin.id(object), 'uniqid': admin.uniqid, 'subclass': app.request.get('subclass')}) }}
+
+    {% endif %}
+{% endblock %}
             {% block sonata_tab_content %}
 
                 <div class="col-md-12">
@@ -119,9 +127,10 @@
                         <div class="box box-primary">
                             <div class="box-header" style="text-align: center">
                                 <h4 class="box-title">
-                                    {{ app.user.loginWithPosition.firstName ~' '~ app.user.loginWithPosition.lastName }}
+                                    {% set position = getInforUserClaim(app.request.get('position-id')) %}
+                                    {{ position.firstName ~' '~ position.lastName }}
                                     <br>
-                                    <small>{{ app.user.loginWithPosition.company.name }}</small>
+                                    <small>{{ position.company.name }}</small>
                                     <p style="border-top: 1px solid black; margin-top: 10px;"></p>
                                     <small>Claims Period: {{ getCurrentClaimPeriod('from')| date('d M') }}
                                         – {{ getCurrentClaimPeriod('to')| date('d M') }}</small>
@@ -173,9 +182,17 @@
           <div class="col-md-12 well">
               {% block sonata_form_actions %}
                   {% if app.request.attributes.get('_route') == 'admin_app_claim_create' %}
-                      {% set nameBtn = 'btn_create_and_edit' %}
+                      {% if app.request.get('position-id') is not null %}
+                          {% set nameBtn = 'btn_create_and_edit_onbehalf' %}
+                      {% else %}
+                          {% set nameBtn = 'btn_create_and_edit' %}
+                      {% endif %}
                   {% else %}
-                      {% set nameBtn = 'btn_edit_and_show' %}
+                      {% if app.request.get('position-id') is not null %}
+                          {% set nameBtn = 'btn_edit_and_show_onbehalf' %}
+                      {% else %}
+                          {% set nameBtn = 'btn_edit_and_show' %}
+                      {% endif %}
                   {% endif %}
                   <button class="btn btn-success btn-claim" type="submit" name="{{ nameBtn }}">NEXT
                   </button>

@@ -120,8 +120,8 @@ class ApprovalAmountPoliciesAdmin extends BaseAdmin
     {
         $listMapper
             ->addIdentifier('approver1.firstName', null, ['label' => 'Approver1'])
-            ->addIdentifier('approver2.firstName', null, ['label' => 'Approver2'])
-            ->addIdentifier('approver3.firstName', null, ['label' => 'Approver3'])
+            ->add('approver2.firstName', null, ['label' => 'Approver2'])
+            ->add('approver3.firstName', null, ['label' => 'Approver3'])
             ->add('_action', null, array(
                 'actions' => array(
                     'delete' => array(),

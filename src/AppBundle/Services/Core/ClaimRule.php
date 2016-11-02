@@ -45,6 +45,15 @@ class ClaimRule
         }
         return $company;
     }
+    public function getClientCompany()
+    {
+        //admin will return null
+        $company = $this->getCompany();
+        if($company->getParent()){
+            return $company->getParent();
+        }
+        return $company;
+    }
 
     public function calculateTaxAmount($receiptAmount,$taxRate){
         $taxAmount = $receiptAmount+$taxRate;
@@ -68,9 +77,7 @@ class ClaimRule
 
     public function getClaimTypeDefault()
     {
-        $position = $this->getPosition();
-        $company = $this->getCompany();
-        $clientCompany = $company->getParent() ? $company->getParent() : $company;
+        $clientCompany = $this->getClientCompany();
         $em = $this->container->get('doctrine')->getManager();
         $claimType = $em->getRepository('AppBundle\Entity\ClaimType')->findOneBy(['isDefault' => true, 'company' => $clientCompany]);
         return $claimType;
@@ -101,7 +108,7 @@ class ClaimRule
         return $period[$key];
     }
 
-    public function getLimitAmount(Claim $claim)
+    public function getLimitAmount(Claim $claim,$position)
     {
         $em = $this->container->get('doctrine')->getManager();
         $limitRule = $em->getRepository('AppBundle\Entity\LimitRule')->findOneBy([
@@ -112,7 +119,7 @@ class ClaimRule
             return null;
         }
         //may be will have many limit amount, but the priority for more detail group
-        $employeeGroupBelongToUser = $this->getEmployeeGroupBelongToUser($this->getPosition());
+        $employeeGroupBelongToUser = $this->getEmployeeGroupBelongToUser($position);
         $expr = new Expr();
         for ($i = count($employeeGroupBelongToUser) - 1; $i >= 0; $i--) {
             $limitRuleEmployeeGroup = $em->createQueryBuilder()
@@ -131,7 +138,7 @@ class ClaimRule
         return null;
     }
 
-    public function isExceedLimitRule(Claim $claim)
+    public function isExceedLimitRule(Claim $claim,$position)
     {
         $em = $this->container->get('doctrine')->getManager();
         $periodFrom = $this->getCurrentClaimPeriod('from');
@@ -145,7 +152,7 @@ class ClaimRule
             ->andWhere($expr->eq('claim.claimCategory', ':claimCategory'))
             ->andWhere($expr->eq('claim.periodFrom', ':periodFrom'))
             ->andWhere($expr->eq('claim.periodTo', ':periodTo'))
-            ->setParameter('position', $this->getPosition())
+            ->setParameter('position', $position)
             ->setParameter('claimType', $claim->getClaimType())
             ->setParameter('claimCategory', $claim->getClaimCategory())
             ->setParameter('periodFrom', $periodFrom->format('Y-m-d'))
@@ -153,7 +160,7 @@ class ClaimRule
             ->getQuery()
             ->getResult();
 
-        $limitAmount = $this->getLimitAmount($claim);
+        $limitAmount = $this->getLimitAmount($claim,$position);
         if (!$limitAmount) {
             return false;
         }
@@ -293,9 +300,9 @@ class ClaimRule
 
     }
 
-    public function assignClaimToSpecificApprover(Claim $claim)
+    public function assignClaimToSpecificApprover(Claim $claim,$position)
     {
-        $approver = $this->getApprover($this->getPosition());
+        $approver = $this->getApprover($position);
         $amount = $claim->getClaimAmount();
         if ($approver) {
             //check approver1 can approve ?

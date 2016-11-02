@@ -43,6 +43,16 @@ class BaseAdmin extends AbstractAdmin
         //admin will return null
         return $this->getContainer()->get('app.claim_rule')->getCompany();
     }
+    public function getClientCompany()
+    {
+        //admin will return null
+        $company = $this->getCompany();
+        if($company->getParent()){
+            return $company->getParent();
+        }
+        return $company;
+    }
+
 
     public function isAdmin()
     {
@@ -155,7 +165,7 @@ class BaseAdmin extends AbstractAdmin
         $query = parent::createQuery($context);
         $class = $this->getClass();
         $company = $this->getCompany();
-        $clientCompany = $company->getParent();
+        $clientCompany = $this->getClientCompany();
         $position = $this->getPosition();
         $expr = new Expr();
         if ($this->isCLient()) {
@@ -367,7 +377,7 @@ class BaseAdmin extends AbstractAdmin
                     $expr->eq('company', ':company')
                 )
             )
-            ->setParameter('company', $this->getCompany());
+            ->setParameter('company', $this->getClientCompany());
         return $qb;
     }
 
@@ -380,7 +390,7 @@ class BaseAdmin extends AbstractAdmin
             ->from('AppBundle\Entity\CostCentre', 'costCentre')
             ->where($expr->eq('costCentre.company', ':company'))
             ->andWhere($expr->eq('costCentre.enabled', true))
-            ->setParameter('company', $this->getCompany());
+            ->setParameter('company', $this->getClientCompany());
         return $qb;
     }
 
@@ -393,7 +403,7 @@ class BaseAdmin extends AbstractAdmin
             ->from('AppBundle\Entity\Region', 'region')
             ->where($expr->eq('region.company', ':company'))
             ->andWhere($expr->eq('region.enabled', true))
-            ->setParameter('company', $this->getCompany());
+            ->setParameter('company', $this->getClientCompany());
         return $qb;
     }
 
@@ -406,7 +416,7 @@ class BaseAdmin extends AbstractAdmin
             ->from('AppBundle\Entity\Branch', 'branch')
             ->where($expr->eq('branch.company', ':company'))
             ->andWhere($expr->eq('branch.enabled', true))
-            ->setParameter('company', $this->getCompany());
+            ->setParameter('company', $this->getClientCompany());
         return $qb;
     }
 
@@ -419,7 +429,7 @@ class BaseAdmin extends AbstractAdmin
             ->from('AppBundle\Entity\Department', 'department')
             ->where($expr->eq('department.company', ':company'))
             ->andWhere($expr->eq('department.enabled', true))
-            ->setParameter('company', $this->getCompany());
+            ->setParameter('company', $this->getClientCompany());
         return $qb;
     }
 
@@ -432,7 +442,7 @@ class BaseAdmin extends AbstractAdmin
             ->from('AppBundle\Entity\Section', 'section')
             ->where($expr->eq('section.company', ':company'))
             ->andWhere($expr->eq('section.enabled', true))
-            ->setParameter('company', $this->getCompany());
+            ->setParameter('company', $this->getClientCompany());
         return $qb;
     }
 
@@ -444,7 +454,7 @@ class BaseAdmin extends AbstractAdmin
         $qb->select('employeeType')
             ->from('AppBundle\Entity\EmployeeType', 'employeeType')
             ->where($expr->eq('employeeType.company', ':company'))
-            ->setParameter('company', $this->getCompany());
+            ->setParameter('company', $this->getClientCompany());
         return $qb;
     }
 
@@ -457,7 +467,7 @@ class BaseAdmin extends AbstractAdmin
             ->from('AppBundle\Entity\ClaimType', 'claimType')
             ->where($expr->eq('claimType.company', ':company'))
             ->andWhere($expr->eq('claimType.enabled', true))
-            ->setParameter('company', $this->getCompany());
+            ->setParameter('company', $this->getClientCompany());
         return $qb;
     }
 
@@ -470,7 +480,7 @@ class BaseAdmin extends AbstractAdmin
         $qb->select('claimCategory')
             ->from('AppBundle\Entity\ClaimCategory', 'claimCategory')
             ->where($expr->eq('claimCategory.company', ':company'))
-            ->setParameter('company', $this->getCompany());
+            ->setParameter('company', $this->getClientCompany());
         return $qb;
     }
 
@@ -482,7 +492,7 @@ class BaseAdmin extends AbstractAdmin
         $qb->select('taxRate')
             ->from('AppBundle\Entity\TaxRate', 'taxRate')
             ->where($expr->eq('taxRate.company', ':company'))
-            ->setParameter('company', $this->getCompany());
+            ->setParameter('company', $this->getClientCompany());
         return $qb;
     }
 
@@ -495,7 +505,7 @@ class BaseAdmin extends AbstractAdmin
             ->from('AppBundle\Entity\PayCode', 'payCode')
             ->where($expr->eq('payCode.company', ':company'))
             ->andWhere($expr->eq('payCode.enabled', true))
-            ->setParameter('company', $this->getCompany());
+            ->setParameter('company', $this->getClientCompany());
         return $qb;
     }
 
@@ -508,7 +518,7 @@ class BaseAdmin extends AbstractAdmin
             ->from('AppBundle\Entity\ClaimTypeType', 'claimTypeType')
             ->where($expr->eq('claimTypeType.company', ':company'))
             ->andWhere($expr->eq('claimTypeType.enabled', true))
-            ->setParameter('company', $this->getCompany());
+            ->setParameter('company', $this->getClientCompany());
         return $qb;
     }
 
@@ -521,7 +531,7 @@ class BaseAdmin extends AbstractAdmin
             ->from('AppBundle\Entity\PayCodeType', 'payCodeType')
             ->where($expr->eq('payCodeType.company', ':company'))
             ->andWhere($expr->eq('payCodeType.enabled', true))
-            ->setParameter('company', $this->getCompany());
+            ->setParameter('company', $this->getClientCompany());
         return $qb;
     }
 
@@ -533,7 +543,7 @@ class BaseAdmin extends AbstractAdmin
         $qb->select('employmentType')
             ->from('AppBundle\Entity\EmploymentType', 'employmentType')
             ->where($expr->eq('employmentType.company', ':company'))
-            ->setParameter('company', $this->getCompany());
+            ->setParameter('company', $this->getClientCompany());
         return $qb;
     }
 
@@ -545,7 +555,7 @@ class BaseAdmin extends AbstractAdmin
         $qb->select('currencyExchange')
             ->from('AppBundle\Entity\CurrencyExchange', 'currencyExchange')
             ->where($expr->eq('currencyExchange.company', ':company'))
-            ->setParameter('company', $this->getCompany());
+            ->setParameter('company', $this->getClientCompany());
         return $qb;
     }
 

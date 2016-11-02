@@ -14,7 +14,7 @@ file that was distributed with this source code.
 {% block field %}
     <div class="row" style="border-bottom: 1px solid #f4f4f4; margin-bottom: 10px;padding-bottom: 10px;">
         ###LIMIT AMOUNT ###<br>
-        {{ getLimitAmount(object) }}
+        {{ getLimitAmount(object,object.position) }}
         <br>###APPROVER###<br>
 
         <div class="col-md-10">

@@ -3,7 +3,7 @@
 {% extends 'SonataAdminBundle:CRUD:base_show_field.html.twig' %}
 
 {% block field %}
-        {% set value = getLimitAmount(object) %}
+        {% set value = getLimitAmount(object,object.position) %}
         {% if value is not null %}
                 $ {{ value }}
         {% endif %}

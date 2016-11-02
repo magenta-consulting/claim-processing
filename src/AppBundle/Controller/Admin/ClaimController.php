@@ -14,9 +14,12 @@ class ClaimController extends Controller
 {
 
 
+    public function listUserSubmissionForAction(){
+        return $this->render("AppBundle:SonataAdmin/Claim:list_user_submission_for.html.twig");
+    }
     public function firstPageCreateClaimAction()
     {
-        return $this->render("@App/SonataAdmin/Claim/first_page_create_claim.html.twig");
+        return $this->render("AppBundle:SonataAdmin/Claim:first_page_create_claim.html.twig");
     }
     public function listOptionClaimAction()
     {
@@ -131,7 +134,7 @@ class ClaimController extends Controller
                 $object->setCheckerUpdatedAt(new \DateTime());
                 $object->setStatus(Claim::STATUS_APPROVER_REJECTED);
             } else {
-                $urlRedirect = $this->admin->generateUrl('list');
+                $urlRedirect = $this->admin->generateUrl('firstPageCreateClaim');
                 $status = Claim::STATUS_PENDING;
                 $object->setStatus(Claim::STATUS_PENDING);
                 $object->setSubmissionRemarks($request->get('employee-remark'));
@@ -398,8 +401,14 @@ class ClaimController extends Controller
 
         $url = false;
 
+        if (null !== $request->get('btn_create_and_edit_onbehalf')) {
+            $url = $this->admin->generateObjectUrl('edit', $object,['type'=>'onbehalf','position-id'=>$request->get('position-id')]);
+        }
         if (null !== $request->get('btn_create_and_edit')) {
             $url = $this->admin->generateObjectUrl('edit', $object);
+        }
+        if (null !== $request->get('btn_edit_and_show_onbehalf')) {
+            $url = $this->admin->generateObjectUrl('show', $object, ['type' => 'employee-preview-claim','position-id'=>$request->get('position-id')]);
         }
         if (null !== $request->get('btn_edit_and_show')) {
             $url = $this->admin->generateObjectUrl('show', $object, ['type' => 'employee-preview-claim']);
