@@ -7,6 +7,7 @@
  */
 
 namespace AppBundle\Entity;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Criteria;
@@ -465,7 +466,7 @@ class ApprovalAmountPolicies
 
     public function validate(ExecutionContextInterface $context, $payload)
     {
-        //validate each employee only belong to a approver
+        //1.validate each employee only belong to a approver
         $company = $this->getCompany();
         if ($company) {
             $expr = Criteria::expr();
@@ -475,31 +476,83 @@ class ApprovalAmountPolicies
             foreach ($approvalAmountPolicies as $approvalAmountPolicy) {
                 foreach ($approvalAmountPolicy->getApprovalAmountPoliciesEmployeeGroups() as $approvalAmountPoliciesEmployeeGroup1) {
                     foreach ($this->getApprovalAmountPoliciesEmployeeGroups() as $approvalAmountPoliciesEmployeeGroup2) {
-                        if ($approvalAmountPoliciesEmployeeGroup1->getEmployeeGroup()->getId() == $approvalAmountPoliciesEmployeeGroup2->getEmployeeGroup()->getId()) {
+                        if ($approvalAmountPoliciesEmployeeGroup1->getEmployeeGroup() && $approvalAmountPoliciesEmployeeGroup2->getEmployeeGroup()) {
+                            if ($approvalAmountPoliciesEmployeeGroup1->getEmployeeGroup()->getId() == $approvalAmountPoliciesEmployeeGroup2->getEmployeeGroup()->getId()) {
 
-                            $context->buildViolation('This employee group (' . $approvalAmountPoliciesEmployeeGroup2->getEmployeeGroup()->getDescription() . ') has already been belong to another approval amount policy')
-                                ->atPath('approvalAmountPoliciesEmployeeGroups')
-                                ->addViolation();
+                                $context->buildViolation('This employee group (' . $approvalAmountPoliciesEmployeeGroup2->getEmployeeGroup()->getDescription() . ') has already been belong to another approval amount policy')
+                                    ->atPath('approvalAmountPoliciesEmployeeGroups')
+                                    ->addViolation();
+                            }
                         }
                     }
 
                 }
             }
         }
+        //2. validation for approver1 : approver1 is required, and approver,backup,overide must be difference
+        if(!$this->getApprover1()){
+            $context->buildViolation('Approver 1 is required')
+                ->atPath('approver1')
+                ->addViolation();
+        }
+        if($this->getBackupApprover1() && $this->getApprover1()){
+            if($this->getBackupApprover1()->getId() === $this->getApprover1()->getId()){
+                $context->buildViolation('Backup Approver must be difference with Approver')
+                    ->atPath('backupApprover1')
+                    ->addViolation();
+            }
+        }
+        if($this->getOverrideApprover1() && $this->getApprover1()){
+            if($this->getOverrideApprover1()->getId() === $this->getApprover1()->getId()){
+                $context->buildViolation('Override Approver must be difference with Approver')
+                    ->atPath('overrideApprover1')
+                    ->addViolation();
+            }
+        }
+
+        //3 validation for approver2 : must input approver first, and approver,backup,overide must be difference
+        if(($this->getApproval2Amount() || $this->getOverrideApprover2()) && $this->getApprover2() === null){
+                $context->buildViolation('Must input approver first')
+                    ->atPath('approver2')
+                    ->addViolation();
+        }
+        if($this->getBackupApprover2() && $this->getApprover2()){
+            if($this->getBackupApprover2()->getId() === $this->getApprover2()->getId()){
+                $context->buildViolation('Backup Approver must be difference with Approver')
+                    ->atPath('backupApprover2')
+                    ->addViolation();
+            }
+        }
+        if($this->getOverrideApprover2() && $this->getApprover2()){
+            if($this->getOverrideApprover2()->getId() === $this->getApprover2()->getId()){
+                $context->buildViolation('Override Approver must be difference with Approver')
+                    ->atPath('overrideApprover2')
+                    ->addViolation();
+            }
+        }
+
+        //4 validation for approver3 : must input approver first, and approver,backup,overide must be difference
+        if(($this->getApproval3Amount() || $this->getOverrideApprover3()) && $this->getApprover3() === null){
+                $context->buildViolation('Must input approver first')
+                    ->atPath('approver3')
+                    ->addViolation();
+        }
+        if($this->getBackupApprover3() && $this->getApprover3()){
+            if($this->getBackupApprover3()->getId() === $this->getApprover3()->getId()){
+                $context->buildViolation('Backup Approver must be difference with Approver')
+                    ->atPath('backupApprover3')
+                    ->addViolation();
+            }
+        }
+        if($this->getOverrideApprover3() && $this->getApprover3()){
+            if($this->getOverrideApprover3()->getId() === $this->getApprover3()->getId()){
+                $context->buildViolation('Override Approver must be difference with Approver')
+                    ->atPath('overrideApprover3')
+                    ->addViolation();
+            }
+        }
+
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

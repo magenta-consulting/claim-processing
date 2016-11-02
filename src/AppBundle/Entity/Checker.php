@@ -189,7 +189,7 @@ class Checker
 
     public function validate(ExecutionContextInterface $context, $payload)
     {
-        //validate each employee only belong to a checker
+        //1. validate each employee group only belong to a checker
         $company = $this->getCompany();
         if ($company) {
             $expr = Criteria::expr();
@@ -199,18 +199,26 @@ class Checker
             foreach ($checkers as $checker) {
                 foreach ($checker->getCheckerEmployeeGroups() as $checkerEmployeeGroup1) {
                     foreach ($this->getCheckerEmployeeGroups() as $checkerEmployeeGroup2) {
-                        if ($checkerEmployeeGroup1->getEmployeeGroup()->getId() == $checkerEmployeeGroup2->getEmployeeGroup()->getId()) {
+                        if($checkerEmployeeGroup1->getEmployeeGroup() && $checkerEmployeeGroup2->getEmployeeGroup()) {
+                            if ($checkerEmployeeGroup1->getEmployeeGroup()->getId() == $checkerEmployeeGroup2->getEmployeeGroup()->getId()) {
 
-                            $context->buildViolation('This employee group (' . $checkerEmployeeGroup2->getEmployeeGroup()->getDescription() . ') has already been belong to another checker')
-                                ->atPath('checkerEmployeeGroups')
-                                ->addViolation();
+                                $context->buildViolation('This employee group (' . $checkerEmployeeGroup2->getEmployeeGroup()->getDescription() . ') has already been belong to another checker')
+                                    ->atPath('checkerEmployeeGroups')
+                                    ->addViolation();
+                            }
                         }
                     }
 
                 }
             }
         }
-        //validate checker and backup checker must be difference
+        //2.checker is required
+        if (!$this->getChecker()) {
+            $context->buildViolation('Checker is required')
+                ->atPath('checker')
+                ->addViolation();
+        }
+        //3. validate checker and backup checker must be difference
         if ($this->getBackupChecker()) {
             if ($this->getChecker()) {
                 if ($this->getBackupChecker()->getId() === $this->getChecker()->getId()) {
@@ -220,6 +228,8 @@ class Checker
                 }
             }
         }
+
+
     }
 
 

@@ -37,7 +37,6 @@ class CheckerAdmin extends BaseAdmin
                 'btn_add' => false,
             ))
             ->add('backupChecker', 'sonata_type_model_list', array(
-                'required' => true,
                 'btn_add' => false,
             ))
             ->end();
@@ -74,7 +73,7 @@ class CheckerAdmin extends BaseAdmin
     public function toString($object)
     {
         return $object instanceof Checker
-            ? $object->getChecker()->getFirstName()
+            ? $object->getId()
             : 'Checker Grouping'; // shown in the breadcrumb on the create view
     }
 }

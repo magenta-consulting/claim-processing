@@ -32,7 +32,7 @@ class ApprovalAmountPoliciesAdmin extends BaseAdmin
             ->end()
             ->with('Approver 1', array('class' => 'col-md-12'))
             ->add('approver1', 'sonata_type_model_list', array(
-                'required' => false,
+                'required' => true,
                 'btn_add' => false,
                 'label' => 'Approver 1'
             ))
