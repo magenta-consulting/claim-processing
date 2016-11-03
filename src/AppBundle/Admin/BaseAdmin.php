@@ -329,6 +329,8 @@ class BaseAdmin extends AbstractAdmin
                                 $expr->eq('checker.backupChecker', ':checker')
                             )
                         );
+                        $query->andWhere($expr->eq('claim.status',':statusPending'));
+                        $query->setParameter('statusPending', Claim::STATUS_PENDING);
                         $query->setParameter('checker', $position);
                         $query->setParameter('company', $company);
                         $query->setParameter('clientCompany', $clientCompany);
@@ -348,6 +350,8 @@ class BaseAdmin extends AbstractAdmin
                                 $expr->eq('claim.approverBackupEmployee', ':position')
                             )
                         );
+                        $query->andWhere($expr->eq('claim.status',':statusCheckerApproved'));
+                        $query->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
                         $query->setParameter('position', $position);
                         $query->setParameter('company', $company);
                         $query->setParameter('clientCompany', $clientCompany);
