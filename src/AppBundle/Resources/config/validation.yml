@@ -20,6 +20,10 @@ AppBundle\Entity\Position:
     constraints:
         - Callback: validate
 
+AppBundle\Entity\TaxRate:
+    constraints:
+        - Callback: validate
+
 AppBundle\Entity\CompanyClaimPolicies:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: claimType

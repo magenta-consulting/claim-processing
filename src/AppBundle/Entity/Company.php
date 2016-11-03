@@ -68,6 +68,11 @@ class Company
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\ClaimType",mappedBy="company")
      */
     private $claimTypes;
+    /**
+     * @var TaxRate
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\TaxRate",mappedBy="company")
+     */
+    private $taxRates;
 
     /**
      * @var EmployeeGroup
@@ -92,7 +97,26 @@ class Company
         $this->limitRules = new ArrayCollection();
         $this->claimTypes = new ArrayCollection();
         $this->employeeGroups = new ArrayCollection();
+        $this->taxRates = new ArrayCollection();
     }
+
+    /**
+     * @return TaxRate
+     */
+    public function getTaxRates()
+    {
+        return $this->taxRates;
+    }
+
+    /**
+     * @param TaxRate $taxRates
+     */
+    public function setTaxRates($taxRates)
+    {
+        $this->taxRates = $taxRates;
+    }
+
+
 
     /**
      * @return ApprovalAmountPolicies

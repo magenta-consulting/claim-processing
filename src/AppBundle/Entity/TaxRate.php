@@ -10,6 +10,8 @@ namespace AppBundle\Entity;
 
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Criteria;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @ORM\Entity
@@ -46,7 +48,7 @@ class TaxRate
     private $isLocalDefault;
     /**
      * @var Company
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company",inversedBy="taxRates")
      */
     private $company;
 
@@ -136,6 +138,26 @@ class TaxRate
     public function setCompany($company)
     {
         $this->company = $company;
+    }
+
+    public function validate(ExecutionContextInterface $context, $payload)
+    {
+        $company = $this->getCompany();
+        if($company) {
+            $expr = Criteria::expr();
+            $criteria = Criteria::create();
+            $criteria->where($expr->eq('isLocalDefault',true))
+                ->andWhere($expr->neq('id', $this->id));
+            if($company->getTaxRates()->count()) {
+                $taxRates = $company->getTaxRates()->matching($criteria);
+                if (count($taxRates) && $this->isIsLocalDefault()) {
+                    $context->buildViolation('Only one value default at one time.')
+                        ->atPath('isLocalDefault')
+                        ->addViolation();
+                }
+            }
+        }
+
     }
 
 

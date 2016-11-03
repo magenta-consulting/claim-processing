@@ -212,11 +212,13 @@ class ClaimType
             $criteria = Criteria::create();
             $criteria->where($expr->eq('isDefault',true))
                 ->andWhere($expr->neq('id', $this->id));
-            $claimTypes = $company->getClaimTypes()->matching($criteria);
-            if (count($claimTypes) && $this->isIsDefault()) {
-                $context->buildViolation('Only one value default at one time.')
-                    ->atPath('isDefault')
-                    ->addViolation();
+            if($company->getClaimTypes()->count()) {
+                $claimTypes = $company->getClaimTypes()->matching($criteria);
+                if (count($claimTypes) && $this->isIsDefault()) {
+                    $context->buildViolation('Only one value default at one time.')
+                        ->atPath('isDefault')
+                        ->addViolation();
+                }
             }
         }
 
