@@ -313,7 +313,11 @@ class BaseAdmin extends AbstractAdmin
                         $query->andWhere(
                             $expr->eq($query->getRootAliases()[0] . '.position', ':position')
                         );
+                        $query->andWhere(
+                            $expr->neq($query->getRootAliases()[0] . '.status', ':status')
+                        );
 
+                        $query->setParameter('status', Claim::STATUS_NOT_USE);
                         $query->setParameter('position', $position);
                 }
             }

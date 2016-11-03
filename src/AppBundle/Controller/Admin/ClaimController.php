@@ -154,7 +154,6 @@ class ClaimController extends Controller
                 $object->setStatus(Claim::STATUS_APPROVER_REJECTED);
             } else {
                 $urlRedirect = $this->admin->generateUrl('firstPageCreateClaim');
-                $status = Claim::STATUS_PENDING;
                 $object->setStatus(Claim::STATUS_PENDING);
                 $object->setSubmissionRemarks($request->get('employee-remark'));
             }
@@ -225,6 +224,7 @@ class ClaimController extends Controller
             // persist if the form was valid and if in preview mode the preview was approved
             if ($isFormValid && (!$this->isInPreviewMode() || $this->isPreviewApproved())) {
                 try {
+                    $object->setStatus(Claim::STATUS_DRAFT);
                     $object = $this->admin->update($object);
 
                     if ($this->isXmlHttpRequest()) {

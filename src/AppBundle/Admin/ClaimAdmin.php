@@ -474,7 +474,6 @@ class ClaimAdmin extends BaseAdmin
             $result = $this->getContainer()->get('app.claim_rule')->assignClaimToSpecificApprover($claim,$position);
             $claim->setApproverEmployee($result['approverEmployee']);
             $claim->setApproverBackupEmployee($result['approverBackupEmployee']);
-            $claim->setStatus(Claim::STATUS_DRAFT);
         } else {
             //approver or checker update claim
 
