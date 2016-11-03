@@ -209,16 +209,9 @@ class ClaimRule
         $qb->from('AppBundle:Claim', 'claim');
         $qb->join('claim.checker', 'checker');
         $qb->where($expr->orX('checker.checker = :position', 'checker.backupChecker = :position'));
-        $qb->andWhere($expr->orX(
-            $expr->eq('claim.status', ':statusPending'),
-            $expr->eq('claim.status', ':statusCheckerRejected'),
-            $expr->eq('claim.status', ':statusCheckerApproved')
-        ));
+        $qb->andWhere($expr->eq('claim.status', ':statusPending'));
         $qb->orderBy('claim.createdAt', 'DESC');
-
         $qb->setParameter('statusPending', Claim::STATUS_PENDING);
-        $qb->setParameter('statusCheckerRejected', Claim::STATUS_CHECKER_REJECTED);
-        $qb->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
         $qb->setParameter('position', $position);
         $claims = $qb->getQuery()->getResult();
 
@@ -239,14 +232,8 @@ class ClaimRule
         $qb->join('claim.checker', 'checker');
         $qb->where('claim.position = :position');
         $qb->andWhere($expr->orX('checker.checker = :positionChecker', 'checker.backupChecker = :positionChecker'));
-        $qb->andWhere($expr->orX(
-            $expr->eq('claim.status', ':statusPending'),
-            $expr->eq('claim.status', ':statusCheckerRejected'),
-            $expr->eq('claim.status', ':statusCheckerApproved')
-        ));
+        $qb->andWhere($expr->eq('claim.status', ':statusPending'));
         $qb->setParameter('statusPending', Claim::STATUS_PENDING);
-        $qb->setParameter('statusCheckerRejected', Claim::STATUS_CHECKER_REJECTED);
-        $qb->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
         $qb->setParameter('position', $position);
         $qb->setParameter('positionChecker', $positionChecker);
 
@@ -262,14 +249,8 @@ class ClaimRule
         $qb->from('AppBundle:Claim', 'claim');
         $qb->join('claim.checker', 'checker');
         $qb->where($expr->orX('checker.checker = :position', 'checker.backupChecker = :position'));
-        $qb->andWhere($expr->orX(
-            $expr->eq('claim.status', ':statusPending'),
-            $expr->eq('claim.status', ':statusCheckerRejected'),
-            $expr->eq('claim.status', ':statusCheckerApproved')
-        ));
+        $qb->andWhere($expr->eq('claim.status', ':statusPending'));
         $qb->setParameter('statusPending', Claim::STATUS_PENDING);
-        $qb->setParameter('statusCheckerRejected', Claim::STATUS_CHECKER_REJECTED);
-        $qb->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
         $qb->setParameter('position', $position);
 
         return $qb->getQuery()->getSingleScalarResult();
@@ -384,15 +365,9 @@ class ClaimRule
         $qb->select('claim');
         $qb->from('AppBundle:Claim', 'claim');
         $qb->where($expr->orX('claim.approverEmployee = :position', 'claim.approverBackupEmployee = :position'));
-        $qb->andWhere($expr->orX(
-            $expr->eq('claim.status', ':statusCheckerApproved'),
-            $expr->eq('claim.status', ':statusApproverRejected'),
-            $expr->eq('claim.status', ':statusApproverApproved')
-        ));
+        $qb->andWhere($expr->eq('claim.status', ':statusCheckerApproved'));
         $qb->orderBy('claim.createdAt', 'DESC');
         $qb->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
-        $qb->setParameter('statusApproverRejected', Claim::STATUS_APPROVER_REJECTED);
-        $qb->setParameter('statusApproverApproved', Claim::STATUS_APPROVER_APPROVED);
         $qb->setParameter('position', $position);
         $claims = $qb->getQuery()->getResult();
 
@@ -412,14 +387,8 @@ class ClaimRule
         $qb->from('AppBundle:Claim', 'claim');
         $qb->where('claim.position = :position');
         $qb->andWhere($expr->orX('claim.approverEmployee = :positionApprover', 'claim.approverBackupEmployee = :positionApprover'));
-        $qb->andWhere($expr->orX(
-            $expr->eq('claim.status', ':statusCheckerApproved'),
-            $expr->eq('claim.status', ':statusApproverRejected'),
-            $expr->eq('claim.status', ':statusApproverApproved')
-        ));
+        $qb->andWhere($expr->eq('claim.status', ':statusCheckerApproved'));
         $qb->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
-        $qb->setParameter('statusApproverRejected', Claim::STATUS_APPROVER_REJECTED);
-        $qb->setParameter('statusApproverApproved', Claim::STATUS_APPROVER_APPROVED);
         $qb->setParameter('position', $position);
         $qb->setParameter('positionApprover', $positionApprover);
 
@@ -434,14 +403,8 @@ class ClaimRule
         $qb->select($qb->expr()->count('claim.id'));
         $qb->from('AppBundle:Claim', 'claim');
         $qb->where($expr->orX('claim.approverEmployee = :position', 'claim.approverBackupEmployee = :position'));
-        $qb->andWhere($expr->orX(
-            $expr->eq('claim.status', ':statusCheckerApproved'),
-            $expr->eq('claim.status', ':statusApproverRejected'),
-            $expr->eq('claim.status', ':statusApproverApproved')
-        ));
+        $qb->andWhere($expr->eq('claim.status', ':statusCheckerApproved'));
         $qb->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
-        $qb->setParameter('statusApproverRejected', Claim::STATUS_APPROVER_REJECTED);
-        $qb->setParameter('statusApproverApproved', Claim::STATUS_APPROVER_APPROVED);
         $qb->setParameter('position', $position);
 
         return $qb->getQuery()->getSingleScalarResult();

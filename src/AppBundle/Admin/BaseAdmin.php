@@ -215,14 +215,8 @@ class BaseAdmin extends AbstractAdmin
                             )
                         );
 
-                        $query->andWhere($expr->orX(
-                            $expr->eq($query->getRootAliases()[0] .'.status',':statusPending'),
-                            $expr->eq($query->getRootAliases()[0] .'.status',':statusCheckerRejected'),
-                            $expr->eq($query->getRootAliases()[0] .'.status',':statusCheckerApproved')
-                        ));
+                        $query->andWhere($expr->eq($query->getRootAliases()[0] .'.status',':statusPending'));
                         $query->setParameter('statusPending', Claim::STATUS_PENDING);
-                        $query->setParameter('statusCheckerRejected', Claim::STATUS_CHECKER_REJECTED);
-                        $query->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
                         $query->setParameter('positionId', $positionId);
                         $query->setParameter('checker', $this->getPosition());
                         break;
@@ -238,14 +232,8 @@ class BaseAdmin extends AbstractAdmin
                                 $expr->eq($query->getRootAliases()[0] .'.approverBackupEmployee', ':approverEmployee')
                             )
                         );
-                        $query->andWhere($expr->orX(
-                            $expr->eq($query->getRootAliases()[0] .'.status',':statusCheckerApproved'),
-                            $expr->eq($query->getRootAliases()[0] .'.status',':statusApproverRejected'),
-                            $expr->eq($query->getRootAliases()[0] .'.status',':statusApproverApproved')
-                        ));
+                        $query->andWhere($expr->eq($query->getRootAliases()[0] .'.status',':statusCheckerApproved'));
                         $query->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
-                        $query->setParameter('statusApproverRejected', Claim::STATUS_APPROVER_REJECTED);
-                        $query->setParameter('statusApproverApproved', Claim::STATUS_APPROVER_APPROVED);
                         $query->setParameter('positionId', $positionId);
                         $query->setParameter('approverEmployee', $this->getPosition());
                         break;
