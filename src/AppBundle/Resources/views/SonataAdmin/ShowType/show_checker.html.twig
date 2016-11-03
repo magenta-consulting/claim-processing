@@ -27,9 +27,9 @@ file that was distributed with this source code.
             <tbody>
             <tr>
                 <td>{{ object.checker.checker.firstName ~' '~ object.checker.checker.lastName }}</td>
-                <td>{{ object.checkerUpdatedAt|date('d M Y, h:i A') }}</td>
-                <td>{{ object.status }}</td>
-                <td>{{ object.checkerRemark }}</td>
+                <td>{{ object.checkerUpdatedAt ? object.checkerUpdatedAt | date('d M Y, h:i A') : 'N/A' }}</td>
+                <td>{{ object.checkerUpdatedAt ? object.status : 'N/A' }}</td>
+                <td>{{ object.checkerUpdatedAt ? object.checkerRemark : 'N/A' }}</td>
             </tr>
             </tbody>
         </table>

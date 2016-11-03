@@ -151,6 +151,12 @@ class Claim
     private $createdAt;
 
     /**
+     * @var Position
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     */
+    private $createdBy;
+
+    /**
      * @var string
      * @ORM\Column(name="status",type="string")
      */
@@ -186,6 +192,24 @@ class Claim
     {
         return $this->id;
     }
+
+    /**
+     * @return Position
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * @param Position $createdBy
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+    }
+
+
 
     /**
      * @return Position
