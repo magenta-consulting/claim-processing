@@ -253,9 +253,11 @@ class BaseAdmin extends AbstractAdmin
                         $query->andWhere(
                             $expr->eq($query->getRootAliases()[0] . '.position', ':position')
                         );
-                        $query->andWhere(
-                            $expr->eq($query->getRootAliases()[0] . '.status', ':status')
-                        );
+                        $query->andWhere($expr->orX(
+                            $expr->eq($query->getRootAliases()[0] .'.status',':statusPending'),
+                            $expr->eq($query->getRootAliases()[0] .'.status',':statusCheckerApprove'),
+                            $expr->eq($query->getRootAliases()[0] .'.status',':statusApproverApprove')
+                        ));
                         $query->andWhere(
                             $expr->eq($query->getRootAliases()[0] . '.periodFrom', ':periodFrom')
                         );
@@ -264,8 +266,10 @@ class BaseAdmin extends AbstractAdmin
                         );
                         $query->setParameter('periodFrom', $periodFrom->format('Y-m-d'));
                         $query->setParameter('periodTo', $periodTo->format('Y-m-d'));
-                        $query->setParameter('status', Claim::STATUS_PENDING);
                         $query->setParameter('position', $position);
+                        $query->setParameter('statusPending', Claim::STATUS_PENDING);
+                        $query->setParameter('statusCheckerApprove', Claim::STATUS_CHECKER_APPROVED);
+                        $query->setParameter('statusApproverApprove', Claim::STATUS_APPROVER_APPROVED);
                         break;
                     case 'draft':
                         $query->andWhere(
