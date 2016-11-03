@@ -14,6 +14,25 @@ class ClaimController extends Controller
 {
 
 
+    public function submitDraftClaimsAction(){
+
+        $em = $this->getDoctrine()->getManager();
+        $claims = $em->getRepository('AppBundle:Claim')->findBy(
+            [
+                'status'=>Claim::STATUS_DRAFT,
+                'position'=>$this->getUser()->getLoginWithPosition()
+            ]
+        );
+        foreach ($claims as $claim){
+            $claim->setStatus(Claim::STATUS_PENDING);
+            $em->persist($claim);
+        }
+        $em->flush();
+        $this->addFlash('sonata_flash_success', 'Submit successfully');
+        $url = $this->admin->generateUrl('list',['type'=>'current']);
+
+        return new RedirectResponse($url);
+    }
     public function listUserSubmissionForAction(){
         return $this->render("AppBundle:SonataAdmin/Claim:list_user_submission_for.html.twig");
     }

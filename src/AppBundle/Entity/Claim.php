@@ -22,6 +22,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 class Claim
 {
 
+    const STATUS_NOT_USE = 'NOT_USE';
     const STATUS_DRAFT = 'DRAFT';
     const STATUS_PENDING = 'PENDING';
     const STATUS_CHECKER_APPROVED = 'CHECKER_APPROVED';
@@ -182,7 +183,7 @@ class Claim
     {
         $this->createdAt = new \DateTime();
         $this->claimMedias = new ArrayCollection();
-        $this->status = self::STATUS_DRAFT;
+        $this->status = self::STATUS_NOT_USE;
     }
 
     /**

@@ -240,9 +240,9 @@ sonata_doctrine_orm_admin:
             show:
                 show_approver:      AppBundle:SonataAdmin/ShowType:show_approver.html.twig
                 show_checker:      AppBundle:SonataAdmin/ShowType:show_checker.html.twig
+                show_checker_remark:      AppBundle:SonataAdmin/ShowType:show_checker_remark.html.twig
                 show_image:      AppBundle:SonataAdmin/ShowType:show_image.html.twig
                 show_claim_limit:      AppBundle:SonataAdmin/ShowType:show_claim_limit.html.twig
-                show_claim_submission_remarks:      AppBundle:SonataAdmin/ShowType:show_claim_submission_remarks.html.twig
                 show_tax_code:      AppBundle:SonataAdmin/ShowType:show_tax_code.html.twig
                 show_currency:      AppBundle:SonataAdmin/ShowType:show_currency.html.twig
                 show_claim_created_by:      AppBundle:SonataAdmin/ShowType:show_claim_created_by.html.twig
