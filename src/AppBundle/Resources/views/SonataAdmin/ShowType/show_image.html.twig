@@ -13,13 +13,17 @@ file that was distributed with this source code.
 
 {% block field %}
     {% if object.claimMedias|length %}
+        {#<div class="row" style="margin-bottom: 50px;overflow: hidden;clear: both;">#}
+            {#<a href="javascript:void(0);"><span class="rotate-img">Rotate Image</span></a>#}
+        {#</div>#}
         <div class="row show-image">
             {% set url = getUrlMedia(object.claimMedias[0].media,'default','default_medium') %}
-            <a href="{{ url }}" target="_blank"><img src="{{ url }}"></a>
+            <a href="{{ url }}" target="_blank"><img class="img-rotate" src="{{ url }}"></a>
         </div>
         <div class="row link-image">
             {% for claimMedia in object.claimMedias %}
-                <a href="javascript:void(0);" class="{{ loop.index == 1 ? 'active-image':''  }}" rel="{{ getUrlMedia(claimMedia.media,'default','default_medium') }}">Image {{ loop.index }}</a><br>
+                <a href="javascript:void(0);" class="{{ loop.index == 1 ? 'active-image':'' }}"
+                   rel="{{ getUrlMedia(claimMedia.media,'default','default_medium') }}">Image {{ loop.index }}</a><br>
             {% endfor %}
         </div>
     {% else %}
@@ -34,6 +38,20 @@ file that was distributed with this source code.
                 $('.show-image img').attr('src', url);
                 $('.show-image a').attr('href', url);
             });
+//            $(".rotate-img").rotate({
+//                bind: {
+//                    click: function () {
+//                        var from = parseInt($('img.img-rotate').getRotateAngle());
+//                        var to = from + 90;
+//                        console.log(from);
+//                        console.log(to);
+//                        $('img.img-rotate').rotate({
+//                            angle: from,
+//                            animateTo: to
+//                        })
+//                    }
+//                }
+//            });
         });
 
     </script>

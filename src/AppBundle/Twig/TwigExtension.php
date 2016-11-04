@@ -104,7 +104,7 @@ class TwigExtension extends \Twig_Extension
         $listStatusAllow = [
             Claim::STATUS_PENDING,
         ];
-        if (in_array($claim->getStatus(), $listStatusAllow)) {
+        if (in_array($claim->getStatus(), $listStatusAllow) ) {
             return true;
         }
         return false;

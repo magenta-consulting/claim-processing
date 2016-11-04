@@ -11,6 +11,8 @@ services:
         class: AppBundle\Services\Core\ClaimRule
         calls:
             - [setContainer,["@service_container"]]
+    app.util:
+        class: AppBundle\Services\Core\Util
     app.api_authenticator:
         class: AppBundle\Security\ApiAuthenticator
         arguments: ['@doctrine.orm.entity_manager','@service_container']

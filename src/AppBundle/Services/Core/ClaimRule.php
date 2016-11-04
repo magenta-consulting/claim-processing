@@ -63,15 +63,8 @@ class ClaimRule
     {
         $employeeGroupDescriptionStr = $position->getEmployeeGroupDescription();
         $employeeGroupDescriptionArr = explode('>', $employeeGroupDescriptionStr);
-        $employeeGroupBelongUser = [];
-        for ($i = 0; $i <= count($employeeGroupDescriptionArr) - 1; $i++) {
-            $groupItemArr = [];
-            for ($j = 0; $j <= $i; $j++) {
-                $groupItemArr[] = $employeeGroupDescriptionArr[$j];
-            }
-            $groupItemStr = implode('>', $groupItemArr);
-            $employeeGroupBelongUser[] = $groupItemStr;
-        }
+        $employeeGroupBelongUser = $this->container->get('app.util')->getResult($employeeGroupDescriptionArr);
+
         return $employeeGroupBelongUser;
     }
 
@@ -164,7 +157,7 @@ class ClaimRule
         if (!$limitAmount) {
             return false;
         }
-        $totalAmount = $claim->getClaimAmount();
+        $totalAmount =0;
         foreach ($claims as $claim) {
             $totalAmount += $claim->getClaimAmount();
         }
