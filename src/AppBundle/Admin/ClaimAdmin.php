@@ -146,7 +146,7 @@ class ClaimAdmin extends BaseAdmin
             $formMapper->add('receiptDate', 'date', ['attr' => ['class' => 'datepicker-claim'], 'widget' => 'single_text', 'format' => 'MM/dd/yyyy']);
             $formMapper->add('taxRate', 'sonata_type_model', array(
                 'property' => 'code',
-                'query' => $this->filterTaxRateBycompany(),
+                'query' => $this->filterTaxRateBycompany($subject),
                 'placeholder' => 'None',
                 'empty_data' => null,
                 'btn_add' => false,

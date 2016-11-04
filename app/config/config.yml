@@ -187,7 +187,6 @@ sonata_admin:
     templates:
         dashboard:                      AppBundle:SonataAdmin/Core:dashboard.html.twig
         layout:                         AppBundle:SonataAdmin:standard_layout.html.twig
-        edit:                           AppBundle:SonataAdmin/CRUD:edit.html.twig
     title:      ClaimEx
 #    dashboard:
 #        groups:

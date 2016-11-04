@@ -43,11 +43,12 @@ class BaseAdmin extends AbstractAdmin
         //admin will return null
         return $this->getContainer()->get('app.claim_rule')->getCompany();
     }
+
     public function getClientCompany()
     {
         //admin will return null
         $company = $this->getCompany();
-        if($company->getParent()){
+        if ($company->getParent()) {
             return $company->getParent();
         }
         return $company;
@@ -215,7 +216,7 @@ class BaseAdmin extends AbstractAdmin
                             )
                         );
 
-                        $query->andWhere($expr->eq($query->getRootAliases()[0] .'.status',':statusPending'));
+                        $query->andWhere($expr->eq($query->getRootAliases()[0] . '.status', ':statusPending'));
                         $query->setParameter('statusPending', Claim::STATUS_PENDING);
                         $query->setParameter('positionId', $positionId);
                         $query->setParameter('checker', $this->getPosition());
@@ -228,11 +229,11 @@ class BaseAdmin extends AbstractAdmin
                         );
                         $query->andWhere(
                             $expr->orX(
-                                $expr->eq($query->getRootAliases()[0] .'.approverEmployee', ':approverEmployee'),
-                                $expr->eq($query->getRootAliases()[0] .'.approverBackupEmployee', ':approverEmployee')
+                                $expr->eq($query->getRootAliases()[0] . '.approverEmployee', ':approverEmployee'),
+                                $expr->eq($query->getRootAliases()[0] . '.approverBackupEmployee', ':approverEmployee')
                             )
                         );
-                        $query->andWhere($expr->eq($query->getRootAliases()[0] .'.status',':statusCheckerApproved'));
+                        $query->andWhere($expr->eq($query->getRootAliases()[0] . '.status', ':statusCheckerApproved'));
                         $query->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
                         $query->setParameter('positionId', $positionId);
                         $query->setParameter('approverEmployee', $this->getPosition());
@@ -242,9 +243,9 @@ class BaseAdmin extends AbstractAdmin
                             $expr->eq($query->getRootAliases()[0] . '.position', ':position')
                         );
                         $query->andWhere($expr->orX(
-                            $expr->eq($query->getRootAliases()[0] .'.status',':statusPending'),
-                            $expr->eq($query->getRootAliases()[0] .'.status',':statusCheckerApprove'),
-                            $expr->eq($query->getRootAliases()[0] .'.status',':statusApproverApprove')
+                            $expr->eq($query->getRootAliases()[0] . '.status', ':statusPending'),
+                            $expr->eq($query->getRootAliases()[0] . '.status', ':statusCheckerApprove'),
+                            $expr->eq($query->getRootAliases()[0] . '.status', ':statusApproverApprove')
                         ));
                         $query->andWhere(
                             $expr->eq($query->getRootAliases()[0] . '.periodFrom', ':periodFrom')
@@ -288,8 +289,8 @@ class BaseAdmin extends AbstractAdmin
                             $expr->eq($query->getRootAliases()[0] . '.periodTo', ':periodTo')
                         );
                         $query->andWhere($expr->orX(
-                            $expr->eq($query->getRootAliases()[0] .'.status',':statusCheckerRejected'),
-                            $expr->eq($query->getRootAliases()[0] .'.status',':statusApproverRejected')
+                            $expr->eq($query->getRootAliases()[0] . '.status', ':statusCheckerRejected'),
+                            $expr->eq($query->getRootAliases()[0] . '.status', ':statusApproverRejected')
                         ));
                         $query->setParameter('periodFrom', $periodFrom->format('Y-m-d'));
                         $query->setParameter('periodTo', $periodTo->format('Y-m-d'));
@@ -320,7 +321,7 @@ class BaseAdmin extends AbstractAdmin
                         $query->andWhere(
                             $expr->orX(
                                 $expr->eq('company.parent', ':clientCompany'),
-                                $expr->eq('company' , ':company')
+                                $expr->eq('company', ':company')
                             )
                         );
                         $query->andWhere(
@@ -329,7 +330,7 @@ class BaseAdmin extends AbstractAdmin
                                 $expr->eq('checker.backupChecker', ':checker')
                             )
                         );
-                        $query->andWhere($expr->eq('claim.status',':statusPending'));
+                        $query->andWhere($expr->eq('claim.status', ':statusPending'));
                         $query->setParameter('statusPending', Claim::STATUS_PENDING);
                         $query->setParameter('checker', $position);
                         $query->setParameter('company', $company);
@@ -341,7 +342,7 @@ class BaseAdmin extends AbstractAdmin
                         $query->andWhere(
                             $expr->orX(
                                 $expr->eq('company.parent', ':clientCompany'),
-                                $expr->eq('company' , ':company')
+                                $expr->eq('company', ':company')
                             )
                         );
                         $query->andWhere(
@@ -350,7 +351,7 @@ class BaseAdmin extends AbstractAdmin
                                 $expr->eq('claim.approverBackupEmployee', ':position')
                             )
                         );
-                        $query->andWhere($expr->eq('claim.status',':statusCheckerApproved'));
+                        $query->andWhere($expr->eq('claim.status', ':statusCheckerApproved'));
                         $query->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
                         $query->setParameter('position', $position);
                         $query->setParameter('company', $company);
@@ -484,7 +485,8 @@ class BaseAdmin extends AbstractAdmin
         return $qb;
     }
 
-    public function filterTaxRateBycompany()
+    public function filterTaxRateBycompany(Claim $claim)
+
     {
         $em = $this->container->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder();
@@ -492,7 +494,13 @@ class BaseAdmin extends AbstractAdmin
         $qb->select('taxRate')
             ->from('AppBundle\Entity\TaxRate', 'taxRate')
             ->where($expr->eq('taxRate.company', ':company'))
+            ->andWhere($expr->eq('taxRate.isLocalDefault', ':localDefault'))
             ->setParameter('company', $this->getClientCompany());
+        if ($claim->getClaimType()->getClaimTypeType()->getName() == 'Local') {
+            $qb->setParameter('localDefault', true);
+        } else {
+            $qb->setParameter('localDefault', false);
+        }
         return $qb;
     }
 
