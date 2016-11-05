@@ -484,9 +484,7 @@ class BaseAdmin extends AbstractAdmin
             ->setParameter('company', $this->getClientCompany());
         return $qb;
     }
-
-    public function filterTaxRateBycompany(Claim $claim)
-
+    public function filterTaxRateBycompany()
     {
         $em = $this->container->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder();
@@ -494,15 +492,10 @@ class BaseAdmin extends AbstractAdmin
         $qb->select('taxRate')
             ->from('AppBundle\Entity\TaxRate', 'taxRate')
             ->where($expr->eq('taxRate.company', ':company'))
-            ->andWhere($expr->eq('taxRate.isLocalDefault', ':localDefault'))
             ->setParameter('company', $this->getClientCompany());
-        if ($claim->getClaimType()->getClaimTypeType()->getName() == 'Local') {
-            $qb->setParameter('localDefault', true);
-        } else {
-            $qb->setParameter('localDefault', false);
-        }
         return $qb;
     }
+
 
     public function filterPayCostBycompany()
     {

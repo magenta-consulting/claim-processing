@@ -85,6 +85,24 @@ class ClaimAdmin extends BaseAdmin
             ->andWhere($expr->in('claimCategory.id', $listCategory));//if $listCategory
         return $qb;
     }
+    public function filterTaxRateBycompanyByClaim(Claim $claim)
+
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder();
+        $expr = new Expr();
+        $qb->select('taxRate')
+            ->from('AppBundle\Entity\TaxRate', 'taxRate')
+            ->where($expr->eq('taxRate.company', ':company'))
+            ->andWhere($expr->eq('taxRate.isLocalDefault', ':localDefault'))
+            ->setParameter('company', $this->getClientCompany());
+        if ($claim->getClaimType()->getClaimTypeType()->getName() == 'Local') {
+            $qb->setParameter('localDefault', true);
+        } else {
+            $qb->setParameter('localDefault', false);
+        }
+        return $qb;
+    }
 
     protected function configureFormFields(FormMapper $formMapper)
     {
@@ -146,7 +164,7 @@ class ClaimAdmin extends BaseAdmin
             $formMapper->add('receiptDate', 'date', ['attr' => ['class' => 'datepicker-claim'], 'widget' => 'single_text', 'format' => 'MM/dd/yyyy']);
             $formMapper->add('taxRate', 'sonata_type_model', array(
                 'property' => 'code',
-                'query' => $this->filterTaxRateBycompany($subject),
+                'query' => $this->filterTaxRateBycompanyByClaim($subject),
                 'placeholder' => 'None',
                 'empty_data' => null,
                 'btn_add' => false,
