@@ -26,7 +26,7 @@ class ClaimAdmin extends BaseAdmin
 
     public function getPosition()
     {
-        if($this->getRequest()->get('type') == 'onbehalf'){
+        if ($this->getRequest()->get('type') == 'onbehalf') {
             $em = $this->container->get('doctrine')->getManager();
             $positionId = $this->getRequest()->get('position-id');
             $position = $em->getRepository('AppBundle\Entity\Position')->find($positionId);
@@ -85,6 +85,7 @@ class ClaimAdmin extends BaseAdmin
             ->andWhere($expr->in('claimCategory.id', $listCategory));//if $listCategory
         return $qb;
     }
+
     public function filterTaxRateBycompanyByClaim(Claim $claim)
 
     {
@@ -349,140 +350,147 @@ class ClaimAdmin extends BaseAdmin
     protected
     function configureShowFields(ShowMapper $show)
     {
+        $claim = $this->getSubject();
         $request = $this->getRequest();
         $type = $request->get('type');
         switch ($type) {
             case 'checker-view-claim':
-                $show->tab('Claim Details')
-                    ->with('Claim Details', array('class' => 'col-md-6'))
-                    ->add('description', 'text', ['label' => 'Description'])
-                    ->add('claimType.code', 'text', ['label' => 'Claim Type'])
-                    ->add('claimCategory.code', 'text', ['label' => 'Claim Category'])
-                    ->add('3', 'show_claim_limit', ['label' => 'Claim Limit'])
-                    ->add('claimAmount', 'show_currency', ['label' => 'Amount','currency'=>'USD'])
-                    ->add('taxRate.code', 'show_tax_code', ['label' => 'Tax Code'])
-                    ->add('taxAmount', null, ['label' => 'Tax Amount'])
-                    ->add('currencyExchange.code', null, ['label' => 'Currency'])
-                    ->add('exRate', null, ['label' => 'Ex Rate'])
-                    ->add('claimAmountConverted', null, ['label' => 'Receipt Value after conversion'])
-                    ->add('taxAmountConverted', null, ['label' => 'Tax Value after Conversion'])
-                    ->add('status', 'text', ['label' => 'Status'])
-                    ->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y'])
-                    ->add('submissionRemarks', null , ['label'=>'Claimant Submission Remarks'])
-                    ->end()
-                    ->with('Claim Images', array('class' => 'col-md-6'))
-                    ->add('claimMedias', 'show_image', ['label' => 'Claim Images'])
-                    ->end()
-
-                    ->end()
-                    ->tab('Submission / Employment Details')
-                    ->with('Submission Details', array('class' => 'col-md-6'))
-                    ->add('createdBy', 'show_claim_created_by', ['label' => 'Submitted By'])
-                    ->add('createdAt', null, ['label' => 'Date Submitted', 'format' => 'd M Y h:i A'])
-                    ->add('position.firstName', null, ['label' => 'Claimant First Name'])
-                    ->add('position.lastName', null, ['label' => 'Claimant Last Name'])
-                    ->add('position.employeeNo', null, ['label' => 'Employee No.'])
-                    ->add('position.contactNumber', null, ['label' => 'Contact No.'])
-                    ->end()
-                    ->with('Employment Details', array('class' => 'col-md-6'))
-                    ->add('position.company.name', null, ['label' => 'Company'])
-                    ->add('position.costCentre.code', null, ['label' => 'Cost Centre'])
-                    ->add('position.department.code', null, ['label' => 'Department'])
-                    ->add('position.employeeType.code', null, ['label' => 'Employee Type'])
-                    ->add('position.employmentType.code', null, ['label' => 'Employment Type'])
-                    ->end()
-                    ->end();
+                $show->tab('Claim Details');
+                $show->with('Claim Details', array('class' => 'col-md-6'));
+                $show->add('description', 'text', ['label' => 'Description']);
+                $show->add('claimType.code', 'text', ['label' => 'Claim Type']);
+                $show->add('claimCategory.code', 'text', ['label' => 'Claim Category']);
+                $show->add('3', 'show_claim_limit', ['label' => 'Claim Limit']);
+                $show->add('claimAmount', 'show_currency', ['label' => 'Amount', 'currency' => 'USD']);
+                $show->add('taxRate.code', 'show_tax_code', ['label' => 'Tax Code']);
+                $show->add('taxAmount', null, ['label' => 'Tax Amount']);
+                if ($claim->getCurrencyExchange()) {
+                    $show->add('currencyExchange.code', null, ['label' => 'Currency']);
+                    $show->add('exRate', null, ['label' => 'Ex Rate']);
+                    $show->add('claimAmountConverted', null, ['label' => 'Receipt Value after conversion']);
+                    $show->add('taxAmountConverted', null, ['label' => 'Tax Value after Conversion']);
+                }
+                $show->add('status', 'text', ['label' => 'Status']);
+                $show->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y']);
+                $show->add('submissionRemarks', null, ['label' => 'Claimant Submission Remarks']);
+                $show->end();
+                $show->with('Claim Images', array('class' => 'col-md-6'));
+                $show->add('claimMedias', 'show_image', ['label' => 'Claim Images']);
+                $show->end();
+                $show->end();
+                $show->tab('Submission / Employment Details');
+                $show->with('Submission Details', array('class' => 'col-md-6'));
+                $show->add('createdBy', 'show_claim_created_by', ['label' => 'Submitted By']);
+                $show->add('createdAt', null, ['label' => 'Date Submitted', 'format' => 'd M Y h:i A']);
+                $show->add('position.firstName', null, ['label' => 'Claimant First Name']);
+                $show->add('position.lastName', null, ['label' => 'Claimant Last Name']);
+                $show->add('position.employeeNo', null, ['label' => 'Employee No.']);
+                $show->add('position.contactNumber', null, ['label' => 'Contact No.']);
+                $show->end();
+                $show->with('Employment Details', array('class' => 'col-md-6'));
+                $show->add('position.company.name', null, ['label' => 'Company']);
+                $show->add('position.costCentre.code', null, ['label' => 'Cost Centre']);
+                $show->add('position.department.code', null, ['label' => 'Department']);
+                $show->add('position.employeeType.code', null, ['label' => 'Employee Type']);
+                $show->add('position.employmentType.code', null, ['label' => 'Employment Type']);
+                $show->end();
+                $show->end();
                 break;
             case 'approving-view-claim':
-                $show->tab('Claim Details')
-                    ->with('Claim Details', array('class' => 'col-md-6'))
-                    ->add('description', 'text', ['label' => 'Description'])
-                    ->add('claimType.code', 'text', ['label' => 'Claim Type'])
-                    ->add('claimCategory.code', 'text', ['label' => 'Claim Category'])
-                    ->add('3', 'show_claim_limit', ['label' => 'Claim Limit'])
-                    ->add('claimAmount', 'show_currency', ['label' => 'Amount','currency'=>'USD'])
-                    ->add('taxRate.code', 'show_tax_code', ['label' => 'Tax Code'])
-                    ->add('taxAmount', null, ['label' => 'Tax Amount'])
-                    ->add('currencyExchange.code', null, ['label' => 'Currency'])
-                    ->add('exRate', null, ['label' => 'Ex Rate'])
-                    ->add('claimAmountConverted', null, ['label' => 'Receipt Value after conversion'])
-                    ->add('taxAmountConverted', null, ['label' => 'Tax Value after Conversion'])
-                    ->add('status', 'text', ['label' => 'Status'])
-                    ->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y'])
-                    ->add('submissionRemarks', null , ['label'=>'Claimant Submission Remarks'])
-                    ->end()
-                    ->with('Claim Images', array('class' => 'col-md-6'))
-                    ->add('claimMedias', 'show_image', ['label' => 'Claim Images'])
-                    ->end()
-                    ->with('Checker Remarks', array('class' => 'col-md-12'))
-                    ->add('checkerRemark','show_checker_remark')
-                    ->end()
-                    ->end()
-                    ->tab('Submission / Employment Details')
-                    ->with('Submission Details', array('class' => 'col-md-6'))
-                    ->add('createdBy', 'show_claim_created_by', ['label' => 'Submitted By'])
-                    ->add('createdAt', null, ['label' => 'Date Submitted', 'format' => 'd M Y h:i A'])
-                    ->add('position.firstName', null, ['label' => 'Claimant First Name'])
-                    ->add('position.lastName', null, ['label' => 'Claimant Last Name'])
-                    ->add('position.employeeNo', null, ['label' => 'Employee No.'])
-                    ->add('position.contactNumber', null, ['label' => 'Contact No.'])
-                    ->end()
-                    ->with('Employment Details', array('class' => 'col-md-6'))
-                    ->add('position.company.name', null, ['label' => 'Company'])
-                    ->add('position.costCentre.code', null, ['label' => 'Cost Centre'])
-                    ->add('position.department.code', null, ['label' => 'Department'])
-                    ->add('position.employeeType.code', null, ['label' => 'Employee Type'])
-                    ->add('position.employmentType.code', null, ['label' => 'Employment Type'])
-                    ->end()
-                    ->end();
+                $show->tab('Claim Details');
+                $show->with('Claim Details', array('class' => 'col-md-6'));
+                $show->add('description', 'text', ['label' => 'Description']);
+                $show->add('claimType.code', 'text', ['label' => 'Claim Type']);
+                $show->add('claimCategory.code', 'text', ['label' => 'Claim Category']);
+                $show->add('3', 'show_claim_limit', ['label' => 'Claim Limit']);
+                $show->add('claimAmount', 'show_currency', ['label' => 'Amount', 'currency' => 'USD']);
+                $show->add('taxRate.code', 'show_tax_code', ['label' => 'Tax Code']);
+                $show->add('taxAmount', null, ['label' => 'Tax Amount']);
+                if ($claim->getCurrencyExchange()) {
+                    $show->add('currencyExchange.code', null, ['label' => 'Currency']);
+                    $show->add('exRate', null, ['label' => 'Ex Rate']);
+                    $show->add('claimAmountConverted', null, ['label' => 'Receipt Value after conversion']);
+                    $show->add('taxAmountConverted', null, ['label' => 'Tax Value after Conversion']);
+                }
+                $show->add('status', 'text', ['label' => 'Status']);
+                $show->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y']);
+                $show->add('submissionRemarks', null, ['label' => 'Claimant Submission Remarks']);
+                $show->end();
+                $show->with('Claim Images', array('class' => 'col-md-6'));
+                $show->add('claimMedias', 'show_image', ['label' => 'Claim Images']);
+                $show->end();
+                $show->with('Checker Remarks', array('class' => 'col-md-12'));
+                $show->add('checkerRemark', 'show_checker_remark');
+                $show->end();
+                $show->end();
+                $show->tab('Submission / Employment Details');
+                $show->with('Submission Details', array('class' => 'col-md-6'));
+                $show->add('createdBy', 'show_claim_created_by', ['label' => 'Submitted By']);
+                $show->add('createdAt', null, ['label' => 'Date Submitted', 'format' => 'd M Y h:i A']);
+                $show->add('position.firstName', null, ['label' => 'Claimant First Name']);
+                $show->add('position.lastName', null, ['label' => 'Claimant Last Name']);
+                $show->add('position.employeeNo', null, ['label' => 'Employee No.']);
+                $show->add('position.contactNumber', null, ['label' => 'Contact No.']);
+                $show->end();
+                $show->with('Employment Details', array('class' => 'col-md-6'));
+                $show->add('position.company.name', null, ['label' => 'Company']);
+                $show->add('position.costCentre.code', null, ['label' => 'Cost Centre']);
+                $show->add('position.department.code', null, ['label' => 'Department']);
+                $show->add('position.employeeType.code', null, ['label' => 'Employee Type']);
+                $show->add('position.employmentType.code', null, ['label' => 'Employment Type']);
+                $show->end();
+                $show->end();
                 break;
             case 'employee-preview-claim':
-                $show
-                    ->with('Claim Images', array('class' => 'col-md-6'))
-                    ->add('claimMedias', 'show_image', ['label' => 'Claim Images'])
-                    ->end()
-                    ->with('Claim Details', array('class' => 'col-md-6'))
-                    ->add('description', 'text', ['label' => 'Description'])
-                    ->add('claimType.code', 'text', ['label' => 'Claim Type'])
-                    ->add('claimCategory.code', 'text', ['label' => 'Claim Category'])
-                    ->add('3', 'show_claim_limit', ['label' => 'Claim Limit'])
-                    ->add('claimAmount', 'show_currency', ['label' => 'Amount','currency'=>'USD'])
-                    ->add('taxRate.code', 'show_tax_code', ['label' => 'Tax Code'])
-                    ->add('taxAmount', null, ['label' => 'Tax Amount'])
-                    ->add('currencyExchange.code', null, ['label' => 'Currency'])
-                    ->add('exRate', null, ['label' => 'Ex Rate'])
-                    ->add('claimAmountConverted', null, ['label' => 'Receipt Value after conversion'])
-                    ->add('taxAmountConverted', null, ['label' => 'Tax Value after Conversion'])
-                    ->add('status', 'text', ['label' => 'Status'])
-                    ->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y'])
-                    ->end();
+                $show->with('Claim Images', array('class' => 'col-md-6'));
+                $show->add('claimMedias', 'show_image', ['label' => 'Claim Images']);
+                $show->end();
+                $show->with('Claim Details', array('class' => 'col-md-6'));
+                $show->add('description', 'text', ['label' => 'Description']);
+                $show->add('claimType.code', 'text', ['label' => 'Claim Type']);
+                $show->add('claimCategory.code', 'text', ['label' => 'Claim Category']);
+                $show->add('3', 'show_claim_limit', ['label' => 'Claim Limit']);
+                $show->add('claimAmount', 'show_currency', ['label' => 'Amount', 'currency' => 'USD']);
+                $show->add('taxRate.code', 'show_tax_code', ['label' => 'Tax Code']);
+                $show->add('taxAmount', null, ['label' => 'Tax Amount']);
+                if ($claim->getCurrencyExchange()) {
+                    $show->add('currencyExchange.code', null, ['label' => 'Currency']);
+                    $show->add('exRate', null, ['label' => 'Ex Rate']);
+                    $show->add('claimAmountConverted', null, ['label' => 'Receipt Value after conversion']);
+                    $show->add('taxAmountConverted', null, ['label' => 'Tax Value after Conversion']);
+                }
+                $show->add('status', 'text', ['label' => 'Status']);
+                $show->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y']);
+                $show->end();
                 break;
             default:
-                $show
-                    ->with('Claim Images', array('class' => 'col-md-6'))
-                    ->add('claimMedias', 'show_image', ['label' => 'Claim Images'])
-                    ->end()
-                    ->with('Claim Details', array('class' => 'col-md-6'))
-                    ->add('description', 'text', ['label' => 'Description'])
-                    ->add('claimType.code', 'text', ['label' => 'Claim Type'])
-                    ->add('claimCategory.code', 'text', ['label' => 'Claim Category'])
-                    ->add('3', 'show_claim_limit', ['label' => 'Claim Limit'])
-                    ->add('claimAmount', 'show_currency', ['label' => 'Amount','currency'=>'USD'])
-                    ->add('currencyExchange.code', null, ['label' => 'Currency'])
-                    ->add('1', null, ['label' => 'Ex Rate'])
-                    ->add('2', null, ['label' => 'Conversion Value'])
-                    ->add('taxRate.code', 'show_tax_code', ['label' => 'Tax Code'])
-                    ->add('taxAmount', null, ['label' => 'Tax Amount'])
-                    ->add('status', 'text', ['label' => 'Status'])
-                    ->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y'])
-                    ->add('submissionRemarks', null , ['label'=>'Claimant Submission Remarks'])
-                    ->end()
-                    ->with('Approver', array('class' => 'col-md-6'))
-                    ->add('approver', 'show_approver', ['label' => 'Company'])
-                    ->end()
-                    ->with('Checker', array('class' => 'col-md-6'))
-                    ->add('checker', 'show_checker', ['label' => 'Company'])
-                    ->end();
+                $show->with('Claim Images', array('class' => 'col-md-6'));
+                $show->add('claimMedias', 'show_image', ['label' => 'Claim Images']);
+                $show->end();
+                $show->with('Claim Details', array('class' => 'col-md-6'));
+                $show->add('description', 'text', ['label' => 'Description']);
+                $show->add('claimType.code', 'text', ['label' => 'Claim Type']);
+                $show->add('claimCategory.code', 'text', ['label' => 'Claim Category']);
+                $show->add('3', 'show_claim_limit', ['label' => 'Claim Limit']);
+                $show->add('claimAmount', 'show_currency', ['label' => 'Amount', 'currency' => 'USD']);
+                $show->add('taxRate.code', 'show_tax_code', ['label' => 'Tax Code']);
+                $show->add('taxAmount', null, ['label' => 'Tax Amount']);
+                if ($claim->getCurrencyExchange()) {
+                    $show->add('currencyExchange.code', null, ['label' => 'Currency']);
+                    $show->add('exRate', null, ['label' => 'Ex Rate']);
+                    $show->add('claimAmountConverted', null, ['label' => 'Receipt Value after conversion']);
+                    $show->add('taxAmountConverted', null, ['label' => 'Tax Value after Conversion']);
+                }
+                $show->add('status', 'text', ['label' => 'Status']);
+                $show->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y']);
+                $show->add('submissionRemarks', null, ['label' => 'Claimant Submission Remarks']);
+                $show->end();
+                $show->with('Approver', array('class' => 'col-md-6'));
+                $show->add('approver', 'show_approver', ['label' => 'Company']);
+                $show->end();
+                $show->with('Checker', array('class' => 'col-md-6'));
+                $show->add('checker', 'show_checker', ['label' => 'Company']);
+                $show->end();
 
                 break;
 
@@ -504,11 +512,14 @@ class ClaimAdmin extends BaseAdmin
         $position = $this->getPosition();
         if ($position->getId() == $claim->getPosition()->getId()) {
             //employee update for claim
-            $result = $this->getContainer()->get('app.claim_rule')->assignClaimToSpecificApprover($claim,$position);
+            $result = $this->getContainer()->get('app.claim_rule')->assignClaimToSpecificApprover($claim, $position);
             $claim->setApproverEmployee($result['approverEmployee']);
             $claim->setApproverBackupEmployee($result['approverBackupEmployee']);
-            if($claim->getCurrencyExchange()){
+            if ($claim->getCurrencyExchange()) {
                 $claim->setExRate($this->getContainer()->get('app.claim_rule')->getExRate($claim->getCurrencyExchange()->getId()));
+            } else {
+                $claim->setClaimAmountConverted($claim->getClaimAmount());
+                $claim->setTaxAmountConverted($claim->getTaxAmount());
             }
         } else {
             //approver or checker update claim

@@ -163,7 +163,7 @@ class ClaimRule
         }
         $totalAmount = 0;
         foreach ($claims as $claim) {
-            $totalAmount += $claim->getClaimAmount();
+            $totalAmount += $claim->getClaimAmountConverted();
         }
         if ($totalAmount > $limitAmount) {
             return true;

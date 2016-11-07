@@ -5,7 +5,7 @@
 {% block field %}
         {% set value = getLimitAmount(object,object.position) %}
         {% if value is not null %}
-                $ {{ value }}
+                {{ value }}
         {% endif %}
 {% endblock %}
 
