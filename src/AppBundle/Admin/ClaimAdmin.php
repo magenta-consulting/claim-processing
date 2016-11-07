@@ -158,6 +158,18 @@ class ClaimAdmin extends BaseAdmin
                     'label' => 'Currency',
                     'required' => false
                 ));
+
+                $formMapper->add('claimAmountConverted', 'number', [
+                    'label' => 'Receipt Value after conversion',
+                    'required' => false,
+                    'attr' => ['readonly' => true]
+                ]);
+
+                $formMapper->add('taxAmountConverted', 'number', [
+                    'label' => 'Tax Value after Conversion',
+                    'required' => false,
+                    'attr' => ['readonly' => true]
+                ]);
             }
             $formMapper->add('claimAmount', 'number', ['label' => 'Receipt Amount']);
             $formMapper->add('description', 'text', ['label' => 'Claim Description']);
@@ -348,11 +360,12 @@ class ClaimAdmin extends BaseAdmin
                     ->add('claimCategory.code', 'text', ['label' => 'Claim Category'])
                     ->add('3', 'show_claim_limit', ['label' => 'Claim Limit'])
                     ->add('claimAmount', 'show_currency', ['label' => 'Amount','currency'=>'USD'])
-                    ->add('currencyExchange.code', null, ['label' => 'Currency'])
-                    ->add('1', null, ['label' => 'Ex Rate'])
-                    ->add('2', null, ['label' => 'Conversion Value'])
                     ->add('taxRate.code', 'show_tax_code', ['label' => 'Tax Code'])
                     ->add('taxAmount', null, ['label' => 'Tax Amount'])
+                    ->add('currencyExchange.code', null, ['label' => 'Currency'])
+                    ->add('exRate', null, ['label' => 'Ex Rate'])
+                    ->add('claimAmountConverted', null, ['label' => 'Receipt Value after conversion'])
+                    ->add('taxAmountConverted', null, ['label' => 'Tax Value after Conversion'])
                     ->add('status', 'text', ['label' => 'Status'])
                     ->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y'])
                     ->add('submissionRemarks', null , ['label'=>'Claimant Submission Remarks'])
@@ -388,11 +401,12 @@ class ClaimAdmin extends BaseAdmin
                     ->add('claimCategory.code', 'text', ['label' => 'Claim Category'])
                     ->add('3', 'show_claim_limit', ['label' => 'Claim Limit'])
                     ->add('claimAmount', 'show_currency', ['label' => 'Amount','currency'=>'USD'])
-                    ->add('currencyExchange.code', null, ['label' => 'Currency'])
-                    ->add('1', null, ['label' => 'Ex Rate'])
-                    ->add('2', null, ['label' => 'Conversion Value'])
                     ->add('taxRate.code', 'show_tax_code', ['label' => 'Tax Code'])
                     ->add('taxAmount', null, ['label' => 'Tax Amount'])
+                    ->add('currencyExchange.code', null, ['label' => 'Currency'])
+                    ->add('exRate', null, ['label' => 'Ex Rate'])
+                    ->add('claimAmountConverted', null, ['label' => 'Receipt Value after conversion'])
+                    ->add('taxAmountConverted', null, ['label' => 'Tax Value after Conversion'])
                     ->add('status', 'text', ['label' => 'Status'])
                     ->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y'])
                     ->add('submissionRemarks', null , ['label'=>'Claimant Submission Remarks'])
@@ -433,11 +447,12 @@ class ClaimAdmin extends BaseAdmin
                     ->add('claimCategory.code', 'text', ['label' => 'Claim Category'])
                     ->add('3', 'show_claim_limit', ['label' => 'Claim Limit'])
                     ->add('claimAmount', 'show_currency', ['label' => 'Amount','currency'=>'USD'])
-                    ->add('currencyExchange.code', null, ['label' => 'Currency'])
-                    ->add('1', null, ['label' => 'Ex Rate'])
-                    ->add('2', null, ['label' => 'Conversion Value'])
                     ->add('taxRate.code', 'show_tax_code', ['label' => 'Tax Code'])
                     ->add('taxAmount', null, ['label' => 'Tax Amount'])
+                    ->add('currencyExchange.code', null, ['label' => 'Currency'])
+                    ->add('exRate', null, ['label' => 'Ex Rate'])
+                    ->add('claimAmountConverted', null, ['label' => 'Receipt Value after conversion'])
+                    ->add('taxAmountConverted', null, ['label' => 'Tax Value after Conversion'])
                     ->add('status', 'text', ['label' => 'Status'])
                     ->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y'])
                     ->end();
@@ -492,6 +507,9 @@ class ClaimAdmin extends BaseAdmin
             $result = $this->getContainer()->get('app.claim_rule')->assignClaimToSpecificApprover($claim,$position);
             $claim->setApproverEmployee($result['approverEmployee']);
             $claim->setApproverBackupEmployee($result['approverBackupEmployee']);
+            if($claim->getCurrencyExchange()){
+                $claim->setExRate($this->getContainer()->get('app.claim_rule')->getExRate($claim->getCurrencyExchange()->getId()));
+            }
         } else {
             //approver or checker update claim
 

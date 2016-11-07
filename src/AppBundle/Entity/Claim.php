@@ -68,6 +68,12 @@ class Claim
     private $claimAmount;
 
     /**
+     * @var float
+     * @ORM\Column(name="claim_amount_converted",type="float",nullable=true)
+     */
+    private $claimAmountConverted;
+
+    /**
      * @var text
      * @ORM\Column(name="description",type="text",nullable=true)
      */
@@ -134,6 +140,12 @@ class Claim
     private $taxAmount;
 
     /**
+     * @var float
+     * @ORM\Column(name="tax_amount_converted",type="float",nullable=true)
+     */
+    private $taxAmountConverted;
+
+    /**
      * @var Date
      * @ORM\Column(name="period_from",type="date",nullable=true)
      */
@@ -179,6 +191,12 @@ class Claim
      */
     private $approverUpdatedAt;
 
+    /**
+     * @var float
+     * @ORM\Column(name="ex_rate",type="string",nullable=true)
+     */
+    private $exRate;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
@@ -193,6 +211,58 @@ class Claim
     {
         return $this->id;
     }
+
+    /**
+     * @return float
+     */
+    public function getExRate()
+    {
+        return $this->exRate;
+    }
+
+    /**
+     * @param float $exRate
+     */
+    public function setExRate($exRate)
+    {
+        $this->exRate = $exRate;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getClaimAmountConverted()
+    {
+        return $this->claimAmountConverted;
+    }
+
+    /**
+     * @param float $claimAmountConverted
+     */
+    public function setClaimAmountConverted($claimAmountConverted)
+    {
+        $this->claimAmountConverted = $claimAmountConverted;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTaxAmountConverted()
+    {
+        return $this->taxAmountConverted;
+    }
+
+    /**
+     * @param float $taxAmountConverted
+     */
+    public function setTaxAmountConverted($taxAmountConverted)
+    {
+        $this->taxAmountConverted = $taxAmountConverted;
+    }
+
+
 
     /**
      * @return Position

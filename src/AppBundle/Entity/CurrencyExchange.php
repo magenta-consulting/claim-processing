@@ -61,6 +61,24 @@ class CurrencyExchange
     }
 
     /**
+     * @return Company
+     */
+    public function getCurrencyExchangeValues()
+    {
+        return $this->currencyExchangeValues;
+    }
+
+    /**
+     * @param Company $currencyExchangeValues
+     */
+    public function setCurrencyExchangeValues($currencyExchangeValues)
+    {
+        $this->currencyExchangeValues = $currencyExchangeValues;
+    }
+
+
+
+    /**
      * @return string
      */
     public function getCode()

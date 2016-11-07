@@ -30,13 +30,20 @@
                     });
                     //update tax amount when claim amount or tax rate change
                     $('.claim-amount').change(function () {
-                        getTaxAmount($(this));
+                        getTaxAmount();
+                        getTaxAmountConverted()
+                        getClaimAmountConverted();
                     });
                     $('.tax-rate').change(function () {
-                        getTaxAmount($(this));
+                        getTaxAmount();
+                        getTaxAmountConverted()
                     });
-                    function getTaxAmount(selector) {
-                        var href = selector.data('href');
+                    $('.claim-currency').change(function () {
+                        getTaxAmountConverted()
+                        getClaimAmountConverted();
+                    });
+                    function getTaxAmount() {
+                        var href = $('.wrap-claim-form').data('href-get-tax-amount');
                         var data = {};
                         data['claim-amount'] = $('.claim-amount').val();
                         data['tax-rate-id'] = $('.tax-rate').val();
@@ -47,6 +54,39 @@
                             success: function (result) {
                                 if (result.status) {
                                     $('.tax-amount').val(result.value);
+                                }
+                            }
+                        });
+                    }
+                    function getTaxAmountConverted() {
+                        var href = $('.wrap-claim-form').data('href-get-taxamount-converted');
+                        var data = {};
+                        data['claim-amount'] = $('.claim-amount').val();
+                        data['tax-rate-id'] = $('.tax-rate').val();
+                        data['ex-rate-id'] = $('.claim-currency').val();
+                        $.ajax({
+                            url: href,
+                            type: 'POST',
+                            data: data,
+                            success: function (result) {
+                                if (result.status) {
+                                    $('.tax-amount-converted').val(result.value);
+                                }
+                            }
+                        });
+                    }
+                    function getClaimAmountConverted() {
+                        var href = $('.wrap-claim-form').data('href-get-claimamount-converted');
+                        var data = {};
+                        data['claim-amount'] = $('.claim-amount').val();
+                        data['ex-rate-id'] = $('.claim-currency').val();
+                        $.ajax({
+                            url: href,
+                            type: 'POST',
+                            data: data,
+                            success: function (result) {
+                                if (result.status) {
+                                    $('.claim-amount-converted').val(result.value);
                                 }
                             }
                         });
@@ -131,7 +171,7 @@
                                         – {{ getCurrentClaimPeriod('to')| date('d M') }}</small>
                                 </h4>
                             </div>
-                            <div class="box-body">
+                            <div class="box-body wrap-claim-form" data-href-get-tax-amount ="{{ path('app_api_gettaxamount') }}" data-href-get-taxamount-converted="{{ path('app_api_gettaxamountconverted') }}" data-href-get-claimamount-converted="{{ path('app_api_getclaimamountconverted') }}">
                                 <div class="sonata-ba-collapsed-fields">
                                     {% if app.request.attributes.get('_route') == 'admin_app_claim_create' %}
                                         {{ form_row(form.claimType ,{'attr': {'class': 'claim-type'}}) }}
@@ -157,12 +197,14 @@
                                             {% endfor %}
                                         </div>
                                         {{ form_row(form.description) }}
-                                        {{ form_row(form.claimAmount,{'attr': {'class': 'claim-amount','data-href':path('app_api_gettaxamount')}}) }}
+                                        {{ form_row(form.claimAmount,{'attr': {'class': 'claim-amount'}}) }}
                                         {{ form_row(form.receiptDate) }}
-                                        {{ form_row(form.taxRate,{'attr': {'class': 'tax-rate','data-href':path('app_api_gettaxamount')}}) }}
+                                        {{ form_row(form.taxRate,{'attr': {'class': 'tax-rate'}}) }}
                                         {{ form_row(form.taxAmount,{'attr': {'class': 'tax-amount'}}) }}
                                         {% if object.claimType.code == 'Overseas' %}
-                                            {{ form_row(form.currencyExchange) }}
+                                            {{ form_row(form.currencyExchange,{'attr': {'class': 'claim-currency'}}) }}
+                                            {{ form_row(form.claimAmountConverted,{'attr': {'class': 'claim-amount-converted'}}) }}
+                                            {{ form_row(form.taxAmountConverted,{'attr': {'class': 'tax-amount-converted'}}) }}
                                         {% endif %}
                                     {% endif %}
                                 </div>

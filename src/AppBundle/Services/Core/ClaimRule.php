@@ -5,6 +5,7 @@ namespace AppBundle\Services\Core;
 use AppBundle\Entity\Claim;
 use Doctrine\ORM\Query\Expr;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Doctrine\Common\Collections\Criteria;
 
 class ClaimRule
 {
@@ -45,20 +46,23 @@ class ClaimRule
         }
         return $company;
     }
+
     public function getClientCompany()
     {
         //admin will return null
         $company = $this->getCompany();
-        if($company->getParent()){
+        if ($company->getParent()) {
             return $company->getParent();
         }
         return $company;
     }
 
-    public function calculateTaxAmount($receiptAmount,$taxRate){
-        $taxAmount = $receiptAmount+$taxRate;
+    public function calculateTaxAmount($receiptAmount, $taxRate)
+    {
+        $taxAmount = $receiptAmount + $taxRate;
         return $taxAmount;
     }
+
     public function getEmployeeGroupBelongToUser($position)
     {
         $employeeGroupDescriptionStr = $position->getEmployeeGroupDescription();
@@ -101,7 +105,7 @@ class ClaimRule
         return $period[$key];
     }
 
-    public function getLimitAmount(Claim $claim,$position)
+    public function getLimitAmount(Claim $claim, $position)
     {
         $em = $this->container->get('doctrine')->getManager();
         $limitRule = $em->getRepository('AppBundle\Entity\LimitRule')->findOneBy([
@@ -131,7 +135,7 @@ class ClaimRule
         return null;
     }
 
-    public function isExceedLimitRule(Claim $claim,$position)
+    public function isExceedLimitRule(Claim $claim, $position)
     {
         $em = $this->container->get('doctrine')->getManager();
         $periodFrom = $this->getCurrentClaimPeriod('from');
@@ -153,11 +157,11 @@ class ClaimRule
             ->getQuery()
             ->getResult();
 
-        $limitAmount = $this->getLimitAmount($claim,$position);
+        $limitAmount = $this->getLimitAmount($claim, $position);
         if (!$limitAmount) {
             return false;
         }
-        $totalAmount =0;
+        $totalAmount = 0;
         foreach ($claims as $claim) {
             $totalAmount += $claim->getClaimAmount();
         }
@@ -274,7 +278,7 @@ class ClaimRule
 
     }
 
-    public function assignClaimToSpecificApprover(Claim $claim,$position)
+    public function assignClaimToSpecificApprover(Claim $claim, $position)
     {
         $approver = $this->getApprover($position);
         $amount = $claim->getClaimAmount();
@@ -403,7 +407,8 @@ class ClaimRule
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function getNumberRejectedClaim(){
+    public function getNumberRejectedClaim()
+    {
         $expr = new Expr();
         $periodFrom = $this->container->get('app.claim_rule')->getCurrentClaimPeriod('from');
         $periodTo = $this->container->get('app.claim_rule')->getCurrentClaimPeriod('to');
@@ -421,8 +426,8 @@ class ClaimRule
             $expr->eq('claim.periodTo', ':periodTo')
         );
         $query->andWhere($expr->orX(
-            $expr->eq('claim.status',':statusCheckerRejected'),
-            $expr->eq('claim.status',':statusApproverRejected')
+            $expr->eq('claim.status', ':statusCheckerRejected'),
+            $expr->eq('claim.status', ':statusApproverRejected')
         ));
         $query->setParameter('periodFrom', $periodFrom->format('Y-m-d'));
         $query->setParameter('periodTo', $periodTo->format('Y-m-d'));
@@ -451,6 +456,52 @@ class ClaimRule
             $listPeriod[$claim->getPeriodFrom()->format('d M Y') . ' - ' . $claim->getPeriodTo()->format('d M Y')] = $claim->getPeriodFrom()->format('Y-m-d');
         }
         return $listPeriod;
+    }
+
+
+    /**--------------------------Work with currency------------------------**/
+    public function getTaxAmount($claimAmount, $taxRateId)
+    {
+        $taxRate = $this->container->get('doctrine')->getManager()->find('AppBundle\Entity\TaxRate', $taxRateId);
+        if($taxRate) {
+            $rate = $taxRate->getRate();
+            $amountBeforeTax = $claimAmount / (1 + $rate / 100);
+            $taxAmount = $claimAmount - $amountBeforeTax;
+            return round($taxAmount, 2);
+        }
+        return null;
+    }
+
+    public function getExRate($exchangeRateId)
+    {
+        $currencyExchange = $this->container->get('doctrine')->getManager()->find('AppBundle\Entity\CurrencyExchange', $exchangeRateId);
+        if ($currencyExchange) {
+            $criteria = Criteria::create();
+            $criteria->orderBy(['effectiveDate'=>Criteria::DESC]);
+            $currencyExchangeValues = $currencyExchange->getCurrencyExchangeValues()->matching($criteria);
+            if($currencyExchangeValues->count()){
+                return $currencyExchangeValues[0]->getExRate();
+            }
+        }
+        return null;
+    }
+
+    public function getClaimAmountConverted($claimAmount, $exchangeRateId)
+    {
+        $exRate = $this->getExRate($exchangeRateId);
+        if($exRate){
+            return round($claimAmount * $exRate,2);
+        }
+        return null;
+    }
+
+    public function getTaxAmountConverted($taxAmount, $exchangeRateId)
+    {
+        $exRate = $this->getExRate($exchangeRateId);
+        if($exRate){
+            return round($taxAmount * $exRate,2);
+        }
+        return null;
     }
 
 }

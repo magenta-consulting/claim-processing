@@ -84,7 +84,9 @@ class TwigExtension extends \Twig_Extension
         }
         return $position;
     }
-
+    public function getExRate($exchangeRateId){
+        return $this->container->get('app.claim_rule')->getExRate($exchangeRateId);
+    }
 
     public function isShowEditDeleteButtonForClaim(Claim $claim)
     {
@@ -148,6 +150,7 @@ class TwigExtension extends \Twig_Extension
             'getApprover' => new \Twig_Function_Method($this, 'getApprover', array('is_safe' => array('html'))),
             'getNumberRejectedClaim' => new \Twig_Function_Method($this, 'getNumberRejectedClaim', array('is_safe' => array('html'))),
             'getInforUserClaim' => new \Twig_Function_Method($this, 'getInforUserClaim', array('is_safe' => array('html'))),
+            'getExRate' => new \Twig_Function_Method($this, 'getExRate', array('is_safe' => array('html'))),
         );
     }
 

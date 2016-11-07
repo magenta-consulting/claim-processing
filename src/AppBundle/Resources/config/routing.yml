@@ -6,3 +6,11 @@ app_api_gettaxamount:
     path: /admin/app/get-tax-amount
     defaults: { _controller: AppBundle:Api:getTaxAmount}
 
+app_api_getclaimamountconverted:
+    path: /admin/app/get-claim-amount-converted
+    defaults: { _controller: AppBundle:Api:getClaimAmountConverted}
+
+app_api_gettaxamountconverted:
+    path: /admin/app/get-tax-amount-converted
+    defaults: { _controller: AppBundle:Api:getTaxAmountConverted}
+
