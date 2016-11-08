@@ -178,6 +178,68 @@ file that was distributed with this source code.
                     {% block sonata_top_nav_menu %}
                         <div class="navbar-custom-menu">
                             <ul class="nav navbar-nav">
+                                {% set resultCheckerNotification = getCheckerNotification() %}
+                                {% if resultCheckerNotification|length %}
+                                    <li class="dropdown">
+
+                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"
+                                           aria-expanded="false">
+                                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                                            {% if resultCheckerNotification|length %}
+                                                <span class="label label-danger number-notification-not-view"
+                                                      style="font-size: 12px;">{{ resultCheckerNotification|length }}</span>
+                                            {% endif %}
+                                        </a>
+                                        <ul class="dropdown-menu notification">
+                                            {% if resultCheckerNotification|length %}
+                                                {% for position in resultCheckerNotification %}
+                                                    <li class=""><a
+                                                                href="{{ path('admin_app_claim_list', {'type':'checking-each-position','position-id':position.id}) }}"><strong>{{ position.firstName ~' ' ~ position.lastName }}</strong>
+                                                            has {{ getNumberClaimEachEmployeeForChecker(position,app.user.loginWithPosition) }}
+                                                            claims
+                                                            require your checking</a></li>
+                                                {% endfor %}
+                                                <li class="view-all"><a
+                                                            href="{{ path('admin_app_position_list',{'type':'checking'}) }}">View
+                                                        All</a></li>
+                                            {% else %}
+                                                <li>None</li>
+                                            {% endif %}
+                                        </ul>
+                                    </li>
+                                {% endif %}
+                                {% set resultApproverNotification = getApproverNotification() %}
+                                {% if resultApproverNotification|length %}
+                                    <li class="dropdown">
+
+                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"
+                                           aria-expanded="false">
+                                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                                            {% if resultApproverNotification|length %}
+                                                <span class="label label-danger number-notification-not-view"
+                                                      style="font-size: 12px;">{{ resultApproverNotification|length }}</span>
+                                            {% endif %}
+                                        </a>
+                                        <ul class="dropdown-menu notification">
+                                            {% if resultApproverNotification|length %}
+                                                {% for position in resultApproverNotification %}
+                                                    <li class=""><a
+                                                                href="{{ path('admin_app_claim_list', {'type':'approving-each-position','position-id':position.id}) }}"><strong>{{ position.firstName ~' ' ~ position.lastName }}</strong>
+                                                            has {{ getNumberClaimEachEmployeeForApprover(position,app.user.loginWithPosition) }}
+                                                            claims
+                                                            require your approval</a></li>
+                                                {% endfor %}
+                                                <li class="view-all"><a
+                                                            href="{{ path('admin_app_position_list',{'type':'approving'}) }}">View
+                                                        All</a></li>
+                                            {% else %}
+                                                <li>None</li>
+                                            {% endif %}
+                                        </ul>
+                                    </li>
+                                {% endif %}
+
+
                                 <li class="dropdown user-menu">
                                     <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
                                         <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>

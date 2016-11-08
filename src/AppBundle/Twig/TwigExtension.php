@@ -56,14 +56,14 @@ class TwigExtension extends \Twig_Extension
         return $this->container->get('app.claim_rule')->getCurrentClaimPeriod($key);
     }
 
-    public function isExceedLimitRule($claim,$position)
+    public function isExceedLimitRule($claim, $position)
     {
-        return $this->container->get('app.claim_rule')->isExceedLimitRule($claim,$position);
+        return $this->container->get('app.claim_rule')->isExceedLimitRule($claim, $position);
     }
 
-    public function getLimitAmount($claim,$position)
+    public function getLimitAmount($claim, $position)
     {
-        return $this->container->get('app.claim_rule')->getLimitAmount($claim,$position);
+        return $this->container->get('app.claim_rule')->getLimitAmount($claim, $position);
     }
 
     public function getChecker($position)
@@ -76,14 +76,16 @@ class TwigExtension extends \Twig_Extension
         return $this->container->get('app.claim_rule')->getApprover($position);
     }
 
-    public function getInforUserClaim($positionId){
-        if($positionId){
+    public function getInforUserClaim($positionId)
+    {
+        if ($positionId) {
             $position = $this->container->get('doctrine')->getManager()->getRepository('AppBundle\Entity\Position')->find($positionId);
-        }else{
+        } else {
             $position = $this->container->get('app.claim_rule')->getPosition();
         }
         return $position;
     }
+
     public function isShowEditDeleteButtonForClaim(Claim $claim)
     {
         $listStatusAllow = [
@@ -102,7 +104,7 @@ class TwigExtension extends \Twig_Extension
         $listStatusAllow = [
             Claim::STATUS_PENDING,
         ];
-        if (in_array($claim->getStatus(), $listStatusAllow) ) {
+        if (in_array($claim->getStatus(), $listStatusAllow)) {
             return true;
         }
         return false;
@@ -118,12 +120,23 @@ class TwigExtension extends \Twig_Extension
         }
         return false;
     }
-    public function getNumberRejectedClaim(){
-        $number =  $this->container->get('app.claim_rule')->getNumberRejectedClaim();
-        if($number > 0){
-            return '<strong style="color:red">( '.$number.' )</strong>';
+
+    public function getNumberRejectedClaim()
+    {
+        $number = $this->container->get('app.claim_rule')->getNumberRejectedClaim();
+        if ($number > 0) {
+            return '<strong style="color:red">( ' . $number . ' )</strong>';
         }
         return '';
+    }
+
+    public function getCheckerNotification()
+    {
+        return $this->container->get('app.claim_rule')->getCheckerNotification();
+    }
+    public function getApproverNotification()
+    {
+        return $this->container->get('app.claim_rule')->getApproverNotification();
     }
 
     public function getFunctions()
@@ -146,6 +159,8 @@ class TwigExtension extends \Twig_Extension
             'getApprover' => new \Twig_Function_Method($this, 'getApprover', array('is_safe' => array('html'))),
             'getNumberRejectedClaim' => new \Twig_Function_Method($this, 'getNumberRejectedClaim', array('is_safe' => array('html'))),
             'getInforUserClaim' => new \Twig_Function_Method($this, 'getInforUserClaim', array('is_safe' => array('html'))),
+            'getCheckerNotification' => new \Twig_Function_Method($this, 'getCheckerNotification', array('is_safe' => array('html'))),
+            'getApproverNotification' => new \Twig_Function_Method($this, 'getApproverNotification', array('is_safe' => array('html'))),
         );
     }
 

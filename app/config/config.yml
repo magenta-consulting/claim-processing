@@ -70,6 +70,7 @@ doctrine:
                   naming_strategy: doctrine.orm.naming_strategy.underscore
                   auto_mapping: true
                   mappings:
+#                        ApplicationSonataNotificationBundle: ~
                         ApplicationSonataMediaBundle: ~
                         SonataMediaBundle: ~
                         ApplicationSonataClassificationBundle: ~
@@ -331,20 +332,8 @@ stof_doctrine_extensions:
         default:
             sluggable: true
 
-#liip_imagine:
-#    controller:
-#        filter_action: SonataMediaBundle:Media:liipImagineFilter
-#    filter_sets:
-#        default_small:
-#            quality: 75
-#            filters:
-#                thumbnail: { size: [100, 70], mode: outbound }
-#
-#
-#        default_big:
-#            quality: 75
-#            filters:
-#                thumbnail: { size: [500, 70], mode: outbound }
+#sonata_notification:
+#    backend: sonata.notification.backend.runtime
 
 
 

@@ -6,6 +6,7 @@ use AppBundle\Entity\Claim;
 use Doctrine\ORM\Query\Expr;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Doctrine\Common\Collections\Criteria;
+use Symfony\Component\Validator\Context\ExecutionContext;
 
 class ClaimRule
 {
@@ -463,7 +464,7 @@ class ClaimRule
     public function getTaxAmount($claimAmount, $taxRateId)
     {
         $taxRate = $this->container->get('doctrine')->getManager()->find('AppBundle\Entity\TaxRate', $taxRateId);
-        if($taxRate) {
+        if ($taxRate) {
             $rate = $taxRate->getRate();
             $amountBeforeTax = $claimAmount / (1 + $rate / 100);
             $taxAmount = $claimAmount - $amountBeforeTax;
@@ -472,38 +473,106 @@ class ClaimRule
         return null;
     }
 
-    public function getExRate($exchangeRateId,$receiptDate)
+    public function getExRate($exchangeRateId, $receiptDate)
     {
         $currencyExchange = $this->container->get('doctrine')->getManager()->find('AppBundle\Entity\CurrencyExchange', $exchangeRateId);
         if ($currencyExchange) {
             $criteria = Criteria::create();
             $expr = Criteria::expr();
-            $criteria->orderBy(['effectiveDate'=>Criteria::DESC]);
-            $criteria->andWhere($expr->lte('effectiveDate',$receiptDate));
+            $criteria->orderBy(['effectiveDate' => Criteria::DESC]);
+            $criteria->andWhere($expr->lte('effectiveDate', $receiptDate));
             $currencyExchangeValues = $currencyExchange->getCurrencyExchangeValues()->matching($criteria);
-            if($currencyExchangeValues->count()){
+            if ($currencyExchangeValues->count()) {
                 return $currencyExchangeValues[0]->getExRate();
             }
         }
         return null;
     }
 
-    public function getClaimAmountConverted($claimAmount, $exchangeRateId,$receiptDate)
+    public function getClaimAmountConverted($claimAmount, $exchangeRateId, $receiptDate)
     {
-        $exRate = $this->getExRate($exchangeRateId,$receiptDate);
-        if($exRate){
-            return round($claimAmount * $exRate,2);
+        $exRate = $this->getExRate($exchangeRateId, $receiptDate);
+        if ($exRate) {
+            return round($claimAmount * $exRate, 2);
         }
         return null;
     }
 
-    public function getTaxAmountConverted($taxAmount, $exchangeRateId,$receiptDate)
+    public function getTaxAmountConverted($taxAmount, $exchangeRateId, $receiptDate)
     {
-        $exRate = $this->getExRate($exchangeRateId,$receiptDate);
-        if($exRate){
-            return round($taxAmount * $exRate,2);
+        $exRate = $this->getExRate($exchangeRateId, $receiptDate);
+        if ($exRate) {
+            return round($taxAmount * $exRate, 2);
         }
         return null;
     }
 
+    /*** notification ****--------------------*/
+
+    public function getCheckerNotification()
+    {
+
+        $em = $this->container->get('doctrine')->getManager();
+        $expr = new Expr();
+        $clientCompany = $this->getClientCompany();
+        $company = $this->getCompany();
+        $position = $this->getPosition();
+        $query = $em->createQueryBuilder('position');
+        $query->select('position');
+        $query->from('AppBundle:Position', 'position');
+        $query->leftJoin('position.claims', 'claim');
+        $query->leftJoin('claim.checker', 'checker');
+        $query->leftJoin('position.company', 'company');
+        $query->andWhere(
+            $expr->orX(
+                $expr->eq('company.parent', ':clientCompany'),
+                $expr->eq('company', ':company')
+            )
+        );
+        $query->andWhere(
+            $expr->orX(
+                $expr->eq('checker.checker', ':checker'),
+                $expr->eq('checker.backupChecker', ':checker')
+            )
+        );
+        $query->andWhere($expr->eq('claim.status', ':statusPending'));
+        $query->setParameter('statusPending', Claim::STATUS_PENDING);
+        $query->setParameter('checker', $position);
+        $query->setParameter('company', $company);
+        $query->setParameter('clientCompany', $clientCompany);
+
+        return  $query->getQuery()->getResult();
+    }
+    public function getApproverNotification()
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $expr = new Expr();
+        $clientCompany = $this->getClientCompany();
+        $company = $this->getCompany();
+        $position = $this->getPosition();
+        $query = $em->createQueryBuilder('position');
+        $query->select('position');
+        $query->from('AppBundle:Position', 'position');
+        $query->leftJoin('position.claims', 'claim');
+        $query->leftJoin('position.company', 'company');
+        $query->andWhere(
+            $expr->orX(
+                $expr->eq('company.parent', ':clientCompany'),
+                $expr->eq('company', ':company')
+            )
+        );
+        $query->andWhere(
+            $expr->orX(
+                $expr->eq('claim.approverEmployee', ':position'),
+                $expr->eq('claim.approverBackupEmployee', ':position')
+            )
+        );
+        $query->andWhere($expr->eq('claim.status', ':statusCheckerApproved'));
+        $query->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
+        $query->setParameter('position', $position);
+        $query->setParameter('company', $company);
+        $query->setParameter('clientCompany', $clientCompany);
+
+        return  $query->getQuery()->getResult();
+    }
 }
