@@ -120,15 +120,19 @@
         </ul>
     </li>
     {% if isShowMenuForChecker(app.user.loginWithPosition) %}
+        {% set resultCheckerNotification = getCheckerNotification() %}
         <li data-route="admin_app_position_list" class="last"><a
                     href="{{ path('admin_app_position_list',{'type':'checking'}) }}"><i
-                        class="fa fa-angle-double-right"></i>Claims For Checking</a>
+                        class="fa fa-angle-double-right"></i>Claims For Checking       <span class="label label-danger number-notification-not-view"
+                                                                                             style="font-size: 12px;">{{ resultCheckerNotification|length }}</span></a>
         </li>
     {% endif %}
     {% if isShowMenuForApprover(app.user.loginWithPosition) %}
+        {% set resultApproverNotification = getApproverNotification() %}
         <li data-route="admin_app_position_list" class="last"><a
                     href="{{ path('admin_app_position_list',{'type':'approving'}) }}"><i
-                        class="fa fa-angle-double-right"></i>Claims For Approval</a>
+                        class="fa fa-angle-double-right"></i>Claims For Approval      <span class="label label-danger number-notification-not-view"
+                                                                                            style="font-size: 12px;">{{ resultApproverNotification|length }}</span></a>
         </li>
     {% endif %}
 </ul>

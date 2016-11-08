@@ -540,7 +540,8 @@ class ClaimRule
         $query->setParameter('checker', $position);
         $query->setParameter('company', $company);
         $query->setParameter('clientCompany', $clientCompany);
-
+        $query->setMaxResults(20);
+        $query->setFirstResult(0);
         return  $query->getQuery()->getResult();
     }
     public function getApproverNotification()
@@ -572,6 +573,8 @@ class ClaimRule
         $query->setParameter('position', $position);
         $query->setParameter('company', $company);
         $query->setParameter('clientCompany', $clientCompany);
+        $query->setMaxResults(20);
+        $query->setFirstResult(0);
 
         return  $query->getQuery()->getResult();
     }
