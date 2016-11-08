@@ -125,7 +125,7 @@ class TwigExtension extends \Twig_Extension
     {
         $number = $this->container->get('app.claim_rule')->getNumberRejectedClaim();
         if ($number > 0) {
-            return '<strong style="color:red">( ' . $number . ' )</strong>';
+            return $number;
         }
         return '';
     }

@@ -28,7 +28,8 @@
                             </small>
                         </a>
                         <a href="{{ path('admin_app_claim_list',{'type':'reject'}) }}" style="width: 100%;margin-top: 5px;" class="btn btn-default" type="submit"
-                           name=""> Rejected Claims {{ getNumberRejectedClaim() }}
+                           name=""> Rejected Claims <span class="label label-danger number-notification-not-view"
+                                                          style="font-size: 12px;">{{ getNumberRejectedClaim() }}</span>
                             <br>
                             <small>Period {{ getCurrentClaimPeriod('to')| date('d M Y') }} -  {{ getCurrentClaimPeriod('to')| date('d M Y') }}
                             </small>

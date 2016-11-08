@@ -110,7 +110,8 @@
                                     class="fa fa-angle-double-right"></i>Draft Claims </a>
                     </li>
                     <li data-route="admin_app_claim_list"><a href="{{ path('admin_app_claim_list',{'type':'reject'}) }}"><i
-                                    class="fa fa-angle-double-right"></i>Rejected Claims {{ getNumberRejectedClaim() }} </a>
+                                    class="fa fa-angle-double-right"></i>Rejected Claims <span class="label label-danger number-notification-not-view"
+                                                                                                                              style="font-size: 12px;">{{ getNumberRejectedClaim() }}</span></a>
                     </li>
                     <li data-route="admin_app_claim_list"><a href="{{ path('admin_app_claim_list') }}"><i
                                     class="fa fa-angle-double-right"></i>Past Claims </a>
