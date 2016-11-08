@@ -472,12 +472,14 @@ class ClaimRule
         return null;
     }
 
-    public function getExRate($exchangeRateId)
+    public function getExRate($exchangeRateId,$receiptDate)
     {
         $currencyExchange = $this->container->get('doctrine')->getManager()->find('AppBundle\Entity\CurrencyExchange', $exchangeRateId);
         if ($currencyExchange) {
             $criteria = Criteria::create();
+            $expr = Criteria::expr();
             $criteria->orderBy(['effectiveDate'=>Criteria::DESC]);
+            $criteria->andWhere($expr->lte('effectiveDate',$receiptDate));
             $currencyExchangeValues = $currencyExchange->getCurrencyExchangeValues()->matching($criteria);
             if($currencyExchangeValues->count()){
                 return $currencyExchangeValues[0]->getExRate();
@@ -486,18 +488,18 @@ class ClaimRule
         return null;
     }
 
-    public function getClaimAmountConverted($claimAmount, $exchangeRateId)
+    public function getClaimAmountConverted($claimAmount, $exchangeRateId,$receiptDate)
     {
-        $exRate = $this->getExRate($exchangeRateId);
+        $exRate = $this->getExRate($exchangeRateId,$receiptDate);
         if($exRate){
             return round($claimAmount * $exRate,2);
         }
         return null;
     }
 
-    public function getTaxAmountConverted($taxAmount, $exchangeRateId)
+    public function getTaxAmountConverted($taxAmount, $exchangeRateId,$receiptDate)
     {
-        $exRate = $this->getExRate($exchangeRateId);
+        $exRate = $this->getExRate($exchangeRateId,$receiptDate);
         if($exRate){
             return round($taxAmount * $exRate,2);
         }

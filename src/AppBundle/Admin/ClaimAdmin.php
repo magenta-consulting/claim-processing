@@ -174,7 +174,7 @@ class ClaimAdmin extends BaseAdmin
             }
             $formMapper->add('claimAmount', 'number', ['label' => 'Receipt Amount']);
             $formMapper->add('description', 'text', ['label' => 'Claim Description']);
-            $formMapper->add('receiptDate', 'date', ['attr' => ['class' => 'datepicker-claim'], 'widget' => 'single_text', 'format' => 'MM/dd/yyyy']);
+            $formMapper->add('receiptDate', 'date', ['widget' => 'single_text', 'format' => 'MM/dd/yyyy']);
             $formMapper->add('taxRate', 'sonata_type_model', array(
                 'property' => 'code',
                 'query' => $this->filterTaxRateBycompanyByClaim($subject),
@@ -516,7 +516,7 @@ class ClaimAdmin extends BaseAdmin
             $claim->setApproverEmployee($result['approverEmployee']);
             $claim->setApproverBackupEmployee($result['approverBackupEmployee']);
             if ($claim->getCurrencyExchange()) {
-                $claim->setExRate($this->getContainer()->get('app.claim_rule')->getExRate($claim->getCurrencyExchange()->getId()));
+                $claim->setExRate($this->getContainer()->get('app.claim_rule')->getExRate($claim->getCurrencyExchange()->getId(),$claim->getReceiptDate()));
             } else {
                 $claim->setClaimAmountConverted($claim->getClaimAmount());
                 $claim->setTaxAmountConverted($claim->getTaxAmount());
