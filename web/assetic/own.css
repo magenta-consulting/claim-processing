@@ -42,3 +42,15 @@
     padding: 5px;
 }
 
+ul.notification{
+    min-width: 300px;
+}
+ul.notification li{
+    border-bottom: 1px solid rgba(117, 171, 172, 0.22);
+    background: rgba(148, 155, 172, 0.47);
+}
+ul.notification .view-all{
+   background: white;
+    text-align: center;
+}
+
