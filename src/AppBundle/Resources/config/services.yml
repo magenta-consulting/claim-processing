@@ -11,6 +11,10 @@ services:
         class: AppBundle\Services\Core\ClaimRule
         calls:
             - [setContainer,["@service_container"]]
+    app.claim_notification:
+        class: AppBundle\Services\Core\ClaimNotification
+        calls:
+            - [setContainer,["@service_container"]]
     app.util:
         class: AppBundle\Services\Core\Util
     app.api_authenticator:

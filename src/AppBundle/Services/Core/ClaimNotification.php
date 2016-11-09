@@ -15,26 +15,16 @@ class ClaimNotification
 
     /*** notification ****--------------------*/
 
-    public function getCheckerNotification()
+    public function getCheckerNotification($checker)
     {
 
         $em = $this->container->get('doctrine')->getManager();
         $expr = new Expr();
-        $clientCompany = $this->getClientCompany();
-        $company = $this->getCompany();
-        $position = $this->getPosition();
         $query = $em->createQueryBuilder('position');
         $query->select('position');
         $query->from('AppBundle:Position', 'position');
         $query->leftJoin('position.claims', 'claim');
         $query->leftJoin('claim.checker', 'checker');
-        $query->leftJoin('position.company', 'company');
-        $query->andWhere(
-            $expr->orX(
-                $expr->eq('company.parent', ':clientCompany'),
-                $expr->eq('company', ':company')
-            )
-        );
         $query->andWhere(
             $expr->orX(
                 $expr->eq('checker.checker', ':checker'),
@@ -43,31 +33,18 @@ class ClaimNotification
         );
         $query->andWhere($expr->eq('claim.status', ':statusPending'));
         $query->setParameter('statusPending', Claim::STATUS_PENDING);
-        $query->setParameter('checker', $position);
-        $query->setParameter('company', $company);
-        $query->setParameter('clientCompany', $clientCompany);
-        $query->setMaxResults(20);
-        $query->setFirstResult(0);
-        return  $query->getQuery()->getResult();
+        $query->setParameter('checker', $checker);
+        return $query->getQuery()->getResult();
     }
-    public function getApproverNotification()
+
+    public function getApproverNotification($approver)
     {
         $em = $this->container->get('doctrine')->getManager();
         $expr = new Expr();
-        $clientCompany = $this->getClientCompany();
-        $company = $this->getCompany();
-        $position = $this->getPosition();
         $query = $em->createQueryBuilder('position');
         $query->select('position');
         $query->from('AppBundle:Position', 'position');
         $query->leftJoin('position.claims', 'claim');
-        $query->leftJoin('position.company', 'company');
-        $query->andWhere(
-            $expr->orX(
-                $expr->eq('company.parent', ':clientCompany'),
-                $expr->eq('company', ':company')
-            )
-        );
         $query->andWhere(
             $expr->orX(
                 $expr->eq('claim.approverEmployee', ':position'),
@@ -76,12 +53,57 @@ class ClaimNotification
         );
         $query->andWhere($expr->eq('claim.status', ':statusCheckerApproved'));
         $query->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
-        $query->setParameter('position', $position);
-        $query->setParameter('company', $company);
-        $query->setParameter('clientCompany', $clientCompany);
-        $query->setMaxResults(20);
-        $query->setFirstResult(0);
-
-        return  $query->getQuery()->getResult();
+        $query->setParameter('position', $approver);
+        return $query->getQuery()->getResult();
     }
+
+    public function sendmailToChecker($checker, $listPosition)
+    {
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Notification For Checker')
+            ->setFrom('noreply@magentapulse.com')
+            ->setTo($checker->getEmail())
+            ->setBody(
+                $this->container->get('twig')->render(
+                    'AppBundle:SonataAdmin/Emails:notification_checker.html.twig',
+                    array('resultCheckerNotification' => $listPosition,'checker'=>$checker)
+                ),
+                'text/html'
+            );
+        $this->container->get('mailer')->send($message);
+    }
+
+    public function sendmailToApprover($approver, $listPosition)
+    {
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Notification For Approver')
+            ->setFrom('noreply@magentapulse.com')
+            ->setTo($approver->getEmail())
+            ->setBody(
+                $this->container->get('twig')->render(
+                    'AppBundle:SonataAdmin/Emails:notification_approver.html.twig',
+                    array('resultApproverNotification' => $listPosition,'approver'=>$approver)
+                ),
+                'text/html'
+            );
+        $this->container->get('mailer')->send($message);
+    }
+
+    public function sendNotification()
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $checkersOrApprovers = $em->getRepository('AppBundle\Entity\Position')->findAll();
+        foreach ($checkersOrApprovers as $checkerOrApprover) {
+            $positionHasClaimRequireChecking = $this->getCheckerNotification($checkerOrApprover);
+            if (count($positionHasClaimRequireChecking)) {
+                $this->sendmailToChecker($checkerOrApprover, $positionHasClaimRequireChecking);
+            }
+            $positionHasClaimRequireApproving = $this->getApproverNotification($checkerOrApprover);
+            if (count($positionHasClaimRequireApproving)) {
+                $this->sendmailToApprover($checkerOrApprover, $positionHasClaimRequireApproving);
+            }
+        }
+    }
+
+
 }

@@ -1,24 +1,17 @@
-{#
 
-This file is part of the Sonata package.
+<p>Dear {{ checker.firstName ~' '~ checker.lastName }}, <p>
+<p>You have <strong>[{{ resultCheckerNotification|length }}]</strong> employee require your checking their claims</p>
+<ul>
+    {% for position in resultCheckerNotification %}
+        <li class=""><a
+                    href="{{ url('admin_app_claim_list', {'type':'checking-each-position','position-id':position.id}) }}"><strong>{{ position.firstName ~' ' ~ position.lastName }}</strong>
+                has {{ getNumberClaimEachEmployeeForChecker(position,checker) }}
+                claims
+                require your checking</a></li>
+    {% endfor %}
+</ul>
+<p>*** This is an automated notification, please do not reply to this email. For technical support please contact your HR Department directly or support@magentapulse.com</p>
 
-(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+<p>Best Regards,</p>
 
-For the full copyright and license information, please view the LICENSE
-file that was distributed with this source code.
-
-#}
-
-{% extends base_template %}
-
-{% block title %}{{ 'title_dashboard'|trans({}, 'SonataAdminBundle') }}{% endblock %}
-{% block breadcrumb %}{% endblock %}
-{% block content %}
-
-    {% if is_granted('ROLE_USER') and not is_granted('ROLE_CLIENT_ADMIN') and not is_granted('ROLE_HR_ADMIN') %}
-        <div>
-            {% include '@App/SonataAdmin/Common/claim_landing_page.html.twig' %}
-        </div>
-    {% endif %}
-
-{% endblock %}
+<p>Magenta Consulting Team</p>
