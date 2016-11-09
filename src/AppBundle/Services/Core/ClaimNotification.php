@@ -71,6 +71,9 @@ class ClaimNotification
                 'text/html'
             );
         $this->container->get('mailer')->send($message);
+        $spool = $this->container->get('mailer')->getTransport()->getSpool();
+        $transport = $this->container->get('swiftmailer.transport.real');
+        $spool->flushQueue($transport);
     }
 
     public function sendmailToApprover($approver, $listPosition)
@@ -87,6 +90,9 @@ class ClaimNotification
                 'text/html'
             );
         $this->container->get('mailer')->send($message);
+        $spool = $this->container->get('mailer')->getTransport()->getSpool();
+        $transport = $this->container->get('swiftmailer.transport.real');
+        $spool->flushQueue($transport);
     }
 
     public function sendNotification()
