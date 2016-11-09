@@ -1,6 +1,9 @@
 app_switch_user:
     path: /switch-user
     defaults: { _controller: AppBundle:SwitchUser:index}
+app_test_notify:
+    path: /test
+    defaults: { _controller: AppBundle:SwitchUser:test}
 
 app_api_gettaxamount:
     path: /admin/app/get-tax-amount

@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class SwitchUserController extends Controller
 {
@@ -35,5 +36,13 @@ class SwitchUserController extends Controller
             return $this->redirectToRoute('sonata_admin_dashboard');
         }
         return $this->render('@App/SwitchUser/index.html.twig',['positions'=>$positions]);
+    }
+    public function testAction(){
+//        $backend = $this->get('sonata.notification.backend');
+//        $backend->createAndPublish('claimMailer',[]);
+
+        $this->get('app.claim_notification')->sendNotification();
+
+        return new Response('aa');
     }
 }
