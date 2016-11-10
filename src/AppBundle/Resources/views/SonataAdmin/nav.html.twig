@@ -95,6 +95,8 @@
                         class="fa fa-angle-double-right"></i>My Employees</a>
         </li>
     {% endif %}
+
+    {% if not is_granted('ROLE_ADMIN') %}
     <li class="last treeview"><a href="#"><i class="fa fa-folder"></i><span>My Claims</span><i
                     class="fa pull-right fa-angle-left"></i></a>
         <ul class="active treeview-menu menu_level_1" style="display: none;">
@@ -135,6 +137,8 @@
                         class="fa fa-angle-double-right"></i>Claims For Approval      <span class="label label-danger number-notification-not-view"
                                                                                             style="font-size: 12px;">{{ resultApproverNotification|length }}</span></a>
         </li>
+    {% endif %}
+
     {% endif %}
 </ul>
 
