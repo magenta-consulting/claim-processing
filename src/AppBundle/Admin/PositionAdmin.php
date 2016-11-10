@@ -210,20 +210,21 @@ class PositionAdmin extends BaseAdmin
                 ->with('Claims Approver / Checker details')
                 ->end()
                 ->end();
-        }
 
-        $formMapper->tab('Appointed Proxy Submitter')
-            ->with('Appointed Proxy Submitter')
-            ->add('submissionBy', 'sonata_type_collection', array('required' => false,
-            ), array(
-                    'edit' => 'inline',
-                    'inline' => 'table',
-                    'link_parameters' => [],
-                    'admin_code' => 'admin.position_submitter',
+
+            $formMapper->tab('Appointed Proxy Submitter')
+                ->with('Appointed Proxy Submitter')
+                ->add('submissionBy', 'sonata_type_collection', array('required' => false,
+                ), array(
+                        'edit' => 'inline',
+                        'inline' => 'table',
+                        'link_parameters' => [],
+                        'admin_code' => 'admin.position_submitter',
+                    )
                 )
-            )
-            ->end()
-            ->end();
+                ->end()
+                ->end();
+        }
         $formMapper->get('roles')->addModelTransformer(new RolesTransformer());
 
     }

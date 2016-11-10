@@ -48,7 +48,7 @@ class BaseAdmin extends AbstractAdmin
     {
         //admin will return null
         $company = $this->getCompany();
-        if ($company->getParent()) {
+        if ($company && $company->getParent()) {
             return $company->getParent();
         }
         return $company;
@@ -169,6 +169,14 @@ class BaseAdmin extends AbstractAdmin
         $clientCompany = $this->getClientCompany();
         $position = $this->getPosition();
         $expr = new Expr();
+        if ($this->isAdmin()) {
+            if ($class === 'AppBundle\Entity\Company') {
+                $query->andWhere(
+                    $expr->isNull($query->getRootAliases()[0] . '.parent')
+                );
+
+            }
+        }
         if ($this->isCLient()) {
             if ($class === 'AppBundle\Entity\Company') {
                 $query->andWhere(
@@ -181,11 +189,24 @@ class BaseAdmin extends AbstractAdmin
                 $query->setParameter('company', $company);
             } else {
                 if ($this->getClass() !== 'AppBundle\Entity\Position') {
+                    //manage infor except poisition
                     $query->andWhere(
-                        $expr->eq($query->getRootAliases()[0] . '.company', ':company')
+                            $expr->eq($query->getRootAliases()[0] . '.company', ':company')
                     );
                     $query->setParameter('company', $company);
+                } elseif ($this->getClass() == 'AppBundle\Entity\Position' && $this->getRequest()->isXmlHttpRequest()) {
+                    //when get list user by ajax will get all belong sub company or client company
+                    $query->join($query->getRootAliases()[0] . '.company', 'company');
+                    $query->andWhere(
+                        $expr->orX(
+                            $expr->eq('company', ':company'),
+                            $expr->eq('company.parent', ':clientCompany')
+                        )
+                    );
+                    $query->setParameter('company', $company);
+                    $query->setParameter('clientCompany', $clientCompany);
                 }
+                //when get user by comnany the system is automticly get user belong this company by param in url (company)
 
             }
         }
@@ -484,6 +505,7 @@ class BaseAdmin extends AbstractAdmin
             ->setParameter('company', $this->getClientCompany());
         return $qb;
     }
+
     public function filterTaxRateBycompany()
     {
         $em = $this->container->get('doctrine')->getManager();
