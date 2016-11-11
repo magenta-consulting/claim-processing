@@ -86,7 +86,7 @@ class TwigExtension extends \Twig_Extension
         return $position;
     }
 
-    public function isShowEditDeleteButtonForClaim(Claim $claim)
+    public function isShowEditButtonForClaim(Claim $claim)
     {
         $listStatusAllow = [
             Claim::STATUS_DRAFT,
@@ -94,6 +94,13 @@ class TwigExtension extends \Twig_Extension
             Claim::STATUS_APPROVER_REJECTED
         ];
         if (in_array($claim->getStatus(), $listStatusAllow)) {
+            return true;
+        }
+        return false;
+    }
+    public function isShowDeleteButtonForClaim(Claim $claim)
+    {
+        if ( $claim->getStatus() != Claim::STATUS_PROCESSED) {
             return true;
         }
         return false;
@@ -152,7 +159,7 @@ class TwigExtension extends \Twig_Extension
             'getCurrentClaimPeriod' => new \Twig_Function_Method($this, 'getCurrentClaimPeriod', array('is_safe' => array('html'))),
             'isExceedLimitRule' => new \Twig_Function_Method($this, 'isExceedLimitRule', array('is_safe' => array('html'))),
             'getLimitAmount' => new \Twig_Function_Method($this, 'getLimitAmount', array('is_safe' => array('html'))),
-            'isShowEditDeleteButtonForClaim' => new \Twig_Function_Method($this, 'isShowEditDeleteButtonForClaim', array('is_safe' => array('html'))),
+            'isShowEditButtonForClaim' => new \Twig_Function_Method($this, 'isShowEditButtonForClaim', array('is_safe' => array('html'))),
             'isShowApproveRejectCheckerButtonForClaim' => new \Twig_Function_Method($this, 'isShowApproveRejectCheckerButtonForClaim', array('is_safe' => array('html'))),
             'isShowApproveRejectApproverButtonForClaim' => new \Twig_Function_Method($this, 'isShowApproveRejectApproverButtonForClaim', array('is_safe' => array('html'))),
             'getChecker' => new \Twig_Function_Method($this, 'getChecker', array('is_safe' => array('html'))),
@@ -161,6 +168,7 @@ class TwigExtension extends \Twig_Extension
             'getInforUserClaim' => new \Twig_Function_Method($this, 'getInforUserClaim', array('is_safe' => array('html'))),
             'getCheckerNotification' => new \Twig_Function_Method($this, 'getCheckerNotification', array('is_safe' => array('html'))),
             'getApproverNotification' => new \Twig_Function_Method($this, 'getApproverNotification', array('is_safe' => array('html'))),
+            'isShowDeleteButtonForClaim' => new \Twig_Function_Method($this, 'isShowDeleteButtonForClaim', array('is_safe' => array('html'))),
         );
     }
 

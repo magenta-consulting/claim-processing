@@ -1,4 +1,4 @@
-{% if isShowEditDeleteButtonForClaim(object) %}
+{% if isShowEditButtonForClaim(object) %}
     <a class="btn btn-sm btn-default" href="{{ path('admin_app_claim_edit', {'id':object.id}) }}"><i
                 class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
 {% endif %}
