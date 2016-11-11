@@ -91,6 +91,12 @@ class Company
      */
     private $approvalAmountPolicies;
 
+    /**
+     * @var ApprovalAmountPolicies
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\CompanyClaimPolicies",mappedBy="company")
+     */
+    private $companyClaimPolicies;
+
     public function __construct()
     {
         $this->positions = new ArrayCollection();
@@ -98,7 +104,25 @@ class Company
         $this->claimTypes = new ArrayCollection();
         $this->employeeGroups = new ArrayCollection();
         $this->taxRates = new ArrayCollection();
+        $this->companyClaimPolicies = new ArrayCollection();
     }
+
+    /**
+     * @return ApprovalAmountPolicies
+     */
+    public function getCompanyClaimPolicies()
+    {
+        return $this->companyClaimPolicies;
+    }
+
+    /**
+     * @param ApprovalAmountPolicies $companyClaimPolicies
+     */
+    public function setCompanyClaimPolicies($companyClaimPolicies)
+    {
+        $this->companyClaimPolicies = $companyClaimPolicies;
+    }
+
 
     /**
      * @return TaxRate

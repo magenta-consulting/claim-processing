@@ -123,7 +123,7 @@ class PositionAdmin extends BaseAdmin
             ->end()
             ->with('Group B', array('class' => 'col-md-6'))
             ->add('employeeNo', 'text')
-            ->add('contactNumber', PhoneNumberType::class, array('widget' => PhoneNumberType::WIDGET_COUNTRY_CHOICE, 'country_choices' => array('SG'), 'preferred_country_choices' => array('SG')))
+            ->add('contactNumber', PhoneNumberType::class, array('required'=>false,'widget' => PhoneNumberType::WIDGET_COUNTRY_CHOICE, 'country_choices' => array('SG'), 'preferred_country_choices' => array('SG')))
             ->add('nric', 'text', ['label' => 'NRIC/Fin No', 'required' => false])
             ->end()
             ->end();

@@ -29,6 +29,7 @@ class Claim
     const STATUS_CHECKER_REJECTED = 'CHECKER_REJECTED';
     const STATUS_APPROVER_APPROVED = 'APPROVER_APPROVED';
     const STATUS_APPROVER_REJECTED = 'APPROVER_REJECTED';
+    const STATUS_PROCESSED = 'PROCESSED';
 
     /**
      * @ORM\Id
@@ -679,10 +680,20 @@ class Claim
     }
 
 
+
+    public function getClaimPolicy(){
+        $company = $this->getCompany();
+        $clientCompany = $company->getParent() ? $company->getParent() : $company;
+        $claimPolicies = $clientCompany->getCompanyClaimPolicies();
+        if($claimPolicies->count()){
+            return $claimPolicies[0];
+        }
+        return null;
+    }
     public function setPeriod()
     {
         if ($this->getClaimType()) {
-            $claimPolicy = $this->getClaimType()->getCompanyClaimPolicies();
+            $claimPolicy = $this->getClaimPolicy();
             if ($claimPolicy) {
                 $cutOffdate = $claimPolicy->getCutOffDate();
                 $currentDate = date('d');
@@ -708,9 +719,10 @@ class Claim
     {
         $this->setPeriod();
         if ($this->getReceiptDate() && $this->getPeriodFrom() && $this->getPeriodTo()) {
+            $claimPolicy = $this->getClaimPolicy();
             $to = $this->getPeriodTo();
             $clone = clone $to;
-            $from = $clone->modify('-' . $this->getClaimType()->getCompanyClaimPolicies()->getClaimablePeriod() . ' month +1 day');
+            $from = $clone->modify('-' . $claimPolicy->getClaimablePeriod() . ' month +1 day');
             if ($this->getReceiptDate() < $from || $this->getReceiptDate() > $to) {
                 $context->buildViolation('This receipt date is invalid')
                     ->atPath('receiptDate')

@@ -545,7 +545,7 @@ class ClaimAdmin extends BaseAdmin
     function toString($object)
     {
         return $object instanceof Claim
-            ? $object->getId()
+            ? "Claim"
             : 'Claim'; // shown in the breadcrumb on the create view
     }
 
