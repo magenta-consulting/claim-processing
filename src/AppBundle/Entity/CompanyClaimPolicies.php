@@ -33,16 +33,11 @@ class CompanyClaimPolicies
      * @ORM\Column(name="claimable_period",type="integer")
      */
     private $claimablePeriod;
-    /**
-     * @var ClaimType
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\ClaimType")
-     * @ORM\JoinColumn(name="claim_type_id", referencedColumnName="id")
-     */
-    private $claimType;
 
     /**
      * @var Company
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
+     * @ORM\JoinColumn(name="company_id", referencedColumnName="id",onDelete="CASCADE")
      */
     private $company;
 
@@ -114,21 +109,6 @@ class CompanyClaimPolicies
         $this->claimablePeriod = $claimablePeriod;
     }
 
-    /**
-     * @return ClaimType
-     */
-    public function getClaimType()
-    {
-        return $this->claimType;
-    }
-
-    /**
-     * @param ClaimType $claimType
-     */
-    public function setClaimType($claimType)
-    {
-        $this->claimType = $claimType;
-    }
 
     
 

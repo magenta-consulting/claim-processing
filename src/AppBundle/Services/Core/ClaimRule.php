@@ -85,25 +85,27 @@ class ClaimRule
     {
         $em = $this->container->get('doctrine')->getManager();
         //in the future will change with multiple cutofdate and claimable, currently just only one
-        $claimType = $em->getRepository('AppBundle\Entity\ClaimType')->findOneBy(['company'=>$this->getClientCompany()]);
+        $claimPolicy = $em->getRepository('AppBundle\Entity\CompanyClaimPolicies')->findOneBy(['company'=>$this->getClientCompany()]);
 
-        $claimPolicy = $claimType->getCompanyClaimPolicies();
-        $cutOffdate = $claimPolicy->getCutOffDate();
-        $currentDate = date('d');
-        if ($currentDate <= $cutOffdate) {
-            $periodTo = new \DateTime('NOW');
-            $clone = clone $periodTo;
-            $periodFrom = $clone->modify('-1 month');
-        } else {
-            $periodTo = new \DateTime('NOW');
-            $periodTo->modify('+1 month');
-            $clone = clone $periodTo;
-            $periodFrom = $clone->modify('-1 month');
+        if($claimPolicy) {
+            $cutOffdate = $claimPolicy->getCutOffDate();
+            $currentDate = date('d');
+            if ($currentDate <= $cutOffdate) {
+                $periodTo = new \DateTime('NOW');
+                $clone = clone $periodTo;
+                $periodFrom = $clone->modify('-1 month');
+            } else {
+                $periodTo = new \DateTime('NOW');
+                $periodTo->modify('+1 month');
+                $clone = clone $periodTo;
+                $periodFrom = $clone->modify('-1 month');
+            }
+            $periodFrom->setDate($periodFrom->format('Y'), $periodFrom->format('m'), $cutOffdate + 1);
+            $periodTo->setDate($periodTo->format('Y'), $periodTo->format('m'), $cutOffdate);
+            $period = ['from' => $periodFrom, 'to' => $periodTo];
+            return $period[$key];
         }
-        $periodFrom->setDate($periodFrom->format('Y'), $periodFrom->format('m'), $cutOffdate + 1);
-        $periodTo->setDate($periodTo->format('Y'), $periodTo->format('m'), $cutOffdate);
-        $period = ['from' => $periodFrom, 'to' => $periodTo];
-        return $period[$key];
+        return null;
     }
 
     public function getLimitAmount(Claim $claim, $position)
@@ -148,13 +150,15 @@ class ClaimRule
             ->where($expr->eq('claim.position', ':position'))
             ->andWhere($expr->eq('claim.claimType', ':claimType'))
             ->andWhere($expr->eq('claim.claimCategory', ':claimCategory'))
-            ->andWhere($expr->eq('claim.periodFrom', ':periodFrom'))
-            ->andWhere($expr->eq('claim.periodTo', ':periodTo'))
             ->setParameter('position', $position)
             ->setParameter('claimType', $claim->getClaimType())
             ->setParameter('claimCategory', $claim->getClaimCategory())
+
+            ->andWhere($expr->eq('claim.periodFrom', ':periodFrom'))
+            ->andWhere($expr->eq('claim.periodTo', ':periodTo'))
             ->setParameter('periodFrom', $periodFrom->format('Y-m-d'))
             ->setParameter('periodTo', $periodTo->format('Y-m-d'))
+
             ->getQuery()
             ->getResult();
 

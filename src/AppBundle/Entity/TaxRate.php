@@ -49,6 +49,7 @@ class TaxRate
     /**
      * @var Company
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company",inversedBy="taxRates")
+     * @ORM\JoinColumn(name="company_id", referencedColumnName="id",onDelete="CASCADE")
      */
     private $company;
 

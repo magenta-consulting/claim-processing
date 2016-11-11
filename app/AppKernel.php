@@ -42,8 +42,8 @@ class AppKernel extends Kernel
             new Sonata\IntlBundle\SonataIntlBundle(),
             new Misd\PhoneNumberBundle\MisdPhoneNumberBundle(),
 
-//            new Sonata\NotificationBundle\SonataNotificationBundle(),
-//            new Application\Sonata\NotificationBundle\ApplicationSonataNotificationBundle(),
+            new Sonata\NotificationBundle\SonataNotificationBundle(),
+            new Application\Sonata\NotificationBundle\ApplicationSonataNotificationBundle(),
 
             new AppBundle\AppBundle(),
 

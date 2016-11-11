@@ -15,6 +15,13 @@ services:
         class: AppBundle\Services\Core\ClaimNotification
         calls:
             - [setContainer,["@service_container"]]
+
+    app.notification.consumer.claim_mailer:
+        class: AppBundle\Consumer\ClaimMailerConsumer
+        tags:
+            - { name: sonata.notification.consumer, type: claimMailer }
+        arguments: [ "@service_container","@mailer" ]
+
     app.util:
         class: AppBundle\Services\Core\Util
     app.api_authenticator:

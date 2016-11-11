@@ -58,14 +58,10 @@ class ClaimType
     /**
      * @var Company
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
+     * @ORM\JoinColumn(name="company_id", referencedColumnName="id",onDelete="CASCADE")
      */
     private $company;
 
-    /**
-     * @var CompanyClaimPolicies
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\CompanyClaimPolicies",mappedBy="claimType")
-     */
-    private $companyClaimPolicies;
 
     /**
      * @var LimitRule
@@ -98,21 +94,7 @@ class ClaimType
     }
 
 
-    /**
-     * @return mixed
-     */
-    public function getCompanyClaimPolicies()
-    {
-        return $this->companyClaimPolicies;
-    }
 
-    /**
-     * @param mixed $companyClaimPolicies
-     */
-    public function setCompanyClaimPolicies($companyClaimPolicies)
-    {
-        $this->companyClaimPolicies = $companyClaimPolicies;
-    }
 
 
     /**

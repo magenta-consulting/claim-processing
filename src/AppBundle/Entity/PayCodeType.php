@@ -42,6 +42,7 @@ class PayCodeType
     /**
      * @var Company
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company",cascade={"persist"})
+     * @ORM\JoinColumn(name="company_id", referencedColumnName="id",onDelete="CASCADE")
      */
     private $company;
 

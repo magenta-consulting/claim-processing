@@ -40,6 +40,7 @@ class Position
     /**
      * @var Media
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company",inversedBy="positions")
+     * @ORM\JoinColumn(name="company_id", referencedColumnName="id",onDelete="CASCADE")
      */
     private $company;
 

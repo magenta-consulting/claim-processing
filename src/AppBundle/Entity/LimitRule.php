@@ -39,6 +39,7 @@ class LimitRule
     /**
      * @var Company
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company",inversedBy="limitRules")
+     * @ORM\JoinColumn(name="company_id", referencedColumnName="id",onDelete="CASCADE")
      */
     private $company;
 

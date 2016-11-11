@@ -5,6 +5,7 @@ use AppBundle\Entity\Claim;
 use AppBundle\Entity\ClaimType;
 use AppBundle\Entity\ClaimTypeType;
 use AppBundle\Entity\Company;
+use AppBundle\Entity\CompanyClaimPolicies;
 use AppBundle\Entity\CostCentre;
 use AppBundle\Entity\PayCodeType;
 use AppBundle\Entity\Position;
@@ -120,10 +121,17 @@ class BaseAdmin extends AbstractAdmin
 
                 $payCodeType2 = new PayCodeType();
                 $payCodeType2->setName('Allowances');
-                $payCodeType2->setOrderSort(1);
+                $payCodeType2->setOrderSort(2);
                 $payCodeType2->setEnabled(true);
                 $payCodeType2->setCompany($object);
                 $em->persist($payCodeType2);
+
+                $payCodeType3 = new PayCodeType();
+                $payCodeType3->setName('Expense');
+                $payCodeType3->setOrderSort(3);
+                $payCodeType3->setEnabled(true);
+                $payCodeType3->setCompany($object);
+                $em->persist($payCodeType3);
 
 
                 //create claim type
@@ -138,7 +146,7 @@ class BaseAdmin extends AbstractAdmin
                 $claimTypeType2->setCompany($object);
                 $claimTypeType2->setEnabled(true);
                 $claimTypeType2->setName('Overseas');
-                $claimTypeType2->setOrderSort(1);
+                $claimTypeType2->setOrderSort(2);
                 $em->persist($claimTypeType2);
 
                 $claimType1 = new ClaimType();
@@ -154,6 +162,8 @@ class BaseAdmin extends AbstractAdmin
                 $claimType2->setClaimTypeType($claimTypeType2);
                 $claimType2->setCode('Overseas Claims');
                 $em->persist($claimType2);
+
+
 
                 $em->flush();
 

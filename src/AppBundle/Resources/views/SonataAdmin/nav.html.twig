@@ -96,7 +96,7 @@
         </li>
     {% endif %}
 
-    {% if not is_granted('ROLE_ADMIN') %}
+    {% if not is_granted('ROLE_ADMIN') and getCurrentClaimPeriod('from') %}
     <li class="last treeview"><a href="#"><i class="fa fa-folder"></i><span>My Claims</span><i
                     class="fa pull-right fa-angle-left"></i></a>
         <ul class="active treeview-menu menu_level_1" style="display: none;">

@@ -15,12 +15,6 @@ class CompanyClaimPoliciesAdmin extends BaseAdmin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('claimType', 'sonata_type_model', array(
-            'property' => 'code',
-            'query'=>$this->filterClaimTypeBycompany(),
-            'placeholder' => 'Select Type',
-            'empty_data'  => null
-        ));
         $cutOffDate = [];
         for($i=1;$i<=31;$i++){
             $cutOffDate[$i]=$i;
@@ -37,13 +31,11 @@ class CompanyClaimPoliciesAdmin extends BaseAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('claimType.code');
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('claimType.code')
             ->addIdentifier('cutOffDate')
             ->addIdentifier('claimablePeriod',null,['label'=>'Claimable Period (months)'])
             ->add('_action', null, array(
@@ -56,7 +48,7 @@ class CompanyClaimPoliciesAdmin extends BaseAdmin
     public function toString($object)
     {
         return $object instanceof CompanyClaimPolicies
-            ? $object->getClaimType()->getCode()
+            ? 'Claim Policies'
             : 'Company Claim Policies Management'; // shown in the breadcrumb on the create view
     }
 
