@@ -207,7 +207,7 @@
                                         {{ form_row(form.receiptDate,{'attr': {'class': 'receipt-date datepicker-claim'}}) }}
                                         {{ form_row(form.taxRate,{'attr': {'class': 'tax-rate'}}) }}
                                         {{ form_row(form.taxAmount,{'attr': {'class': 'tax-amount'}}) }}
-                                        {% if object.claimType.code == 'Overseas' %}
+                                        {% if object.claimType.claimTypeType.name == 'Overseas' %}
                                             {{ form_row(form.currencyExchange,{'attr': {'class': 'claim-currency'}}) }}
                                             {{ form_row(form.claimAmountConverted,{'attr': {'class': 'claim-amount-converted'}}) }}
                                             {{ form_row(form.taxAmountConverted,{'attr': {'class': 'tax-amount-converted'}}) }}

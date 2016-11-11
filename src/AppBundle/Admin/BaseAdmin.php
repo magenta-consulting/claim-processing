@@ -2,6 +2,8 @@
 namespace AppBundle\Admin;
 
 use AppBundle\Entity\Claim;
+use AppBundle\Entity\ClaimType;
+use AppBundle\Entity\ClaimTypeType;
 use AppBundle\Entity\Company;
 use AppBundle\Entity\CostCentre;
 use AppBundle\Entity\PayCodeType;
@@ -122,6 +124,37 @@ class BaseAdmin extends AbstractAdmin
                 $payCodeType2->setEnabled(true);
                 $payCodeType2->setCompany($object);
                 $em->persist($payCodeType2);
+
+
+                //create claim type
+                $claimTypeType1 = new ClaimTypeType();
+                $claimTypeType1->setCompany($object);
+                $claimTypeType1->setEnabled(true);
+                $claimTypeType1->setName('Local');
+                $claimTypeType1->setOrderSort(1);
+                $em->persist($claimTypeType1);
+
+                $claimTypeType2 = new ClaimTypeType();
+                $claimTypeType2->setCompany($object);
+                $claimTypeType2->setEnabled(true);
+                $claimTypeType2->setName('Overseas');
+                $claimTypeType2->setOrderSort(1);
+                $em->persist($claimTypeType2);
+
+                $claimType1 = new ClaimType();
+                $claimType1->setCompany($object);
+                $claimType1->setEnabled(true);
+                $claimType1->setClaimTypeType($claimTypeType1);
+                $claimType1->setCode('Local Claims');
+                $em->persist($claimType1);
+
+                $claimType2 = new ClaimType();
+                $claimType2->setCompany($object);
+                $claimType2->setEnabled(true);
+                $claimType2->setClaimTypeType($claimTypeType2);
+                $claimType2->setCode('Overseas Claims');
+                $em->persist($claimType2);
+
                 $em->flush();
 
             }

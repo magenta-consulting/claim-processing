@@ -149,7 +149,7 @@ class ClaimAdmin extends BaseAdmin
         //step 2(edit)
         $subject = $this->getSubject();
         if ($subject && $subject->getId()) {
-            if ($subject->getClaimType()->getCode() === 'Overseas') {
+            if ($subject->getClaimType()->getClaimTypeType()->getName() === 'Overseas') {
                 $formMapper->add('currencyExchange', 'sonata_type_model', array(
                     'property' => 'code',
                     'query' => $this->filterCurrencyExchangeBycompany(),

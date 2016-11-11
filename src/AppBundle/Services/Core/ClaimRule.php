@@ -85,7 +85,7 @@ class ClaimRule
     {
         $em = $this->container->get('doctrine')->getManager();
         //in the future will change with multiple cutofdate and claimable, currently just only one
-        $claimType = $em->getRepository('AppBundle\Entity\ClaimType')->findOneBy([]);
+        $claimType = $em->getRepository('AppBundle\Entity\ClaimType')->findOneBy(['company'=>$this->getClientCompany()]);
 
         $claimPolicy = $claimType->getCompanyClaimPolicies();
         $cutOffdate = $claimPolicy->getCutOffDate();
