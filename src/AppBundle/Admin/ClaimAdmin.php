@@ -361,14 +361,15 @@ class ClaimAdmin extends BaseAdmin
                 $show->add('claimType.code', 'text', ['label' => 'Claim Type']);
                 $show->add('claimCategory.code', 'text', ['label' => 'Claim Category']);
                 $show->add('3', 'show_claim_limit', ['label' => 'Claim Limit']);
+                $show->add('taxRate.code', 'show_tax_code', ['label' => 'Tax Code']);
+                $show->add('taxRate.rate', 'show_tax_rate', ['label' => 'Tax Rate']);
+                $show->add('claimAmount', 'show_currency', ['label' => 'Amount']);
+                $show->add('taxAmount', null, ['label' => 'Tax Amount']);
                 if ($claim->getCurrencyExchange()) {
-                    $show->add('claimAmountConverted', null, ['label' => 'Amount']);
-                    $show->add('taxRate.code', 'show_tax_code', ['label' => 'Tax Code']);
-                    $show->add('taxAmountConverted', null, ['label' => 'Tax Amount']);
-                }else{
-                    $show->add('claimAmount', 'show_currency', ['label' => 'Amount']);
-                    $show->add('taxRate.code', 'show_tax_code', ['label' => 'Tax Code']);
-                    $show->add('taxAmount', null, ['label' => 'Tax Amount']);
+                    $show->add('currencyExchange.code', null, ['label' => 'Currency']);
+                    $show->add('exRate', null, ['label' => 'Ex Rate']);
+                    $show->add('claimAmountConverted', null, ['label' => 'Receipt Value after conversion']);
+                    $show->add('taxAmountConverted', null, ['label' => 'Tax Value after Conversion']);
                 }
                 $show->add('status', 'text', ['label' => 'Status']);
                 $show->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y']);
@@ -403,14 +404,15 @@ class ClaimAdmin extends BaseAdmin
                 $show->add('claimType.code', 'text', ['label' => 'Claim Type']);
                 $show->add('claimCategory.code', 'text', ['label' => 'Claim Category']);
                 $show->add('3', 'show_claim_limit', ['label' => 'Claim Limit']);
+                $show->add('taxRate.code', 'show_tax_code', ['label' => 'Tax Code']);
+                $show->add('taxRate.rate', 'show_tax_rate', ['label' => 'Tax Rate']);
+                $show->add('claimAmount', 'show_currency', ['label' => 'Amount']);
+                $show->add('taxAmount', null, ['label' => 'Tax Amount']);
                 if ($claim->getCurrencyExchange()) {
-                    $show->add('claimAmountConverted', null, ['label' => 'Amount']);
-                    $show->add('taxRate.code', 'show_tax_code', ['label' => 'Tax Code']);
-                    $show->add('taxAmountConverted', null, ['label' => 'Tax Amount']);
-                }else{
-                    $show->add('claimAmount', 'show_currency', ['label' => 'Amount']);
-                    $show->add('taxRate.code', 'show_tax_code', ['label' => 'Tax Code']);
-                    $show->add('taxAmount', null, ['label' => 'Tax Amount']);
+                    $show->add('currencyExchange.code', null, ['label' => 'Currency']);
+                    $show->add('exRate', null, ['label' => 'Ex Rate']);
+                    $show->add('claimAmountConverted', null, ['label' => 'Receipt Value after conversion']);
+                    $show->add('taxAmountConverted', null, ['label' => 'Tax Value after Conversion']);
                 }
                 $show->add('status', 'text', ['label' => 'Status']);
                 $show->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y']);
@@ -450,8 +452,9 @@ class ClaimAdmin extends BaseAdmin
                 $show->add('claimType.code', 'text', ['label' => 'Claim Type']);
                 $show->add('claimCategory.code', 'text', ['label' => 'Claim Category']);
                 $show->add('3', 'show_claim_limit', ['label' => 'Claim Limit']);
-                $show->add('claimAmount', 'show_currency', ['label' => 'Amount', 'currency' => 'USD']);
                 $show->add('taxRate.code', 'show_tax_code', ['label' => 'Tax Code']);
+                $show->add('taxRate.rate', 'show_tax_rate', ['label' => 'Tax Rate']);
+                $show->add('claimAmount', 'show_currency', ['label' => 'Amount']);
                 $show->add('taxAmount', null, ['label' => 'Tax Amount']);
                 if ($claim->getCurrencyExchange()) {
                     $show->add('currencyExchange.code', null, ['label' => 'Currency']);
@@ -472,14 +475,15 @@ class ClaimAdmin extends BaseAdmin
                 $show->add('claimType.code', 'text', ['label' => 'Claim Type']);
                 $show->add('claimCategory.code', 'text', ['label' => 'Claim Category']);
                 $show->add('3', 'show_claim_limit', ['label' => 'Claim Limit']);
+                $show->add('taxRate.code', 'show_tax_code', ['label' => 'Tax Code']);
+                $show->add('taxRate.rate', 'show_tax_rate', ['label' => 'Tax Rate']);
+                $show->add('claimAmount', 'show_currency', ['label' => 'Amount']);
+                $show->add('taxAmount', null, ['label' => 'Tax Amount']);
                 if ($claim->getCurrencyExchange()) {
-                    $show->add('claimAmountConverted', null, ['label' => 'Amount']);
-                    $show->add('taxRate.code', 'show_tax_code', ['label' => 'Tax Code']);
-                    $show->add('taxAmountConverted', null, ['label' => 'Tax Amount']);
-                }else{
-                    $show->add('claimAmount', 'show_currency', ['label' => 'Amount']);
-                    $show->add('taxRate.code', 'show_tax_code', ['label' => 'Tax Code']);
-                    $show->add('taxAmount', null, ['label' => 'Tax Amount']);
+                    $show->add('currencyExchange.code', null, ['label' => 'Currency']);
+                    $show->add('exRate', null, ['label' => 'Ex Rate']);
+                    $show->add('claimAmountConverted', null, ['label' => 'Receipt Value after conversion']);
+                    $show->add('taxAmountConverted', null, ['label' => 'Tax Value after Conversion']);
                 }
                 $show->add('status', 'text', ['label' => 'Status']);
                 $show->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y']);

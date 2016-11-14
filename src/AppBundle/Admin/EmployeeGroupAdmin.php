@@ -78,24 +78,8 @@ class EmployeeGroupAdmin extends BaseAdmin
     }
     public function manualUpdate($employeeGroup)
     {
-        if ($employeeGroup->getCompanyApply()) {
-            $name[] = $employeeGroup->getCompanyApply()->getName();
-        }
-        if ($employeeGroup->getCostCentre()) {
-            $name[] = $employeeGroup->getCostCentre()->getCode();
-        }
-        if ($employeeGroup->getDepartment()) {
-            $name[] = $employeeGroup->getDepartment()->getCode();
-        }
-        if ($employeeGroup->getEmployeeType()) {
-            $name[] = $employeeGroup->getEmployeeType()->getCode();
-        }
-        if (count($name)) {
-            $name = implode('>', $name);
-        } else {
-            $name = '';
-        }
-        $employeeGroup->setDescription($name);
+        $description = $this->getContainer()->get('app.claim_rule')->getDescriptionEmployeeGroup($employeeGroup);
+        $employeeGroup->setDescription($description);
     }
 
     public function toString($object)

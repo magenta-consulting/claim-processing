@@ -1,4 +1,8 @@
-<ul class="sidebar-menu" data-current-route="{{ app.request.get('_route') }}">
+<ul class="sidebar-menu" data-current-admin="{{ app.request.get('_route_params') ? app.request.get('_route_params')['_sonata_admin'] }}"
+    data-current-route-name="{{ app.request.get('_route_params') ? app.request.get('_route_params')['_sonata_name'] }}"
+    data-current-param-type="{{ app.request.get('type') }}"
+    data-current-route = {{ app.request.get('_route') }}
+>
 
     {% if app.user.hasRole('ROLE_ADMIN') %}
         <li data-route="admin_app_company_list" class="first"><a href="{{ path('admin_app_company_list') }}"><i
@@ -9,76 +13,72 @@
                         class="fa pull-right fa-angle-left"></i></a>
             <ul class="active treeview-menu menu_level_1" style="display: none;">
 
-                {#<li class="first"><a href="{{ path('admin_app_claim_list') }}"><i#}
-                {#class="fa fa-angle-double-right"></i>Claim</a>#}
-                {#</li>#}
-
-                <li data-route="admin_app_company_list"><a href="{{ path('admin_app_company_list') }}"><i
+                <li class="item" data-route="admin.company"><a href="{{ path('admin_app_company_list') }}"><i
                                 class="fa fa-angle-double-right"></i>Company Management</a>
                 </li>
 
-                <li data-route="admin_app_costcentre_list"><a href="{{ path('admin_app_costcentre_list') }}"><i
+                <li class="item" data-route="admin.cost_centre"><a href="{{ path('admin_app_costcentre_list') }}"><i
                                 class="fa fa-angle-double-right"></i>Cost Centre Management</a>
                 </li>
 
-                <li data-route="admin_app_region_list"><a href="{{ path('admin_app_region_list') }}"><i
+                <li class="item" data-route="admin.region"><a href="{{ path('admin_app_region_list') }}"><i
                                 class="fa fa-angle-double-right"></i>Region Management</a>
                 </li>
 
-                <li data-route="admin_app_branch_list"><a href="{{ path('admin_app_branch_list') }}"><i
+                <li class="item" data-route="admin.branch"><a href="{{ path('admin_app_branch_list') }}"><i
                                 class="fa fa-angle-double-right"></i>Branch Management</a>
                 </li>
-                <li data-route="admin_app_department_list"><a href="{{ path('admin_app_department_list') }}"><i
+                <li class="item" data-route="admin.department"><a href="{{ path('admin_app_department_list') }}"><i
                                 class="fa fa-angle-double-right"></i>Department Management</a>
                 </li>
-                <li data-route="admin_app_section_list"><a href="{{ path('admin_app_section_list') }}"><i
+                <li class="item" data-route="admin.section"><a href="{{ path('admin_app_section_list') }}"><i
                                 class="fa fa-angle-double-right"></i>Section Management</a>
                 </li>
-                <li data-route="admin_app_paycode_list"><a href="{{ path('admin_app_paycode_list') }}"><i
+                <li class="item" data-route="admin.pay_code"><a href="{{ path('admin_app_paycode_list') }}"><i
                                 class="fa fa-angle-double-right"></i>Company Pay Code Management</a>
-                <li data-route="admin_app_taxrate_list"><a href="{{ path('admin_app_taxrate_list') }}"><i
+                <li class="item" data-route="admin.tax_rate"><a href="{{ path('admin_app_taxrate_list') }}"><i
                                 class="fa fa-angle-double-right"></i>Tax Rate Management</a>
                 </li>
-                <li data-route="admin_app_claimtype_list"><a href="{{ path('admin_app_claimtype_list') }}"><i
+                <li class="item" data-route="admin.claim_type"><a href="{{ path('admin_app_claimtype_list') }}"><i
                                 class="fa fa-angle-double-right"></i>Claim Type Management</a>
                 </li>
-                <li data-route="admin_app_currencyexchange_list"><a
+                <li class="item" data-route="admin.currency_exchange"><a
                             href="{{ path('admin_app_currencyexchange_list') }}"><i
                                 class="fa fa-angle-double-right"></i>Currency Exchange Management</a>
                 </li>
-                <li data-route="admin_app_claimcategory_list"><a href="{{ path('admin_app_claimcategory_list') }}"><i
+                <li class="item" data-route="admin.claim_category"><a href="{{ path('admin_app_claimcategory_list') }}"><i
                                 class="fa fa-angle-double-right"></i>Claim Category Management</a>
                 </li>
 
-                <li data-route="admin_app_companyclaimpolicies_list"><a
+                <li class="item" data-route="admin.company_claim_policies"><a
                             href="{{ path('admin_app_companyclaimpolicies_list') }}"><i
                                 class="fa fa-angle-double-right"></i>Claim Policies Management</a>
                 </li>
 
 
-                <li data-route="admin_app_approvalamountpolicies_list"><a
+                <li class="item" data-route="admin.approval_amount_policies"><a
                             href="{{ path('admin_app_approvalamountpolicies_list') }}"><i
                                 class="fa fa-angle-double-right"></i>Approval Policies Management</a>
                 </li>
 
 
-                <li data-route="admin_app_employeetype_list"><a href="{{ path('admin_app_employeetype_list') }}"><i
+                <li class="item" data-route="admin.employee_type"><a href="{{ path('admin_app_employeetype_list') }}"><i
                                 class="fa fa-angle-double-right"></i>Employee Type Management</a>
                 </li>
 
 
-                <li data-route="admin_app_employmenttype_list"><a href="{{ path('admin_app_employmenttype_list') }}"><i
+                <li class="item" data-route="admin.employment_type"><a href="{{ path('admin_app_employmenttype_list') }}"><i
                                 class="fa fa-angle-double-right"></i>Employment Type Management</a>
                 </li>
-                <li data-route="admin_app_employeegroup_list"><a href="{{ path('admin_app_employeegroup_list') }}"><i
+                <li class="item" data-route="admin.employee_group"><a href="{{ path('admin_app_employeegroup_list') }}"><i
                                 class="fa fa-angle-double-right"></i>Employee Group Management</a>
                 </li>
 
-                <li data-route="admin_app_limitrule_list"><a href="{{ path('admin_app_limitrule_list') }}"><i
+                <li class="item" data-route="admin.limit_rule"><a href="{{ path('admin_app_limitrule_list') }}"><i
                                 class="fa fa-angle-double-right"></i>Claims Limit Rules</a>
                 </li>
 
-                <li data-route="admin_app_checker_list"><a href="{{ path('admin_app_checker_list') }}"><i
+                <li class="item" data-route="admin.checker"><a href="{{ path('admin_app_checker_list') }}"><i
                                 class="fa fa-angle-double-right"></i>Checker Grouping</a>
                 </li>
 
@@ -86,73 +86,104 @@
 
         </li>
     {% elseif app.user.hasRole('ROLE_HR_ADMIN') %}
-        <li data-route="admin_app_company_show" class="first"><a
+        <li class="item" data-route1="admin_app_company_show" class="first"><a
                     href="{{ path('admin_app_company_show',{'id':app.user.company.id}) }}"><i
                         class="fa fa-angle-double-right"></i>My Company</a>
         </li>
-        <li data-route="admin_app_company_position_list" class="last"><a
+        <li class="item"  data-route1="admin_app_company_position_list" class="last"><a
                     href="{{ path('admin_app_company_position_list',{'id':app.user.company.id}) }}"><i
                         class="fa fa-angle-double-right"></i>My Employees</a>
         </li>
     {% endif %}
 
     {% if not is_granted('ROLE_ADMIN') and getCurrentClaimPeriod('from') %}
-    <li class="last treeview"><a href="#"><i class="fa fa-folder"></i><span>My Claims</span><i
-                    class="fa pull-right fa-angle-left"></i></a>
-        <ul class="active treeview-menu menu_level_1" style="display: none;">
-            <li data-route="admin_app_claim_firstPageCreateClaim"><a href="{{ path('admin_app_claim_firstPageCreateClaim') }}"><i
-                            class="fa fa-angle-double-right"></i>New Claims</a>
-            </li>
-            <li class="treeview"><a href="#"><i class="fa fa-folder"></i>Claims Summary</a>
-                <ul class="active treeview-menu menu_level_1" style="display: none;">
-                    <li data-route="admin_app_claim_list"><a href="{{ path('admin_app_claim_list',{'type':'current'}) }}"><i
-                                    class="fa fa-angle-double-right"></i>Current Claims</a>
-                    </li>
-                    <li data-route="admin_app_claim_list"><a href="{{ path('admin_app_claim_list',{'type':'draft'}) }}"><i
-                                    class="fa fa-angle-double-right"></i>Draft Claims </a>
-                    </li>
-                    <li data-route="admin_app_claim_list"><a href="{{ path('admin_app_claim_list',{'type':'reject'}) }}"><i
-                                    class="fa fa-angle-double-right"></i>Rejected Claims <span class="label label-danger number-notification-not-view"
-                                                                                                                              style="font-size: 12px;">{{ getNumberRejectedClaim() }}</span></a>
-                    </li>
-                    <li data-route="admin_app_claim_list"><a href="{{ path('admin_app_claim_list') }}"><i
-                                    class="fa fa-angle-double-right"></i>Past Claims </a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </li>
-    {% if isShowMenuForChecker(app.user.loginWithPosition) %}
-        {% set resultCheckerNotification = getCheckerNotification() %}
-        <li data-route="admin_app_position_list" class="last"><a
-                    href="{{ path('admin_app_position_list',{'type':'checking'}) }}"><i
-                        class="fa fa-angle-double-right"></i>Claims For Checking       <span class="label label-danger number-notification-not-view"
-                                                                                             style="font-size: 12px;">{{ resultCheckerNotification|length }}</span></a>
+        <li class="last treeview"><a href="#"><i class="fa fa-folder"></i><span>My Claims</span><i
+                        class="fa pull-right fa-angle-left"></i></a>
+            <ul class="active treeview-menu menu_level_1" style="display: none;">
+                <li class="item" data-route="admin_app_claim_firstPageCreateClaim"><a
+                            href="{{ path('admin_app_claim_firstPageCreateClaim') }}"><i
+                                class="fa fa-angle-double-right"></i>New Claims</a>
+                </li>
+                <li class="treeview"><a href="#"><i class="fa fa-folder"></i>Claims Summary</a>
+                    <ul class="active treeview-menu menu_level_1" style="display: none;">
+                        <li class="item" data-route-param="current"><a
+                                    href="{{ path('admin_app_claim_list',{'type':'current'}) }}"><i
+                                        class="fa fa-angle-double-right"></i>Current Claims</a>
+                        </li>
+                        <li class="item" data-route-param="draft"><a href="{{ path('admin_app_claim_list',{'type':'draft'}) }}"><i
+                                        class="fa fa-angle-double-right"></i>Draft Claims </a>
+                        </li>
+                        <li class="item" data-route-param="reject"><a href="{{ path('admin_app_claim_list',{'type':'reject'}) }}"><i
+                                        class="fa fa-angle-double-right"></i>Rejected Claims <span
+                                        class="label label-danger number-notification-not-view"
+                                        style="font-size: 12px;">{{ getNumberRejectedClaim() }}</span></a>
+                        </li>
+                        <li class="item" data-route-param=""><a href="{{ path('admin_app_claim_list') }}"><i
+                                        class="fa fa-angle-double-right"></i>Past Claims </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </li>
-    {% endif %}
-    {% if isShowMenuForApprover(app.user.loginWithPosition) %}
-        {% set resultApproverNotification = getApproverNotification() %}
-        <li data-route="admin_app_position_list" class="last"><a
-                    href="{{ path('admin_app_position_list',{'type':'approving'}) }}"><i
-                        class="fa fa-angle-double-right"></i>Claims For Approval      <span class="label label-danger number-notification-not-view"
-                                                                                            style="font-size: 12px;">{{ resultApproverNotification|length }}</span></a>
-        </li>
-    {% endif %}
+        {% if isShowMenuForChecker(app.user.loginWithPosition) %}
+            {% set resultCheckerNotification = getCheckerNotification() %}
+            <li  data-route1="admin_app_position_list" class="last item"><a
+                        href="{{ path('admin_app_position_list',{'type':'checking'}) }}"><i
+                            class="fa fa-angle-double-right"></i>Claims For Checking <span
+                            class="label label-danger number-notification-not-view"
+                            style="font-size: 12px;">{{ resultCheckerNotification|length }}</span></a>
+            </li>
+        {% endif %}
+        {% if isShowMenuForApprover(app.user.loginWithPosition) %}
+            {% set resultApproverNotification = getApproverNotification() %}
+            <li data-route1="admin_app_position_list" class="last item"><a
+                        href="{{ path('admin_app_position_list',{'type':'approving'}) }}"><i
+                            class="fa fa-angle-double-right"></i>Claims For Approval <span
+                            class="label label-danger number-notification-not-view"
+                            style="font-size: 12px;">{{ resultApproverNotification|length }}</span></a>
+            </li>
+        {% endif %}
 
     {% endif %}
 </ul>
-
 <script>
-//    $(document).ready(function () {
-//        console.log(1);
-//        var currentRote = $('.sidebar-menu').data('current-route');
-//        $('.sidebar-menu li').each(function () {
-//            var route = $(this).data('route');
-//            if (route == currentRote) {
-//                $(this).addClass('active');
-//                $(this).parents('ul').show();
-//                return;
-//            }
-//        });
-//    });
+    $(document).ready(function () {
+        $('li.item').each(function () {
+            var currentRouteName = $('.sidebar-menu').data('current-route-name');
+            var currentAdmin = $('.sidebar-menu').data('current-admin');
+            var currentRoute = $('.sidebar-menu').data('current-route');
+            if (currentAdmin != 'admin.claim') {
+                //use for menu system
+                var currentAdmin = currentAdmin.split('|');
+                var route = $(this).data('route');
+                if (jQuery.inArray(route, currentAdmin) != -1) {
+                    $(this).addClass('active');
+                    $(this).parents('ul').show();
+                    return;
+                }
+            } else {
+                //use for menu claims
+                if (currentRouteName == $(this).data('route')) {
+                    $(this).addClass('active');
+                    $(this).parents('ul').show();
+                    return;
+                } else if(currentRouteName == 'admin_app_claim_list') {
+                    var routeParam = $(this).data('route-param');
+                    var routeCurrentParam = $('.sidebar-menu').data('current-param-type');
+                    if (routeParam == routeCurrentParam) {
+                        $(this).addClass('active');
+                        $(this).parents('ul').show();
+                        return;
+                    }
+                }
+            }
+
+            //use for menu my company, my employees, checker, approver
+            if(currentRoute == $(this).data('route1')){
+                $(this).addClass('active');
+                $(this).parents('ul').show();
+                return;
+            }
+        });
+    });
 </script>

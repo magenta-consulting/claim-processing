@@ -146,6 +146,10 @@ class TwigExtension extends \Twig_Extension
         return $this->container->get('app.claim_rule')->getApproverNotification();
     }
 
+    public function getDescriptionEmployeeGroup($employeeGroup){
+        return $this->container->get('app.claim_rule')->getDescriptionEmployeeGroup($employeeGroup);
+    }
+
     public function getFunctions()
     {
         return array(
@@ -169,6 +173,7 @@ class TwigExtension extends \Twig_Extension
             'getCheckerNotification' => new \Twig_Function_Method($this, 'getCheckerNotification', array('is_safe' => array('html'))),
             'getApproverNotification' => new \Twig_Function_Method($this, 'getApproverNotification', array('is_safe' => array('html'))),
             'isShowDeleteButtonForClaim' => new \Twig_Function_Method($this, 'isShowDeleteButtonForClaim', array('is_safe' => array('html'))),
+            'getDescriptionEmployeeGroup' => new \Twig_Function_Method($this, 'getDescriptionEmployeeGroup', array('is_safe' => array('html'))),
         );
     }
 

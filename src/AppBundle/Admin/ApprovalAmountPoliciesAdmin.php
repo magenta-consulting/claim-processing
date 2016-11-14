@@ -122,6 +122,7 @@ class ApprovalAmountPoliciesAdmin extends BaseAdmin
             ->addIdentifier('approver1.firstName', null, ['label' => 'Approver1'])
             ->add('approver2.firstName', null, ['label' => 'Approver2'])
             ->add('approver3.firstName', null, ['label' => 'Approver3'])
+            ->add('1', 'approver_employee_groups', ['label' => 'Employee Groups'])
             ->add('_action', null, array(
                 'actions' => array(
                     'delete' => array(),

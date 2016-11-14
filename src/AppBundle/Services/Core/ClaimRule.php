@@ -85,9 +85,9 @@ class ClaimRule
     {
         $em = $this->container->get('doctrine')->getManager();
         //in the future will change with multiple cutofdate and claimable, currently just only one
-        $claimPolicy = $em->getRepository('AppBundle\Entity\CompanyClaimPolicies')->findOneBy(['company'=>$this->getClientCompany()]);
+        $claimPolicy = $em->getRepository('AppBundle\Entity\CompanyClaimPolicies')->findOneBy(['company' => $this->getClientCompany()]);
 
-        if($claimPolicy) {
+        if ($claimPolicy) {
             $cutOffdate = $claimPolicy->getCutOffDate();
             $currentDate = date('d');
             if ($currentDate <= $cutOffdate) {
@@ -153,12 +153,10 @@ class ClaimRule
             ->setParameter('position', $position)
             ->setParameter('claimType', $claim->getClaimType())
             ->setParameter('claimCategory', $claim->getClaimCategory())
-
             ->andWhere($expr->eq('claim.periodFrom', ':periodFrom'))
             ->andWhere($expr->eq('claim.periodTo', ':periodTo'))
             ->setParameter('periodFrom', $periodFrom->format('Y-m-d'))
             ->setParameter('periodTo', $periodTo->format('Y-m-d'))
-
             ->getQuery()
             ->getResult();
 
@@ -534,10 +532,7 @@ class ClaimRule
             )
         );
         $query->andWhere(
-            $expr->orX(
-                $expr->eq('checker.checker', ':checker'),
-                $expr->eq('checker.backupChecker', ':checker')
-            )
+            $expr->eq('checker.checker', ':checker')
         );
         $query->andWhere($expr->eq('claim.status', ':statusPending'));
         $query->setParameter('statusPending', Claim::STATUS_PENDING);
@@ -546,8 +541,9 @@ class ClaimRule
         $query->setParameter('clientCompany', $clientCompany);
         $query->setMaxResults(20);
         $query->setFirstResult(0);
-        return  $query->getQuery()->getResult();
+        return $query->getQuery()->getResult();
     }
+
     public function getApproverNotification()
     {
         $em = $this->container->get('doctrine')->getManager();
@@ -567,10 +563,7 @@ class ClaimRule
             )
         );
         $query->andWhere(
-            $expr->orX(
-                $expr->eq('claim.approverEmployee', ':position'),
-                $expr->eq('claim.approverBackupEmployee', ':position')
-            )
+            $expr->eq('claim.approverEmployee', ':position')
         );
         $query->andWhere($expr->eq('claim.status', ':statusCheckerApproved'));
         $query->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
@@ -580,6 +573,32 @@ class ClaimRule
         $query->setMaxResults(20);
         $query->setFirstResult(0);
 
-        return  $query->getQuery()->getResult();
+        return $query->getQuery()->getResult();
+    }
+
+    public function getDescriptionEmployeeGroup($employeeGroup)
+    {
+        if($employeeGroup == null){
+            return null;
+        }
+        $description = [];
+        if ($employeeGroup->getCompanyApply()) {
+            $description[] = $employeeGroup->getCompanyApply()->getName();
+        }
+        if ($employeeGroup->getCostCentre()) {
+            $description[] = $employeeGroup->getCostCentre()->getCode();
+        }
+        if ($employeeGroup->getDepartment()) {
+            $description[] = $employeeGroup->getDepartment()->getCode();
+        }
+        if ($employeeGroup->getEmployeeType()) {
+            $description[] = $employeeGroup->getEmployeeType()->getCode();
+        }
+        if (count($description)) {
+            $description = implode('>', $description);
+        } else {
+            $description = '';
+        }
+        return $description;
     }
 }

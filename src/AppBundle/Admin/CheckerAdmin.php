@@ -55,6 +55,7 @@ class CheckerAdmin extends BaseAdmin
         $listMapper
             ->addIdentifier('checker.firstName', null, ['label' => 'Checker'])
             ->add('backupChecker.firstName', null, ['label' => 'Backup Checker'])
+            ->add('1', 'checker_employee_groups', ['label' => 'Employee Groups'])
             ->add('_action', null, array(
                 'actions' => array(
                     'delete' => array(),
