@@ -532,7 +532,10 @@ class ClaimRule
             )
         );
         $query->andWhere(
-            $expr->eq('checker.checker', ':checker')
+            $expr->orX(
+                $expr->eq('checker.checker', ':checker'),
+                $expr->eq('checker.backupChecker', ':checker')
+            )
         );
         $query->andWhere($expr->eq('claim.status', ':statusPending'));
         $query->setParameter('statusPending', Claim::STATUS_PENDING);
@@ -563,7 +566,10 @@ class ClaimRule
             )
         );
         $query->andWhere(
-            $expr->eq('claim.approverEmployee', ':position')
+            $expr->orX(
+                $expr->eq('claim.approverEmployee', ':position'),
+                $expr->eq('claim.approverBackupEmployee', ':position')
+            )
         );
         $query->andWhere($expr->eq('claim.status', ':statusCheckerApproved'));
         $query->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
