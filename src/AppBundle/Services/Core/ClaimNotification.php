@@ -54,7 +54,7 @@ class ClaimNotification
     public function sendmailToChecker($checker, $listPosition)
     {
         $message = \Swift_Message::newInstance()
-            ->setSubject('Notification For Checker')
+            ->setSubject('New Claims for Verification')
             ->setFrom('noreply@magentapulse.com')
             ->setTo($checker->getEmail())
             ->setBody(
@@ -73,7 +73,7 @@ class ClaimNotification
     public function sendmailToApprover($approver, $listPosition)
     {
         $message = \Swift_Message::newInstance()
-            ->setSubject('Notification For Approver')
+            ->setSubject('New Claims for Approval')
             ->setFrom('noreply@magentapulse.com')
             ->setTo($approver->getEmail())
             ->setBody(

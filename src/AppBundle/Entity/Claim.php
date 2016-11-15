@@ -231,7 +231,6 @@ class Claim
     }
 
 
-
     /**
      * @return float
      */
@@ -265,7 +264,6 @@ class Claim
     }
 
 
-
     /**
      * @return Position
      */
@@ -281,7 +279,6 @@ class Claim
     {
         $this->createdBy = $createdBy;
     }
-
 
 
     /**
@@ -317,7 +314,6 @@ class Claim
     }
 
 
-
     /**
      * @return \DateTime
      */
@@ -349,7 +345,6 @@ class Claim
     {
         $this->approverUpdatedAt = $approverUpdatedAt;
     }
-
 
 
     /**
@@ -680,16 +675,17 @@ class Claim
     }
 
 
-
-    public function getClaimPolicy(){
+    public function getClaimPolicy()
+    {
         $company = $this->getCompany();
         $clientCompany = $company->getParent() ? $company->getParent() : $company;
         $claimPolicies = $clientCompany->getCompanyClaimPolicies();
-        if($claimPolicies->count()){
+        if ($claimPolicies->count()) {
             return $claimPolicies[0];
         }
         return null;
     }
+
     public function setPeriod()
     {
         if ($this->getClaimType()) {
@@ -720,10 +716,10 @@ class Claim
         $this->setPeriod();
         if ($this->getReceiptDate() && $this->getPeriodFrom() && $this->getPeriodTo()) {
             $claimPolicy = $this->getClaimPolicy();
-            $to = $this->getPeriodTo();
-            $clone = clone $to;
-            $from = $clone->modify('-' . $claimPolicy->getClaimablePeriod() . ' month +1 day');
-            if ($this->getReceiptDate() < $from || $this->getReceiptDate() > $to) {
+            $claimable = $claimPolicy->getClaimablePeriod();
+            $to = date('Y-m-d');
+            $from = date('Y-m-d', strtotime('- '. $claimable.' month',strtotime($to)));
+            if ($this->getReceiptDate()->getTimestamp() < strtotime($from) || $this->getReceiptDate()->getTimestamp() > strtotime($to)) {
                 $context->buildViolation('This receipt date is invalid')
                     ->atPath('receiptDate')
                     ->addViolation();

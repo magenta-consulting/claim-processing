@@ -1,12 +1,11 @@
 <p>Dear {{ approver.firstName ~' '~ approver.lastName }}, <p>
-<p>You have <strong>[{{ resultApproverNotification|length }}]</strong> employee require your approval their claims</p>
+<p><strong>[{{ resultApproverNotification|length }}]</strong> employee require your approval their claims</p>
 <ul>
     {% for position in resultApproverNotification %}
         <li class=""><a
                     href="{{ url('admin_app_claim_list', {'type':'approving-each-position','position-id':position.id}) }}"><strong>{{ position.firstName ~' ' ~ position.lastName }}</strong>
                 has {{ getNumberClaimEachEmployeeForApprover(position,approver) }}
-                claims
-                require your approval</a></li>
+                claims</a></li>
     {% endfor %}
 
 </ul>
