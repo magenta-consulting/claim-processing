@@ -14,32 +14,44 @@ class ClaimController extends Controller
 {
 
 
-    public function submitDraftClaimsAction(){
+    public function showClaimImageAction(Media $media)
+    {
+        $url = $this->get('app.media.retriever')->getPublicURL($media);
+        return $this->render('@App/SonataAdmin/Claim/show_claim_image.html.twig', ['url' => $url]);
+
+    }
+
+    public function submitDraftClaimsAction()
+    {
 
         $em = $this->getDoctrine()->getManager();
         $claims = $em->getRepository('AppBundle:Claim')->findBy(
             [
-                'status'=>Claim::STATUS_DRAFT,
-                'position'=>$this->getUser()->getLoginWithPosition()
+                'status' => Claim::STATUS_DRAFT,
+                'position' => $this->getUser()->getLoginWithPosition()
             ]
         );
-        foreach ($claims as $claim){
+        foreach ($claims as $claim) {
             $claim->setStatus(Claim::STATUS_PENDING);
             $em->persist($claim);
         }
         $em->flush();
         $this->addFlash('sonata_flash_success', 'Submit successfully');
-        $url = $this->admin->generateUrl('list',['type'=>'current']);
+        $url = $this->admin->generateUrl('list', ['type' => 'current']);
 
         return new RedirectResponse($url);
     }
-    public function listUserSubmissionForAction(){
+
+    public function listUserSubmissionForAction()
+    {
         return $this->render("AppBundle:SonataAdmin/Claim:list_user_submission_for.html.twig");
     }
+
     public function firstPageCreateClaimAction()
     {
         return $this->render("AppBundle:SonataAdmin/Claim:first_page_create_claim.html.twig");
     }
+
     public function listOptionClaimAction()
     {
         return $this->render("@App/SonataAdmin/Claim/list_option_claim.html.twig");
@@ -421,13 +433,13 @@ class ClaimController extends Controller
         $url = false;
 
         if (null !== $request->get('btn_create_and_edit_onbehalf')) {
-            $url = $this->admin->generateObjectUrl('edit', $object,['type'=>'onbehalf','position-id'=>$request->get('position-id')]);
+            $url = $this->admin->generateObjectUrl('edit', $object, ['type' => 'onbehalf', 'position-id' => $request->get('position-id')]);
         }
         if (null !== $request->get('btn_create_and_edit')) {
             $url = $this->admin->generateObjectUrl('edit', $object);
         }
         if (null !== $request->get('btn_edit_and_show_onbehalf')) {
-            $url = $this->admin->generateObjectUrl('show', $object, ['type' => 'employee-preview-claim','position-id'=>$request->get('position-id')]);
+            $url = $this->admin->generateObjectUrl('show', $object, ['type' => 'employee-preview-claim', 'position-id' => $request->get('position-id')]);
         }
         if (null !== $request->get('btn_edit_and_show')) {
             $url = $this->admin->generateObjectUrl('show', $object, ['type' => 'employee-preview-claim']);

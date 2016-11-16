@@ -336,6 +336,7 @@ class ClaimAdmin extends BaseAdmin
         $collection->add('listOptionClaim', 'list-claim');
         $collection->add('listUserSubmissionFor', 'list-user-submission-for');
         $collection->add('submitDraftClaims', 'submit-draft-claims');
+        $collection->add('showClaimImage', '{media}/show-claim-image');
     }
 
     protected
