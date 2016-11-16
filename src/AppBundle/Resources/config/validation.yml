@@ -23,3 +23,7 @@ AppBundle\Entity\Position:
 AppBundle\Entity\TaxRate:
     constraints:
         - Callback: validate
+
+AppBundle\Entity\CurrencyExchange:
+    constraints:
+        - Callback: validate

@@ -2,7 +2,6 @@
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Debug\Debug;
-
 //if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 //    // return only the headers and not the content
 //    // only allow CORS if we're doing a GET - i.e. no saving for now.

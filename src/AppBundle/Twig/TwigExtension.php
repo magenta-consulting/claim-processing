@@ -149,6 +149,13 @@ class TwigExtension extends \Twig_Extension
     public function getDescriptionEmployeeGroup($employeeGroup){
         return $this->container->get('app.claim_rule')->getDescriptionEmployeeGroup($employeeGroup);
     }
+    public function getCurrencyDefault(){
+        $currency = $this->container->get('app.claim_rule')->getCurrencyDefault();
+        if($currency){
+            return $currency->getCode();
+        }
+        return '';
+    }
 
     public function getFunctions()
     {
@@ -174,6 +181,7 @@ class TwigExtension extends \Twig_Extension
             'getApproverNotification' => new \Twig_Function_Method($this, 'getApproverNotification', array('is_safe' => array('html'))),
             'isShowDeleteButtonForClaim' => new \Twig_Function_Method($this, 'isShowDeleteButtonForClaim', array('is_safe' => array('html'))),
             'getDescriptionEmployeeGroup' => new \Twig_Function_Method($this, 'getDescriptionEmployeeGroup', array('is_safe' => array('html'))),
+            'getCurrencyDefault' => new \Twig_Function_Method($this, 'getCurrencyDefault', array('is_safe' => array('html'))),
         );
     }
 

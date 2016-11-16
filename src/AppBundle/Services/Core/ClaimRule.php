@@ -64,6 +64,13 @@ class ClaimRule
         return $taxAmount;
     }
 
+    public function getCurrencyDefault(){
+        $clientCompany = $this->getClientCompany();
+        $em = $this->container->get('doctrine')->getManager();
+        $currencyExchange = $em->getRepository('AppBundle\Entity\CurrencyExchange')->findOneBy(['isDefault' => true, 'company' => $clientCompany]);
+        return $currencyExchange;
+    }
+
     public function getEmployeeGroupBelongToUser($position)
     {
         $employeeGroupDescriptionStr = $position->getEmployeeGroupDescription();

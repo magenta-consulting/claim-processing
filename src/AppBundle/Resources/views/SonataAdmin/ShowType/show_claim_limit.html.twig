@@ -5,7 +5,7 @@
 {% block field %}
         {% set value = getLimitAmount(object,object.position) %}
         {% if value is not null %}
-                {{ value }}
+                {{ value|number_format(2, '.', ',') }} {{ getCurrencyDefault() }}
         {% endif %}
 {% endblock %}
 

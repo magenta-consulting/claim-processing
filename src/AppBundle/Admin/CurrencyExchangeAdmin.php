@@ -17,6 +17,7 @@ class CurrencyExchangeAdmin extends BaseAdmin
     {
         $formMapper->add('code', 'text',['label'=>'Currency Code']);
         $formMapper->add('description', 'textarea',['label'=>'Currency Description']);
+        $formMapper->add('isDefault', 'checkbox',['label'=>'Is Default','required' => false]);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -29,6 +30,7 @@ class CurrencyExchangeAdmin extends BaseAdmin
         $listMapper
             ->addIdentifier('code',null,['label'=>'Currency Code'])
             ->add('description',null,['label'=>'Currency Description'])
+            ->add('isDefault', null, array('editable' => true))
             ->add('_action', null, array(
                 'actions' => array(
                     'delete' => array(),

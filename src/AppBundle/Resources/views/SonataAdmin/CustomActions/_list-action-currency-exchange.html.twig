@@ -1,1 +1,4 @@
-<a class="btn btn-sm btn-default" href="{{ path('admin_app_currencyexchange_currencyexchangevalue_list', {'id':object.id}) }}">Manage Value</a>
+{% if object.isDefault != 1 %}
+    <a class="btn btn-sm btn-default"
+       href="{{ path('admin_app_currencyexchange_currencyexchangevalue_list', {'id':object.id}) }}">Manage Value</a>
+{% endif %}

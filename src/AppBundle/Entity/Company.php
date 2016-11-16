@@ -97,6 +97,12 @@ class Company
      */
     private $companyClaimPolicies;
 
+    /**
+     * @var CurrencyExchange
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\CurrencyExchange",mappedBy="company")
+     */
+    private $currencyExchanges;
+
     public function __construct()
     {
         $this->positions = new ArrayCollection();
@@ -105,7 +111,26 @@ class Company
         $this->employeeGroups = new ArrayCollection();
         $this->taxRates = new ArrayCollection();
         $this->companyClaimPolicies = new ArrayCollection();
+        $this->currencyExchanges = new ArrayCollection();
     }
+
+    /**
+     * @return CurrencyExchange
+     */
+    public function getCurrencyExchanges()
+    {
+        return $this->currencyExchanges;
+    }
+
+    /**
+     * @param CurrencyExchange $currencyExchanges
+     */
+    public function setCurrencyExchanges($currencyExchanges)
+    {
+        $this->currencyExchanges = $currencyExchanges;
+    }
+
+
 
     /**
      * @return ApprovalAmountPolicies
