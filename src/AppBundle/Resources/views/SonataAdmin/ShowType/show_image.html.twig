@@ -22,7 +22,7 @@ file that was distributed with this source code.
         </div>
         <div class="row link-image">
             {% for claimMedia in object.claimMedias %}
-                <a href="javascript:void(0);" class="{{ loop.index == 1 ? 'active-image':'' }}"
+                <a data-href="{{ path('admin_app_claim_showClaimImage',{'media':claimMedia.media.id}) }}"  href="javascript:void(0);" class="{{ loop.index == 1 ? 'active-image':'' }}"
                    rel="{{ getUrlMedia(claimMedia.media,'default','default_medium') }}">Image {{ loop.index }}</a><br>
             {% endfor %}
         </div>
@@ -33,6 +33,7 @@ file that was distributed with this source code.
         $(function () {
             $('.link-image a').click(function () {
                 var url = $(this).attr('rel');
+                var href = $(this).data('href');
                 $('.link-image a').removeClass('active-image');
                 $(this).addClass('active-image');
                 $('.show-image img').attr('src', url);
@@ -41,13 +42,12 @@ file that was distributed with this source code.
                     angle: 0,
                     animateTo: 0
                 });
-                $('.show-image a').attr('href', url);
+                $('.show-image a').attr('href', href);
             });
             $(".rotate-img").rotate({
                 bind: {
                     click: function () {
                         var from = $('.img-rotate').data('rotate');
-                        console.log(from);
                         $('img.img-rotate').rotate({
                             angle: from,
                             animateTo: from + 90
