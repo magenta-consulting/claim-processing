@@ -20,7 +20,7 @@ services:
         calls:
             - [setContainer,["@service_container"]]
     app.employee_rule:
-        class: AppBundle\Services\EmployeeRuleRule
+        class: AppBundle\Services\EmployeeRule
         calls:
             - [setContainer,["@service_container"]]
 

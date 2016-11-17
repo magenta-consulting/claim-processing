@@ -262,7 +262,7 @@ class ClaimAdmin extends BaseAdmin
                     },
                     'field_type' => 'choice',
                     'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
-                        'choices' => $this->getContainer()->get('app.claim_rule')->getListClaimPeriodForFilterEmployee()
+                        'choices' => $this->getContainer()->get('app.employee_rule')->getListClaimPeriodForFilterEmployee()
                     ],
                     'advanced_filter' => false,
 

@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\Validator\Context\ExecutionContext;
 use AppBundle\Services\ClaimRule;
 
-class EmployeeRuleRule extends ClaimRule
+class EmployeeRule extends ClaimRule
 {
 
     public function getListClaimPeriodForFilterEmployee()
