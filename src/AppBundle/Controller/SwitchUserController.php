@@ -38,8 +38,22 @@ class SwitchUserController extends Controller
         return $this->render('@App/SwitchUser/index.html.twig',['positions'=>$positions]);
     }
     public function testAction(){
-//        $backend = $this->get('sonata.notification.backend');
+        $backend = $this->get('sonata.notification.backend');
 //        $backend->createAndPublish('claimMailer',[]);
+//        $backend->createAndPublish('mailer', array(
+//            'from' => array(
+//                'email' => 'mikedutuandu@gmail.com',
+//                'name'  => 'No Reply'
+//            ),
+//            'to'   => array(
+//                'tuandumikedu@gmail.com' => 'My User',
+//            ),
+//            'message' => array(
+//                'html' => '<b>hello</b>',
+//                'text' => 'hello'
+//            ),
+//            'subject' => 'Contact form',
+//        ));
 
         $this->get('app.claim_notification')->sendNotification();
 

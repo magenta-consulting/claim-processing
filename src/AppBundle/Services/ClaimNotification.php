@@ -127,6 +127,7 @@ class ClaimNotification extends ClaimRule
             ->setSubject('New Claims for Verification')
             ->setFrom('noreply@magentapulse.com')
             ->setTo($checker->getEmail())
+//            ->setTo('tuandumikedu@gmail.com')
             ->setBody(
                 $this->container->get('twig')->render(
                     'AppBundle:SonataAdmin/Emails:notification_checker.html.twig',
@@ -146,6 +147,7 @@ class ClaimNotification extends ClaimRule
             ->setSubject('New Claims for Approval')
             ->setFrom('noreply@magentapulse.com')
             ->setTo($approver->getEmail())
+//            ->setTo('tuandumikedu@gmail.com')
             ->setBody(
                 $this->container->get('twig')->render(
                     'AppBundle:SonataAdmin/Emails:notification_approver.html.twig',
