@@ -140,8 +140,8 @@ class ApprovalAmountPoliciesAdmin extends BaseAdmin
     public function toString($object)
     {
         return $object instanceof ApprovalAmountPolicies
-            ? $object->getId()
-            : 'Approval Amount Policies Management'; // shown in the breadcrumb on the create view
+            ? 'Approval Policy'
+            : 'Approval Policies Management'; // shown in the breadcrumb on the create view
     }
 
 }

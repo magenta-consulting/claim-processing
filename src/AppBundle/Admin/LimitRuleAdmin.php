@@ -94,7 +94,7 @@ class LimitRuleAdmin extends BaseAdmin
     public function toString($object)
     {
         return $object instanceof LimitRule
-            ? $object->getClaimType()->getCode()
+            ? 'Claims Limit Rules'
             : 'Claims Limit Rules'; // shown in the breadcrumb on the create view
     }
 

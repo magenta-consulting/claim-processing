@@ -1,7 +1,7 @@
 <?php
 // src/Solutions/AppBundle/Services/Core/Media/MediaRetriever.php
 
-namespace AppBundle\Services\Core;
+namespace AppBundle\Services;
 
 use Sonata\MediaBundle\Model\Media;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;

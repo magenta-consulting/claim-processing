@@ -1,0 +1,57 @@
+sonata_media:
+    # if you don't use default namespace configuration
+    #class:
+    #    media: MyVendor\MediaBundle\Entity\Media
+    #    gallery: MyVendor\MediaBundle\Entity\Gallery
+    #    gallery_has_media: MyVendor\MediaBundle\Entity\GalleryHasMedia
+    db_driver: doctrine_orm # or doctrine_mongodb, doctrine_phpcr it is mandatory to choose one here
+    default_context: default # you need to set a context
+    contexts:
+        default:  # the default context is mandatory
+            providers:
+                - sonata.media.provider.dailymotion
+                - sonata.media.provider.youtube
+                - sonata.media.provider.image
+                - sonata.media.provider.file
+                - sonata.media.provider.vimeo
+
+            formats:
+                small: { width: 70 ,height: 70, quality: 100}
+                medium:   { width: 500 , quality: 100}
+                big:  { width: 1200 , quality: 100}
+
+#    cdn:
+#        server:
+#            path: /uploads/media # http://media.sonata-project.org/
+
+    filesystem:
+        local:
+            directory:  %kernel.root_dir%/../web/uploads/media
+            create:     false
+#        Amazon s3
+        s3:
+            bucket: %s3_bucket_name%
+            accessKey: %s3_access_key%
+            secretKey: %s3_secret_key%
+            region: %s3_region%
+            directory: %s3_directory%
+            version:     %s3_version% # latest by default (cf. https://docs.aws.amazon.com/aws-sdk-php/v3/guide/guide/configuration.html#version)
+            sdk_version: %s3_sdk_version% # 2 by default
+
+# Amazon s3
+    providers:
+        image:
+            resizer: sonata.media.resizer.square
+            filesystem: %s3_filesystem%
+        file:
+            resizer: false
+            filesystem: %s3_filesystem%
+            service:    sonata.media.provider.file
+            allowed_extensions: ['pdf', 'txt', 'rtf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'odt', 'odg', 'odp', 'ods', 'odc', 'odf', 'odb', 'csv', 'xml','png','jpg','jpeg','webm','wav','blob','','mp4']
+            allowed_mime_types: ['application/pdf', 'application/x-pdf', 'application/rtf', 'text/html', 'text/rtf', 'text/plain','application/json','image/png','image/jpg','image/jpeg','application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.presentationml.presentation','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','audio/x-wav','video/webm','application/octet-stream','video/mp4','binary/octet-stream']
+
+    cdn:
+        server:
+#            path: http://%s3_region%/%s3_bucket_name% # this one is working
+            path: %s3_cdn_server_path%
+

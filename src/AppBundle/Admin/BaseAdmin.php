@@ -50,11 +50,7 @@ class BaseAdmin extends AbstractAdmin
     public function getClientCompany()
     {
         //admin will return null
-        $company = $this->getCompany();
-        if ($company && $company->getParent()) {
-            return $company->getParent();
-        }
-        return $company;
+        return $this->getContainer()->get('app.claim_rule')->getClientCompany();
     }
 
 

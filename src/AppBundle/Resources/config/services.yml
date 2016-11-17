@@ -4,15 +4,28 @@ imports:
 
 services:
     app.media.retriever:
-        class: AppBundle\Services\Core\MediaRetriever
+        class: AppBundle\Services\MediaRetriever
         calls:
             - [setContainer,["@service_container"]]
     app.claim_rule:
-        class: AppBundle\Services\Core\ClaimRule
+        class: AppBundle\Services\ClaimRule
         calls:
             - [setContainer,["@service_container"]]
+    app.checker_rule:
+        class: AppBundle\Services\CheckerRule
+        calls:
+            - [setContainer,["@service_container"]]
+    app.approver_rule:
+        class: AppBundle\Services\ApproverRule
+        calls:
+            - [setContainer,["@service_container"]]
+    app.employee_rule:
+        class: AppBundle\Services\EmployeeRuleRule
+        calls:
+            - [setContainer,["@service_container"]]
+
     app.claim_notification:
-        class: AppBundle\Services\Core\ClaimNotification
+        class: AppBundle\Services\ClaimNotification
         calls:
             - [setContainer,["@service_container"]]
 
@@ -23,7 +36,7 @@ services:
         arguments: [ "@service_container","@mailer" ]
 
     app.util:
-        class: AppBundle\Services\Core\Util
+        class: AppBundle\Services\Util
     app.api_authenticator:
         class: AppBundle\Security\ApiAuthenticator
         arguments: ['@doctrine.orm.entity_manager','@service_container']

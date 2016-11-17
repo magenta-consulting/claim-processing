@@ -74,7 +74,7 @@ class CheckerAdmin extends BaseAdmin
     public function toString($object)
     {
         return $object instanceof Checker
-            ? $object->getId()
+            ? 'Checker'
             : 'Checker Grouping'; // shown in the breadcrumb on the create view
     }
 }

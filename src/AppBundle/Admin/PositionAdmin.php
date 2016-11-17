@@ -248,7 +248,7 @@ class PositionAdmin extends BaseAdmin
                     },
                     'field_type' => 'choice',
                     'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
-                        'choices'=>$this->getContainer()->get('app.claim_rule')->getListClaimPeriodForFilterChecker()
+                        'choices'=>$this->getContainer()->get('app.checker_rule')->getListClaimPeriodForFilterChecker()
                     ],
                     'advanced_filter' => false,
 
@@ -268,7 +268,7 @@ class PositionAdmin extends BaseAdmin
                     },
                     'field_type' => 'choice',
                     'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
-                        'choices'=>$this->getContainer()->get('app.claim_rule')->getListClaimPeriodForFilterApprover()
+                        'choices'=>$this->getContainer()->get('app.approver_rule')->getListClaimPeriodForFilterApprover()
                     ],
                     'advanced_filter' => false,
 

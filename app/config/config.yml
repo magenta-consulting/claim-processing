@@ -2,6 +2,11 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
+    - { resource: sonata/sonata_block.yml }
+    - { resource: sonata/sonata_admin.yml }
+    - { resource: sonata/sonata_doctrine_orm_admin.yml }
+    - { resource: sonata/sonata_media.yml }
+    - { resource: sonata/sonata_notification.yml }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -176,154 +181,6 @@ swiftmailer:
     spool:     { type: memory }
 
 
-sonata_block:
-    default_contexts: [cms]
-    blocks:
-        # enable the SonataAdminBundle block
-        sonata.admin.block.admin_list:
-            contexts: [admin]
-sonata_admin:
-    options:
-        use_select2:    false # disable select2
-    templates:
-        dashboard:                      AppBundle:SonataAdmin/Core:dashboard.html.twig
-        layout:                         AppBundle:SonataAdmin:standard_layout.html.twig
-    title:      ClaimEx
-#    dashboard:
-#        groups:
-#                      Companies:
-#                          on_top:               true
-#                          label:                ~
-#                          label_catalogue:      ~
-#                          items:
-#                              - admin.company
-
-#    title_logo: bundles/app/images/fancy_acme_logo.png
-
-    admin_services:
-#        admin.claim:
-#            route_generator: app.admin.route.generator
-#        admin.position:
-#            route_generator: app.admin.route.generator
-
-
-sonata_doctrine_orm_admin:
-    templates:
-        form:
-            - SonataDoctrineORMAdminBundle:Form:form_admin_fields.html.twig
-        filter:
-            - SonataDoctrineORMAdminBundle:Form:filter_admin_fields.html.twig
-        types:
-            list:
-                debug:      AppBundle:SonataAdmin/ListType:list_debug.html.twig
-                exrate:      AppBundle:SonataAdmin/ListType:list_exrate.html.twig
-                number_claim:      AppBundle:SonataAdmin/ListType:list_number_claim.html.twig
-                submission_date_claim:      AppBundle:SonataAdmin/ListType:list_submission_date_claim.html.twig
-                checker_employee_groups:      AppBundle:SonataAdmin/ListType:list_checker_employee_groups.html.twig
-                approver_employee_groups:      AppBundle:SonataAdmin/ListType:list_approver_employee_groups.html.twig
-                array:      SonataAdminBundle:CRUD:list_array.html.twig
-                boolean:    SonataAdminBundle:CRUD:list_boolean.html.twig
-                date:       SonataAdminBundle:CRUD:list_date.html.twig
-                time:       SonataAdminBundle:CRUD:list_time.html.twig
-                datetime:   SonataAdminBundle:CRUD:list_datetime.html.twig
-                text:       SonataAdminBundle:CRUD:base_list_field.html.twig
-                trans:      SonataAdminBundle:CRUD:list_trans.html.twig
-                string:     SonataAdminBundle:CRUD:base_list_field.html.twig
-                smallint:   SonataAdminBundle:CRUD:base_list_field.html.twig
-                bigint:     SonataAdminBundle:CRUD:base_list_field.html.twig
-                integer:    SonataAdminBundle:CRUD:base_list_field.html.twig
-                decimal:    SonataAdminBundle:CRUD:base_list_field.html.twig
-                identifier: SonataAdminBundle:CRUD:base_list_field.html.twig
-                currency:   SonataAdminBundle:CRUD:list_currency.html.twig
-                percent:    SonataAdminBundle:CRUD:list_percent.html.twig
-                choice:     SonataAdminBundle:CRUD:list_choice.html.twig
-                url:        SonataAdminBundle:CRUD:list_url.html.twig
-
-            show:
-                show_approver:      AppBundle:SonataAdmin/ShowType:show_approver.html.twig
-                show_checker:      AppBundle:SonataAdmin/ShowType:show_checker.html.twig
-                show_checker_remark:      AppBundle:SonataAdmin/ShowType:show_checker_remark.html.twig
-                show_image:      AppBundle:SonataAdmin/ShowType:show_image.html.twig
-                show_claim_limit:      AppBundle:SonataAdmin/ShowType:show_claim_limit.html.twig
-                show_tax_code:      AppBundle:SonataAdmin/ShowType:show_tax_code.html.twig
-                show_tax_rate:      AppBundle:SonataAdmin/ShowType:show_tax_rate.html.twig
-                show_default_currency:      AppBundle:SonataAdmin/ShowType:show_default_currency.html.twig
-                show_currency:      AppBundle:SonataAdmin/ShowType:show_currency.html.twig
-                show_claim_created_by:      AppBundle:SonataAdmin/ShowType:show_claim_created_by.html.twig
-                array:      SonataAdminBundle:CRUD:show_array.html.twig
-                boolean:    SonataAdminBundle:CRUD:show_boolean.html.twig
-                date:       SonataAdminBundle:CRUD:show_date.html.twig
-                time:       SonataAdminBundle:CRUD:show_time.html.twig
-                datetime:   SonataAdminBundle:CRUD:show_datetime.html.twig
-                text:       SonataAdminBundle:CRUD:base_show_field.html.twig
-                trans:      SonataAdminBundle:CRUD:show_trans.html.twig
-                string:     SonataAdminBundle:CRUD:base_show_field.html.twig
-                smallint:   SonataAdminBundle:CRUD:base_show_field.html.twig
-                bigint:     SonataAdminBundle:CRUD:base_show_field.html.twig
-                integer:    SonataAdminBundle:CRUD:base_show_field.html.twig
-                decimal:    SonataAdminBundle:CRUD:base_show_field.html.twig
-                currency:   SonataAdminBundle:CRUD:show_currency.html.twig
-                percent:    SonataAdminBundle:CRUD:base_percent.html.twig
-                choice:     SonataAdminBundle:CRUD:show_choice.html.twig
-                url:        SonataAdminBundle:CRUD:show_url.html.twig
-sonata_media:
-    # if you don't use default namespace configuration
-    #class:
-    #    media: MyVendor\MediaBundle\Entity\Media
-    #    gallery: MyVendor\MediaBundle\Entity\Gallery
-    #    gallery_has_media: MyVendor\MediaBundle\Entity\GalleryHasMedia
-    db_driver: doctrine_orm # or doctrine_mongodb, doctrine_phpcr it is mandatory to choose one here
-    default_context: default # you need to set a context
-    contexts:
-        default:  # the default context is mandatory
-            providers:
-                - sonata.media.provider.dailymotion
-                - sonata.media.provider.youtube
-                - sonata.media.provider.image
-                - sonata.media.provider.file
-                - sonata.media.provider.vimeo
-
-            formats:
-                small: { width: 70 ,height: 70, quality: 100}
-                medium:   { width: 500 , quality: 100}
-                big:  { width: 1200 , quality: 100}
-
-#    cdn:
-#        server:
-#            path: /uploads/media # http://media.sonata-project.org/
-
-    filesystem:
-        local:
-            directory:  %kernel.root_dir%/../web/uploads/media
-            create:     false
-#        Amazon s3
-        s3:
-            bucket: %s3_bucket_name%
-            accessKey: %s3_access_key%
-            secretKey: %s3_secret_key%
-            region: %s3_region%
-            directory: %s3_directory%
-            version:     %s3_version% # latest by default (cf. https://docs.aws.amazon.com/aws-sdk-php/v3/guide/guide/configuration.html#version)
-            sdk_version: %s3_sdk_version% # 2 by default
-
-# Amazon s3
-    providers:
-        image:
-            resizer: sonata.media.resizer.square
-            filesystem: %s3_filesystem%
-        file:
-            resizer: false
-            filesystem: %s3_filesystem%
-            service:    sonata.media.provider.file
-            allowed_extensions: ['pdf', 'txt', 'rtf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'odt', 'odg', 'odp', 'ods', 'odc', 'odf', 'odb', 'csv', 'xml','png','jpg','jpeg','webm','wav','blob','','mp4']
-            allowed_mime_types: ['application/pdf', 'application/x-pdf', 'application/rtf', 'text/html', 'text/rtf', 'text/plain','application/json','image/png','image/jpg','image/jpeg','application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.presentationml.presentation','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','audio/x-wav','video/webm','application/octet-stream','video/mp4','binary/octet-stream']
-
-    cdn:
-        server:
-#            path: http://%s3_region%/%s3_bucket_name% # this one is working
-            path: %s3_cdn_server_path%
-
-
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
@@ -336,21 +193,7 @@ stof_doctrine_extensions:
         default:
             sluggable: true
 
-sonata_notification:
-    backend: sonata.notification.backend.doctrine
-    backends:
-        doctrine:
-            max_age:      86400     # max age in second
-            pause:        500000    # delay in microseconds
-            states:                 # raising errors level
-                in_progress: 10
-                error:       20
-                open:        100
-                done:        10000
 
-    queues:
-        - { queue: claim, types: [claimMailer]}
-        - { queue: catchall, default: true }
 
 
 

@@ -1,0 +1,59 @@
+sonata_doctrine_orm_admin:
+    templates:
+        form:
+            - SonataDoctrineORMAdminBundle:Form:form_admin_fields.html.twig
+        filter:
+            - SonataDoctrineORMAdminBundle:Form:filter_admin_fields.html.twig
+        types:
+            list:
+                debug:      AppBundle:SonataAdmin/ListType:list_debug.html.twig
+                exrate:      AppBundle:SonataAdmin/ListType:list_exrate.html.twig
+                number_claim:      AppBundle:SonataAdmin/ListType:list_number_claim.html.twig
+                submission_date_claim:      AppBundle:SonataAdmin/ListType:list_submission_date_claim.html.twig
+                checker_employee_groups:      AppBundle:SonataAdmin/ListType:list_checker_employee_groups.html.twig
+                approver_employee_groups:      AppBundle:SonataAdmin/ListType:list_approver_employee_groups.html.twig
+                array:      SonataAdminBundle:CRUD:list_array.html.twig
+                boolean:    SonataAdminBundle:CRUD:list_boolean.html.twig
+                date:       SonataAdminBundle:CRUD:list_date.html.twig
+                time:       SonataAdminBundle:CRUD:list_time.html.twig
+                datetime:   SonataAdminBundle:CRUD:list_datetime.html.twig
+                text:       SonataAdminBundle:CRUD:base_list_field.html.twig
+                trans:      SonataAdminBundle:CRUD:list_trans.html.twig
+                string:     SonataAdminBundle:CRUD:base_list_field.html.twig
+                smallint:   SonataAdminBundle:CRUD:base_list_field.html.twig
+                bigint:     SonataAdminBundle:CRUD:base_list_field.html.twig
+                integer:    SonataAdminBundle:CRUD:base_list_field.html.twig
+                decimal:    SonataAdminBundle:CRUD:base_list_field.html.twig
+                identifier: SonataAdminBundle:CRUD:base_list_field.html.twig
+                currency:   SonataAdminBundle:CRUD:list_currency.html.twig
+                percent:    SonataAdminBundle:CRUD:list_percent.html.twig
+                choice:     SonataAdminBundle:CRUD:list_choice.html.twig
+                url:        SonataAdminBundle:CRUD:list_url.html.twig
+
+            show:
+                show_approver:      AppBundle:SonataAdmin/ShowType:show_approver.html.twig
+                show_checker:      AppBundle:SonataAdmin/ShowType:show_checker.html.twig
+                show_checker_remark:      AppBundle:SonataAdmin/ShowType:show_checker_remark.html.twig
+                show_image:      AppBundle:SonataAdmin/ShowType:show_image.html.twig
+                show_claim_limit:      AppBundle:SonataAdmin/ShowType:show_claim_limit.html.twig
+                show_tax_code:      AppBundle:SonataAdmin/ShowType:show_tax_code.html.twig
+                show_tax_rate:      AppBundle:SonataAdmin/ShowType:show_tax_rate.html.twig
+                show_default_currency:      AppBundle:SonataAdmin/ShowType:show_default_currency.html.twig
+                show_currency:      AppBundle:SonataAdmin/ShowType:show_currency.html.twig
+                show_claim_created_by:      AppBundle:SonataAdmin/ShowType:show_claim_created_by.html.twig
+                array:      SonataAdminBundle:CRUD:show_array.html.twig
+                boolean:    SonataAdminBundle:CRUD:show_boolean.html.twig
+                date:       SonataAdminBundle:CRUD:show_date.html.twig
+                time:       SonataAdminBundle:CRUD:show_time.html.twig
+                datetime:   SonataAdminBundle:CRUD:show_datetime.html.twig
+                text:       SonataAdminBundle:CRUD:base_show_field.html.twig
+                trans:      SonataAdminBundle:CRUD:show_trans.html.twig
+                string:     SonataAdminBundle:CRUD:base_show_field.html.twig
+                smallint:   SonataAdminBundle:CRUD:base_show_field.html.twig
+                bigint:     SonataAdminBundle:CRUD:base_show_field.html.twig
+                integer:    SonataAdminBundle:CRUD:base_show_field.html.twig
+                decimal:    SonataAdminBundle:CRUD:base_show_field.html.twig
+                currency:   SonataAdminBundle:CRUD:show_currency.html.twig
+                percent:    SonataAdminBundle:CRUD:base_percent.html.twig
+                choice:     SonataAdminBundle:CRUD:show_choice.html.twig
+                url:        SonataAdminBundle:CRUD:show_url.html.twig

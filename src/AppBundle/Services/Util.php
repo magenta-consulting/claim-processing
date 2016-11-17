@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Services\Core;
+namespace AppBundle\Services;
 
 use AppBundle\Entity\Claim;
 use Doctrine\ORM\Query\Expr;

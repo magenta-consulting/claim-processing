@@ -222,7 +222,7 @@ class ClaimAdmin extends BaseAdmin
                     },
                     'field_type' => 'choice',
                     'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
-                        'choices' => $this->getContainer()->get('app.claim_rule')->getListClaimPeriodForFilterChecker()
+                        'choices' => $this->getContainer()->get('app.checker_rule')->getListClaimPeriodForFilterChecker()
                     ],
                     'advanced_filter' => false,
 
@@ -242,7 +242,7 @@ class ClaimAdmin extends BaseAdmin
                     },
                     'field_type' => 'choice',
                     'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
-                        'choices' => $this->getContainer()->get('app.claim_rule')->getListClaimPeriodForFilterApprover()
+                        'choices' => $this->getContainer()->get('app.approver_rule')->getListClaimPeriodForFilterApprover()
                     ],
                     'advanced_filter' => false,
 
@@ -517,7 +517,7 @@ class ClaimAdmin extends BaseAdmin
         $position = $this->getPosition();
         if ($position->getId() == $claim->getPosition()->getId()) {
             //employee update for claim
-            $result = $this->getContainer()->get('app.claim_rule')->assignClaimToSpecificApprover($claim, $position);
+            $result = $this->getContainer()->get('app.approver_rule')->assignClaimToSpecificApprover($claim, $position);
             $claim->setApproverEmployee($result['approverEmployee']);
             $claim->setApproverBackupEmployee($result['approverBackupEmployee']);
             if ($claim->getCurrencyExchange()) {
@@ -538,8 +538,8 @@ class ClaimAdmin extends BaseAdmin
     {
         $position = $this->getPosition();
         //must just save when create not update (will conflict when approver or checker update claim)
-        $claim->setChecker($this->getContainer()->get('app.claim_rule')->getChecker($position));
-        $claim->setApprover($this->getContainer()->get('app.claim_rule')->getApprover($position));
+        $claim->setChecker($this->getContainer()->get('app.checker_rule')->getChecker($position));
+        $claim->setApprover($this->getContainer()->get('app.approver_rule')->getApprover($position));
         $claim->setPosition($position);
         $claim->setCreatedBy($this->getUser()->getLoginWithPosition());
         $claim->setReceiptDate(new \DateTime());

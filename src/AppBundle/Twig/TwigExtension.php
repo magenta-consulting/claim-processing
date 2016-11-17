@@ -28,22 +28,22 @@ class TwigExtension extends \Twig_Extension
 
     public function getNumberClaimEachEmployeeForChecker($position, $positionChecker)
     {
-        return $this->container->get('app.claim_rule')->getNumberClaimEachEmployeeForChecker($position, $positionChecker);
+        return $this->container->get('app.checker_rule')->getNumberClaimEachEmployeeForChecker($position, $positionChecker);
     }
 
     public function getNumberClaimEachEmployeeForApprover($position, $positionApprover)
     {
-        return $this->container->get('app.claim_rule')->getNumberClaimEachEmployeeForApprover($position, $positionApprover);
+        return $this->container->get('app.approver_rule')->getNumberClaimEachEmployeeForApprover($position, $positionApprover);
     }
 
     public function isShowMenuForChecker($position)
     {
-        return $this->container->get('app.claim_rule')->isShowMenuForChecker($position);
+        return $this->container->get('app.checker_rule')->isShowMenuForChecker($position);
     }
 
     public function isShowMenuForApprover($position)
     {
-        return $this->container->get('app.claim_rule')->isShowMenuForApprover($position);
+        return $this->container->get('app.approver_rule')->isShowMenuForApprover($position);
     }
 
     public function getUrlMedia($media, $context = 'default', $format = 'reference')
@@ -68,12 +68,12 @@ class TwigExtension extends \Twig_Extension
 
     public function getChecker($position)
     {
-        return $this->container->get('app.claim_rule')->getChecker($position);
+        return $this->container->get('app.checker_rule')->getChecker($position);
     }
 
     public function getApprover($position)
     {
-        return $this->container->get('app.claim_rule')->getApprover($position);
+        return $this->container->get('app.approver_rule')->getApprover($position);
     }
 
     public function getInforUserClaim($positionId)
@@ -139,11 +139,11 @@ class TwigExtension extends \Twig_Extension
 
     public function getCheckerNotification()
     {
-        return $this->container->get('app.claim_rule')->getCheckerNotification();
+        return $this->container->get('app.claim_notification')->getCheckerMessageNotification();
     }
     public function getApproverNotification()
     {
-        return $this->container->get('app.claim_rule')->getApproverNotification();
+        return $this->container->get('app.claim_notification')->getApproverMessageNotification();
     }
 
     public function getDescriptionEmployeeGroup($employeeGroup){
