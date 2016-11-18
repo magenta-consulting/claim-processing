@@ -37,6 +37,7 @@ file that was distributed with this source code.
         <link rel="stylesheet"
               href="{{ asset('themes/homer/vendor/bootstrap-datepicker-master/dist/css/bootstrap-datepicker3.min.css') }}"/>
         <link rel="stylesheet" href="{{ asset('assetic/own.css') }}">
+        <link rel="stylesheet" href="{{ asset('themes/homer/vendor/rotate-zoom/jquery.iviewer.css') }}">
     {% endblock %}
 
     {% block javascripts %}
@@ -83,6 +84,8 @@ file that was distributed with this source code.
         <script type="text/javascript" src="http://beneposto.pl/jqueryrotate/js/jQueryRotateCompressed.js"></script>
         <script src="{{ asset('themes/homer/vendor/moment/moment.js') }}"></script>
         <script src="{{ asset('themes/homer/vendor/bootstrap-datepicker-master/dist/js/bootstrap-datepicker.min.js') }}"></script>
+        <script src="{{ asset('themes/homer/vendor/rotate-zoom/test/jquery.mousewheel.min.js') }}"></script>
+        <script src="{{ asset('themes/homer/vendor/rotate-zoom/jquery.iviewer.js') }}"></script>
         <script type="text/javascript">
             $(function () {
                 $(".datepicker").datepicker({autoclose: true});

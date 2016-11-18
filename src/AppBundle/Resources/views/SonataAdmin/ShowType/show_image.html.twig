@@ -12,54 +12,72 @@ file that was distributed with this source code.
 {% extends admin.getTemplate('base_list_field') %}
 
 {% block field %}
+
     {% if object.claimMedias|length %}
-        <div class="row" style="margin-bottom: 50px;overflow: hidden;clear: both;">
-            <a href="javascript:void(0);"><span class="rotate-img">Rotate Image</span></a>
-        </div>
         <div class="row show-image">
             {% set url = getUrlMedia(object.claimMedias[0].media,'default','default_medium') %}
-            <a href="{{ path('admin_app_claim_showClaimImage',{'media':object.claimMedias[0].media.id}) }}" target="_blank"><img data-rotate="0" class="img-rotate" src="{{ url }}"></a>
+            <a href="javascript:void(0)" data-toggle="modal" data-target=".bs-example-modal-lg">
+                <img data-rotate="0" class="img-rotate" src="{{ url }}">
+            </a>
+            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">
+                                Image Claim
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="viewer2" class="viewer"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="row link-image">
             {% for claimMedia in object.claimMedias %}
-                <a data-href="{{ path('admin_app_claim_showClaimImage',{'media':claimMedia.media.id}) }}"  href="javascript:void(0);" class="{{ loop.index == 1 ? 'active-image':'' }}"
-                   rel="{{ getUrlMedia(claimMedia.media,'default','default_medium') }}">Image {{ loop.index }}</a><br>
+                <a href="javascript:void(0);" class="{{ loop.index == 1 ? 'active-image':'' }}"
+                   data-url="{{ getUrlMedia(claimMedia.media,'default','default_medium') }}"
+                   data-url-big="{{ getUrlMedia(claimMedia.media) }}">Image {{ loop.index }}</a>
+                <br>
             {% endfor %}
         </div>
     {% else %}
         None
     {% endif %}
+
     <script>
         $(function () {
+
+            var iv2 = $("#viewer2").iviewer(
+                    {
+                        src: "/uploads/media/default/0001/01/thumb_75_default_medium.jpeg"
+                    });
+
+
+        });
+        $(function () {
             $('.link-image a').click(function () {
-                var url = $(this).attr('rel');
-                var href = $(this).data('href');
+                var url = $(this).data('url');
+                var urlBig = $(this).data('url-big');
                 $('.link-image a').removeClass('active-image');
                 $(this).addClass('active-image');
-                $('.show-image img').attr('src', url);
-                $('.show-image img').data('rotate', 0);
-                $('img.img-rotate').rotate({
-                    angle: 0,
-                    animateTo: 0
-                });
-                $('.show-image a').attr('href', href);
-            });
-            $(".rotate-img").rotate({
-                bind: {
-                    click: function () {
-                        var from = $('.img-rotate').data('rotate');
-                        $('img.img-rotate').rotate({
-                            angle: from,
-                            animateTo: from + 90
-                        });
-                        $('.img-rotate').data('rotate',from+90);
-                    }
-                }
+                $('.show-image a img').attr('src', url);
+                $('.show-image .modal img').attr('src', urlBig);
             });
         });
 
     </script>
     <style>
+        .viewer {
+            /*width: 50%;*/
+            text-align: center;
+            height: 500px;
+            border: 1px solid black;
+            position: relative;
+        }
+
         .active-image {
             font-weight: bold;
             text-decoration: underline;
