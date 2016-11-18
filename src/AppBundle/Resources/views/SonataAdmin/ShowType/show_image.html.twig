@@ -16,8 +16,9 @@ file that was distributed with this source code.
     {% if object.claimMedias|length %}
         <div class="row show-image">
             {% set url = getUrlMedia(object.claimMedias[0].media,'default','default_medium') %}
+            {% set urlBig = getUrlMedia(object.claimMedias[0].media) %}
             <a href="javascript:void(0)" data-toggle="modal" data-target=".bs-example-modal-lg">
-                <img data-rotate="0" class="img-rotate" src="{{ url }}">
+                <img data-rotate="0" class="img-show" src="{{ url }}" data-url-big="{{ urlBig }}">
             </a>
             <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
                 <div class="modal-dialog modal-lg">
@@ -52,7 +53,7 @@ file that was distributed with this source code.
 
             var iv2 = $("#viewer2").iviewer(
                     {
-                        src: "/uploads/media/default/0001/01/thumb_75_default_medium.jpeg"
+                        src: $('.img-show').data('url-big')
                     });
 
 
