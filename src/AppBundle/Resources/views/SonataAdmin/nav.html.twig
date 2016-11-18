@@ -8,6 +8,9 @@
         <li data-route="admin_app_company_list" class="first"><a href="{{ path('admin_app_company_list') }}"><i
                         class="fa fa-angle-double-right"></i>Client Company</a>
         </li>
+        <li data-route="admin_app_thirdpartychecker_list" class="first"><a href="{{ path('admin_app_thirdpartychecker_list') }}"><i
+                        class="fa fa-angle-double-right"></i>3rd Party Checker Management</a>
+        </li>
     {% elseif app.user.hasRole('ROLE_CLIENT_ADMIN') or app.user.hasRole('ROLE_CS_ADMIN') %}
         <li class="last treeview"><a href="#"><i class="fa fa-folder"></i><span>System Management</span><i
                         class="fa pull-right fa-angle-left"></i></a>

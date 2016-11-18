@@ -14,12 +14,7 @@ class ClaimController extends Controller
 {
 
 
-    public function showClaimImageAction(Media $media)
-    {
-        $url = $this->get('app.media.retriever')->getPublicURL($media);
-        return $this->render('@App/SonataAdmin/Claim/show_claim_image.html.twig', ['url' => $url]);
 
-    }
 
     public function submitDraftClaimsAction()
     {
