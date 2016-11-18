@@ -52,7 +52,7 @@ class ClaimRule
     {
         //admin will return null
         $company = $this->getCompany();
-        if ($company->getParent()) {
+        if ($company && $company->getParent()) {
             return $company->getParent();
         }
         return $company;
