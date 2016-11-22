@@ -69,9 +69,9 @@ doctrine:
         auto_generate_proxy_classes: "%kernel.debug%"
         entity_managers:
               default:
-                  metadata_cache_driver: apcu
-                  query_cache_driver: apcu
-                  result_cache_driver: apcu
+#                  metadata_cache_driver: apcu
+#                  query_cache_driver: apcu
+#                  result_cache_driver: apcu
                   naming_strategy: doctrine.orm.naming_strategy.underscore
                   auto_mapping: true
                   mappings:

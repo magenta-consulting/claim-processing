@@ -42,10 +42,10 @@ class PositionAdmin extends BaseAdmin
             $user = $this->getUserManager()->createUser();
             $user->setUsername($email);
             $user->setEmail($email);
-            if($plainPassword) {
+            if ($plainPassword) {
                 //just only create a position have email not belong system
                 $user->setPlainPassword($plainPassword);
-            }else{
+            } else {
                 //when update email of position
                 $user->setPassword($this->getUser()->getPassword());
             }
@@ -60,7 +60,8 @@ class PositionAdmin extends BaseAdmin
         return $user;
     }
 
-    public function updateEmployeeGroupDescription(Position $position){
+    public function updateEmployeeGroupDescription(Position $position)
+    {
         if ($position->getCompany()) {
             $employeeGroupDescription[] = $position->getCompany()->getName();
         }
@@ -123,7 +124,7 @@ class PositionAdmin extends BaseAdmin
             ->end()
             ->with('Group B', array('class' => 'col-md-6'))
             ->add('employeeNo', 'text')
-            ->add('contactNumber', PhoneNumberType::class, array('required'=>false,'widget' => PhoneNumberType::WIDGET_COUNTRY_CHOICE, 'country_choices' => array('SG'), 'preferred_country_choices' => array('SG')))
+            ->add('contactNumber', PhoneNumberType::class, array('required' => false, 'widget' => PhoneNumberType::WIDGET_COUNTRY_CHOICE, 'country_choices' => array('SG'), 'preferred_country_choices' => array('SG')))
             ->add('nric', 'text', ['label' => 'NRIC/Fin No', 'required' => false])
             ->end()
             ->end();
@@ -241,14 +242,14 @@ class PositionAdmin extends BaseAdmin
                             return;
                         }
                         $expr = new Expr();
-                        $queryBuilder->andWhere($expr->eq('claim.periodFrom',':periodFrom'));
+                        $queryBuilder->andWhere($expr->eq('claim.periodFrom', ':periodFrom'));
                         $queryBuilder->setParameter('periodFrom', $value['value']);
 
                         return true;
                     },
                     'field_type' => 'choice',
                     'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
-                        'choices'=>$this->getContainer()->get('app.checker_rule')->getListClaimPeriodForFilterChecker()
+                        'choices' => $this->getContainer()->get('app.checker_rule')->getListClaimPeriodForFilterChecker()
                     ],
                     'advanced_filter' => false,
 
@@ -261,14 +262,74 @@ class PositionAdmin extends BaseAdmin
                             return;
                         }
                         $expr = new Expr();
-                        $queryBuilder->andWhere($expr->eq('claim.periodFrom',':periodFrom'));
+                        $queryBuilder->andWhere($expr->eq('claim.periodFrom', ':periodFrom'));
                         $queryBuilder->setParameter('periodFrom', $value['value']);
 
                         return true;
                     },
                     'field_type' => 'choice',
                     'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
-                        'choices'=>$this->getContainer()->get('app.approver_rule')->getListClaimPeriodForFilterApprover()
+                        'choices' => $this->getContainer()->get('app.approver_rule')->getListClaimPeriodForFilterApprover()
+                    ],
+                    'advanced_filter' => false,
+
+                ));
+                break;
+            case 'hr':
+                $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
+                    'callback' => function ($queryBuilder, $alias, $field, $value) {
+                        if (!$value['value']) {
+                            return;
+                        }
+                        $expr = new Expr();
+                        $queryBuilder->andWhere($expr->eq('claim.periodFrom', ':periodFrom'));
+                        $queryBuilder->setParameter('periodFrom', $value['value']);
+
+                        return true;
+                    },
+                    'field_type' => 'choice',
+                    'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
+                        'choices' => $this->getContainer()->get('app.hr_rule')->getListClaimPeriodForFilterHr()
+                    ],
+                    'advanced_filter' => false,
+
+                ));
+                break;
+            case 'hr-report':
+                $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
+                    'callback' => function ($queryBuilder, $alias, $field, $value) {
+                        if (!$value['value']) {
+                            return;
+                        }
+                        $expr = new Expr();
+                        $queryBuilder->andWhere($expr->eq('claim.periodFrom', ':periodFrom'));
+                        $queryBuilder->setParameter('periodFrom', $value['value']);
+
+                        return true;
+                    },
+                    'field_type' => 'choice',
+                    'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
+                        'choices' => $this->getContainer()->get('app.hr_rule')->getListClaimPeriodForFilterHrReport()
+                    ],
+                    'advanced_filter' => false,
+
+                ));
+                break;
+            case 'hr-reject':
+                $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
+                    'callback' => function ($queryBuilder, $alias, $field, $value) {
+                        if (!$value['value']) {
+                            return;
+                        }
+                        $expr = new Expr();
+                        $queryBuilder->andWhere($expr->eq('claim.periodFrom', ':periodFrom'));
+                        $queryBuilder->setParameter('periodFrom', $value['value']);
+
+                        return true;
+                    },
+                    'field_type' => 'choice',
+                    'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
+                        'choices' => $this->getContainer()->get('app.hr_rule')->getListClaimPeriodForFilterHrReject()
                     ],
                     'advanced_filter' => false,
 
@@ -326,6 +387,34 @@ class PositionAdmin extends BaseAdmin
                         )
                     ));
                 break;
+            case 'hr':
+                $listMapper->add('employeeNo', null, ['label' => 'Employee No'])
+                    ->add('firstName', null, ['label' => 'Name'])
+                    ->add('company.name', null, ['label' => 'Company'])
+                    ->add('employeeGroup.costCentre.code', null, ['label' => 'Cost Centre'])
+                    ->add('3', 'number_claim', ['label' => 'Total Claims Amount'])
+                    ->add('_action', null, array(
+                        'actions' => array(
+                            'list' => array(
+                                'template' => 'AppBundle:SonataAdmin/CustomActions:_list-action-claim-each-position.html.twig'
+                            ),
+                        )
+                    ));
+                break;
+            case 'hr-report':
+                $listMapper->add('employeeNo', null, ['label' => 'Employee No'])
+                    ->add('firstName', null, ['label' => 'Name'])
+                    ->add('company.name', null, ['label' => 'Company'])
+                    ->add('employeeGroup.costCentre.code', null, ['label' => 'Cost Centre'])
+                    ->add('3', 'number_claim', ['label' => 'Total Claims Amount']);
+                break;
+            case 'hr-reject':
+                $listMapper->add('employeeNo', null, ['label' => 'Employee No'])
+                    ->add('firstName', null, ['label' => 'Name'])
+                    ->add('company.name', null, ['label' => 'Company'])
+                    ->add('employeeGroup.costCentre.code', null, ['label' => 'Cost Centre'])
+                    ->add('3', 'number_claim', ['label' => 'Total Claims Amount']);
+                break;
             default:
                 $listMapper->
                 addIdentifier('employeeNo', null, array(
@@ -347,13 +436,22 @@ class PositionAdmin extends BaseAdmin
 
     protected function configureBatchActions($actions)
     {
-        $request = $this->getRequest();
-        $type = $request->get('type');
-        if ($type != '') {
-            return [];
+        $type = $this->getRequest()->get('type');
+        if($type == '') {
+            $actions = parent::configureBatchActions($actions);
+        }else{
+            $actions = [];
+        }
+        if ($type === 'hr') {
+            $actions['proceed'] = array(
+                'label' => 'Process Claims',
+                'translation_domain' => 'SonataAdminBundle',
+                'ask_confirmation' => true, // by default always true
+            );
         }
         return $actions;
     }
+
 
 
     public function toString($object)

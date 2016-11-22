@@ -220,12 +220,14 @@ class ClaimRule
         );
         $query->andWhere($expr->orX(
             $expr->eq('claim.status', ':statusCheckerRejected'),
-            $expr->eq('claim.status', ':statusApproverRejected')
+            $expr->eq('claim.status', ':statusApproverRejected'),
+            $expr->eq('claim.status', ':statusHrRejected')
         ));
         $query->setParameter('periodFrom', $periodFrom->format('Y-m-d'));
         $query->setParameter('periodTo', $periodTo->format('Y-m-d'));
         $query->setParameter('statusCheckerRejected', Claim::STATUS_CHECKER_REJECTED);
         $query->setParameter('statusApproverRejected', Claim::STATUS_APPROVER_REJECTED);
+        $query->setParameter('statusHrRejected', Claim::STATUS_HR_REJECTED);
         $query->setParameter('position', $this->getPosition());
         return $query->getQuery()->getSingleScalarResult();
     }

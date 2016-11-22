@@ -2,7 +2,7 @@ services:
 
     admin.position:
             class: AppBundle\Admin\PositionAdmin
-            arguments: [~, AppBundle\Entity\Position, ~]
+            arguments: [~, AppBundle\Entity\Position, AppBundle:Admin/Position]
             tags:
                 - { name: sonata.admin, manager_type: orm, label: User Management }
             calls:
@@ -10,6 +10,7 @@ services:
                 - [setUserManager, ["@fos_user.user_manager"]]
                 - [setTemplate,[list,AppBundle:SonataAdmin/Position:list.html.twig]]
                 - [setTemplate,[edit,AppBundle:SonataAdmin/Position:edit.html.twig]]
+                - [setTemplate,[batch_confirmation,AppBundle:SonataAdmin/Position:batch_confirmation.html.twig]]
     admin.position_submitter:
             class: AppBundle\Admin\PositionSubmitterAdmin
             arguments: [~, AppBundle\Entity\PositionSubmitter, ~]

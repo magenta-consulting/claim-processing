@@ -2,6 +2,12 @@
     {% include '@App/SonataAdmin/Position/Checker/list.html.twig' %}
 {% elseif app.request.get('type') == 'approving' %}
     {% include '@App/SonataAdmin/Position/Approver/list.html.twig' %}
+{% elseif app.request.get('type') == 'hr' %}
+    {% include '@App/SonataAdmin/Position/Hr/list.html.twig' %}
+{% elseif app.request.get('type') == 'hr-report' %}
+    {% include '@App/SonataAdmin/Position/Hr/report.html.twig' %}
+{% elseif app.request.get('type') == 'hr-reject' %}
+    {% include '@App/SonataAdmin/Position/Hr/reject.html.twig' %}
 {% else %}
     {% include'AppBundle:SonataAdmin/Position/Admin:list.html.twig' %}
 {% endif %}

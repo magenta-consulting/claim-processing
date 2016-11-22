@@ -35,6 +35,18 @@ class TwigExtension extends \Twig_Extension
     {
         return $this->container->get('app.approver_rule')->getNumberClaimEachEmployeeForApprover($position, $positionApprover);
     }
+    public function getTotalAmountClaimEachEmployeeForHr($position)
+    {
+        return $this->container->get('app.hr_rule')->getTotalAmountClaimEachEmployeeForHr($position);
+    }
+    public function getTotalAmountClaimEachEmployeeForHrReport($position)
+    {
+        return $this->container->get('app.hr_rule')->getTotalAmountClaimEachEmployeeForHrReport($position);
+    }
+    public function getTotalAmountClaimEachEmployeeForHrReject($position)
+    {
+        return $this->container->get('app.hr_rule')->getTotalAmountClaimEachEmployeeForHrReject($position);
+    }
 
     public function isShowMenuForChecker($position)
     {
@@ -91,7 +103,8 @@ class TwigExtension extends \Twig_Extension
         $listStatusAllow = [
             Claim::STATUS_DRAFT,
             Claim::STATUS_CHECKER_REJECTED,
-            Claim::STATUS_APPROVER_REJECTED
+            Claim::STATUS_APPROVER_REJECTED,
+            Claim::STATUS_HR_REJECTED
         ];
         if (in_array($claim->getStatus(), $listStatusAllow)) {
             return true;
@@ -117,10 +130,10 @@ class TwigExtension extends \Twig_Extension
         return false;
     }
 
-    public function isShowApproveRejectApproverButtonForClaim(Claim $claim)
+    public function isShowDeleteRejectHrButtonForClaim(Claim $claim)
     {
         $listStatusAllow = [
-            Claim::STATUS_CHECKER_APPROVED,
+            Claim::STATUS_APPROVER_APPROVED,
         ];
         if (in_array($claim->getStatus(), $listStatusAllow)) {
             return true;
@@ -182,6 +195,10 @@ class TwigExtension extends \Twig_Extension
             'isShowDeleteButtonForClaim' => new \Twig_Function_Method($this, 'isShowDeleteButtonForClaim', array('is_safe' => array('html'))),
             'getDescriptionEmployeeGroup' => new \Twig_Function_Method($this, 'getDescriptionEmployeeGroup', array('is_safe' => array('html'))),
             'getCurrencyDefault' => new \Twig_Function_Method($this, 'getCurrencyDefault', array('is_safe' => array('html'))),
+            'getTotalAmountClaimEachEmployeeForHr' => new \Twig_Function_Method($this, 'getTotalAmountClaimEachEmployeeForHr', array('is_safe' => array('html'))),
+            'isShowDeleteRejectHrButtonForClaim' => new \Twig_Function_Method($this, 'isShowDeleteRejectHrButtonForClaim', array('is_safe' => array('html'))),
+            'getTotalAmountClaimEachEmployeeForHrReport' => new \Twig_Function_Method($this, 'getTotalAmountClaimEachEmployeeForHrReport', array('is_safe' => array('html'))),
+            'getTotalAmountClaimEachEmployeeForHrReject' => new \Twig_Function_Method($this, 'getTotalAmountClaimEachEmployeeForHrReject', array('is_safe' => array('html'))),
         );
     }
 

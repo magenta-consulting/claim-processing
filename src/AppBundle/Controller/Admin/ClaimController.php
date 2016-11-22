@@ -159,6 +159,23 @@ class ClaimController extends Controller
                 $urlRedirect = $this->admin->generateUrl('list', ['type' => 'approving-each-position', 'position-id' => $object->getPosition()->getId()]);
                 $object->setCheckerUpdatedAt(new \DateTime());
                 $object->setStatus(Claim::STATUS_APPROVER_REJECTED);
+            } else if ($request->get('btn_hr_reject') == 1) {
+                $urlRedirect = $this->admin->generateUrl('list', ['type' => 'hr-each-position', 'position-id' => $object->getPosition()->getId()]);
+                $object->setCheckerUpdatedAt(new \DateTime());
+                $object->setStatus(Claim::STATUS_HR_REJECTED);
+            }else if ($request->get('btn_hr_delete') == 1) {
+
+                $this->admin->delete($object);
+                    $urlRedirect = $this->admin->generateUrl('list', ['type' => 'hr-each-position', 'position-id' => $object->getPosition()->getId()]);
+                $this->addFlash(
+                    'sonata_flash_success',
+                    $this->trans(
+                        'flash_delete_success',
+                        array('%name%' => 'claim'),
+                        'SonataAdminBundle'
+                    )
+                );
+                return new RedirectResponse($urlRedirect);
             } else {
                 $urlRedirect = $this->admin->generateUrl('firstPageCreateClaim');
                 $object->setStatus(Claim::STATUS_PENDING);
@@ -472,5 +489,54 @@ class ClaimController extends Controller
         }
 
         return new RedirectResponse($url);
+    }
+    /**
+     * @param ProxyQueryInterface $selectedModelQuery
+     * @param Request             $request
+     *
+     * @return RedirectResponse
+     */
+    public function batchActionProceed(ProxyQueryInterface $selectedModelQuery, Request $request = null)
+    {
+        echo 1;die;
+        if (!$this->admin->isGranted('EDIT') || !$this->admin->isGranted('DELETE')) {
+            throw new AccessDeniedException();
+        }
+
+        $modelManager = $this->admin->getModelManager();
+
+        $target = $modelManager->find($this->admin->getClass(), $request->get('targetId'));
+
+        if ($target === null){
+            $this->addFlash('sonata_flash_info', 'flash_batch_merge_no_target');
+
+            return new RedirectResponse(
+                $this->admin->generateUrl('list', array('filter' => $this->admin->getFilterParameters()))
+            );
+        }
+
+        $selectedModels = $selectedModelQuery->execute();
+
+        // do the merge work here
+
+        try {
+            foreach ($selectedModels as $selectedModel) {
+                $modelManager->delete($selectedModel);
+            }
+
+            $modelManager->update($selectedModel);
+        } catch (\Exception $e) {
+            $this->addFlash('sonata_flash_error', 'flash_batch_merge_error');
+
+            return new RedirectResponse(
+                $this->admin->generateUrl('list', array('filter' => $this->admin->getFilterParameters()))
+            );
+        }
+
+        $this->addFlash('sonata_flash_success', 'flash_batch_merge_success');
+
+        return new RedirectResponse(
+            $this->admin->generateUrl('list', array('filter' => $this->admin->getFilterParameters()))
+        );
     }
 }

@@ -1,14 +1,16 @@
-<ul class="sidebar-menu" data-current-admin="{{ app.request.get('_route_params') ? app.request.get('_route_params')['_sonata_admin'] }}"
+<ul class="sidebar-menu"
+    data-current-admin="{{ app.request.get('_route_params') ? app.request.get('_route_params')['_sonata_admin'] }}"
     data-current-route-name="{{ app.request.get('_route_params') ? app.request.get('_route_params')['_sonata_name'] }}"
     data-current-param-type="{{ app.request.get('type') }}"
-    data-current-route = {{ app.request.get('_route') }}
+    data-current-route= {{ app.request.get('_route') }}
 >
 
     {% if app.user.hasRole('ROLE_ADMIN') %}
         <li data-route="admin_app_company_list" class="first"><a href="{{ path('admin_app_company_list') }}"><i
                         class="fa fa-angle-double-right"></i>Client Company</a>
         </li>
-        <li data-route="admin_app_thirdpartychecker_list" class="first"><a href="{{ path('admin_app_thirdpartychecker_list') }}"><i
+        <li data-route="admin_app_thirdpartychecker_list" class="first"><a
+                    href="{{ path('admin_app_thirdpartychecker_list') }}"><i
                         class="fa fa-angle-double-right"></i>3rd Party Checker Management</a>
         </li>
     {% elseif app.user.hasRole('ROLE_CLIENT_ADMIN') or app.user.hasRole('ROLE_CS_ADMIN') %}
@@ -70,7 +72,8 @@
                 </li>
 
 
-                <li class="item" data-route="admin.employment_type"><a href="{{ path('admin_app_employmenttype_list') }}"><i
+                <li class="item" data-route="admin.employment_type"><a
+                            href="{{ path('admin_app_employmenttype_list') }}"><i
                                 class="fa fa-angle-double-right"></i>Employment Type Management</a>
                 </li>
                 <li class="item" data-route="admin.employee_group"><a href="{{ path('admin_app_employeegroup_list') }}"><i
@@ -93,9 +96,29 @@
                     href="{{ path('admin_app_company_show',{'id':app.user.company.id}) }}"><i
                         class="fa fa-angle-double-right"></i>My Company</a>
         </li>
-        <li class="item"  data-route1="admin_app_company_position_list" class="last"><a
+        <li class="item" data-route1="admin_app_company_position_list" class="last"><a
                     href="{{ path('admin_app_company_position_list',{'id':app.user.company.id}) }}"><i
                         class="fa fa-angle-double-right"></i>My Employees</a>
+        </li>
+        <li class="last treeview"><a href="#"><i class="fa fa-folder"></i><span>Process Claims</span><i
+                        class="fa pull-right fa-angle-left"></i></a>
+            <ul class="active treeview-menu menu_level_1" style="display: none;">
+                <li data-route-param="hr" class="last item"><a
+                            href="{{ path('admin_app_position_list',{'type':'hr'}) }}"><i
+                                class="fa fa-angle-double-right"></i>Process Employee Claims
+                    </a>
+                </li>
+                <li data-route-param="hr-report" class="last item"><a
+                            href="{{ path('admin_app_position_list',{'type':'hr-report'}) }}"><i
+                                class="fa fa-angle-double-right"></i>Processed Claims
+                    </a>
+                </li>
+                <li data-route-param="hr-reject" class="last item"><a
+                            href="{{ path('admin_app_position_list',{'type':'hr-reject'}) }}"><i
+                                class="fa fa-angle-double-right"></i>Unprocessed Claims
+                    </a>
+                </li>
+            </ul>
         </li>
     {% endif %}
 
@@ -113,10 +136,12 @@
                                     href="{{ path('admin_app_claim_list',{'type':'current'}) }}"><i
                                         class="fa fa-angle-double-right"></i>Current Claims</a>
                         </li>
-                        <li class="item" data-route-param="draft"><a href="{{ path('admin_app_claim_list',{'type':'draft'}) }}"><i
+                        <li class="item" data-route-param="draft"><a
+                                    href="{{ path('admin_app_claim_list',{'type':'draft'}) }}"><i
                                         class="fa fa-angle-double-right"></i>Draft Claims </a>
                         </li>
-                        <li class="item" data-route-param="reject"><a href="{{ path('admin_app_claim_list',{'type':'reject'}) }}"><i
+                        <li class="item" data-route-param="reject"><a
+                                    href="{{ path('admin_app_claim_list',{'type':'reject'}) }}"><i
                                         class="fa fa-angle-double-right"></i>Rejected Claims <span
                                         class="label label-danger number-notification-not-view"
                                         style="font-size: 12px;">{{ getNumberRejectedClaim() }}</span></a>
@@ -130,7 +155,7 @@
         </li>
         {% if isShowMenuForChecker(app.user.loginWithPosition) %}
             {% set resultCheckerNotification = getCheckerNotification() %}
-            <li  data-route1="admin_app_position_list" class="last item"><a
+            <li data-route1="admin_app_position_list" class="last item"><a
                         href="{{ path('admin_app_position_list',{'type':'checking'}) }}"><i
                             class="fa fa-angle-double-right"></i>Claims For Checking <span
                             class="label label-danger number-notification-not-view"
@@ -155,7 +180,7 @@
             var currentRouteName = $('.sidebar-menu').data('current-route-name');
             var currentAdmin = $('.sidebar-menu').data('current-admin');
             var currentRoute = $('.sidebar-menu').data('current-route');
-            if (currentAdmin != 'admin.claim') {
+            if (currentAdmin != 'admin.claim' && currentAdmin != 'admin.position') {
                 //use for menu system
                 var currentAdmin = currentAdmin.split('|');
                 var route = $(this).data('route');
@@ -164,14 +189,25 @@
                     $(this).parents('ul').show();
                     return;
                 }
-            } else {
+            } else if (currentAdmin == 'admin.claim') {
                 //use for menu claims
                 if (currentRouteName == $(this).data('route')) {
                     $(this).addClass('active');
                     $(this).parents('ul').show();
                     return;
-                } else if(currentRouteName == 'admin_app_claim_list') {
+                } else if (currentRouteName == 'admin_app_claim_list') {
                     var routeParam = $(this).data('route-param');
+                    var routeCurrentParam = $('.sidebar-menu').data('current-param-type');
+                    if (routeParam == routeCurrentParam) {
+                        $(this).addClass('active');
+                        $(this).parents('ul').show();
+                        return;
+                    }
+                }
+            } else if (currentAdmin == 'admin.position') {
+                //use for menu process claims
+                var routeParam = $(this).data('route-param');
+                if (routeParam != '') {
                     var routeCurrentParam = $('.sidebar-menu').data('current-param-type');
                     if (routeParam == routeCurrentParam) {
                         $(this).addClass('active');
@@ -182,7 +218,7 @@
             }
 
             //use for menu my company, my employees, checker, approver
-            if(currentRoute == $(this).data('route1')){
+            if (currentRoute == $(this).data('route1')) {
                 $(this).addClass('active');
                 $(this).parents('ul').show();
                 return;

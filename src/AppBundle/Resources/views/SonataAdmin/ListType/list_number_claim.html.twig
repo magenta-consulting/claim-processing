@@ -14,7 +14,13 @@ file that was distributed with this source code.
 {% block field %}
     {% if app.request.get('type') == 'checking' %}
         {{ getNumberClaimEachEmployeeForChecker(object,app.user.loginWithPosition) }}
-    {% else %}
+    {% elseif app.request.get('type') == 'approving'  %}
         {{ getNumberClaimEachEmployeeForApprover(object,app.user.loginWithPosition) }}
+    {% elseif app.request.get('type') == 'hr'  %}
+        {{ getTotalAmountClaimEachEmployeeForHr(object)|number_format(2, '.', ',') }}
+    {% elseif app.request.get('type') == 'hr-report'  %}
+        {{ getTotalAmountClaimEachEmployeeForHrReport(object)|number_format(2, '.', ',') }}
+    {% elseif app.request.get('type') == 'hr-reject'  %}
+        {{ getTotalAmountClaimEachEmployeeForHrReject(object)|number_format(2, '.', ',') }}
     {% endif %}
 {% endblock %}

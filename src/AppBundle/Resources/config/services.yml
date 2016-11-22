@@ -23,6 +23,10 @@ services:
         class: AppBundle\Services\EmployeeRule
         calls:
             - [setContainer,["@service_container"]]
+    app.hr_rule:
+        class: AppBundle\Services\HrRule
+        calls:
+            - [setContainer,["@service_container"]]
 
     app.claim_notification:
         class: AppBundle\Services\ClaimNotification
