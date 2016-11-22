@@ -413,7 +413,14 @@ class PositionAdmin extends BaseAdmin
                     ->add('firstName', null, ['label' => 'Name'])
                     ->add('company.name', null, ['label' => 'Company'])
                     ->add('employeeGroup.costCentre.code', null, ['label' => 'Cost Centre'])
-                    ->add('3', 'number_claim', ['label' => 'Total Claims Amount']);
+                    ->add('3', 'number_claim', ['label' => 'Total Claims Amount'])
+                    ->add('_action', null, array(
+                        'actions' => array(
+                            'list' => array(
+                                'template' => 'AppBundle:SonataAdmin/CustomActions:_list-action-claim-each-position.html.twig'
+                            ),
+                        )
+                    ));
                 break;
             default:
                 $listMapper->

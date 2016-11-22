@@ -268,6 +268,26 @@ class ClaimAdmin extends BaseAdmin
 
                 ));
                 break;
+            case 'hr-reject-each-position':
+                $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
+                    'callback' => function ($queryBuilder, $alias, $field, $value) {
+                        if (!$value['value']) {
+                            return;
+                        }
+                        $dateFilter = new  \DateTime($value['value']);
+                        $expr = new Expr();
+                        $queryBuilder->andWhere($expr->eq($alias . '.periodFrom', ':periodFrom'));
+                        $queryBuilder->setParameter('periodFrom', $dateFilter->format('Y-m-d'));
+                        return true;
+                    },
+                    'field_type' => 'choice',
+                    'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
+                        'choices' => $this->getContainer()->get('app.hr_rule')->getListClaimPeriodForFilterHrReject()
+                    ],
+                    'advanced_filter' => false,
+
+                ));
+                break;
             case null:
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
@@ -302,6 +322,7 @@ class ClaimAdmin extends BaseAdmin
             case 'checking-each-position':
             case 'approving-each-position':
             case 'hr-each-position':
+            case 'hr-reject-each-position':
                 $listMapper
                     ->add('position.employeeNo', null, ['label' => 'Employee No'])
                     ->add('position.firstName', null, ['label' => 'Name'])
@@ -420,6 +441,7 @@ class ClaimAdmin extends BaseAdmin
                 break;
             case 'approving-view-claim':
             case 'hr-view-claim':
+            case 'hr-reject-view-claim':
                 $show->tab('Claim Details');
                 $show->with('Claim Details', array('class' => 'col-md-6'));
                 $show->add('description', 'text', ['label' => 'Description']);

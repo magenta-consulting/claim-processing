@@ -4,6 +4,8 @@
     {% include 'AppBundle:SonataAdmin/Claim/Approver:list.html.twig' %}
 {% elseif app.request.get('type') == 'hr-each-position' %}
     {% include 'AppBundle:SonataAdmin/Claim/Hr:list.html.twig' %}
+{% elseif app.request.get('type') == 'hr-reject-each-position' %}
+    {% include 'AppBundle:SonataAdmin/Claim/Hr:list_rejected.html.twig' %}
 {% else %}
     {% include 'AppBundle:SonataAdmin/Claim/Employee:list.html.twig' %}
 {% endif %}
