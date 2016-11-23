@@ -32,6 +32,7 @@ class HrRule extends ClaimRule
         }
         return $listPeriod;
     }
+
     public function getListClaimPeriodForFilterHrReport()
     {
         $expr = new Expr();
@@ -53,6 +54,7 @@ class HrRule extends ClaimRule
         }
         return $listPeriod;
     }
+
     public function getListClaimPeriodForFilterHrReject()
     {
         $expr = new Expr();
@@ -89,6 +91,7 @@ class HrRule extends ClaimRule
 
         return $qb->getQuery()->getSingleScalarResult();
     }
+
     public function getTotalAmountClaimEachEmployeeForHrReport($position)
     {
         $expr = new Expr();
@@ -103,6 +106,7 @@ class HrRule extends ClaimRule
 
         return $qb->getQuery()->getSingleScalarResult();
     }
+
     public function getTotalAmountClaimEachEmployeeForHrReject($position)
     {
         $expr = new Expr();
@@ -116,6 +120,53 @@ class HrRule extends ClaimRule
         $qb->setParameter('position', $position);
 
         return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function getDataForPayMaster($from)
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $expr = new Expr();
+        $company = $this->getCompany();
+        $qb = $em->createQueryBuilder('position');
+        $qb->select('position');
+        $qb->from('AppBundle:Position', 'position');
+        $qb->leftJoin('position.claims', 'claim');
+        $qb->leftJoin('position.company', 'company');
+        $qb->andWhere(
+            $expr->eq('company', ':company')
+        );
+        $qb->andWhere($expr->eq('claim.status', ':statusProcessed'));
+        $qb->setParameter('statusProcessed', Claim::STATUS_PROCESSED);
+        $qb->setParameter('company', $company);
+        if ($from != 'none') {
+            $qb->andWhere($expr->eq('claim.periodFrom', ':periodFrom'));
+            $qb->setParameter('periodFrom', $from);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function getDataForExcelReport($from)
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $expr = new Expr();
+        $company = $this->getCompany();
+        $qb = $em->createQueryBuilder('claim');
+        $qb->select('claim');
+        $qb->from('AppBundle:Claim', 'claim');
+        $qb->leftJoin('claim.company', 'company');
+        $qb->andWhere(
+            $expr->eq('company', ':company')
+        );
+        $qb->andWhere($expr->eq('claim.status', ':statusProcessed'));
+        $qb->setParameter('statusProcessed', Claim::STATUS_PROCESSED);
+        $qb->setParameter('company', $company);
+        if ($from != 'none') {
+            $qb->andWhere($expr->eq('claim.periodFrom', ':periodFrom'));
+            $qb->setParameter('periodFrom', $from);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
 

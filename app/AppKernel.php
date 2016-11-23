@@ -44,7 +44,7 @@ class AppKernel extends Kernel
 
             new Sonata\NotificationBundle\SonataNotificationBundle(),
             new Application\Sonata\NotificationBundle\ApplicationSonataNotificationBundle(),
-
+            new Liuggio\ExcelBundle\LiuggioExcelBundle(),
             new AppBundle\AppBundle(),
 
         ];
@@ -73,6 +73,24 @@ class AppKernel extends Kernel
     {
         return dirname(__DIR__).'/var/logs';
     }
+
+//    public function getCacheDir()
+//    {
+//        if (in_array($this->environment, array('dev', 'test'))) {
+//            return '/dev/shm/claim/cache/' .  $this->environment;
+//        }
+//
+//        return parent::getCacheDir();
+//    }
+//
+//    public function getLogDir()
+//    {
+//        if (in_array($this->environment, array('dev', 'test'))) {
+//            return '/dev/shm/claim/logs';
+//        }
+//
+//        return parent::getLogDir();
+//    }
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {

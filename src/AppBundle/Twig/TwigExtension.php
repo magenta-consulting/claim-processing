@@ -129,6 +129,16 @@ class TwigExtension extends \Twig_Extension
         }
         return false;
     }
+    public function isShowApproveRejectApproverButtonForClaim(Claim $claim)
+    {
+        $listStatusAllow = [
+            Claim::STATUS_CHECKER_APPROVED,
+        ];
+        if (in_array($claim->getStatus(), $listStatusAllow)) {
+            return true;
+        }
+        return false;
+    }
 
     public function isShowDeleteRejectHrButtonForClaim(Claim $claim)
     {

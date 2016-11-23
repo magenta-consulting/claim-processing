@@ -21,31 +21,13 @@ file that was distributed with this source code.
     <div class="col-xs-12 col-md-12">
         {% set batchactions = admin.batchactions %}
         {% if admin.hasRoute('batch') and batchactions|length %}
-        <form action="{{ admin.generateUrl('batch', {'type':'hr-report','filter': admin.filterParameters}) }}"
-              method="POST">
+        <form action="{{ admin.generateUrl('batch', {'filter': admin.filterParameters}) }}" method="POST">
             <input type="hidden" name="_sonata_csrf_token" value="{{ csrf_token }}">
             {% endif %}
 
             {# Add a margin if no pager to prevent dropdown cropping on window #}
             <div class="box box-primary"
                  {% if admin.datagrid.pager.lastPage == 1 %}style="margin-bottom: 100px;"{% endif %}>
-                <div class="box-header" style="text-align: center">
-                    <h4 class="box-title">
-                        <small>{{ app.user.loginWithPosition.company.name }}</small>
-                        <br>
-                        <p style="border-top: 1px solid black; margin-top: 10px;"></p>
-                        <strong>Claims Report Summary (Processed)
-                        </strong><br><br>
-                        <a href="{{ path('admin_app_claim_payMaster',{'filter':admin.filterParameters}) }}"
-                           class="btn btn-primary">
-                            Generate for PayMaster
-                        </a>
-                        <a href="{{ path('admin_app_claim_excelReport',{'filter':admin.filterParameters}) }}"
-                           class="btn btn-success">
-                            Generate Excel Report
-                        </a>
-                    </h4>
-                </div>
                 <div class="box-body {% if admin.datagrid.results|length > 0 %}table-responsive no-padding{% endif %}">
                     {{ sonata_block_render_event('sonata.admin.list.table.top', { 'admin': admin }) }}
 
@@ -104,6 +86,7 @@ file that was distributed with this source code.
                         {% block no_result_content %}
                             <div class="info-box">
                                 <span class="info-box-text">{{ 'no_result'|trans({}, 'SonataAdminBundle') }}</span>
+
                             </div>
                         {% endblock %}
                     {% endif %}
@@ -196,7 +179,7 @@ file that was distributed with this source code.
                                         {% endif %}
 
                                         {% block pager_results %}
-                                            {#{% include admin.getTemplate('pager_results') %}#}
+                                            {#{% include admin.getTemplate('pager_results') %#}
                                             {% block num_pages %}
                                                 {{ admin.datagrid.pager.page }} / {{ admin.datagrid.pager.lastpage }}
                                                 &nbsp;-&nbsp;
@@ -215,14 +198,12 @@ file that was distributed with this source code.
                                                         id="{{ admin.uniqid }}_per_page" style="width: auto">
                                                     {% for per_page in admin.getperpageoptions %}
                                                         <option {% if per_page == admin.datagrid.pager.maxperpage %}selected="selected"{% endif %}
-                                                                value="{{ admin.generateUrl('list', {'type':'hr-report','filter': admin.datagrid.values|merge({'_page': 1, '_per_page': per_page})}) }}">
+                                                                value="{{ admin.generateUrl('list', {'type':'hr-report-each-position','position-id':app.request.get('position-id'),'filter': admin.datagrid.values|merge({'_page': 1, '_per_page': per_page})}) }}">
                                                             {{- per_page -}}
                                                         </option>
                                                     {% endfor %}
                                                 </select>
                                             {% endblock %}
-
-
                                         {% endblock %}
                                     </div>
                                 {% endif %}
@@ -244,6 +225,7 @@ file that was distributed with this source code.
     </div>
 {% endblock %}
 
+
 {% block list_filters %}
     {% if admin.datagrid.filters %}
         {% form_theme form admin.getTemplate('filter') %}
@@ -251,10 +233,11 @@ file that was distributed with this source code.
         <div class="col-xs-12 col-md-12 ">
             <div class="box box-primary">
                 <div class="box-body">
-                    <form class="sonata-filter-form form-horizontal {{ admin.isChild and 1 == admin.datagrid.filters|length ? 'hide' : '' }}"
+                    <form class="form-horizontal"
                           action="{{ admin.generateUrl('list') }}" method="GET" role="form">
                         {{ form_errors(form) }}
-                        <input type="hidden" name="type" value="hr-report">
+                        <input type="hidden" name="type" value="hr-report-each-position">
+                        <input type="hidden" name="position-id" value="{{ app.request.get('position-id') }}">
                         <div class="row">
                             <div class="col-sm-9">
                                 {% set withAdvancedFilter = false %}
@@ -296,7 +279,7 @@ file that was distributed with this source code.
                                     </button>
 
                                     <a class="btn btn-default"
-                                       href="{{ admin.generateUrl('list', {'type': 'hr-report'}) }}">
+                                       href="{{ admin.generateUrl('list', {'type':'hr-report-each-position','position-id':app.request.get('position-id')}) }}">
                                         {{ 'link_reset_filter'|trans({}, 'SonataAdminBundle') }}
                                     </a>
                                 </div>

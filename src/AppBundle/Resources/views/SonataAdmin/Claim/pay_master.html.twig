@@ -1,0 +1,74 @@
+{% extends 'AppBundle:SonataAdmin:standard_layout.html.twig' %}
+
+{% block sonata_admin_content %}
+    <div>
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+
+                <div class="box box-primary" style="margin-bottom: 100px;">
+                    <div class="box-header" style="text-align: center">
+                        <h4 class="box-title">
+                            <small>{{ app.user.loginWithPosition.company.name }}</small>
+                            <br>
+                            <p style="border-top: 1px solid black; margin-top: 10px;"></p>
+                            <strong>PayMaster
+                            </strong><br><br>
+                            <a href="{{ path('admin_app_claim_payMasterExport',{'from':from}) }}"
+                               class="btn btn-primary">
+                                Dowload
+                            </a>
+                        </h4>
+                    </div>
+                    <div class="box-body table-responsive no-padding">
+
+
+                        <table class="table table-bordered table-striped sonata-ba-list">
+                            <thead>
+                            <tr class="sonata-ba-list-field-header">
+                                <th class="sonata-ba-list-field-header-text ">Emp No.</th>
+                                <th class="sonata-ba-list-field-header-text ">Name</th>
+                                <th class="sonata-ba-list-field-header-text ">Company</th>
+                                <th class="sonata-ba-list-field-header-text ">Cost Centre Code</th>
+                                <th class="sonata-ba-list-field-header-text ">Employment Type</th>
+                                <th class="sonata-ba-list-field-header-text ">Employee Type</th>
+                                <th class="sonata-ba-list-field-header-text ">Region</th>
+                                <th class="sonata-ba-list-field-header-text ">Branch</th>
+                                <th class="sonata-ba-list-field-header-text ">Section</th>
+                                <th class="sonata-ba-list-field-header-text ">Date/Time Processed</th>
+                                <th class="sonata-ba-list-field-header-text ">Total Claim Amount</th>
+
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            {% for position in positions %}
+                                <tr>
+                                    <td>{{ position.employeeNo }}</td>
+                                    <td>{{ position.firstName ~' ' ~position.lastName }}</td>
+                                    <td>{{ position.company.name }}</td>
+                                    <td>{{ position.costCentre ? position.costCentre.code :'N/A' }}</td>
+                                    <td>{{ position.employmentType ? position.employmentType.code :'N/A' }}</td>
+                                    <td>{{ position.employeeType ? position.employeeType.code :'N/A' }}</td>
+                                    <td>{{ position.region ? position.region.code :'N/A' }}</td>
+                                    <td>{{ position.branch ? position.branch.code :'N/A' }}</td>
+                                    <td>{{ position.section ? position.section.code :'N/A' }}</td>
+                                    <td>N/A</td>
+                                    <td>{{ getTotalAmountClaimEachEmployeeForHrReport(position)|number_format(2, '.', ',')}}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+
+                        </table>
+
+
+                    </div>
+                    <div class="box-footer">
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

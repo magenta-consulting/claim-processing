@@ -12,4 +12,7 @@
 {% elseif app.request.get('type') == 'hr-reject' %}
     <a class="btn btn-sm btn-default"
        href="{{ path('admin_app_claim_list', {'type':'hr-reject-each-position','position-id':object.id,'filter': admin.filterParameters}) }}">Detail</a>
+{% elseif app.request.get('type') == 'hr-report' %}
+    <a class="btn btn-sm btn-default"
+       href="{{ path('admin_app_claim_list', {'type':'hr-report-each-position','position-id':object.id,'filter': admin.filterParameters}) }}">Detail</a>
 {% endif %}
