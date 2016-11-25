@@ -63,7 +63,7 @@ class AppKernel extends Kernel
     {
         return __DIR__;
     }
-
+/*
     public function getCacheDir()
     {
         return dirname(__DIR__).'/var/cache/'.$this->getEnvironment();
@@ -73,24 +73,24 @@ class AppKernel extends Kernel
     {
         return dirname(__DIR__).'/var/logs';
     }
+*/
+    public function getCacheDir()
+    {
+        if (in_array($this->environment, array('prod'))) {
+            return '/dev/shm/claim/cache/' .  $this->environment;
+        }
 
-//    public function getCacheDir()
-//    {
-//        if (in_array($this->environment, array('dev', 'test'))) {
-//            return '/dev/shm/claim/cache/' .  $this->environment;
-//        }
-//
-//        return parent::getCacheDir();
-//    }
-//
-//    public function getLogDir()
-//    {
-//        if (in_array($this->environment, array('dev', 'test'))) {
-//            return '/dev/shm/claim/logs';
-//        }
-//
-//        return parent::getLogDir();
-//    }
+        return parent::getCacheDir();
+    }
+
+    public function getLogDir()
+    {
+        if (in_array($this->environment, array('prod'))) {
+            return '/dev/shm/claim/logs';
+        }
+
+        return parent::getLogDir();
+    }
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
