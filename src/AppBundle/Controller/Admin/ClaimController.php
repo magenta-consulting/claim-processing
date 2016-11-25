@@ -27,7 +27,55 @@ class ClaimController extends Controller
 
         return $this->render('@App/SonataAdmin/Claim/pay_master.html.twig', ['positions' => $positions, 'from' => $from]);
     }
+    public function formatPayMasterExportAction($filter)
+    {
+        $from = 'none';
+        $filter = json_decode($filter,true);
+        if (isset($filter['claim_period'])) {
+            $from = $filter['claim_period']['value'];
+        }
+        $positions = $this->get('app.hr_rule')->getDataForPayMaster($from);
+        $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+        //set some static value
+        $phpExcelObject->setActiveSheetIndex(0)->setCellValue('A1', "TRANSACTION_TYPE");
+        $phpExcelObject->setActiveSheetIndex(0)->setCellValue('B1', 'CORP_CODE');
+        $phpExcelObject->setActiveSheetIndex(0)->setCellValue('C1', 'EMP_NO');
+        $phpExcelObject->setActiveSheetIndex(0)->setCellValue('D1', 'PAYMENT_PERIOD');
+        $phpExcelObject->setActiveSheetIndex(0)->setCellValue('E1', "FILLER1");
+        $phpExcelObject->setActiveSheetIndex(0)->setCellValue('F1', "FILLER2");
+        $phpExcelObject->setActiveSheetIndex(0)->setCellValue('G1', "PAY_ITEM_CODE");
+        $phpExcelObject->setActiveSheetIndex(0)->setCellValue('H1', "UNIT_PAID");
+        $phpExcelObject->setActiveSheetIndex(0)->setCellValue('I1', "CAL_METHOD");
 
+        foreach ($positions as $k => $position) {
+            $num = $k + 2;
+            $totalAmount = $this->get('app.hr_rule')->getTotalAmountClaimEachEmployeeForHrReport($position);
+            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('A' . $num, '2');
+            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('B' . $num, $position->getFirstName() . ' ' . $position->getLastName());
+            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('C' . $num, $position->getCostCentre() ? $position->getCostCentre()->getCode() : 'N/A');
+            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('D' . $num,$position->getEmployeeNo());
+            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('E' . $num, '');
+            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('F' . $num, '');
+            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('G' . $num, '');
+            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('H' . $num, number_format($totalAmount, 2, '.', ','));
+            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('I' . $num, 'A');
+        }
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $phpExcelObject->setActiveSheetIndex(0);
+        // create the writer
+        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+        // create the response
+        $response = $this->get('phpexcel')->createStreamedResponse($writer);
+        // adding headers
+        $dispositionHeader = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT, 'report.xls'
+        );
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+        $response->headers->set('Content-Disposition', $dispositionHeader);
+        return $response;
+    }
     public function payMasterExportAction($from)
     {
         $positions = $this->get('app.hr_rule')->getDataForPayMaster($from);

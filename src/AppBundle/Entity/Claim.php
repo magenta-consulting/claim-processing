@@ -88,6 +88,11 @@ class Claim
      * @ORM\Column(name="receipt_date",type="date",nullable=true)
      */
     private $receiptDate;
+    /**
+     * @var date
+     * @ORM\Column(name="processed_date",type="date",nullable=true)
+     */
+    private $processedDate;
 
     /**
      * @var string
@@ -214,6 +219,23 @@ class Claim
     {
         return $this->id;
     }
+
+    /**
+     * @return Date
+     */
+    public function getProcessedDate()
+    {
+        return $this->processedDate;
+    }
+
+    /**
+     * @param Date $processedDate
+     */
+    public function setProcessedDate($processedDate)
+    {
+        $this->processedDate = $processedDate;
+    }
+
 
     /**
      * @return float

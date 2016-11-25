@@ -299,6 +299,7 @@ class BaseAdmin extends AbstractAdmin
                         $query->setParameter('approverEmployee', $this->getPosition());
                         break;
                     case 'hr-each-position':
+                    case 'hr-reject-each-position':
                         $positionId = $request->get('position-id');
                         $query->join($query->getRootAliases()[0] . '.position', 'position');
                         $query->andWhere(
@@ -324,20 +325,6 @@ class BaseAdmin extends AbstractAdmin
                             )
                         );
                         $query->setParameter('statusHrApproved', Claim::STATUS_PROCESSED);
-                        $query->setParameter('positionId', $positionId);
-                        break;
-                    case 'hr-reject-each-position':
-                        $positionId = $request->get('position-id');
-                        $query->join($query->getRootAliases()[0] . '.position', 'position');
-                        $query->andWhere(
-                            $expr->eq('position.id', ':positionId')
-                        );
-                        $query->andWhere(
-                            $expr->orX(
-                                $expr->eq($query->getRootAliases()[0] . '.status', ':statusHrRejected')
-                            )
-                        );
-                        $query->setParameter('statusHrRejected', Claim::STATUS_HR_REJECTED);
                         $query->setParameter('positionId', $positionId);
                         break;
                     case 'current':
@@ -462,6 +449,7 @@ class BaseAdmin extends AbstractAdmin
                         $query->setParameter('clientCompany', $clientCompany);
                         break;
                     case 'hr':
+                    case 'hr-reject':
                         $query->leftJoin($query->getRootAliases()[0] . '.claims', 'claim');
                         $query->leftJoin($query->getRootAliases()[0] . '.company', 'company');
                         $query->andWhere(
@@ -479,16 +467,6 @@ class BaseAdmin extends AbstractAdmin
                         );
                         $query->andWhere($expr->eq('claim.status', ':statusProcessed'));
                         $query->setParameter('statusProcessed', Claim::STATUS_PROCESSED);
-                        $query->setParameter('company', $company);
-                        break;
-                    case 'hr-reject':
-                        $query->leftJoin($query->getRootAliases()[0] . '.claims', 'claim');
-                        $query->leftJoin($query->getRootAliases()[0] . '.company', 'company');
-                        $query->andWhere(
-                                $expr->eq('company', ':company')
-                        );
-                        $query->andWhere($expr->eq('claim.status', ':statusHrRejected'));
-                        $query->setParameter('statusHrRejected', Claim::STATUS_HR_REJECTED);
                         $query->setParameter('company', $company);
                         break;
                 }

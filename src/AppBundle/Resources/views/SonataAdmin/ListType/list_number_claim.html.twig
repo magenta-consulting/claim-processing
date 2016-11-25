@@ -21,6 +21,6 @@ file that was distributed with this source code.
     {% elseif app.request.get('type') == 'hr-report'  %}
         {{ getTotalAmountClaimEachEmployeeForHrReport(object)|number_format(2, '.', ',') }}
     {% elseif app.request.get('type') == 'hr-reject'  %}
-        {{ getTotalAmountClaimEachEmployeeForHrReject(object)|number_format(2, '.', ',') }}
+        {{ getTotalAmountClaimEachEmployeeForHr(object)|number_format(2, '.', ',') }}
     {% endif %}
 {% endblock %}

@@ -249,7 +249,9 @@ class PositionAdmin extends BaseAdmin
                     },
                     'field_type' => 'choice',
                     'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
-                        'choices' => $this->getContainer()->get('app.checker_rule')->getListClaimPeriodForFilterChecker()
+                        'choices' => $this->getContainer()->get('app.checker_rule')->getListClaimPeriodForFilterChecker(),
+                        'placeholder' => 'Select a period',
+                        'empty_data' => null
                     ],
                     'advanced_filter' => false,
 
@@ -269,13 +271,16 @@ class PositionAdmin extends BaseAdmin
                     },
                     'field_type' => 'choice',
                     'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
-                        'choices' => $this->getContainer()->get('app.approver_rule')->getListClaimPeriodForFilterApprover()
+                        'choices' => $this->getContainer()->get('app.approver_rule')->getListClaimPeriodForFilterApprover(),
+                        'placeholder' => 'Select a period',
+                        'empty_data' => null
                     ],
                     'advanced_filter' => false,
 
                 ));
                 break;
             case 'hr':
+            case 'hr-reject':
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
                         if (!$value['value']) {
@@ -289,7 +294,9 @@ class PositionAdmin extends BaseAdmin
                     },
                     'field_type' => 'choice',
                     'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
-                        'choices' => $this->getContainer()->get('app.hr_rule')->getListClaimPeriodForFilterHr()
+                        'choices' => $this->getContainer()->get('app.hr_rule')->getListClaimPeriodForFilterHr(),
+                        'placeholder' => 'Select a period',
+                        'empty_data' => null
                     ],
                     'advanced_filter' => false,
 
@@ -309,27 +316,9 @@ class PositionAdmin extends BaseAdmin
                     },
                     'field_type' => 'choice',
                     'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
-                        'choices' => $this->getContainer()->get('app.hr_rule')->getListClaimPeriodForFilterHrReport()
-                    ],
-                    'advanced_filter' => false,
-
-                ));
-                break;
-            case 'hr-reject':
-                $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
-                    'callback' => function ($queryBuilder, $alias, $field, $value) {
-                        if (!$value['value']) {
-                            return;
-                        }
-                        $expr = new Expr();
-                        $queryBuilder->andWhere($expr->eq('claim.periodFrom', ':periodFrom'));
-                        $queryBuilder->setParameter('periodFrom', $value['value']);
-
-                        return true;
-                    },
-                    'field_type' => 'choice',
-                    'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
-                        'choices' => $this->getContainer()->get('app.hr_rule')->getListClaimPeriodForFilterHrReject()
+                        'choices' => $this->getContainer()->get('app.hr_rule')->getListClaimPeriodForFilterHrReport(),
+                        'placeholder' => 'Select a period',
+                        'empty_data' => null
                     ],
                     'advanced_filter' => false,
 
@@ -402,18 +391,16 @@ class PositionAdmin extends BaseAdmin
                     ));
                 break;
             case 'hr-report':
-                $listMapper->add('employeeNo', null, ['label' => 'Employee No'])
-                    ->add('firstName', null, ['label' => 'Name'])
-                    ->add('company.name', null, ['label' => 'Company'])
-                    ->add('employeeGroup.costCentre.code', null, ['label' => 'Cost Centre'])
-                    ->add('3', 'number_claim', ['label' => 'Total Claims Amount'])
-                    ->add('_action', null, array(
-                        'actions' => array(
-                            'list' => array(
-                                'template' => 'AppBundle:SonataAdmin/CustomActions:_list-action-claim-each-position.html.twig'
-                            ),
-                        )
-                    ));
+                $listMapper
+                    ->add('1', 'list_transaction_type', ['label' => 'TRANSACTION_TYPE'])
+                    ->add('employeeGroup.costCentre.code', null, ['label' => 'CORP_CODE', 'sortable' => false])
+                    ->add('employeeNo', null, ['label' => 'EMP_NO', 'sortable' => false])
+                    ->add('2', null, ['label' => 'PAYMENT_PERIOD'])
+                    ->add('3', null, ['label' => 'FILLER1'])
+                    ->add('4', null, ['label' => 'FILLER2'])
+                    ->add('5', null, ['label' => 'PAY_ITEM_CODE'])
+                    ->add('6', 'number_claim', ['label' => 'UNIT_PAID'])
+                    ->add('7', 'cal_method', ['label' => 'CAL_METHOD']);
                 break;
             case 'hr-reject':
                 $listMapper->add('employeeNo', null, ['label' => 'Employee No'])
@@ -451,9 +438,9 @@ class PositionAdmin extends BaseAdmin
     protected function configureBatchActions($actions)
     {
         $type = $this->getRequest()->get('type');
-        if($type == '') {
+        if ($type == '') {
             $actions = parent::configureBatchActions($actions);
-        }else{
+        } else {
             $actions = [];
         }
         if ($type === 'hr') {
@@ -465,7 +452,6 @@ class PositionAdmin extends BaseAdmin
         }
         return $actions;
     }
-
 
 
     public function toString($object)

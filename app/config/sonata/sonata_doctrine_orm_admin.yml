@@ -12,6 +12,9 @@ sonata_doctrine_orm_admin:
                 submission_date_claim:      AppBundle:SonataAdmin/ListType:list_submission_date_claim.html.twig
                 checker_employee_groups:      AppBundle:SonataAdmin/ListType:list_checker_employee_groups.html.twig
                 approver_employee_groups:      AppBundle:SonataAdmin/ListType:list_approver_employee_groups.html.twig
+                approver_employee_groups:      AppBundle:SonataAdmin/ListType:list_approver_employee_groups.html.twig
+                list_transaction_type:      AppBundle:SonataAdmin/ListType:list_transaction_type.html.twig
+                cal_method:      AppBundle:SonataAdmin/ListType:cal_method.html.twig
                 array:      SonataAdminBundle:CRUD:list_array.html.twig
                 boolean:    SonataAdminBundle:CRUD:list_boolean.html.twig
                 date:       SonataAdminBundle:CRUD:list_date.html.twig

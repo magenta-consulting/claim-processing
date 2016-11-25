@@ -50,6 +50,7 @@ class PositionController extends Controller
                 foreach ($position->getClaims() as $claim){
                     if($claim->getStatus() == Claim::STATUS_APPROVER_APPROVED){
                         $claim->setStatus(Claim::STATUS_PROCESSED);
+                        $claim->setProcessedDate(new \DateTime());
                         $modelManager->update($claim);
                     }
                 }

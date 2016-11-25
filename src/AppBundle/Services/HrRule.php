@@ -55,34 +55,13 @@ class HrRule extends ClaimRule
         return $listPeriod;
     }
 
-    public function getListClaimPeriodForFilterHrReject()
-    {
-        $expr = new Expr();
-        $company = $this->getCompany();
-        $em = $this->container->get('doctrine')->getManager();
-        $qb = $em->createQueryBuilder('claim');
-        $qb->select('claim');
-        $qb->from('AppBundle:Claim', 'claim');
-        $qb->where($expr->eq('claim.company', ':company'));
-        $qb->andWhere($expr->eq('claim.status', ':statusHrRejected'));
-        $qb->orderBy('claim.createdAt', 'DESC');
-        $qb->setParameter('statusHrRejected', Claim::STATUS_HR_REJECTED);
-        $qb->setParameter('company', $company);
-        $claims = $qb->getQuery()->getResult();
-
-        $listPeriod = [];
-        foreach ($claims as $claim) {
-            $listPeriod[$claim->getPeriodFrom()->format('d M Y') . ' - ' . $claim->getPeriodTo()->format('d M Y')] = $claim->getPeriodFrom()->format('Y-m-d');
-        }
-        return $listPeriod;
-    }
 
     public function getTotalAmountClaimEachEmployeeForHr($position)
     {
         $expr = new Expr();
         $em = $this->container->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder('claim');
-        $qb->select('SUM(claim.claimAmount)');
+        $qb->select('SUM(claim.claimAmountConverted)');
         $qb->from('AppBundle:Claim', 'claim');
         $qb->where('claim.position = :position');
         $qb->andWhere($expr->eq('claim.status', ':statusApproverApproved'));
@@ -97,7 +76,7 @@ class HrRule extends ClaimRule
         $expr = new Expr();
         $em = $this->container->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder('claim');
-        $qb->select('SUM(claim.claimAmount)');
+        $qb->select('SUM(claim.claimAmountConverted)');
         $qb->from('AppBundle:Claim', 'claim');
         $qb->where('claim.position = :position');
         $qb->andWhere($expr->eq('claim.status', ':statusHrApproved'));
@@ -107,20 +86,6 @@ class HrRule extends ClaimRule
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function getTotalAmountClaimEachEmployeeForHrReject($position)
-    {
-        $expr = new Expr();
-        $em = $this->container->get('doctrine')->getManager();
-        $qb = $em->createQueryBuilder('claim');
-        $qb->select('SUM(claim.claimAmount)');
-        $qb->from('AppBundle:Claim', 'claim');
-        $qb->where('claim.position = :position');
-        $qb->andWhere($expr->eq('claim.status', ':statusHrRejected'));
-        $qb->setParameter('statusHrRejected', Claim::STATUS_HR_REJECTED);
-        $qb->setParameter('position', $position);
-
-        return $qb->getQuery()->getSingleScalarResult();
-    }
 
     public function getDataForPayMaster($from)
     {

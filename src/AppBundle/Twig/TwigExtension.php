@@ -43,10 +43,7 @@ class TwigExtension extends \Twig_Extension
     {
         return $this->container->get('app.hr_rule')->getTotalAmountClaimEachEmployeeForHrReport($position);
     }
-    public function getTotalAmountClaimEachEmployeeForHrReject($position)
-    {
-        return $this->container->get('app.hr_rule')->getTotalAmountClaimEachEmployeeForHrReject($position);
-    }
+
 
     public function isShowMenuForChecker($position)
     {
@@ -208,7 +205,7 @@ class TwigExtension extends \Twig_Extension
             'getTotalAmountClaimEachEmployeeForHr' => new \Twig_Function_Method($this, 'getTotalAmountClaimEachEmployeeForHr', array('is_safe' => array('html'))),
             'isShowDeleteRejectHrButtonForClaim' => new \Twig_Function_Method($this, 'isShowDeleteRejectHrButtonForClaim', array('is_safe' => array('html'))),
             'getTotalAmountClaimEachEmployeeForHrReport' => new \Twig_Function_Method($this, 'getTotalAmountClaimEachEmployeeForHrReport', array('is_safe' => array('html'))),
-            'getTotalAmountClaimEachEmployeeForHrReject' => new \Twig_Function_Method($this, 'getTotalAmountClaimEachEmployeeForHrReject', array('is_safe' => array('html'))),
+
         );
     }
 

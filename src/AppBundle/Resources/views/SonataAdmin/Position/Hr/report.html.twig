@@ -29,22 +29,30 @@ file that was distributed with this source code.
             {# Add a margin if no pager to prevent dropdown cropping on window #}
             <div class="box box-primary"
                  {% if admin.datagrid.pager.lastPage == 1 %}style="margin-bottom: 100px;"{% endif %}>
-                <div class="box-header" style="text-align: center">
-                    <h4 class="box-title">
-                        <small>{{ app.user.loginWithPosition.company.name }}</small>
-                        <br>
-                        <p style="border-top: 1px solid black; margin-top: 10px;"></p>
-                        <strong>Claims Report Summary (Processed)
-                        </strong><br><br>
-                        <a href="{{ path('admin_app_claim_payMaster',{'filter':admin.filterParameters}) }}"
-                           class="btn btn-primary">
-                            Generate for PayMaster
+                <div class="box-header">
+                    <div style="text-align: center">
+                        <h4 class="box-title">
+                            <small>{{ app.user.loginWithPosition.company.name }}</small>
+                            <br>
+                            <p style="border-top: 1px solid black; margin-top: 10px;"></p>
+                            <strong>Claims Report Summary (Processed)
+                            </strong><br><br>
+                            <a href="{{ path('admin_app_claim_payMaster',{'filter':admin.filterParameters}) }}"
+                               class="btn btn-primary">
+                                Generate for PayMaster
+                            </a>
+                            <a href="{{ path('admin_app_claim_excelReport',{'filter':admin.filterParameters}) }}"
+                               class="btn btn-success">
+                                Generate Excel Report
+                            </a>
+                        </h4>
+                    </div>
+                    {% if admin.datagrid.results|length > 0 %}
+                        <a href="{{ path('admin_app_claim_formatPayMasterExport',{'filter':admin.filterParameters|json_encode}) }}"
+                           class="btn btn-default">
+                            Dowload
                         </a>
-                        <a href="{{ path('admin_app_claim_excelReport',{'filter':admin.filterParameters}) }}"
-                           class="btn btn-success">
-                            Generate Excel Report
-                        </a>
-                    </h4>
+                    {% endif %}
                 </div>
                 <div class="box-body {% if admin.datagrid.results|length > 0 %}table-responsive no-padding{% endif %}">
                     {{ sonata_block_render_event('sonata.admin.list.table.top', { 'admin': admin }) }}
