@@ -130,8 +130,11 @@ class HrRule extends ClaimRule
 
         $result = $qb->getQuery()->getResult();
         if(count($result)){
-            return $result[0]->getProcessedDate()->format('Ymd');
+            if($result[0]->getProcessedDate()) {
+                return $result[0]->getProcessedDate()->format('Ymd');
+            }
         }
+        return null;
     }
     public function getDataForFormatPayMaster($from)
     {
