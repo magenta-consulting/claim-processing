@@ -578,8 +578,10 @@ class ClaimAdmin extends BaseAdmin
     {
         $position = $this->getPosition();
         //must just save when create not update (will conflict when approver or checker update claim)
-        $claim->setChecker($this->getContainer()->get('app.checker_rule')->getChecker($position));
-        $claim->setApprover($this->getContainer()->get('app.approver_rule')->getApprover($position));
+        $checker = $this->getContainer()->get('app.checker_rule')->getChecker($position);
+        $approver = $this->getContainer()->get('app.approver_rule')->getApprover($position);
+        $claim->setChecker($checker);
+        $claim->setApprover($approver);
         $claim->setPosition($position);
         $claim->setCreatedBy($this->getUser()->getLoginWithPosition());
         $claim->setReceiptDate(new \DateTime());
