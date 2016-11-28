@@ -7,7 +7,7 @@
             <div class="col-xs-12 col-md-12 ">
                 <div class="box box-primary">
                     <div class="box-body">
-                        <form class="sonata-filter-form form-horizontal " action="{{ path('admin_app_claim_payMaster') }}" method="GET" role="form">
+                        <form class="sonata-filter-form form-horizontal " action="{{ path('admin_app_claim_formatPayMaster') }}" method="GET" role="form">
 
                             <input type="hidden" name="type" value="hr">
                             <div class="row">
@@ -20,7 +20,7 @@
                                                 <option value="">Select a period</option>
                                                 {% for key,period in periods %}
                                                     <option {{ from == key ? 'selected':''}} value="{{ key }}">{{ period }}</option>
-                                                {% endfor %}
+                                                    {% endfor %}
                                             </select>
 
                                         </div>
@@ -34,7 +34,7 @@
                                             <i class="fa fa-filter" aria-hidden="true"></i> Filter
                                         </button>
 
-                                        <a class="btn btn-default" href="{{ path('admin_app_claim_payMaster') }}">
+                                        <a class="btn btn-default" href="{{ path('admin_app_claim_formatPayMaster') }}">
                                             Reset
                                         </a>
                                     </div>
@@ -54,20 +54,26 @@
                 <div class="box box-primary" style="margin-bottom: 100px;">
                     <div class="box-header">
                         <div style="text-align: center">
-
-                        <h4 class="box-title">
-                            <small>{{ app.user.loginWithPosition.company.name }}</small>
-                            <br>
-                            <p style="border-top: 1px solid black; margin-top: 10px;"></p>
-                            <strong>PayMaster
-                            </strong><br><br>
-
-                        </h4>
-                            </div>
-                        <a href="{{ path('admin_app_claim_payMasterExport',{'from':from}) }}"
-                           class="btn btn-default">
-                            Dowload
-                        </a>
+                            <h4 class="box-title">
+                                <small>{{ app.user.loginWithPosition.company.name }}</small>
+                                <br>
+                                <p style="border-top: 1px solid black; margin-top: 10px;"></p>
+                                <strong>Claims Report Summary (Processed)
+                                </strong><br><br>
+                                <a href="{{ path('admin_app_claim_payMaster')}}"
+                                   class="btn btn-primary">
+                                    Generate for PayMaster
+                                </a>
+                                <a href="{{ path('admin_app_claim_excelReport') }}"
+                                   class="btn btn-success">
+                                    Generate Excel Report
+                                </a>
+                            </h4>
+                        </div>
+                            <a href="{{ path('admin_app_claim_formatPayMasterExport',{'filter':admin.filterParameters|json_encode}) }}"
+                               class="btn btn-default">
+                                Dowload
+                            </a>
                     </div>
                     <div class="box-body table-responsive no-padding">
 
@@ -75,35 +81,35 @@
                         <table class="table table-bordered table-striped sonata-ba-list">
                             <thead>
                             <tr class="sonata-ba-list-field-header">
-                                <th class="sonata-ba-list-field-header-text ">Emp No.</th>
-                                <th class="sonata-ba-list-field-header-text ">Name</th>
-                                <th class="sonata-ba-list-field-header-text ">Company</th>
-                                <th class="sonata-ba-list-field-header-text ">Cost Centre Code</th>
-                                <th class="sonata-ba-list-field-header-text ">Employment Type</th>
-                                <th class="sonata-ba-list-field-header-text ">Employee Type</th>
-                                <th class="sonata-ba-list-field-header-text ">Region</th>
-                                <th class="sonata-ba-list-field-header-text ">Branch</th>
-                                <th class="sonata-ba-list-field-header-text ">Section</th>
-                                <th class="sonata-ba-list-field-header-text ">Date/Time Processed</th>
-                                <th class="sonata-ba-list-field-header-text ">Total Claim Amount</th>
+                                <th class="sonata-ba-list-field-header-text ">TRANSACTION_TYPE
+                                </th>
+                                <th class="sonata-ba-list-field-header-text ">CORP_CODE</th>
+                                <th class="sonata-ba-list-field-header-text ">EMP_NO</th>
+                                <th class="sonata-ba-list-field-header-text ">PAYMENT_PERIOD</th>
+                                <th class="sonata-ba-list-field-header-text ">FILLER1</th>
+                                <th class="sonata-ba-list-field-header-text ">FILLER2</th>
+                                <th class="sonata-ba-list-field-header-text ">PAY_ITEM_CODE</th>
+                                <th class="sonata-ba-list-field-header-text ">UNIT_PAID</th>
+                                <th class="sonata-ba-list-field-header-text ">CAL_METHOD</th>
 
                             </tr>
                             </thead>
 
                             <tbody>
-                            {% for position in data %}
+                            {% for item in data %}
+                                {% set claim = item[0] %}
+                                {% set unitPaid = item[1] %}
+                                {% set position = claim.position %}
                                 <tr>
-                                    <td>{{ position.employeeNo }}</td>
-                                    <td>{{ position.firstName ~' ' ~position.lastName }}</td>
-                                    <td>{{ position.company.name }}</td>
+                                    <td>02</td>
                                     <td>{{ position.costCentre ? position.costCentre.code :'N/A' }}</td>
-                                    <td>{{ position.employmentType ? position.employmentType.code :'N/A' }}</td>
-                                    <td>{{ position.employeeType ? position.employeeType.code :'N/A' }}</td>
-                                    <td>{{ position.region ? position.region.code :'N/A' }}</td>
-                                    <td>{{ position.branch ? position.branch.code :'N/A' }}</td>
-                                    <td>{{ position.section ? position.section.code :'N/A' }}</td>
-                                    <td>{{ getProcessedDate(from,position) }}</td>
-                                    <td>{{ getTotalAmountClaimEachEmployeeForHrReport(position)|number_format(2, '.', ',')}}</td>
+                                    <td>{{ position.employeeNo }}</td>
+                                    <td>{{ claim.processedDate|date('Ymd') }}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>{{ claim.payCode ? claim.payCode.code :'N/A' }}</td>
+                                    <td>{{ unitPaid|number_format(2, '.', ',')  }}</td>
+                                    <td>A</td>
                                 </tr>
                             {% endfor %}
                             </tbody>

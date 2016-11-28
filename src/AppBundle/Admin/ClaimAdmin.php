@@ -275,28 +275,6 @@ class ClaimAdmin extends BaseAdmin
 
                 ));
                 break;
-            case 'hr-report-each-position':
-                $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
-                    'callback' => function ($queryBuilder, $alias, $field, $value) {
-                        if (!$value['value']) {
-                            return;
-                        }
-                        $dateFilter = new  \DateTime($value['value']);
-                        $expr = new Expr();
-                        $queryBuilder->andWhere($expr->eq($alias . '.periodFrom', ':periodFrom'));
-                        $queryBuilder->setParameter('periodFrom', $dateFilter->format('Y-m-d'));
-                        return true;
-                    },
-                    'field_type' => 'choice',
-                    'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
-                        'choices' => $this->getContainer()->get('app.hr_rule')->getListClaimPeriodForFilterHrReport(),
-                        'placeholder' => 'Select a period',
-                        'empty_data' => null
-                    ],
-                    'advanced_filter' => false,
-
-                ));
-                break;
             case null:
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
@@ -334,7 +312,6 @@ class ClaimAdmin extends BaseAdmin
             case 'approving-each-position':
             case 'hr-each-position':
             case 'hr-reject-each-position':
-            case 'hr-report-each-position':
                 $listMapper
                     ->add('position.employeeNo', null, ['label' => 'Employee No'])
                     ->add('position.firstName', null, ['label' => 'Name'])
@@ -391,6 +368,7 @@ class ClaimAdmin extends BaseAdmin
         $collection->add('listUserSubmissionFor', 'list-user-submission-for');
         $collection->add('submitDraftClaims', 'submit-draft-claims');
         $collection->add('payMaster', 'pay-master');
+        $collection->add('formatPayMaster', 'format-pay-master');
         $collection->add('payMasterExport', '{from}/pay-master-report');
         $collection->add('formatPayMasterExport', '{filter}/format-pay-master-report');
         $collection->add('excelReport', 'excel-report');
@@ -578,8 +556,10 @@ class ClaimAdmin extends BaseAdmin
         if ($position->getId() == $claim->getPosition()->getId()) {
             //employee update for claim
             $result = $this->getContainer()->get('app.approver_rule')->assignClaimToSpecificApprover($claim, $position);
+            $payCode = $this->getContainer()->get('app.claim_rule')->getPayCode($claim);
             $claim->setApproverEmployee($result['approverEmployee']);
             $claim->setApproverBackupEmployee($result['approverBackupEmployee']);
+            $claim->setPayCode($payCode);
             if ($claim->getCurrencyExchange()) {
                 $claim->setExRate($this->getContainer()->get('app.claim_rule')->getExRate($claim->getCurrencyExchange()->getId(), $claim->getReceiptDate()));
             } else {

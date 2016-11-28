@@ -109,6 +109,17 @@ class ClaimRule
         return null;
     }
 
+    public function getPayCode($claim){
+        $em = $this->container->get('doctrine')->getManager();
+        $limitRule = $em->getRepository('AppBundle\Entity\LimitRule')->findOneBy([
+            'claimType' => $claim->getClaimType(),
+            'claimCategory' => $claim->getClaimCategory()
+        ]);
+        if (!$limitRule) {
+            return null;
+        }
+        return $limitRule->getPayCode();
+    }
     public function getLimitAmount(Claim $claim, $position)
     {
         $em = $this->container->get('doctrine')->getManager();

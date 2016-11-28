@@ -50,7 +50,7 @@ class HrRule extends ClaimRule
 
         $listPeriod = [];
         foreach ($claims as $claim) {
-            $listPeriod[$claim->getPeriodFrom()->format('d M Y') . ' - ' . $claim->getPeriodTo()->format('d M Y')] = $claim->getPeriodFrom()->format('Y-m-d');
+            $listPeriod[$claim->getPeriodFrom()->format('Y-m-d')] = $claim->getPeriodFrom()->format('d M Y') . ' - ' . $claim->getPeriodTo()->format('d M Y');
         }
         return $listPeriod;
     }
@@ -110,6 +110,50 @@ class HrRule extends ClaimRule
 
         return $qb->getQuery()->getResult();
     }
+    public function getProcessedDate($from,$position)
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $expr = new Expr();
+        $company = $this->getCompany();
+        $qb = $em->createQueryBuilder('claim');
+        $qb->select('claim');
+        $qb->from('AppBundle:claim', 'claim');
+        $qb->leftJoin('claim.position', 'position');
+        $qb->andWhere($expr->eq('position', ':position'));
+        $qb->andWhere($expr->eq('claim.status', ':statusProcessed'));
+        $qb->setParameter('statusProcessed', Claim::STATUS_PROCESSED);
+        $qb->setParameter('position', $position);
+        if ($from != 'none') {
+            $qb->andWhere($expr->eq('claim.periodFrom', ':periodFrom'));
+            $qb->setParameter('periodFrom', $from);
+        }
+
+        $result = $qb->getQuery()->getResult();
+        if(count($result)){
+            return $result[0]->getProcessedDate()->format('Ymd');
+        }
+    }
+    public function getDataForFormatPayMaster($from)
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $expr = new Expr();
+        $company = $this->getCompany();
+        $qb = $em->createQueryBuilder('claim');
+        $qb->select('claim,SUM(claim.claimAmountConverted)');
+        $qb->from('AppBundle:Claim', 'claim');
+        $qb->andWhere($expr->eq('claim.company', ':company'));
+        $qb->andWhere($expr->eq('claim.status', ':statusProcessed'));
+        $qb->groupBy('claim.payCode,claim.position');
+        $qb->setParameter('statusProcessed', Claim::STATUS_PROCESSED);
+        $qb->setParameter('company', $company);
+        if ($from != 'none') {
+            $qb->andWhere($expr->eq('claim.periodFrom', ':periodFrom'));
+            $qb->setParameter('periodFrom', $from);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
 
     public function getDataForExcelReport($from)
     {

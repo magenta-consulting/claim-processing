@@ -67,7 +67,7 @@ class PositionController extends Controller
         $this->addFlash('sonata_flash_success', 'Process Claims Successfully');
 
         return new RedirectResponse(
-            $this->admin->generateUrl('list', array('type'=>'hr-report','filter' => $this->admin->getFilterParameters()))
+            $this->generateUrl('admin_app_claim_formatPayMaster')
         );
     }
     /**

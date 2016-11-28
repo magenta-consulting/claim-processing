@@ -204,6 +204,11 @@ class Claim
      * @ORM\Column(name="ex_rate",type="string",nullable=true)
      */
     private $exRate;
+    /**
+     * @var PayCode
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PayCode")
+     */
+    private $payCode;
 
     public function __construct()
     {
@@ -219,6 +224,23 @@ class Claim
     {
         return $this->id;
     }
+
+    /**
+     * @return PayCode
+     */
+    public function getPayCode()
+    {
+        return $this->payCode;
+    }
+
+    /**
+     * @param PayCode $payCode
+     */
+    public function setPayCode($payCode)
+    {
+        $this->payCode = $payCode;
+    }
+
 
     /**
      * @return Date
@@ -741,7 +763,7 @@ class Claim
             $claimPolicy = $this->getClaimPolicy();
             $claimable = $claimPolicy->getClaimablePeriod();
             $to = date('Y-m-d');
-            $from = date('Y-m-d', strtotime('- '. $claimable.' month',strtotime($to)));
+            $from = date('Y-m-d', strtotime('- ' . $claimable . ' month', strtotime($to)));
             if ($this->getReceiptDate()->getTimestamp() < strtotime($from) || $this->getReceiptDate()->getTimestamp() > strtotime($to)) {
                 $context->buildViolation('This receipt date is invalid')
                     ->atPath('receiptDate')

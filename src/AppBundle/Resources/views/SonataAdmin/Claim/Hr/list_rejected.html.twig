@@ -16,7 +16,9 @@ file that was distributed with this source code.
 {%- endblock -%}
 
 {% block tab_menu %}{{ knp_menu_render(admin.sidemenu(action), {'currentClass' : 'active', 'template': sonata_admin.adminPool.getTemplate('tab_menu_template')}, 'twig') }}{% endblock %}
+      {% block sonata_breadcrumb %}
 
+      {% endblock sonata_breadcrumb %}
 {% block list_table %}
     <div class="col-xs-12 col-md-12">
         {% set batchactions = admin.batchactions %}
