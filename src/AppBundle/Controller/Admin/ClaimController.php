@@ -333,7 +333,6 @@ class ClaimController extends Controller
 
         if ($request->isMethod('post')) {
             if ($request->get('btn_checker_approve') == 1) {
-
                 $urlRedirect = $this->admin->generateUrl('list', ['type' => 'checking-each-position', 'position-id' => $object->getPosition()->getId()]);
                 $object->setCheckerUpdatedAt(new \DateTime());
                 $object->setCheckerRemark($request->get('checker-remark'));
@@ -345,18 +344,16 @@ class ClaimController extends Controller
                 $object->setStatus(Claim::STATUS_CHECKER_REJECTED);
             } else if ($request->get('btn_approver_approve') == 1) {
                 $urlRedirect = $this->admin->generateUrl('list', ['type' => 'approving-each-position', 'position-id' => $object->getPosition()->getId()]);
-                $object->setCheckerUpdatedAt(new \DateTime());
+                $object->setApproverUpdatedAt(new \DateTime());
                 $object->setStatus(Claim::STATUS_APPROVER_APPROVED);
             } else if ($request->get('btn_approver_reject') == 1) {
                 $urlRedirect = $this->admin->generateUrl('list', ['type' => 'approving-each-position', 'position-id' => $object->getPosition()->getId()]);
-                $object->setCheckerUpdatedAt(new \DateTime());
+                $object->setApproverUpdatedAt(new \DateTime());
                 $object->setStatus(Claim::STATUS_APPROVER_REJECTED);
             } else if ($request->get('btn_hr_reject') == 1) {
                 $urlRedirect = $this->admin->generateUrl('list', ['type' => 'hr-each-position', 'position-id' => $object->getPosition()->getId()]);
-                $object->setCheckerUpdatedAt(new \DateTime());
                 $object->setStatus(Claim::STATUS_HR_REJECTED);
             } else if ($request->get('btn_hr_delete') == 1) {
-
                 $this->admin->delete($object);
                 $urlRedirect = $this->admin->generateUrl('list', ['type' => 'hr-each-position', 'position-id' => $object->getPosition()->getId()]);
                 $this->addFlash(
