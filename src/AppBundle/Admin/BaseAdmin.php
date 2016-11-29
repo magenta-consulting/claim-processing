@@ -313,6 +313,20 @@ class BaseAdmin extends AbstractAdmin
                         $query->setParameter('statusApproverApproved', Claim::STATUS_APPROVER_APPROVED);
                         $query->setParameter('positionId', $positionId);
                         break;
+                    case 'hr-report-each-position':
+                        $positionId = $request->get('position-id');
+                        $query->join($query->getRootAliases()[0] . '.position', 'position');
+                        $query->andWhere(
+                            $expr->eq('position.id', ':positionId')
+                        );
+                        $query->andWhere(
+                            $expr->orX(
+                                $expr->eq($query->getRootAliases()[0] . '.status', ':statusHrApproved')
+                            )
+                        );
+                        $query->setParameter('statusHrApproved', Claim::STATUS_PROCESSED);
+                        $query->setParameter('positionId', $positionId);
+                        break;
                     case 'current':
                         $query->andWhere(
                             $expr->eq($query->getRootAliases()[0] . '.position', ':position')

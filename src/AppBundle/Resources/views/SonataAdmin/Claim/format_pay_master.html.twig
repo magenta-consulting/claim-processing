@@ -58,16 +58,9 @@
                                 <small>{{ app.user.loginWithPosition.company.name }}</small>
                                 <br>
                                 <p style="border-top: 1px solid black; margin-top: 10px;"></p>
-                                <strong>Claims Report Summary (Processed)
+                                <strong>Pay Master
                                 </strong><br><br>
-                                <a href="{{ path('admin_app_claim_payMaster')}}"
-                                   class="btn btn-primary">
-                                    Generate for PayMaster
-                                </a>
-                                <a href="{{ path('admin_app_claim_excelReport') }}"
-                                   class="btn btn-success">
-                                    Generate Excel Report
-                                </a>
+
                             </h4>
                         </div>
                             <a href="{{ path('admin_app_claim_formatPayMasterExport',{'filter':admin.filterParameters|json_encode}) }}"
@@ -110,6 +103,7 @@
                                     <td>{{ claim.payCode ? claim.payCode.code :'N/A' }}</td>
                                     <td>{{ unitPaid|number_format(2, '.', ',')  }}</td>
                                     <td>A</td>
+
                                 </tr>
                             {% endfor %}
                             </tbody>

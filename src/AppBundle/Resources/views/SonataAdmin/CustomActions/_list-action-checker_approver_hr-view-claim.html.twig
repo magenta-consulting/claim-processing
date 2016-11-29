@@ -6,4 +6,6 @@
     <a class="btn btn-sm btn-default edit_link" href="{{ path('admin_app_claim_show', {'id':object.id,'type':'hr-view-claim'}) }}">show</a>
 {% elseif app.request.get('type') == 'hr-reject-each-position' %}
     <a class="btn btn-sm btn-default edit_link" href="{{ path('admin_app_claim_show', {'id':object.id,'type':'hr-reject-view-claim'}) }}">show</a>
+{% elseif app.request.get('type') == 'hr-report-each-position' %}
+    <a class="btn btn-sm btn-default edit_link" href="{{ path('admin_app_claim_show', {'id':object.id,'type':'hr-report-view-claim'}) }}">show</a>
 {% endif %}

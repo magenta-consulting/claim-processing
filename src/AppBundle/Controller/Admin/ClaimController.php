@@ -21,7 +21,7 @@ class ClaimController extends Controller
     {
         $from = 'none';
         $filter = $this->getRequest()->get('filter');
-        if (isset($filter['claim_period'])) {
+        if (isset($filter['claim_period']) && $filter['claim_period']['value']) {
             $from = $filter['claim_period']['value'];
         }
         $data = $this->get('app.hr_rule')->getDataForFormatPayMaster($from);
@@ -82,20 +82,22 @@ class ClaimController extends Controller
         $response->headers->set('Content-Disposition', $dispositionHeader);
         return $response;
     }
-    public function payMasterAction()
+
+    public function excelReportAction()
     {
         $from = 'none';
         $filter = $this->getRequest()->get('filter');
-        if (isset($filter['claim_period'])) {
+        if (isset($filter['claim_period']) && $filter['claim_period']['value'] != '') {
             $from = $filter['claim_period']['value'];
         }
-        $data = $this->get('app.hr_rule')->getDataForPayMaster($from);
+        $data = $this->get('app.hr_rule')->getDataForExcelReport($from);
         $periods = $this->get('app.hr_rule')->getListClaimPeriodForFilterHrReport();
-        return $this->render('@App/SonataAdmin/Claim/pay_master.html.twig', ['data' => $data, 'from' => $from,'periods'=>$periods]);
+        return $this->render('@App/SonataAdmin/Claim/excel_report.html.twig', ['data' => $data, 'from' => $from,'periods'=>$periods]);
     }
-    public function payMasterExportAction($from)
+
+    public function excelReportExportAction($from)
     {
-        $positions = $this->get('app.hr_rule')->getDataForPayMaster($from);
+        $positions = $this->get('app.hr_rule')->getDataForExcelReport($from);
         $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
         //set some static value
         $phpExcelObject->setActiveSheetIndex(0)->setCellValue('A1', "Emp No.");
@@ -135,71 +137,6 @@ class ClaimController extends Controller
         // adding headers
         $dispositionHeader = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT, 'pay-master.xls'
-        );
-        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
-        $response->headers->set('Pragma', 'public');
-        $response->headers->set('Cache-Control', 'maxage=1');
-        $response->headers->set('Content-Disposition', $dispositionHeader);
-        return $response;
-    }
-
-    public function excelReportAction()
-    {
-        $from = 'none';
-        $filter = $this->getRequest()->get('filter');
-        if (isset($filter['claim_period'])) {
-            $from = $filter['claim_period']['value'];
-        }
-        $claims = $this->get('app.hr_rule')->getDataForExcelReport($from);
-        $periods = $this->get('app.hr_rule')->getListClaimPeriodForFilterHrReport();
-        return $this->render('@App/SonataAdmin/Claim/excel_report.html.twig', ['claims' => $claims, 'from' => $from,'periods'=>$periods]);
-    }
-
-    public function excelReportExportAction($from)
-    {
-        $claims = $this->get('app.hr_rule')->getDataForExcelReport($from);
-        $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
-        //set some static value
-        $phpExcelObject->setActiveSheetIndex(0)->setCellValue('A1', "Emp No.");
-        $phpExcelObject->setActiveSheetIndex(0)->setCellValue('B1', 'Name');
-        $phpExcelObject->setActiveSheetIndex(0)->setCellValue('C1', 'Company');
-        $phpExcelObject->setActiveSheetIndex(0)->setCellValue('D1', 'Cost Centre Code');
-        $phpExcelObject->setActiveSheetIndex(0)->setCellValue('E1', "Employment Type");
-        $phpExcelObject->setActiveSheetIndex(0)->setCellValue('F1', "Employee Type");
-        $phpExcelObject->setActiveSheetIndex(0)->setCellValue('G1', "Region");
-        $phpExcelObject->setActiveSheetIndex(0)->setCellValue('H1', "Branch");
-        $phpExcelObject->setActiveSheetIndex(0)->setCellValue('I1', "Section");
-        $phpExcelObject->setActiveSheetIndex(0)->setCellValue('J1', "Date/Time Processed");
-        $phpExcelObject->setActiveSheetIndex(0)->setCellValue('K1', "Claim Type");
-        $phpExcelObject->setActiveSheetIndex(0)->setCellValue('L1', "Claim Category");
-        $phpExcelObject->setActiveSheetIndex(0)->setCellValue('M1', "Claim Amount");
-
-        foreach ($claims as $k => $claim) {
-            $position = $claim->getPosition();
-            $num = $k + 2;
-            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('A' . $num, $position->getEmployeeNo());
-            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('B' . $num, $position->getFirstName() . ' ' . $position->getLastName());
-            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('C' . $num, $position->getCompany()->getName());
-            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('D' . $num, $position->getCostCentre() ? $position->getCostCentre()->getCode() : 'N/A');
-            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('E' . $num, $position->getEmploymentType() ? $position->getEmploymentType()->getCode() : 'N/A');
-            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('F' . $num, $position->getEmployeeType() ? $position->getEmployeeType()->getCode() : 'N/A');
-            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('G' . $num, $position->getRegion() ? $position->getRegion()->getCode() : 'N/A');
-            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('H' . $num, $position->getBranch() ? $position->getBranch()->getCode() : 'N/A');
-            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('I' . $num, $position->getSection() ? $position->getSection()->getCode() : 'N/A');
-            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('J' . $num, $claim->getProcessedDate()->format('Ymd'));
-            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('K' . $num, $claim->getClaimType()->getCode());
-            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('L' . $num, $claim->getClaimCategory()->getCode());
-            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('M' . $num, number_format($claim->getClaimAmountConverted(), 2, '.', ','));
-        }
-        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
-        $phpExcelObject->setActiveSheetIndex(0);
-        // create the writer
-        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
-        // create the response
-        $response = $this->get('phpexcel')->createStreamedResponse($writer);
-        // adding headers
-        $dispositionHeader = $response->headers->makeDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT, 'excel-report.xls'
         );
         $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
         $response->headers->set('Pragma', 'public');

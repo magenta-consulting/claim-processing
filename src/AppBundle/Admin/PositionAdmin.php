@@ -239,11 +239,13 @@ class PositionAdmin extends BaseAdmin
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
                         if (!$value['value']) {
-                            return;
+                            $dateFilter = new  \DateTime('1970-01-01');
+                        }else{
+                            $dateFilter = new  \DateTime($value['value']);
                         }
                         $expr = new Expr();
                         $queryBuilder->andWhere($expr->eq('claim.periodFrom', ':periodFrom'));
-                        $queryBuilder->setParameter('periodFrom', $value['value']);
+                        $queryBuilder->setParameter('periodFrom', $dateFilter->format('Y-m-d'));
 
                         return true;
                     },
@@ -261,11 +263,13 @@ class PositionAdmin extends BaseAdmin
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
                         if (!$value['value']) {
-                            return;
+                            $dateFilter = new  \DateTime('1970-01-01');
+                        }else{
+                            $dateFilter = new  \DateTime($value['value']);
                         }
                         $expr = new Expr();
                         $queryBuilder->andWhere($expr->eq('claim.periodFrom', ':periodFrom'));
-                        $queryBuilder->setParameter('periodFrom', $value['value']);
+                        $queryBuilder->setParameter('periodFrom', $dateFilter->format('Y-m-d'));
 
                         return true;
                     },
@@ -284,11 +288,13 @@ class PositionAdmin extends BaseAdmin
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
                         if (!$value['value']) {
-                            return;
+                            $dateFilter = new  \DateTime('1970-01-01');
+                        }else{
+                            $dateFilter = new  \DateTime($value['value']);
                         }
                         $expr = new Expr();
                         $queryBuilder->andWhere($expr->eq('claim.periodFrom', ':periodFrom'));
-                        $queryBuilder->setParameter('periodFrom', $value['value']);
+                        $queryBuilder->setParameter('periodFrom', $dateFilter->format('Y-m-d'));
 
                         return true;
                     },

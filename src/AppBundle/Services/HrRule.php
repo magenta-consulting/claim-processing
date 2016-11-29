@@ -33,7 +33,7 @@ class HrRule extends ClaimRule
         return $listPeriod;
     }
 
-    public function getListClaimPeriodForFilterHrReport()
+    public function getListClaimPeriodForFilterHrReport($reverse = 0)
     {
         $expr = new Expr();
         $company = $this->getCompany();
@@ -49,8 +49,14 @@ class HrRule extends ClaimRule
         $claims = $qb->getQuery()->getResult();
 
         $listPeriod = [];
-        foreach ($claims as $claim) {
-            $listPeriod[$claim->getPeriodFrom()->format('Y-m-d')] = $claim->getPeriodFrom()->format('d M Y') . ' - ' . $claim->getPeriodTo()->format('d M Y');
+        if ($reverse == 0) {
+            foreach ($claims as $claim) {
+                $listPeriod[$claim->getPeriodFrom()->format('Y-m-d')] = $claim->getPeriodFrom()->format('d M Y') . ' - ' . $claim->getPeriodTo()->format('d M Y');
+            }
+        } else {
+            foreach ($claims as $claim) {
+                $listPeriod[$claim->getPeriodFrom()->format('d M Y') . ' - ' . $claim->getPeriodTo()->format('d M Y')] = $claim->getPeriodFrom()->format('Y-m-d');
+            }
         }
         return $listPeriod;
     }
@@ -110,7 +116,8 @@ class HrRule extends ClaimRule
 
         return $qb->getQuery()->getResult();
     }
-    public function getProcessedDate($from,$position)
+
+    public function getProcessedDate($from, $position)
     {
         $em = $this->container->get('doctrine')->getManager();
         $expr = new Expr();
@@ -129,13 +136,14 @@ class HrRule extends ClaimRule
         }
 
         $result = $qb->getQuery()->getResult();
-        if(count($result)){
-            if($result[0]->getProcessedDate()) {
+        if (count($result)) {
+            if ($result[0]->getProcessedDate()) {
                 return $result[0]->getProcessedDate()->format('Ymd');
             }
         }
         return null;
     }
+
     public function getDataForFormatPayMaster($from)
     {
         $em = $this->container->get('doctrine')->getManager();
@@ -152,6 +160,8 @@ class HrRule extends ClaimRule
         if ($from != 'none') {
             $qb->andWhere($expr->eq('claim.periodFrom', ':periodFrom'));
             $qb->setParameter('periodFrom', $from);
+        } else {
+            return [];
         }
 
         return $qb->getQuery()->getResult();
@@ -163,10 +173,11 @@ class HrRule extends ClaimRule
         $em = $this->container->get('doctrine')->getManager();
         $expr = new Expr();
         $company = $this->getCompany();
-        $qb = $em->createQueryBuilder('claim');
-        $qb->select('claim');
-        $qb->from('AppBundle:Claim', 'claim');
-        $qb->leftJoin('claim.company', 'company');
+        $qb = $em->createQueryBuilder('position');
+        $qb->select('position');
+        $qb->from('AppBundle:Position', 'position');
+        $qb->leftJoin('position.claims', 'claim');
+        $qb->leftJoin('position.company', 'company');
         $qb->andWhere(
             $expr->eq('company', ':company')
         );
@@ -176,6 +187,8 @@ class HrRule extends ClaimRule
         if ($from != 'none') {
             $qb->andWhere($expr->eq('claim.periodFrom', ':periodFrom'));
             $qb->setParameter('periodFrom', $from);
+        } else {
+            return [];
         }
 
         return $qb->getQuery()->getResult();

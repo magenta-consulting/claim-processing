@@ -58,8 +58,12 @@
                                 <small>{{ app.user.loginWithPosition.company.name }}</small>
                                 <br>
                                 <p style="border-top: 1px solid black; margin-top: 10px;"></p>
-                                <strong>Excel Report
+                                <strong>Claims Report Summary (Processed)
                                 </strong><br><br>
+                                <a href="{{ path('admin_app_claim_formatPayMaster')}}"
+                                   class="btn btn-primary">
+                                    Generate for PayMaster
+                                </a>
                             </h4>
                         </div>
                         <a href="{{ path('admin_app_claim_excelReportExport',{'from':from}) }}"
@@ -83,16 +87,14 @@
                                 <th class="sonata-ba-list-field-header-text ">Branch</th>
                                 <th class="sonata-ba-list-field-header-text ">Section</th>
                                 <th class="sonata-ba-list-field-header-text ">Date/Time Processed</th>
-                                <th class="sonata-ba-list-field-header-text ">Claim Type</th>
-                                <th class="sonata-ba-list-field-header-text ">Claim Category</th>
-                                <th class="sonata-ba-list-field-header-text ">Claim Amount</th>
+                                <th class="sonata-ba-list-field-header-text ">Total Claim Amount</th>
+                                <th class="sonata-ba-list-field-header-text ">Action</th>
 
                             </tr>
                             </thead>
 
                             <tbody>
-                            {% for claim in claims %}
-                                {% set position = claim.position %}
+                            {% for position in data %}
                                 <tr>
                                     <td>{{ position.employeeNo }}</td>
                                     <td>{{ position.firstName ~' ' ~position.lastName }}</td>
@@ -103,10 +105,10 @@
                                     <td>{{ position.region ? position.region.code :'N/A' }}</td>
                                     <td>{{ position.branch ? position.branch.code :'N/A' }}</td>
                                     <td>{{ position.section ? position.section.code :'N/A' }}</td>
-                                    <td>{{ claim.processedDate|date('Ymd') }}</td>
-                                    <td>{{ claim.claimType.code }}</td>
-                                    <td>{{ claim.claimCategory.code }}</td>
-                                    <td>{{ claim.claimAmountConverted | number_format(2, '.', ',') }}</td>
+                                    <td>{{ getProcessedDate(from,position) }}</td>
+                                    <td>{{ getTotalAmountClaimEachEmployeeForHrReport(position)|number_format(2, '.', ',')}}</td>
+                                    <td>    <a class="btn btn-sm btn-default"
+                                               href="{{ path('admin_app_claim_list', {'type':'hr-report-each-position','position-id':position.id,'filter':app.request.get('filter')}) }}">Detail</a></td>
                                 </tr>
                             {% endfor %}
                             </tbody>
