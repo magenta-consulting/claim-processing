@@ -6,6 +6,8 @@
     {% include 'AppBundle:SonataAdmin/Claim/Hr:show.html.twig' %}
 {% elseif app.request.get('type') == 'hr-reject-view-claim' %}
     {% include 'AppBundle:SonataAdmin/Claim/Hr:show_rejected.html.twig' %}
+{% elseif app.request.get('type') == 'hr-report-view-claim' %}
+    {% include 'AppBundle:SonataAdmin/Claim/Hr:show_report.html.twig' %}
 {% elseif app.request.get('type') == 'employee-preview-claim' %}
     {% include 'AppBundle:SonataAdmin/Claim/Employee:show_preview.html.twig' %}
 {% else %}

@@ -72,7 +72,7 @@ class HrRule extends ClaimRule
     }
 
 
-    public function getTotalAmountClaimEachEmployeeForHr($position)
+    public function getTotalAmountClaimEachEmployeeForHr($position,$from)
     {
         $expr = new Expr();
         $em = $this->container->get('doctrine')->getManager();
@@ -83,12 +83,18 @@ class HrRule extends ClaimRule
         $qb->andWhere($expr->eq('claim.status', ':statusApproverApproved'));
         $qb->setParameter('statusApproverApproved', Claim::STATUS_APPROVER_APPROVED);
         $qb->setParameter('position', $position);
+        if ($from !='all') {
+            $dateFilter = new  \DateTime($from);
+            $qb->andWhere($expr->eq('claim.periodFrom', ':periodFrom'));
+            $qb->setParameter('periodFrom', $dateFilter->format('Y-m-d'));
+        }
 
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function getTotalAmountClaimEachEmployeeForHrReport($position)
+    public function getTotalAmountClaimEachEmployeeForHrReport($position,$from)
     {
+
         $expr = new Expr();
         $em = $this->container->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder('claim');
@@ -98,6 +104,11 @@ class HrRule extends ClaimRule
         $qb->andWhere($expr->eq('claim.status', ':statusHrApproved'));
         $qb->setParameter('statusHrApproved', Claim::STATUS_PROCESSED);
         $qb->setParameter('position', $position);
+        if ($from !='all') {
+            $dateFilter = new  \DateTime($from);
+            $qb->andWhere($expr->eq('claim.periodFrom', ':periodFrom'));
+            $qb->setParameter('periodFrom', $dateFilter->format('Y-m-d'));
+        }
 
         return $qb->getQuery()->getSingleScalarResult();
     }

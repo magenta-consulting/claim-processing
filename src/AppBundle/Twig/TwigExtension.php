@@ -35,13 +35,13 @@ class TwigExtension extends \Twig_Extension
     {
         return $this->container->get('app.approver_rule')->getNumberClaimEachEmployeeForApprover($position, $positionApprover);
     }
-    public function getTotalAmountClaimEachEmployeeForHr($position)
+    public function getTotalAmountClaimEachEmployeeForHr($position,$from)
     {
-        return $this->container->get('app.hr_rule')->getTotalAmountClaimEachEmployeeForHr($position);
+        return $this->container->get('app.hr_rule')->getTotalAmountClaimEachEmployeeForHr($position,$from);
     }
-    public function getTotalAmountClaimEachEmployeeForHrReport($position)
+    public function getTotalAmountClaimEachEmployeeForHrReport($position,$from)
     {
-        return $this->container->get('app.hr_rule')->getTotalAmountClaimEachEmployeeForHrReport($position);
+        return $this->container->get('app.hr_rule')->getTotalAmountClaimEachEmployeeForHrReport($position,$from);
     }
 
 

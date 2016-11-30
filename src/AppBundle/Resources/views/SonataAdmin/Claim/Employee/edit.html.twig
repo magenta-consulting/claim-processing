@@ -153,6 +153,9 @@
  {% block sonata_page_content_header %}
 
  {% endblock %}
+    {% block sonata_breadcrumb %}
+
+    {% endblock sonata_breadcrumb %}
 {% block sonata_form_action_url %}
     {% if app.request.get('type') == 'onbehalf' %}
         {{ admin.generateUrl(url, {'id': admin.id(object),'type':'onbehalf','position-id':app.request.get('position-id'), 'uniqid': admin.uniqid, 'subclass': app.request.get('subclass')}) }}

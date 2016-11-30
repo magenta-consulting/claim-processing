@@ -109,7 +109,7 @@ class ClaimController extends Controller
 
         foreach ($positions as $k => $position) {
             $num = $k + 2;
-            $totalAmount = $this->get('app.hr_rule')->getTotalAmountClaimEachEmployeeForHrReport($position);
+            $totalAmount = $this->get('app.hr_rule')->getTotalAmountClaimEachEmployeeForHrReport($position,$from);
             $processedDate = $this->get('app.hr_rule')->getProcessedDate($from,$position);
             $phpExcelObject->setActiveSheetIndex(0)->setCellValue('A' . $num, $position->getEmployeeNo());
             $phpExcelObject->setActiveSheetIndex(0)->setCellValue('B' . $num, $position->getFirstName() . ' ' . $position->getLastName());

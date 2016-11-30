@@ -106,7 +106,7 @@
                                     <td>{{ position.branch ? position.branch.code :'N/A' }}</td>
                                     <td>{{ position.section ? position.section.code :'N/A' }}</td>
                                     <td>{{ getProcessedDate(from,position) }}</td>
-                                    <td>{{ getTotalAmountClaimEachEmployeeForHrReport(position)|number_format(2, '.', ',')}}</td>
+                                    <td>{{ getTotalAmountClaimEachEmployeeForHrReport(position,from)|number_format(2, '.', ',')}}</td>
                                     <td>    <a class="btn btn-sm btn-default"
                                                href="{{ path('admin_app_claim_list', {'type':'hr-report-each-position','position-id':position.id,'filter':app.request.get('filter')}) }}">Detail</a></td>
                                 </tr>

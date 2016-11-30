@@ -12,15 +12,19 @@ file that was distributed with this source code.
 {% extends admin.getTemplate('base_list_field') %}
 
 {% block field %}
+    {% if app.request.get('filter') is not empty %}
+        {% set from = app.request.get('filter')['claim_period']['value'] %}
+    {% else %}
+        {% set from = getCurrentClaimPeriod('from')|date('Y-m-d') %}
+    {% endif %}
+
     {% if app.request.get('type') == 'checking' %}
         {{ getNumberClaimEachEmployeeForChecker(object,app.user.loginWithPosition) }}
     {% elseif app.request.get('type') == 'approving'  %}
         {{ getNumberClaimEachEmployeeForApprover(object,app.user.loginWithPosition) }}
     {% elseif app.request.get('type') == 'hr'  %}
-        {{ getTotalAmountClaimEachEmployeeForHr(object)|number_format(2, '.', ',') }}
-    {% elseif app.request.get('type') == 'hr-report'  %}
-        {{ getTotalAmountClaimEachEmployeeForHrReport(object)|number_format(2, '.', ',') }}
+        {{ getTotalAmountClaimEachEmployeeForHr(object,from)|number_format(2, '.', ',') }}
     {% elseif app.request.get('type') == 'hr-reject'  %}
-        {{ getTotalAmountClaimEachEmployeeForHr(object)|number_format(2, '.', ',') }}
+        {{ getTotalAmountClaimEachEmployeeForHr(object,from)|number_format(2, '.', ',') }}
     {% endif %}
 {% endblock %}
