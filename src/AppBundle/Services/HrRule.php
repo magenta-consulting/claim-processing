@@ -26,7 +26,10 @@ class HrRule extends ClaimRule
         $qb->setParameter('company', $company);
         $claims = $qb->getQuery()->getResult();
 
-        $listPeriod = [];
+        $listPeriod = ['Show All' => 'all'];
+        $from = $this->getCurrentClaimPeriod('from');
+        $to = $this->getCurrentClaimPeriod('to');
+        $listPeriod[$from->format('d M Y') . ' - ' . $to->format('d M Y')] = $from->format('Y-m-d');
         foreach ($claims as $claim) {
             $listPeriod[$claim->getPeriodFrom()->format('d M Y') . ' - ' . $claim->getPeriodTo()->format('d M Y')] = $claim->getPeriodFrom()->format('Y-m-d');
         }
@@ -48,12 +51,19 @@ class HrRule extends ClaimRule
         $qb->setParameter('company', $company);
         $claims = $qb->getQuery()->getResult();
 
-        $listPeriod = [];
         if ($reverse == 0) {
+            $listPeriod = ['all' => 'Show All'];
+            $from = $this->getCurrentClaimPeriod('from');
+            $to = $this->getCurrentClaimPeriod('to');
+            $listPeriod[$from->format('Y-m-d')] = $from->format('d M Y') . ' - ' . $to->format('d M Y');
             foreach ($claims as $claim) {
                 $listPeriod[$claim->getPeriodFrom()->format('Y-m-d')] = $claim->getPeriodFrom()->format('d M Y') . ' - ' . $claim->getPeriodTo()->format('d M Y');
             }
         } else {
+            $listPeriod = ['Show All' => 'all'];
+            $from = $this->getCurrentClaimPeriod('from');
+            $to = $this->getCurrentClaimPeriod('to');
+            $listPeriod[$from->format('d M Y') . ' - ' . $to->format('d M Y')] = $from->format('Y-m-d');
             foreach ($claims as $claim) {
                 $listPeriod[$claim->getPeriodFrom()->format('d M Y') . ' - ' . $claim->getPeriodTo()->format('d M Y')] = $claim->getPeriodFrom()->format('Y-m-d');
             }
@@ -157,11 +167,9 @@ class HrRule extends ClaimRule
         $qb->groupBy('claim.payCode,claim.position');
         $qb->setParameter('statusProcessed', Claim::STATUS_PROCESSED);
         $qb->setParameter('company', $company);
-        if ($from != 'none') {
+        if ($from != 'all') {
             $qb->andWhere($expr->eq('claim.periodFrom', ':periodFrom'));
             $qb->setParameter('periodFrom', $from);
-        } else {
-            return [];
         }
 
         return $qb->getQuery()->getResult();
@@ -184,11 +192,9 @@ class HrRule extends ClaimRule
         $qb->andWhere($expr->eq('claim.status', ':statusProcessed'));
         $qb->setParameter('statusProcessed', Claim::STATUS_PROCESSED);
         $qb->setParameter('company', $company);
-        if ($from != 'none') {
+        if ($from != 'all') {
             $qb->andWhere($expr->eq('claim.periodFrom', ':periodFrom'));
             $qb->setParameter('periodFrom', $from);
-        } else {
-            return [];
         }
 
         return $qb->getQuery()->getResult();

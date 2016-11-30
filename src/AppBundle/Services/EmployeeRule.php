@@ -25,7 +25,10 @@ class EmployeeRule extends ClaimRule
         $qb->setParameter('position', $position);
         $claims = $qb->getQuery()->getResult();
 
-        $listPeriod = [];
+        $listPeriod = ['Show All'=>'all'];
+        $from = $this->getCurrentClaimPeriod('from');
+        $to = $this->getCurrentClaimPeriod('to');
+        $listPeriod[$from->format('d M Y') . ' - ' . $to->format('d M Y')] = $from->format('Y-m-d');
         foreach ($claims as $claim) {
             $listPeriod[$claim->getPeriodFrom()->format('d M Y') . ' - ' . $claim->getPeriodTo()->format('d M Y')] = $claim->getPeriodFrom()->format('Y-m-d');
         }

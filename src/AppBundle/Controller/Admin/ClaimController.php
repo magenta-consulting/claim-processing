@@ -19,7 +19,7 @@ class ClaimController extends Controller
 
     public function formatPayMasterAction()
     {
-        $from = 'none';
+        $from = $this->get('app.claim_rule')->getCurrentClaimPeriod('from')->format('Y-m-d');
         $filter = $this->getRequest()->get('filter');
         if (isset($filter['claim_period']) && $filter['claim_period']['value']) {
             $from = $filter['claim_period']['value'];
@@ -31,13 +31,8 @@ class ClaimController extends Controller
             'data' => $data, 'from' => $from,'periods'=>$periods
         ]);
     }
-    public function formatPayMasterExportAction($filter)
+    public function formatPayMasterExportAction($from)
     {
-        $from = 'none';
-        $filter = json_decode($filter,true);
-        if (isset($filter['claim_period'])) {
-            $from = $filter['claim_period']['value'];
-        }
         $data = $this->get('app.hr_rule')->getDataForFormatPayMaster($from);
         $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
         //set some static value
@@ -85,7 +80,7 @@ class ClaimController extends Controller
 
     public function excelReportAction()
     {
-        $from = 'none';
+        $from = $this->get('app.claim_rule')->getCurrentClaimPeriod('from')->format('Y-m-d');
         $filter = $this->getRequest()->get('filter');
         if (isset($filter['claim_period']) && $filter['claim_period']['value'] != '') {
             $from = $filter['claim_period']['value'];

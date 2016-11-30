@@ -238,8 +238,8 @@ class PositionAdmin extends BaseAdmin
             case 'checking':
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
-                        if (!$value['value']) {
-                            $dateFilter = new  \DateTime('1970-01-01');
+                        if ($value['value']==='all') {
+                            return;
                         }else{
                             $dateFilter = new  \DateTime($value['value']);
                         }
@@ -252,8 +252,7 @@ class PositionAdmin extends BaseAdmin
                     'field_type' => 'choice',
                     'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
                         'choices' => $this->getContainer()->get('app.checker_rule')->getListClaimPeriodForFilterChecker(),
-                        'placeholder' => 'Select a period',
-                        'empty_data' => null
+                        'empty_data' => $this->getContainer()->get('app.claim_rule')->getCurrentClaimPeriod('from')->format('Y-m-d'),
                     ],
                     'advanced_filter' => false,
 
@@ -262,8 +261,8 @@ class PositionAdmin extends BaseAdmin
             case 'approving':
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
-                        if (!$value['value']) {
-                            $dateFilter = new  \DateTime('1970-01-01');
+                        if ($value['value']==='all') {
+                            return;
                         }else{
                             $dateFilter = new  \DateTime($value['value']);
                         }
@@ -276,8 +275,7 @@ class PositionAdmin extends BaseAdmin
                     'field_type' => 'choice',
                     'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
                         'choices' => $this->getContainer()->get('app.approver_rule')->getListClaimPeriodForFilterApprover(),
-                        'placeholder' => 'Select a period',
-                        'empty_data' => null
+                        'empty_data' => $this->getContainer()->get('app.claim_rule')->getCurrentClaimPeriod('from')->format('Y-m-d'),
                     ],
                     'advanced_filter' => false,
 
@@ -287,8 +285,8 @@ class PositionAdmin extends BaseAdmin
             case 'hr-reject':
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
-                        if (!$value['value']) {
-                            $dateFilter = new  \DateTime('1970-01-01');
+                        if ($value['value']==='all') {
+                            return;
                         }else{
                             $dateFilter = new  \DateTime($value['value']);
                         }
@@ -299,10 +297,10 @@ class PositionAdmin extends BaseAdmin
                         return true;
                     },
                     'field_type' => 'choice',
-                    'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
+                    'field_options' => [
+                        'attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
                         'choices' => $this->getContainer()->get('app.hr_rule')->getListClaimPeriodForFilterHr(),
-                        'placeholder' => 'Select a period',
-                        'empty_data' => null
+                        'empty_data' => $this->getContainer()->get('app.claim_rule')->getCurrentClaimPeriod('from')->format('Y-m-d'),
                     ],
                     'advanced_filter' => false,
 

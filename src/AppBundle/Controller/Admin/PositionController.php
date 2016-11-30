@@ -67,7 +67,7 @@ class PositionController extends Controller
         $this->addFlash('sonata_flash_success', 'Process Claims Successfully');
 
         return new RedirectResponse(
-            $this->generateUrl('admin_app_claim_formatPayMaster')
+            $this->generateUrl('admin_app_claim_excelReport')
         );
     }
     /**

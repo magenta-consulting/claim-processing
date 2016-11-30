@@ -17,7 +17,7 @@
 
                                         <div class="col-sm-4">
                                             <select id="filter_claim_period_value" name="filter[claim_period][value]" placeholder="Name, Email, Employee No, NRIC/Fin" class=" form-control">
-                                                <option value="">Select a period</option>
+                                                <option value=""></option>
                                                 {% for key,period in periods %}
                                                     <option {{ from == key ? 'selected':''}} value="{{ key }}">{{ period }}</option>
                                                 {% endfor %}
@@ -60,7 +60,7 @@
                                 <p style="border-top: 1px solid black; margin-top: 10px;"></p>
                                 <strong>Claims Report Summary (Processed)
                                 </strong><br><br>
-                                <a href="{{ path('admin_app_claim_formatPayMaster')}}"
+                                <a href="{{ path('admin_app_claim_formatPayMaster',{'filter':app.request.get('filter')})}}"
                                    class="btn btn-primary">
                                     Generate for PayMaster
                                 </a>
