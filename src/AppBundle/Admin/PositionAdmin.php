@@ -410,7 +410,7 @@ class PositionAdmin extends BaseAdmin
                     ->add('firstName', null, ['label' => 'Name'])
                     ->add('company.name', null, ['label' => 'Company'])
                     ->add('employeeGroup.costCentre.code', null, ['label' => 'Cost Centre'])
-                    ->add('2', 'number_claim', ['label' => 'No. Pending Claims'])
+                    ->add('2', 'number_claim', ['label' => 'No. Claims'])
                     ->add('_action', null, array(
                         'actions' => array(
                             'list' => array(
