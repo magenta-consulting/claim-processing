@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Entity\ApproverHistory;
+use AppBundle\Entity\CheckerHistory;
 use AppBundle\Entity\Claim;
 use AppBundle\Entity\ClaimMedia;
 use AppBundle\Entity\Position;
@@ -246,6 +248,7 @@ class ClaimController extends Controller
     public function showAction($id = null)
     {
         $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
         $id = $request->get($this->admin->getIdParameter());
 
         $object = $this->admin->getObject($id);
@@ -269,6 +272,15 @@ class ClaimController extends Controller
                 $object->setCheckerUpdatedAt(new \DateTime());
                 $object->setCheckerRemark($request->get('checker-remark'));
                 $object->setStatus(Claim::STATUS_CHECKER_APPROVED);
+                //add history
+                $history = new CheckerHistory();
+                $history->setClaim($object);
+                $history->setPosition($object->getPosition());
+                $history->setCheckerPosition($object->getChecker()->getChecker());
+                $history->setPeriodFrom($object->getPeriodFrom());
+                $history->setPeriodTo($object->getPeriodTo());
+                $em->persist($history);
+                $em->flush();
             } else if ($request->get('btn_checker_reject') == 1) {
                 $urlRedirect = $this->admin->generateUrl('list', ['type' => 'checking-each-position', 'position-id' => $object->getPosition()->getId()]);
                 $object->setCheckerUpdatedAt(new \DateTime());
@@ -278,6 +290,15 @@ class ClaimController extends Controller
                 $urlRedirect = $this->admin->generateUrl('list', ['type' => 'approving-each-position', 'position-id' => $object->getPosition()->getId()]);
                 $object->setApproverUpdatedAt(new \DateTime());
                 $object->setStatus(Claim::STATUS_APPROVER_APPROVED);
+                //add history
+                $history = new ApproverHistory();
+                $history->setClaim($object);
+                $history->setPosition($object->getPosition());
+                $history->setApproverPosition($object->getApproverEmployee());
+                $history->setPeriodFrom($object->getPeriodFrom());
+                $history->setPeriodTo($object->getPeriodTo());
+                $em->persist($history);
+                $em->flush();
             } else if ($request->get('btn_approver_reject') == 1) {
                 $urlRedirect = $this->admin->generateUrl('list', ['type' => 'approving-each-position', 'position-id' => $object->getPosition()->getId()]);
                 $object->setApproverUpdatedAt(new \DateTime());

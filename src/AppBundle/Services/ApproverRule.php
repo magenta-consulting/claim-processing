@@ -209,6 +209,18 @@ class ApproverRule extends ClaimRule
 
         return $qb->getQuery()->getSingleScalarResult();
     }
+    public function isShowMenuForApproverHistory($position)
+    {
+        $expr = new Expr();
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder('approverHistory');
+        $qb->select($qb->expr()->count('approverHistory.id'));
+        $qb->from('AppBundle:approverHistory', 'approverHistory');
+        $qb->where($expr->eq('approverHistory.approverPosition', ':approverPosition'));
+        $qb->setParameter('approverPosition', $position);
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
 
 
 }

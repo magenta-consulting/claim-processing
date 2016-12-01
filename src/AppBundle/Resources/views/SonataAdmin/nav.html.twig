@@ -162,14 +162,13 @@
                             style="font-size: 12px;">{{ resultCheckerNotification|length }}</span></a>
             </li>
         {% endif %}
-        <li data-route1="admin_app_position_list" class="last item"><a
-                    href="{{ path('admin_app_position_list',{'type':'checker-history'}) }}"><i
-                        class="fa fa-angle-double-right"></i>Checker History </a>
-        </li>
-        <li data-route1="admin_app_position_list" class="last item"><a
-                    href="{{ path('admin_app_position_list',{'type':'approver-history'}) }}"><i
-                        class="fa fa-angle-double-right"></i>Approver History </a>
-        </li>
+        {% if isShowMenuForCheckerHistory(app.user.loginWithPosition) %}
+            <li data-route1="admin_app_position_list" class="last item"><a
+                        href="{{ path('admin_app_position_list',{'type':'checker-history'}) }}"><i
+                            class="fa fa-angle-double-right"></i>Checker History </a>
+            </li>
+        {% endif %}
+
         {% if isShowMenuForApprover(app.user.loginWithPosition) %}
             {% set resultApproverNotification = getApproverNotification() %}
             <li data-route1="admin_app_position_list" class="last item"><a
@@ -177,6 +176,12 @@
                             class="fa fa-angle-double-right"></i>Claims For Approval <span
                             class="label label-danger number-notification-not-view"
                             style="font-size: 12px;">{{ resultApproverNotification|length }}</span></a>
+            </li>
+        {% endif %}
+        {% if isShowMenuForApproverHistory(app.user.loginWithPosition) %}
+            <li data-route1="admin_app_position_list" class="last item"><a
+                        href="{{ path('admin_app_position_list',{'type':'approver-history'}) }}"><i
+                            class="fa fa-angle-double-right"></i>Approver History </a>
             </li>
         {% endif %}
 

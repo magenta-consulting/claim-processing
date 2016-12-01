@@ -138,5 +138,17 @@ class CheckerRule extends ClaimRule
 
         return $qb->getQuery()->getSingleScalarResult();
     }
+    public function isShowMenuForCheckerHistory($position)
+    {
+        $expr = new Expr();
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder('checkerHistory');
+        $qb->select($qb->expr()->count('checkerHistory.id'));
+        $qb->from('AppBundle:checkerHistory', 'checkerHistory');
+        $qb->where($expr->eq('checkerHistory.checkerPosition', ':checkerPosition'));
+        $qb->setParameter('checkerPosition', $position);
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
 
 }

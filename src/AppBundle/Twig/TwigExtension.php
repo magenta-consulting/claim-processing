@@ -57,10 +57,18 @@ class TwigExtension extends \Twig_Extension
     {
         return $this->container->get('app.checker_rule')->isShowMenuForChecker($position);
     }
+    public function isShowMenuForCheckerHistory($position)
+    {
+        return $this->container->get('app.checker_rule')->isShowMenuForCheckerHistory($position);
+    }
 
     public function isShowMenuForApprover($position)
     {
         return $this->container->get('app.approver_rule')->isShowMenuForApprover($position);
+    }
+    public function isShowMenuForApproverHistory($position)
+    {
+        return $this->container->get('app.approver_rule')->isShowMenuForApproverHistory($position);
     }
 
     public function getUrlMedia($media, $context = 'default', $format = 'reference')
@@ -222,6 +230,8 @@ class TwigExtension extends \Twig_Extension
             'getProcessedDate' => new \Twig_Function_Method($this, 'getProcessedDate', array('is_safe' => array('html'))),
             'getNumberClaimEachEmployeeForCheckerHistory' => new \Twig_Function_Method($this, 'getNumberClaimEachEmployeeForCheckerHistory', array('is_safe' => array('html'))),
             'getNumberClaimEachEmployeeForApproverHistory' => new \Twig_Function_Method($this, 'getNumberClaimEachEmployeeForApproverHistory', array('is_safe' => array('html'))),
+            'isShowMenuForApproverHistory' => new \Twig_Function_Method($this, 'isShowMenuForApproverHistory', array('is_safe' => array('html'))),
+            'isShowMenuForCheckerHistory' => new \Twig_Function_Method($this, 'isShowMenuForCheckerHistory', array('is_safe' => array('html'))),
 
         );
     }
