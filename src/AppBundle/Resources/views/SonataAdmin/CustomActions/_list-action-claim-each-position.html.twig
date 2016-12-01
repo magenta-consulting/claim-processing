@@ -2,9 +2,17 @@
     <a class="btn btn-sm btn-default"
        href="{{ path('admin_app_claim_list', {'type':'checking-each-position','position-id':object.id,'filter': admin.filterParameters}) }}">View
         Claims Of This User</a>
+{% elseif app.request.get('type') == 'checker-history' %}
+    <a class="btn btn-sm btn-default"
+       href="{{ path('admin_app_claim_list', {'type':'checker-history-each-position','position-id':object.id,'filter': admin.filterParameters}) }}">View
+        Claims Of This User</a>
 {% elseif app.request.get('type') == 'approving' %}
     <a class="btn btn-sm btn-default"
        href="{{ path('admin_app_claim_list', {'type':'approving-each-position','position-id':object.id,'filter': admin.filterParameters}) }}">View
+        Claims Of This User</a>
+{% elseif app.request.get('type') == 'approver-history' %}
+    <a class="btn btn-sm btn-default"
+       href="{{ path('admin_app_claim_list', {'type':'approver-history-each-position','position-id':object.id,'filter': admin.filterParameters}) }}">View
         Claims Of This User</a>
 {% elseif app.request.get('type') == 'hr' %}
     <a class="btn btn-sm btn-default"

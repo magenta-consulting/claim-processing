@@ -210,10 +210,25 @@ class Claim
      */
     private $payCode;
 
+    /**
+     * @var CheckerHistory
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\CheckerHistory",mappedBy="claim")
+     */
+    private $checkingHistories;
+
+    /**
+     * @var CheckerHistory
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ApproverHistory",mappedBy="claim")
+     */
+    private $approverHistories;
+
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
         $this->claimMedias = new ArrayCollection();
+        $this->checkingHistories = new ArrayCollection();
+        $this->approverHistories = new ArrayCollection();
         $this->status = self::STATUS_NOT_USE;
     }
 
@@ -224,6 +239,42 @@ class Claim
     {
         return $this->id;
     }
+
+    /**
+     * @return CheckerHistory
+     */
+    public function getApproverHistories()
+    {
+        return $this->approverHistories;
+    }
+
+    /**
+     * @param CheckerHistory $approverHistories
+     */
+    public function setApproverHistories($approverHistories)
+    {
+        $this->approverHistories = $approverHistories;
+    }
+
+
+
+    /**
+     * @return CheckerHistory
+     */
+    public function getCheckingHistories()
+    {
+        return $this->checkingHistories;
+    }
+
+    /**
+     * @param CheckerHistory $checkingHistories
+     */
+    public function setCheckingHistories($checkingHistories)
+    {
+        $this->checkingHistories = $checkingHistories;
+    }
+
+
 
     /**
      * @return PayCode

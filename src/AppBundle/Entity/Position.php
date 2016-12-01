@@ -21,6 +21,8 @@ class Position
         $this->createdDate = new \DateTime();
         $this->submissionBy = new ArrayCollection();
         $this->submissionFor = new ArrayCollection();
+        $this->checkingHistories = new ArrayCollection();
+        $this->approverHistories = new ArrayCollection();
         $this->roles = array();
         // your own logic
     }
@@ -150,6 +152,17 @@ class Position
     private $claims;
 
     /**
+     * @var CheckerHistory
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\CheckerHistory",mappedBy="position")
+     */
+    private $checkingHistories;
+    /**
+     * @var CheckerHistory
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ApproverHistory",mappedBy="position")
+     */
+    private $approverHistories;
+
+    /**
      * @var EmployeeType
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\EmployeeType")
      */
@@ -198,6 +211,42 @@ class Position
     {
         return $this->id;
     }
+
+    /**
+     * @return CheckerHistory
+     */
+    public function getApproverHistories()
+    {
+        return $this->approverHistories;
+    }
+
+    /**
+     * @param CheckerHistory $approverHistories
+     */
+    public function setApproverHistories($approverHistories)
+    {
+        $this->approverHistories = $approverHistories;
+    }
+
+
+    /**
+     * @return Claim
+     */
+    public function getCheckingHistories()
+    {
+        return $this->checkingHistories;
+    }
+
+    /**
+     * @param Claim $checkingHistories
+     */
+    public function setCheckingHistories($checkingHistories)
+    {
+        $this->checkingHistories = $checkingHistories;
+    }
+
+
+
     public function addSubmissionBy(PositionSubmitter $submissionBy){
         $this->submissionBy->add($submissionBy);
         $submissionBy->setSubmissionByPosition($this);

@@ -1,7 +1,11 @@
 {% if app.request.get('type') == 'checking' %}
     {% include '@App/SonataAdmin/Position/Checker/list.html.twig' %}
+{% elseif app.request.get('type') == 'checker-history' %}
+    {% include '@App/SonataAdmin/Position/Checker/list_checker_history.html.twig' %}
 {% elseif app.request.get('type') == 'approving' %}
     {% include '@App/SonataAdmin/Position/Approver/list.html.twig' %}
+{% elseif app.request.get('type') == 'approver-history' %}
+    {% include '@App/SonataAdmin/Position/Approver/list_approver_history.html.twig' %}
 {% elseif app.request.get('type') == 'hr' %}
     {% include '@App/SonataAdmin/Position/Hr/list.html.twig' %}
 {% elseif app.request.get('type') == 'hr-report' %}

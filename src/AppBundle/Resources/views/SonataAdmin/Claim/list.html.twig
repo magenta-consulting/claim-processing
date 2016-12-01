@@ -1,7 +1,11 @@
 {% if app.request.get('type') == 'checking-each-position' %}
     {% include 'AppBundle:SonataAdmin/Claim/Checker:list.html.twig' %}
+{% elseif app.request.get('type') == 'checker-history-each-position' %}
+    {% include 'AppBundle:SonataAdmin/Claim/Checker:list_checker_history.html.twig' %}
 {% elseif app.request.get('type') == 'approving-each-position' %}
     {% include 'AppBundle:SonataAdmin/Claim/Approver:list.html.twig' %}
+{% elseif app.request.get('type') == 'approver-history-each-position' %}
+    {% include 'AppBundle:SonataAdmin/Claim/Approver:list_approver_history.html.twig' %}
 {% elseif app.request.get('type') == 'hr-each-position' %}
     {% include 'AppBundle:SonataAdmin/Claim/Hr:list.html.twig' %}
 {% elseif app.request.get('type') == 'hr-reject-each-position' %}

@@ -61,6 +61,29 @@ class CheckerRule extends ClaimRule
         }
         return $listPeriod;
     }
+    public function getListClaimPeriodForFilterCheckerHistory()
+    {
+        $expr = new Expr();
+        $position = $this->getPosition();
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder('checkerHistory');
+        $qb->select('checkerHistory');
+        $qb->from('AppBundle:checkerHistory', 'checkerHistory');
+        $qb->join('checkerHistory.claim', 'claim');
+        $qb->andWhere($expr->eq('checkerHistory.checkerPosition', ':checkerPosition'));
+        $qb->orderBy('claim.createdAt', 'DESC');
+        $qb->setParameter('checkerPosition', $position);
+        $checkerHistories = $qb->getQuery()->getResult();
+
+        $listPeriod = ['Show All'=>'all'];
+        $from = $this->getCurrentClaimPeriod('from');
+        $to = $this->getCurrentClaimPeriod('to');
+        $listPeriod[$from->format('d M Y') . ' - ' . $to->format('d M Y')] = $from->format('Y-m-d');
+        foreach ($checkerHistories as $checkerHistory) {
+            $listPeriod[$checkerHistory->getPeriodFrom()->format('d M Y') . ' - ' . $checkerHistory->getPeriodTo()->format('d M Y')] = $checkerHistory->getPeriodFrom()->format('Y-m-d');
+        }
+        return $listPeriod;
+    }
 
     public function getNumberClaimEachEmployeeForChecker($position, $positionChecker)
     {
@@ -79,6 +102,26 @@ class CheckerRule extends ClaimRule
 
         return $qb->getQuery()->getSingleScalarResult();
     }
+    public function getNumberClaimEachEmployeeForCheckerHistory($position, $positionChecker,$from)
+    {
+        $expr = new Expr();
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder('checkerHistory');
+        $qb->select($qb->expr()->count('checkerHistory.id'));
+        $qb->from('AppBundle:checkerHistory', 'checkerHistory');
+        $qb->where('checkerHistory.position = :position');
+        $qb->andWhere('checkerHistory.checkerPosition = :checkerPosition');
+        $qb->setParameter('position', $position);
+        $qb->setParameter('checkerPosition', $positionChecker);
+        if ($from !='all') {
+            $dateFilter = new  \DateTime($from);
+            $qb->andWhere($expr->eq('checkerHistory.periodFrom', ':periodFrom'));
+            $qb->setParameter('periodFrom', $dateFilter->format('Y-m-d'));
+        }
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
 
     public function isShowMenuForChecker($position)
     {

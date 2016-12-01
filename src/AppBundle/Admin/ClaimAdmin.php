@@ -230,6 +230,28 @@ class ClaimAdmin extends BaseAdmin
 
                 ));
                 break;
+            case 'checker-history-each-position':
+                $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
+                    'callback' => function ($queryBuilder, $alias, $field, $value) {
+                        if ($value['value']==='all') {
+                            return;
+                        }else{
+                            $dateFilter = new  \DateTime($value['value']);
+                        }
+                        $expr = new Expr();
+                        $queryBuilder->andWhere($expr->eq($alias . '.periodFrom', ':periodFrom'));
+                        $queryBuilder->setParameter('periodFrom', $dateFilter->format('Y-m-d'));
+                        return true;
+                    },
+                    'field_type' => 'choice',
+                    'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
+                        'choices' => $this->getContainer()->get('app.checker_rule')->getListClaimPeriodForFilterCheckerHistory(),
+                        'empty_data' => $this->getContainer()->get('app.claim_rule')->getCurrentClaimPeriod('from')->format('Y-m-d'),
+                    ],
+                    'advanced_filter' => false,
+
+                ));
+                break;
             case 'approving-each-position':
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
@@ -246,6 +268,28 @@ class ClaimAdmin extends BaseAdmin
                     'field_type' => 'choice',
                     'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
                         'choices' => $this->getContainer()->get('app.approver_rule')->getListClaimPeriodForFilterApprover(),
+                        'empty_data' => $this->getContainer()->get('app.claim_rule')->getCurrentClaimPeriod('from')->format('Y-m-d'),
+                    ],
+                    'advanced_filter' => false,
+
+                ));
+                break;
+            case 'approver-history-each-position':
+                $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
+                    'callback' => function ($queryBuilder, $alias, $field, $value) {
+                        if ($value['value']==='all') {
+                            return;
+                        }else{
+                            $dateFilter = new  \DateTime($value['value']);
+                        }
+                        $expr = new Expr();
+                        $queryBuilder->andWhere($expr->eq($alias . '.periodFrom', ':periodFrom'));
+                        $queryBuilder->setParameter('periodFrom', $dateFilter->format('Y-m-d'));
+                        return true;
+                    },
+                    'field_type' => 'choice',
+                    'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
+                        'choices' => $this->getContainer()->get('app.approver_rule')->getListClaimPeriodForFilterApproverHistory(),
                         'empty_data' => $this->getContainer()->get('app.claim_rule')->getCurrentClaimPeriod('from')->format('Y-m-d'),
                     ],
                     'advanced_filter' => false,
@@ -313,8 +357,7 @@ class ClaimAdmin extends BaseAdmin
                     'field_type' => 'choice',
                     'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
                         'choices' => $this->getContainer()->get('app.employee_rule')->getListClaimPeriodForFilterEmployee(),
-                        'placeholder' => 'Select a period',
-                        'empty_data' => null
+                        'empty_data' => $this->getContainer()->get('app.claim_rule')->getCurrentClaimPeriod('from')->format('Y-m-d'),
                     ],
                     'advanced_filter' => false,
 
@@ -336,6 +379,8 @@ class ClaimAdmin extends BaseAdmin
             case 'hr-each-position':
             case 'hr-reject-each-position':
             case 'hr-report-each-position':
+            case 'checker-history-each-position':
+            case 'approver-history-each-position':
                 $listMapper
                     ->add('position.employeeNo', null, ['label' => 'Employee No'])
                     ->add('position.firstName', null, ['label' => 'Name'])
@@ -460,6 +505,8 @@ class ClaimAdmin extends BaseAdmin
             case 'hr-view-claim':
             case 'hr-reject-view-claim':
             case 'hr-report-view-claim':
+            case 'checker-history-view-claim':
+            case 'approver-history-view-claim':
                 $show->tab('Claim Details');
                 $show->with('Claim Details', array('class' => 'col-md-6'));
                 $show->add('description', 'text', ['label' => 'Description']);

@@ -162,6 +162,14 @@
                             style="font-size: 12px;">{{ resultCheckerNotification|length }}</span></a>
             </li>
         {% endif %}
+        <li data-route1="admin_app_position_list" class="last item"><a
+                    href="{{ path('admin_app_position_list',{'type':'checker-history'}) }}"><i
+                        class="fa fa-angle-double-right"></i>Checker History </a>
+        </li>
+        <li data-route1="admin_app_position_list" class="last item"><a
+                    href="{{ path('admin_app_position_list',{'type':'approver-history'}) }}"><i
+                        class="fa fa-angle-double-right"></i>Approver History </a>
+        </li>
         {% if isShowMenuForApprover(app.user.loginWithPosition) %}
             {% set resultApproverNotification = getApproverNotification() %}
             <li data-route1="admin_app_position_list" class="last item"><a

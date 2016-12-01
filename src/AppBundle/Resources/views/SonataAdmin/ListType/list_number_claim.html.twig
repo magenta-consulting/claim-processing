@@ -20,8 +20,12 @@ file that was distributed with this source code.
 
     {% if app.request.get('type') == 'checking' %}
         {{ getNumberClaimEachEmployeeForChecker(object,app.user.loginWithPosition) }}
+    {% elseif app.request.get('type') == 'checker-history' %}
+        {{ getNumberClaimEachEmployeeForCheckerHistory(object,app.user.loginWithPosition,from) }}
     {% elseif app.request.get('type') == 'approving'  %}
         {{ getNumberClaimEachEmployeeForApprover(object,app.user.loginWithPosition) }}
+    {% elseif app.request.get('type') == 'approver-history'  %}
+        {{ getNumberClaimEachEmployeeForApproverHistory(object,app.user.loginWithPosition,from) }}
     {% elseif app.request.get('type') == 'hr'  %}
         {{ getTotalAmountClaimEachEmployeeForHr(object,from)|number_format(2, '.', ',') }}
     {% elseif app.request.get('type') == 'hr-reject'  %}

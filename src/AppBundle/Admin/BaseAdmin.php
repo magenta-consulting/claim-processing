@@ -281,6 +281,16 @@ class BaseAdmin extends AbstractAdmin
                         $query->setParameter('positionId', $positionId);
                         $query->setParameter('checker', $this->getPosition());
                         break;
+                    case 'checker-history-each-position':
+                        $positionId = $request->get('position-id');
+                        $query->leftJoin($query->getRootAliases()[0] . '.checkingHistories', 'checkingHistory');
+                        $query->leftJoin('checkingHistory.position', 'position');
+                        $query->andWhere(
+                            $expr->eq('position.id', ':positionId')
+                        );
+                        $query->setParameter('positionId', $positionId);
+                        break;
+
                     case 'approving-each-position':
                         $positionId = $request->get('position-id');
                         $query->join($query->getRootAliases()[0] . '.position', 'position');
@@ -297,6 +307,15 @@ class BaseAdmin extends AbstractAdmin
                         $query->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
                         $query->setParameter('positionId', $positionId);
                         $query->setParameter('approverEmployee', $this->getPosition());
+                        break;
+                    case 'approver-history-each-position':
+                        $positionId = $request->get('position-id');
+                        $query->leftJoin($query->getRootAliases()[0] . '.approverHistories', 'approverHistory');
+                        $query->leftJoin('approverHistory.position', 'position');
+                        $query->andWhere(
+                            $expr->eq('position.id', ':positionId')
+                        );
+                        $query->setParameter('positionId', $positionId);
                         break;
                     case 'hr-each-position':
                     case 'hr-reject-each-position':
@@ -427,6 +446,11 @@ class BaseAdmin extends AbstractAdmin
                         $query->setParameter('company', $company);
                         $query->setParameter('clientCompany', $clientCompany);
                         break;
+                    case 'checker-history':
+                        $query->leftJoin($query->getRootAliases()[0] . '.checkingHistories', 'checkingHistory');
+                        $query->andWhere($expr->eq('checkingHistory.checkerPosition', ':checkerPosition'));
+                        $query->setParameter('checkerPosition', $position);
+                        break;
                     case 'approving':
                         $query->leftJoin($query->getRootAliases()[0] . '.claims', 'claim');
                         $query->leftJoin($query->getRootAliases()[0] . '.company', 'company');
@@ -447,6 +471,11 @@ class BaseAdmin extends AbstractAdmin
                         $query->setParameter('position', $position);
                         $query->setParameter('company', $company);
                         $query->setParameter('clientCompany', $clientCompany);
+                        break;
+                    case 'approver-history':
+                        $query->leftJoin($query->getRootAliases()[0] . '.approverHistories', 'approverHistory');
+                        $query->andWhere($expr->eq('approverHistory.approverPosition', ':approverPosition'));
+                        $query->setParameter('approverPosition', $position);
                         break;
                     case 'hr':
                     case 'hr-reject':

@@ -134,6 +134,29 @@ class ApproverRule extends ClaimRule
         }
         return $listPeriod;
     }
+    public function getListClaimPeriodForFilterApproverHistory()
+    {
+        $expr = new Expr();
+        $position = $this->getPosition();
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder('approverHistory');
+        $qb->select('approverHistory');
+        $qb->from('AppBundle:approverHistory', 'approverHistory');
+        $qb->join('approverHistory.claim', 'claim');
+        $qb->andWhere($expr->eq('approverHistory.approverPosition', ':approverPosition'));
+        $qb->orderBy('claim.createdAt', 'DESC');
+        $qb->setParameter('approverPosition', $position);
+        $approverHistories = $qb->getQuery()->getResult();
+
+        $listPeriod = ['Show All'=>'all'];
+        $from = $this->getCurrentClaimPeriod('from');
+        $to = $this->getCurrentClaimPeriod('to');
+        $listPeriod[$from->format('d M Y') . ' - ' . $to->format('d M Y')] = $from->format('Y-m-d');
+        foreach ($approverHistories as $approverHistory) {
+            $listPeriod[$approverHistory->getPeriodFrom()->format('d M Y') . ' - ' . $approverHistory->getPeriodTo()->format('d M Y')] = $approverHistory->getPeriodFrom()->format('Y-m-d');
+        }
+        return $listPeriod;
+    }
 
     public function getNumberClaimEachEmployeeForApprover($position, $positionApprover)
     {
@@ -148,6 +171,26 @@ class ApproverRule extends ClaimRule
         $qb->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
         $qb->setParameter('position', $position);
         $qb->setParameter('positionApprover', $positionApprover);
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function getNumberClaimEachEmployeeForApproverHistory($position, $positionApprover,$from)
+    {
+        $expr = new Expr();
+        $em = $this->container->get('doctrine')->getManager();
+        $qb = $em->createQueryBuilder('approverHistory');
+        $qb->select($qb->expr()->count('approverHistory.id'));
+        $qb->from('AppBundle:approverHistory', 'approverHistory');
+        $qb->where('approverHistory.position = :position');
+        $qb->andWhere('approverHistory.approverPosition = :approverPosition');
+        $qb->setParameter('position', $position);
+        $qb->setParameter('approverPosition', $positionApprover);
+        if ($from !='all') {
+            $dateFilter = new  \DateTime($from);
+            $qb->andWhere($expr->eq('approverHistory.periodFrom', ':periodFrom'));
+            $qb->setParameter('periodFrom', $dateFilter->format('Y-m-d'));
+        }
 
         return $qb->getQuery()->getSingleScalarResult();
     }

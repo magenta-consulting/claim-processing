@@ -30,10 +30,18 @@ class TwigExtension extends \Twig_Extension
     {
         return $this->container->get('app.checker_rule')->getNumberClaimEachEmployeeForChecker($position, $positionChecker);
     }
+    public function getNumberClaimEachEmployeeForCheckerHistory($position, $positionChecker,$from)
+    {
+        return $this->container->get('app.checker_rule')->getNumberClaimEachEmployeeForCheckerHistory($position, $positionChecker,$from);
+    }
 
     public function getNumberClaimEachEmployeeForApprover($position, $positionApprover)
     {
         return $this->container->get('app.approver_rule')->getNumberClaimEachEmployeeForApprover($position, $positionApprover);
+    }
+    public function getNumberClaimEachEmployeeForApproverHistory($position, $positionApprover,$from)
+    {
+        return $this->container->get('app.approver_rule')->getNumberClaimEachEmployeeForApproverHistory($position, $positionApprover,$from);
     }
     public function getTotalAmountClaimEachEmployeeForHr($position,$from)
     {
@@ -212,6 +220,8 @@ class TwigExtension extends \Twig_Extension
             'isShowDeleteRejectHrButtonForClaim' => new \Twig_Function_Method($this, 'isShowDeleteRejectHrButtonForClaim', array('is_safe' => array('html'))),
             'getTotalAmountClaimEachEmployeeForHrReport' => new \Twig_Function_Method($this, 'getTotalAmountClaimEachEmployeeForHrReport', array('is_safe' => array('html'))),
             'getProcessedDate' => new \Twig_Function_Method($this, 'getProcessedDate', array('is_safe' => array('html'))),
+            'getNumberClaimEachEmployeeForCheckerHistory' => new \Twig_Function_Method($this, 'getNumberClaimEachEmployeeForCheckerHistory', array('is_safe' => array('html'))),
+            'getNumberClaimEachEmployeeForApproverHistory' => new \Twig_Function_Method($this, 'getNumberClaimEachEmployeeForApproverHistory', array('is_safe' => array('html'))),
 
         );
     }
