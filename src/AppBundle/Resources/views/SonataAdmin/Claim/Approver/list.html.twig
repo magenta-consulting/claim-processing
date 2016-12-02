@@ -25,7 +25,7 @@ file that was distributed with this source code.
     <div class="col-xs-12 col-md-12">
         {% set batchactions = admin.batchactions %}
         {% if admin.hasRoute('batch') and batchactions|length %}
-        <form action="{{ admin.generateUrl('batch', {'filter': admin.filterParameters}) }}" method="POST">
+        <form action="{{ admin.generateUrl('batch', {'type':'approving-each-position','position-id':app.request.get('position-id'),'filter': admin.filterParameters}) }}" method="POST">
             <input type="hidden" name="_sonata_csrf_token" value="{{ csrf_token }}">
             {% endif %}
 
@@ -143,7 +143,7 @@ file that was distributed with this source code.
                                                     ({{ admin.datagrid.pager.nbresults }})
                                                 </label>
 
-                                                <select name="action" style="width: auto; height: auto"
+                                                <select name="action" style="width: auto; height: auto;display: none"
                                                         class="form-control">
                                                     {% for action, options in batchactions %}
                                                         <option value="{{ action }}">{{ options.label|trans({}, options.translation_domain|default(admin.translationDomain)) }}</option>
@@ -152,7 +152,7 @@ file that was distributed with this source code.
                                             {% endblock %}
 
                                                 <input type="submit" class="btn btn-small btn-primary"
-                                                       value="{{ 'btn_batch'|trans({}, 'SonataAdminBundle') }}">
+                                                       value="Approve Claims">
                                             {% endblock %}
                                         {% endif %}
                                     </div>

@@ -211,9 +211,9 @@ class ClaimAdmin extends BaseAdmin
             case 'checking-each-position':
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
-                        if ($value['value']==='all') {
+                        if ($value['value'] === 'all') {
                             return;
-                        }else{
+                        } else {
                             $dateFilter = new  \DateTime($value['value']);
                         }
                         $expr = new Expr();
@@ -233,9 +233,9 @@ class ClaimAdmin extends BaseAdmin
             case 'checker-history-each-position':
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
-                        if ($value['value']==='all') {
+                        if ($value['value'] === 'all') {
                             return;
-                        }else{
+                        } else {
                             $dateFilter = new  \DateTime($value['value']);
                         }
                         $expr = new Expr();
@@ -255,9 +255,9 @@ class ClaimAdmin extends BaseAdmin
             case 'approving-each-position':
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
-                        if ($value['value']==='all') {
+                        if ($value['value'] === 'all') {
                             return;
-                        }else{
+                        } else {
                             $dateFilter = new  \DateTime($value['value']);
                         }
                         $expr = new Expr();
@@ -277,9 +277,9 @@ class ClaimAdmin extends BaseAdmin
             case 'approver-history-each-position':
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
-                        if ($value['value']==='all') {
+                        if ($value['value'] === 'all') {
                             return;
-                        }else{
+                        } else {
                             $dateFilter = new  \DateTime($value['value']);
                         }
                         $expr = new Expr();
@@ -300,9 +300,9 @@ class ClaimAdmin extends BaseAdmin
             case 'hr-reject-each-position':
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
-                        if ($value['value']==='all') {
+                        if ($value['value'] === 'all') {
                             return;
-                        }else{
+                        } else {
                             $dateFilter = new  \DateTime($value['value']);
                         }
                         $expr = new Expr();
@@ -322,9 +322,9 @@ class ClaimAdmin extends BaseAdmin
             case 'hr-report-each-position':
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
-                        if ($value['value']==='all') {
+                        if ($value['value'] === 'all') {
                             return;
-                        }else{
+                        } else {
                             $dateFilter = new  \DateTime($value['value']);
                         }
                         $expr = new Expr();
@@ -344,9 +344,9 @@ class ClaimAdmin extends BaseAdmin
             case null:
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
-                        if ($value['value']==='all') {
+                        if ($value['value'] === 'all') {
                             return;
-                        }else{
+                        } else {
                             $dateFilter = new  \DateTime($value['value']);
                         }
                         $expr = new Expr();
@@ -382,16 +382,16 @@ class ClaimAdmin extends BaseAdmin
             case 'checker-history-each-position':
             case 'approver-history-each-position':
                 $listMapper
-                    ->add('position.employeeNo', null, ['label' => 'Employee No','sortable'=>false])
-                    ->add('position.firstName', null, ['label' => 'Name','sortable'=>false])
-                    ->add('position.employeeGroup.costCentre.code', null, ['label' => 'Cost Centre','sortable'=>false])
-                    ->add('claimType.code', null, ['label' => 'Claim Type','sortable'=>false])
-                    ->add('claimCategory.code', null, ['label' => 'Claim Category','sortable'=>false])
-                    ->add('periodFrom', 'date', ['label' => 'Period From', 'format' => 'd M Y','sortable'=>false])
-                    ->add('periodTo', null, ['label' => 'Period To', 'format' => 'd M Y','sortable'=>false])
-                    ->add('status', null, ['label' => 'Status','sortable'=>false])
-                    ->add('createdAt', null, ['label' => 'Submission Date', 'format' => 'd M Y','sortable'=>false])
-                    ->add('claimAmountConverted', null, ['label' => 'Amount','sortable'=>false])
+                    ->add('position.employeeNo', null, ['label' => 'Employee No', 'sortable' => false])
+                    ->add('position.firstName', null, ['label' => 'Name', 'sortable' => false])
+                    ->add('position.employeeGroup.costCentre.code', null, ['label' => 'Cost Centre', 'sortable' => false])
+                    ->add('claimType.code', null, ['label' => 'Claim Type', 'sortable' => false])
+                    ->add('claimCategory.code', null, ['label' => 'Claim Category', 'sortable' => false])
+                    ->add('periodFrom', 'date', ['label' => 'Period From', 'format' => 'd M Y', 'sortable' => false])
+                    ->add('periodTo', null, ['label' => 'Period To', 'format' => 'd M Y', 'sortable' => false])
+                    ->add('status', null, ['label' => 'Status', 'sortable' => false])
+                    ->add('createdAt', null, ['label' => 'Submission Date', 'format' => 'd M Y', 'sortable' => false])
+                    ->add('claimAmountConverted', null, ['label' => 'Amount', 'sortable' => false])
                     ->add('_action', null, array(
                         'actions' => array(
                             'show' => array(
@@ -403,10 +403,10 @@ class ClaimAdmin extends BaseAdmin
             default:
 
                 $listMapper
-                    ->add('claimType.code', null, ['label' => 'Claim Type','sortable'=>false])
-                    ->add('claimCategory.code', null, ['label' => 'Claim Category','sortable'=>false])
-                    ->add('status', null, ['label' => 'Status','sortable'=>false])
-                    ->add('claimAmountConverted', null, ['label' => 'Amount','sortable'=>false])
+                    ->add('claimType.code', null, ['label' => 'Claim Type', 'sortable' => false])
+                    ->add('claimCategory.code', null, ['label' => 'Claim Category', 'sortable' => false])
+                    ->add('status', null, ['label' => 'Status', 'sortable' => false])
+                    ->add('claimAmountConverted', null, ['label' => 'Amount', 'sortable' => false])
                     ->add('a', 'debug', ['label' => 'DEBUG'])
                     ->add('_action', null, array(
                         'actions' => array(
@@ -445,7 +445,16 @@ class ClaimAdmin extends BaseAdmin
     protected
     function configureBatchActions($actions)
     {
-        return [];
+        $type = $this->getRequest()->get('type');
+        $actions = [];
+        if ($type === 'approving-each-position') {
+            $actions['approve'] = array(
+                'label' => 'Approve Claims',
+                'translation_domain' => 'SonataAdminBundle',
+                'ask_confirmation' => true, // by default always true
+            );
+        }
+        return $actions;
     }
 
     /**

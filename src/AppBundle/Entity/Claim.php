@@ -90,7 +90,7 @@ class Claim
     private $receiptDate;
     /**
      * @var date
-     * @ORM\Column(name="processed_date",type="date",nullable=true)
+     * @ORM\Column(name="processed_date",type="datetime",nullable=true)
      */
     private $processedDate;
 

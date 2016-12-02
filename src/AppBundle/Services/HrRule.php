@@ -159,7 +159,7 @@ class HrRule extends ClaimRule
         $result = $qb->getQuery()->getResult();
         if (count($result)) {
             if ($result[0]->getProcessedDate()) {
-                return $result[0]->getProcessedDate()->format('Ymd');
+                return $result[0]->getProcessedDate()->format('Ymdhis');
             }
         }
         return null;

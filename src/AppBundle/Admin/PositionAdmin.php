@@ -478,6 +478,13 @@ class PositionAdmin extends BaseAdmin
                 'ask_confirmation' => true, // by default always true
             );
         }
+        if ($type === 'approving') {
+            $actions['approve'] = array(
+                'label' => 'Approve Claims',
+                'translation_domain' => 'SonataAdminBundle',
+                'ask_confirmation' => true, // by default always true
+            );
+        }
         return $actions;
     }
 

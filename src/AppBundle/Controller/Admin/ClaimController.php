@@ -13,10 +13,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Sonata\AdminBundle\Controller\CRUDController as Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Doctrine\Common\Inflector\Inflector;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
 class ClaimController extends Controller
 {
-
 
 
     public function formatPayMasterAction()
@@ -30,9 +31,10 @@ class ClaimController extends Controller
         $periods = $this->get('app.hr_rule')->getListClaimPeriodForFilterHrReport();
 
         return $this->render('@App/SonataAdmin/Claim/format_pay_master.html.twig', [
-            'data' => $data, 'from' => $from,'periods'=>$periods
+            'data' => $data, 'from' => $from, 'periods' => $periods
         ]);
     }
+
     public function formatPayMasterExportAction($from)
     {
         $data = $this->get('app.hr_rule')->getDataForFormatPayMaster($from);
@@ -56,7 +58,7 @@ class ClaimController extends Controller
             $phpExcelObject->setActiveSheetIndex(0)->setCellValue('A' . $num, '2');
             $phpExcelObject->setActiveSheetIndex(0)->setCellValue('B' . $num, $position->getCostCentre() ? $position->getCostCentre()->getCode() : 'N/A');
             $phpExcelObject->setActiveSheetIndex(0)->setCellValue('C' . $num, $position->getEmployeeNo());
-            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('D' . $num,$claim->getProcessedDate()->format('Ymd'));
+            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('D' . $num, $claim->getProcessedDate()->format('Ymd'));
             $phpExcelObject->setActiveSheetIndex(0)->setCellValue('E' . $num, '');
             $phpExcelObject->setActiveSheetIndex(0)->setCellValue('F' . $num, '');
             $phpExcelObject->setActiveSheetIndex(0)->setCellValue('G' . $num, $claim->getPayCode()->getCode());
@@ -89,7 +91,7 @@ class ClaimController extends Controller
         }
         $data = $this->get('app.hr_rule')->getDataForExcelReport($from);
         $periods = $this->get('app.hr_rule')->getListClaimPeriodForFilterHrReport();
-        return $this->render('@App/SonataAdmin/Claim/excel_report.html.twig', ['data' => $data, 'from' => $from,'periods'=>$periods]);
+        return $this->render('@App/SonataAdmin/Claim/excel_report.html.twig', ['data' => $data, 'from' => $from, 'periods' => $periods]);
     }
 
     public function excelReportExportAction($from)
@@ -111,8 +113,8 @@ class ClaimController extends Controller
 
         foreach ($positions as $k => $position) {
             $num = $k + 2;
-            $totalAmount = $this->get('app.hr_rule')->getTotalAmountClaimEachEmployeeForHrReport($position,$from);
-            $processedDate = $this->get('app.hr_rule')->getProcessedDate($from,$position);
+            $totalAmount = $this->get('app.hr_rule')->getTotalAmountClaimEachEmployeeForHrReport($position, $from);
+            $processedDate = $this->get('app.hr_rule')->getProcessedDate($from, $position);
             $phpExcelObject->setActiveSheetIndex(0)->setCellValue('A' . $num, $position->getEmployeeNo());
             $phpExcelObject->setActiveSheetIndex(0)->setCellValue('B' . $num, $position->getFirstName() . ' ' . $position->getLastName());
             $phpExcelObject->setActiveSheetIndex(0)->setCellValue('C' . $num, $position->getCompany()->getName());
@@ -122,7 +124,7 @@ class ClaimController extends Controller
             $phpExcelObject->setActiveSheetIndex(0)->setCellValue('G' . $num, $position->getRegion() ? $position->getRegion()->getCode() : 'N/A');
             $phpExcelObject->setActiveSheetIndex(0)->setCellValue('H' . $num, $position->getBranch() ? $position->getBranch()->getCode() : 'N/A');
             $phpExcelObject->setActiveSheetIndex(0)->setCellValue('I' . $num, $position->getSection() ? $position->getSection()->getCode() : 'N/A');
-            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('J' . $num,$processedDate);
+            $phpExcelObject->setActiveSheetIndex(0)->setCellValue('J' . $num, $processedDate);
             $phpExcelObject->setActiveSheetIndex(0)->setCellValue('K' . $num, number_format($totalAmount, 2, '.', ','));
         }
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
@@ -322,9 +324,9 @@ class ClaimController extends Controller
                 return new RedirectResponse($urlRedirect);
             } else {
                 $urlRedirect = $this->admin->generateUrl('firstPageCreateClaim');
-                if($object->getChecker()) {
+                if ($object->getChecker()) {
                     $object->setStatus(Claim::STATUS_PENDING);
-                }else{
+                } else {
                     $object->setSTatus(Claim::STATUS_CHECKER_APPROVED);
                 }
                 $object->setSubmissionRemarks($request->get('employee-remark'));
@@ -637,6 +639,177 @@ class ClaimController extends Controller
         }
 
         return new RedirectResponse($url);
+    }
+
+
+    public function batchActionApprove(ProxyQueryInterface $selectedModelQuery, Request $request = null)
+    {
+
+        $modelManager = $this->admin->getModelManager();
+
+
+        $selectedModels = $selectedModelQuery->execute();
+
+        // do the merge work here
+
+        $currentPeriod = $this->get('app.claim_rule')->getCurrentClaimPeriod('from');
+        $filter = $this->admin->getFilterParameters();
+        if (isset($filter['claim_period'])) {
+            $from = $filter['claim_period']['value'];
+        } else {
+            $from = $currentPeriod->format('Y-m-d');
+        }
+        try {
+            foreach ($selectedModels as $claim) {
+                if ($claim->getStatus() == Claim::STATUS_CHECKER_APPROVED) {
+                    if ($claim->getPeriodFrom()->format('Y-m-d') == $from || $from == 'all') {
+                        $claim->setStatus(Claim::STATUS_APPROVER_APPROVED);
+                        $claim->setApproverUpdatedAt(new \DateTime());
+                        $modelManager->update($claim);
+                    }
+                }
+            }
+
+        } catch (\Exception $e) {
+            $this->addFlash('sonata_flash_error', 'flash_batch_merge_error');
+
+            return new RedirectResponse(
+                $this->admin->generateUrl('list', array('type' => 'approving', 'filter' => $this->admin->getFilterParameters()))
+            );
+        }
+
+        $this->addFlash('sonata_flash_success', 'Approve Claims Successfully');
+
+        return new RedirectResponse(
+            $this->generateUrl('admin_app_position_list', ['type' => 'approving', 'filter' => $this->admin->getFilterParameters()])
+        );
+    }
+
+    /**
+     * Batch action.
+     *
+     * @param Request $request
+     *
+     * @return Response|RedirectResponse
+     *
+     * @throws NotFoundHttpException If the HTTP method is not POST
+     * @throws \RuntimeException     If the batch action is not defined
+     */
+    public function batchAction()
+    {
+        $request = $this->getRequest();
+        $restMethod = $this->getRestMethod();
+
+        if ('POST' !== $restMethod) {
+            throw $this->createNotFoundException(sprintf('Invalid request type "%s", POST expected', $restMethod));
+        }
+
+        // check the csrf token
+        $this->validateCsrfToken('sonata.batch');
+
+        $confirmation = $request->get('confirmation', false);
+
+        if ($data = json_decode($request->get('data'), true)) {
+            $action = $data['action'];
+            $idx = $data['idx'];
+            $allElements = $data['all_elements'];
+            $request->request->replace(array_merge($request->request->all(), $data));
+        } else {
+            $request->request->set('idx', $request->get('idx', array()));
+            $request->request->set('all_elements', $request->get('all_elements', false));
+
+            $action = $request->get('action');
+            $idx = $request->get('idx');
+            $allElements = $request->get('all_elements');
+            $data = $request->request->all();
+
+            unset($data['_sonata_csrf_token']);
+        }
+
+        // NEXT_MAJOR: Remove reflection check.
+        $reflector = new \ReflectionMethod($this->admin, 'getBatchActions');
+        if ($reflector->getDeclaringClass()->getName() === get_class($this->admin)) {
+            @trigger_error('Override Sonata\AdminBundle\Admin\AbstractAdmin::getBatchActions method'
+                . ' is deprecated since version 3.2.'
+                . ' Use Sonata\AdminBundle\Admin\AbstractAdmin::configureBatchActions instead.'
+                . ' The method will be final in 4.0.', E_USER_DEPRECATED
+            );
+        }
+        $batchActions = $this->admin->getBatchActions();
+        if (!array_key_exists($action, $batchActions)) {
+            throw new \RuntimeException(sprintf('The `%s` batch action is not defined', $action));
+        }
+
+        $camelizedAction = Inflector::classify($action);
+        $isRelevantAction = sprintf('batchAction%sIsRelevant', $camelizedAction);
+
+        if (method_exists($this, $isRelevantAction)) {
+            $nonRelevantMessage = call_user_func(array($this, $isRelevantAction), $idx, $allElements);
+        } else {
+            $nonRelevantMessage = count($idx) != 0 || $allElements; // at least one item is selected
+        }
+
+        if (!$nonRelevantMessage) { // default non relevant message (if false of null)
+            $nonRelevantMessage = 'flash_batch_empty';
+        }
+
+        $datagrid = $this->admin->getDatagrid();
+        $datagrid->buildPager();
+
+        if (true !== $nonRelevantMessage) {
+            $this->addFlash('sonata_flash_info', $nonRelevantMessage);
+
+            return new RedirectResponse(
+                $this->admin->generateUrl(
+                    'list',
+                    array('type' => $this->getRequest()->get('type'), 'position-id' => $this->getRequest()->get('position-id'))
+                )
+            );
+        }
+
+        $askConfirmation = isset($batchActions[$action]['ask_confirmation']) ?
+            $batchActions[$action]['ask_confirmation'] :
+            true;
+
+        if ($askConfirmation && $confirmation != 'ok') {
+            $actionLabel = $batchActions[$action]['label'];
+            $batchTranslationDomain = isset($batchActions[$action]['translation_domain']) ?
+                $batchActions[$action]['translation_domain'] :
+                $this->admin->getTranslationDomain();
+
+            $formView = $datagrid->getForm()->createView();
+
+            return $this->render($this->admin->getTemplate('batch_confirmation'), array(
+                'action' => 'list',
+                'action_label' => $actionLabel,
+                'batch_translation_domain' => $batchTranslationDomain,
+                'datagrid' => $datagrid,
+                'form' => $formView,
+                'data' => $data,
+                'csrf_token' => $this->getCsrfToken('sonata.batch'),
+            ), null);
+        }
+
+        // execute the action, batchActionXxxxx
+        $finalAction = sprintf('batchAction%s', $camelizedAction);
+        if (!is_callable(array($this, $finalAction))) {
+            throw new \RuntimeException(sprintf('A `%s::%s` method must be callable', get_class($this), $finalAction));
+        }
+
+        $query = $datagrid->getQuery();
+
+        $query->setFirstResult(null);
+        $query->setMaxResults(null);
+
+        $this->admin->preBatchAction($action, $query, $idx, $allElements);
+
+        if (count($idx) > 0) {
+            $this->admin->getModelManager()->addIdentifiersToQuery($this->admin->getClass(), $query, $idx);
+        } elseif (!$allElements) {
+            $query = null;
+        }
+
+        return call_user_func(array($this, $finalAction), $query);
     }
 
 

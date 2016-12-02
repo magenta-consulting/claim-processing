@@ -28,6 +28,7 @@ services:
                 - [setTemplate,[edit,AppBundle:SonataAdmin/Claim:edit.html.twig]]
                 - [setTemplate,[show,AppBundle:SonataAdmin/Claim:show.html.twig]]
                 - [setTemplate,[list,AppBundle:SonataAdmin/Claim:list.html.twig]]
+                - [setTemplate,[batch_confirmation,AppBundle:SonataAdmin/Claim:batch_confirmation.html.twig]]
     admin.claim_media:
             class: AppBundle\Admin\ClaimMediaAdmin
             arguments: [~, AppBundle\Entity\ClaimMedia, ~]

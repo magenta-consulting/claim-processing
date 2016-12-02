@@ -31,7 +31,7 @@ class PositionController extends Controller
 
     /**
      * @param ProxyQueryInterface $selectedModelQuery
-     * @param Request             $request
+     * @param Request $request
      *
      * @return RedirectResponse
      */
@@ -45,13 +45,23 @@ class PositionController extends Controller
 
         // do the merge work here
 
+        $currentPeriod = $this->get('app.claim_rule')->getCurrentClaimPeriod('from');
+        $filter = $this->admin->getFilterParameters();
+        if (isset($filter['claim_period'])) {
+            $from = $filter['claim_period']['value'];
+        } else {
+            $from = $currentPeriod->format('Y-m-d');
+        }
+
         try {
             foreach ($selectedModels as $position) {
-                foreach ($position->getClaims() as $claim){
-                    if($claim->getStatus() == Claim::STATUS_APPROVER_APPROVED){
-                        $claim->setStatus(Claim::STATUS_PROCESSED);
-                        $claim->setProcessedDate(new \DateTime());
-                        $modelManager->update($claim);
+                foreach ($position->getClaims() as $claim) {
+                    if ($claim->getStatus() == Claim::STATUS_APPROVER_APPROVED) {
+                        if ($claim->getPeriodFrom()->format('Y-m-d') == $from || $from == 'all') {
+                            $claim->setStatus(Claim::STATUS_PROCESSED);
+                            $claim->setProcessedDate(new \DateTime());
+                            $modelManager->update($claim);
+                        }
                     }
                 }
             }
@@ -60,7 +70,7 @@ class PositionController extends Controller
             $this->addFlash('sonata_flash_error', 'flash_batch_merge_error');
 
             return new RedirectResponse(
-                $this->admin->generateUrl('list', array('type'=>'hr','filter' => $this->admin->getFilterParameters()))
+                $this->admin->generateUrl('list', array('type' => 'hr', 'filter' => $this->admin->getFilterParameters()))
             );
         }
 
@@ -70,6 +80,58 @@ class PositionController extends Controller
             $this->generateUrl('admin_app_claim_excelReport')
         );
     }
+
+    /**
+     * @param ProxyQueryInterface $selectedModelQuery
+     * @param Request $request
+     *
+     * @return RedirectResponse
+     */
+    public function batchActionApprove(ProxyQueryInterface $selectedModelQuery, Request $request = null)
+    {
+
+        $modelManager = $this->admin->getModelManager();
+
+
+        $selectedModels = $selectedModelQuery->execute();
+
+        // do the merge work here
+
+        $currentPeriod = $this->get('app.claim_rule')->getCurrentClaimPeriod('from');
+        $filter = $this->admin->getFilterParameters();
+        if (isset($filter['claim_period'])) {
+            $from = $filter['claim_period']['value'];
+        } else {
+            $from = $currentPeriod->format('Y-m-d');
+        }
+        try {
+            foreach ($selectedModels as $position) {
+                foreach ($position->getClaims() as $claim) {
+                    if ($claim->getStatus() == Claim::STATUS_CHECKER_APPROVED) {
+                        if ($claim->getPeriodFrom()->format('Y-m-d') == $from || $from == 'all') {
+                            $claim->setStatus(Claim::STATUS_APPROVER_APPROVED);
+                            $claim->setApproverUpdatedAt(new \DateTime());
+                            $modelManager->update($claim);
+                        }
+                    }
+                }
+            }
+
+        } catch (\Exception $e) {
+            $this->addFlash('sonata_flash_error', 'flash_batch_merge_error');
+
+            return new RedirectResponse(
+                $this->admin->generateUrl('list', array('type' => 'approving', 'filter' => $this->admin->getFilterParameters()))
+            );
+        }
+
+        $this->addFlash('sonata_flash_success', 'Approve Claims Successfully');
+
+        return new RedirectResponse(
+            $this->generateUrl('admin_app_position_list',['type'=>'approving','filter' => $this->admin->getFilterParameters()])
+        );
+    }
+
     /**
      * Batch action.
      *
@@ -115,9 +177,9 @@ class PositionController extends Controller
         $reflector = new \ReflectionMethod($this->admin, 'getBatchActions');
         if ($reflector->getDeclaringClass()->getName() === get_class($this->admin)) {
             @trigger_error('Override Sonata\AdminBundle\Admin\AbstractAdmin::getBatchActions method'
-                .' is deprecated since version 3.2.'
-                .' Use Sonata\AdminBundle\Admin\AbstractAdmin::configureBatchActions instead.'
-                .' The method will be final in 4.0.', E_USER_DEPRECATED
+                . ' is deprecated since version 3.2.'
+                . ' Use Sonata\AdminBundle\Admin\AbstractAdmin::configureBatchActions instead.'
+                . ' The method will be final in 4.0.', E_USER_DEPRECATED
             );
         }
         $batchActions = $this->admin->getBatchActions();
@@ -147,7 +209,7 @@ class PositionController extends Controller
             return new RedirectResponse(
                 $this->admin->generateUrl(
                     'list',
-                    array('type' => 'hr')
+                    array('type' => $this->getRequest()->get('type'))
                 )
             );
         }

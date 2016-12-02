@@ -35,12 +35,8 @@ file that was distributed with this source code.
                 {% endif %}
             </div>
             <div class="box-footer clearfix">
-                {% if app.request.get('type') == 'hr' %}
-                    {% set action = admin.generateUrl('batch', {'type':'hr','filter': admin.filterParameters}) %}
-                {% elseif app.request.get('type') == 'approving' %}
-                    {% set action = admin.generateUrl('batch', {'type':'approving','filter': admin.filterParameters}) %}
-                {% else %}
-                    {% set action = admin.generateUrl('batch', {'filter': admin.filterParameters}) %}
+                {% if app.request.get('type') == 'approving-each-position' %}
+                    {% set action = admin.generateUrl('batch', {'type':'approving-each-position','position-id':app.request.get('position-id'),'filter': admin.filterParameters}) %}
                 {% endif %}
                 <form action="{{ action }}"
                       method="POST">
@@ -59,7 +55,7 @@ file that was distributed with this source code.
                         {{ 'delete_or'|trans({}, 'SonataAdminBundle') }}
 
                         <a class="btn btn-success"
-                           href="{{ app.request.get('type') == 'hr' ? admin.generateUrl('list',{'type':'hr'}) : admin.generateUrl('list') }}">
+                           href="{{ admin.generateUrl('list',{'type':'approving-each-position','position-id':app.request.get('position-id')}) }}">
                             <i class="fa fa-th-list"
                                aria-hidden="true"></i> {{ 'link_action_list'|trans({}, 'SonataAdminBundle') }}
                         </a>
