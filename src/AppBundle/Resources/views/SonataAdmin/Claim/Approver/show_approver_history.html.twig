@@ -69,18 +69,7 @@ file that was distributed with this source code.
         {% endif %}
 
     </div>
-        <div class="sonata-ba-view">
-            {% if isShowApproveRejectApproverButtonForClaim(object) %}
-                <form method="post" action="{{ path('admin_app_claim_show',{'id':admin.id(object)}) }}">
-                    <div class="sonata-ba-form-actions well well-small form-actions">
-                        <button type="submit" class="btn btn-success" name="btn_approver_approve" value="1"> Approve
-                        </button>
-                        <button type="submit" class="btn btn-danger" name="btn_approver_reject" value="1"> Reject
-                        </button>
-                    </div>
-                </form>
-            {% endif %}
-        </div>
+
 
     {{ sonata_block_render_event('sonata.admin.show.bottom', { 'admin': admin, 'object': object }) }}
 {% endblock %}

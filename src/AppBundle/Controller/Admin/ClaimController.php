@@ -289,6 +289,7 @@ class ClaimController extends Controller
             } else if ($request->get('btn_approver_approve') == 1) {
                 $urlRedirect = $this->admin->generateUrl('list', ['type' => 'approving-each-position', 'position-id' => $object->getPosition()->getId()]);
                 $object->setApproverUpdatedAt(new \DateTime());
+                $object->setApproverRemark($request->get('approver-remark'));
                 $object->setStatus(Claim::STATUS_APPROVER_APPROVED);
                 //add history
                 $history = new ApproverHistory();
@@ -302,6 +303,7 @@ class ClaimController extends Controller
             } else if ($request->get('btn_approver_reject') == 1) {
                 $urlRedirect = $this->admin->generateUrl('list', ['type' => 'approving-each-position', 'position-id' => $object->getPosition()->getId()]);
                 $object->setApproverUpdatedAt(new \DateTime());
+                $object->setApproverRemark($request->get('approver-remark'));
                 $object->setStatus(Claim::STATUS_APPROVER_REJECTED);
             } else if ($request->get('btn_hr_reject') == 1) {
                 $urlRedirect = $this->admin->generateUrl('list', ['type' => 'hr-each-position', 'position-id' => $object->getPosition()->getId()]);

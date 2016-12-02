@@ -189,6 +189,12 @@ class Claim
     private $checkerRemark;
 
     /**
+     * @var string
+     * @ORM\Column(name="approver_remark",type="string",nullable=true)
+     */
+    private $approverRemark;
+
+    /**
      * @var \DateTime
      * @ORM\Column(name="checker_updated_at",type="datetime",nullable=true)
      */
@@ -239,6 +245,23 @@ class Claim
     {
         return $this->id;
     }
+
+    /**
+     * @return string
+     */
+    public function getApproverRemark()
+    {
+        return $this->approverRemark;
+    }
+
+    /**
+     * @param string $approverRemark
+     */
+    public function setApproverRemark($approverRemark)
+    {
+        $this->approverRemark = $approverRemark;
+    }
+
 
     /**
      * @return CheckerHistory

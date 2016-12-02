@@ -36,7 +36,7 @@ sonata_doctrine_orm_admin:
             show:
                 show_approver:      AppBundle:SonataAdmin/ShowType:show_approver.html.twig
                 show_checker:      AppBundle:SonataAdmin/ShowType:show_checker.html.twig
-                show_checker_remark:      AppBundle:SonataAdmin/ShowType:show_checker_remark.html.twig
+                show_remark:      AppBundle:SonataAdmin/ShowType:show_remark.html.twig
                 show_image:      AppBundle:SonataAdmin/ShowType:show_image.html.twig
                 show_claim_limit:      AppBundle:SonataAdmin/ShowType:show_claim_limit.html.twig
                 show_tax_code:      AppBundle:SonataAdmin/ShowType:show_tax_code.html.twig

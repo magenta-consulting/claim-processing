@@ -382,16 +382,16 @@ class ClaimAdmin extends BaseAdmin
             case 'checker-history-each-position':
             case 'approver-history-each-position':
                 $listMapper
-                    ->add('position.employeeNo', null, ['label' => 'Employee No'])
-                    ->add('position.firstName', null, ['label' => 'Name'])
-                    ->add('position.employeeGroup.costCentre.code', null, ['label' => 'Cost Centre'])
-                    ->add('claimType.code', null, ['label' => 'Claim Type'])
-                    ->add('claimCategory.code', null, ['label' => 'Claim Category'])
-                    ->add('periodFrom', 'date', ['label' => 'Period From', 'format' => 'd M Y'])
-                    ->add('periodTo', null, ['label' => 'Period To', 'format' => 'd M Y'])
-                    ->add('status', null, ['label' => 'Status'])
-                    ->add('createdAt', null, ['label' => 'Submission Date', 'format' => 'd M Y'])
-                    ->add('claimAmountConverted', null, ['label' => 'Amount'])
+                    ->add('position.employeeNo', null, ['label' => 'Employee No','sortable'=>false])
+                    ->add('position.firstName', null, ['label' => 'Name','sortable'=>false])
+                    ->add('position.employeeGroup.costCentre.code', null, ['label' => 'Cost Centre','sortable'=>false])
+                    ->add('claimType.code', null, ['label' => 'Claim Type','sortable'=>false])
+                    ->add('claimCategory.code', null, ['label' => 'Claim Category','sortable'=>false])
+                    ->add('periodFrom', 'date', ['label' => 'Period From', 'format' => 'd M Y','sortable'=>false])
+                    ->add('periodTo', null, ['label' => 'Period To', 'format' => 'd M Y','sortable'=>false])
+                    ->add('status', null, ['label' => 'Status','sortable'=>false])
+                    ->add('createdAt', null, ['label' => 'Submission Date', 'format' => 'd M Y','sortable'=>false])
+                    ->add('claimAmountConverted', null, ['label' => 'Amount','sortable'=>false])
                     ->add('_action', null, array(
                         'actions' => array(
                             'show' => array(
@@ -403,10 +403,10 @@ class ClaimAdmin extends BaseAdmin
             default:
 
                 $listMapper
-                    ->add('claimType.code', null, ['label' => 'Claim Type'])
-                    ->add('claimCategory.code', null, ['label' => 'Claim Category'])
-                    ->add('status', null, ['label' => 'Status'])
-                    ->add('claimAmountConverted', null, ['label' => 'Amount'])
+                    ->add('claimType.code', null, ['label' => 'Claim Type','sortable'=>false])
+                    ->add('claimCategory.code', null, ['label' => 'Claim Category','sortable'=>false])
+                    ->add('status', null, ['label' => 'Status','sortable'=>false])
+                    ->add('claimAmountConverted', null, ['label' => 'Amount','sortable'=>false])
                     ->add('a', 'debug', ['label' => 'DEBUG'])
                     ->add('_action', null, array(
                         'actions' => array(
@@ -531,7 +531,10 @@ class ClaimAdmin extends BaseAdmin
                 $show->add('claimMedias', 'show_image', ['label' => 'Claim Images']);
                 $show->end();
                 $show->with('Checker Remarks', array('class' => 'col-md-12'));
-                $show->add('checkerRemark', 'show_checker_remark');
+                $show->add('checkerRemark', 'show_remark');
+                $show->end();
+                $show->with('Approver Remarks', array('class' => 'col-md-12'));
+                $show->add('approverRemark', 'show_remark');
                 $show->end();
                 $show->end();
                 $show->tab('Submission / Employment Details');

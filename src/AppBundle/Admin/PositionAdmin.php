@@ -238,9 +238,9 @@ class PositionAdmin extends BaseAdmin
             case 'checking':
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
-                        if ($value['value']==='all') {
+                        if ($value['value'] === 'all') {
                             return;
-                        }else{
+                        } else {
                             $dateFilter = new  \DateTime($value['value']);
                         }
                         $expr = new Expr();
@@ -261,9 +261,9 @@ class PositionAdmin extends BaseAdmin
             case 'checker-history':
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
-                        if ($value['value']==='all') {
+                        if ($value['value'] === 'all') {
                             return;
-                        }else{
+                        } else {
                             $dateFilter = new  \DateTime($value['value']);
                         }
                         $expr = new Expr();
@@ -284,9 +284,9 @@ class PositionAdmin extends BaseAdmin
             case 'approving':
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
-                        if ($value['value']==='all') {
+                        if ($value['value'] === 'all') {
                             return;
-                        }else{
+                        } else {
                             $dateFilter = new  \DateTime($value['value']);
                         }
                         $expr = new Expr();
@@ -307,9 +307,9 @@ class PositionAdmin extends BaseAdmin
             case 'approver-history':
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
-                        if ($value['value']==='all') {
+                        if ($value['value'] === 'all') {
                             return;
-                        }else{
+                        } else {
                             $dateFilter = new  \DateTime($value['value']);
                         }
                         $expr = new Expr();
@@ -331,9 +331,9 @@ class PositionAdmin extends BaseAdmin
             case 'hr-reject':
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
-                        if ($value['value']==='all') {
+                        if ($value['value'] === 'all') {
                             return;
-                        }else{
+                        } else {
                             $dateFilter = new  \DateTime($value['value']);
                         }
                         $expr = new Expr();
@@ -390,12 +390,12 @@ class PositionAdmin extends BaseAdmin
         switch ($type) {
             case 'checking':
             case 'approving':
-                $listMapper->add('employeeNo', null, ['label' => 'Employee No'])
-                    ->add('firstName', null, ['label' => 'Name'])
-                    ->add('company.name', null, ['label' => 'Company'])
-                    ->add('employeeGroup.costCentre.code', null, ['label' => 'Cost Centre'])
-                    ->add('2', 'number_claim', ['label' => 'No. Pending Claims'])
-                    ->add('4', 'submission_date_claim', ['label' => 'Initial Submission Date'])
+                $listMapper->add('employeeNo', null, ['label' => 'Employee No', 'sortable' => false])
+                    ->add('firstName', null, ['label' => 'Name', 'sortable' => false])
+                    ->add('company.name', null, ['label' => 'Company', 'sortable' => false])
+                    ->add('employeeGroup.costCentre.code', null, ['label' => 'Cost Centre', 'sortable' => false])
+                    ->add('2', 'number_claim', ['label' => 'No. Pending Claims', 'sortable' => false])
+                    ->add('4', 'submission_date_claim', ['label' => 'Initial Submission Date', 'sortable' => false])
                     ->add('_action', null, array(
                         'actions' => array(
                             'list' => array(
@@ -406,11 +406,11 @@ class PositionAdmin extends BaseAdmin
                 break;
             case 'checker-history':
             case 'approver-history':
-                $listMapper->add('employeeNo', null, ['label' => 'Employee No'])
-                    ->add('firstName', null, ['label' => 'Name'])
-                    ->add('company.name', null, ['label' => 'Company'])
-                    ->add('employeeGroup.costCentre.code', null, ['label' => 'Cost Centre'])
-                    ->add('2', 'number_claim', ['label' => 'No. Claims'])
+                $listMapper->add('employeeNo', null, ['label' => 'Employee No', 'sortable' => false])
+                    ->add('firstName', null, ['label' => 'Name', 'sortable' => false])
+                    ->add('company.name', null, ['label' => 'Company', 'sortable' => false])
+                    ->add('employeeGroup.costCentre.code', null, ['label' => 'Cost Centre', 'sortable' => false])
+                    ->add('2', 'number_claim', ['label' => 'No. Claims', 'sortable' => false])
                     ->add('_action', null, array(
                         'actions' => array(
                             'list' => array(
@@ -420,11 +420,11 @@ class PositionAdmin extends BaseAdmin
                     ));
                 break;
             case 'hr':
-                $listMapper->add('employeeNo', null, ['label' => 'Employee No'])
-                    ->add('firstName', null, ['label' => 'Name'])
-                    ->add('company.name', null, ['label' => 'Company'])
-                    ->add('employeeGroup.costCentre.code', null, ['label' => 'Cost Centre'])
-                    ->add('3', 'number_claim', ['label' => 'Total Claims Amount'])
+                $listMapper->add('employeeNo', null, ['label' => 'Employee No', 'sortable' => false])
+                    ->add('firstName', null, ['label' => 'Name', 'sortable' => false])
+                    ->add('company.name', null, ['label' => 'Company', 'sortable' => false])
+                    ->add('employeeGroup.costCentre.code', null, ['label' => 'Cost Centre', 'sortable' => false])
+                    ->add('3', 'number_claim', ['label' => 'Total Claims Amount', 'sortable' => false])
                     ->add('_action', null, array(
                         'actions' => array(
                             'list' => array(
@@ -434,11 +434,11 @@ class PositionAdmin extends BaseAdmin
                     ));
                 break;
             case 'hr-reject':
-                $listMapper->add('employeeNo', null, ['label' => 'Employee No'])
-                    ->add('firstName', null, ['label' => 'Name'])
-                    ->add('company.name', null, ['label' => 'Company'])
-                    ->add('employeeGroup.costCentre.code', null, ['label' => 'Cost Centre'])
-                    ->add('3', 'number_claim', ['label' => 'Total Claims Amount'])
+                $listMapper->add('employeeNo', null, ['label' => 'Employee No', 'sortable' => false])
+                    ->add('firstName', null, ['label' => 'Name', 'sortable' => false])
+                    ->add('company.name', null, ['label' => 'Company', 'sortable' => false])
+                    ->add('employeeGroup.costCentre.code', null, ['label' => 'Cost Centre', 'sortable' => false])
+                    ->add('3', 'number_claim', ['label' => 'Total Claims Amount', 'sortable' => false])
                     ->add('_action', null, array(
                         'actions' => array(
                             'list' => array(
@@ -449,15 +449,12 @@ class PositionAdmin extends BaseAdmin
                 break;
             default:
                 $listMapper->
-                addIdentifier('employeeNo', null, array(
-                    'sortable' => 'email',
-                ))->add('email', null, array(
-                    'sortable' => 'email',
-                ))
-                    ->add('firstName')
-                    ->add('lastName')
-                    ->add('contactNumber')
-                    ->add('nric', null, ['label' => 'NRIC/Fin No'])
+                addIdentifier('employeeNo', null, array('sortable'=>false))
+                    ->add('email', null, array('sortable'=>false))
+                    ->add('firstName',null,['sortable'=>false])
+                    ->add('lastName',null,['sortable'=>false])
+                    ->add('contactNumber',null,['sortable'=>false])
+                    ->add('nric', null, ['label' => 'NRIC/Fin No','sortable'=>false])
                     ->add('_action', null, array(
                         'actions' => array(
                             'delete' => array(),
