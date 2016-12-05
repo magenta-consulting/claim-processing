@@ -20,10 +20,25 @@ file that was distributed with this source code.
             Return to list</a></li>
 {%- endblock -%}
 
-
-                        {% block sonata_breadcrumb %}
-
-                        {% endblock sonata_breadcrumb %}
+         {% block sonata_breadcrumb %}
+             <div class="navbar-left">
+                 <div class="hidden-xs">
+                     <ol class="nav navbar-top-links breadcrumb">
+                         <li>
+                             <a href="{{ path('sonata_admin_dashboard') }}">Dashboard</a>
+                         </li>
+                         <li>
+                             <a href="{{ path('admin_app_position_list',{'type':'approver-history'}) }}">Approver History
+                             </a>
+                         </li>
+                         <li>
+                             <a href="{{ path('admin_app_claim_list',{'type':'approver-history-each-position','position-id':app.request.get('position-id')}) }}">{{ getNameUser(app.request.get('position-id')) }}</a>
+                         </li>
+                         <li class="active"><span>Show</span></li>
+                     </ol>
+                 </div>
+             </div>
+         {% endblock sonata_breadcrumb %}
 
 {% block show %}
     <div class="sonata-ba-view">

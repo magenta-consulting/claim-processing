@@ -21,9 +21,25 @@ file that was distributed with this source code.
 {%- endblock -%}
 
 
-                        {% block sonata_breadcrumb %}
-
-                        {% endblock sonata_breadcrumb %}
+             {% block sonata_breadcrumb %}
+                 <div class="navbar-left">
+                     <div class="hidden-xs">
+                         <ol class="nav navbar-top-links breadcrumb">
+                             <li>
+                                 <a href="{{ path('sonata_admin_dashboard') }}">Dashboard</a>
+                             </li>
+                             <li>
+                                 <a href="{{ path('admin_app_claim_excelReport') }}">Claims Report</a>
+                             </li>
+                             <li>
+                                 <a href="{{ path('admin_app_claim_list',{'type':'hr-report-each-position','position-id':object.position.id}) }}">Claims Report Summary</a>
+                             </li>
+                             <li class="active"><span>{{ getNameUser(object.position.id) }}</span></li>
+                             <li class="active"><span>List</span></li>
+                         </ol>
+                     </div>
+                 </div>
+             {% endblock sonata_breadcrumb %}
 
 {% block show %}
     <div class="sonata-ba-view">

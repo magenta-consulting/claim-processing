@@ -57,6 +57,14 @@ class ClaimRule
         }
         return $company;
     }
+    public function getNameUser($id){
+        $em = $this->container->get('doctrine')->getManager();
+        $position = $em->getRepository('AppBundle\Entity\Position')->find($id);
+        if($position){
+            return $position->getFirstName() .' '.$position->getLastName();
+        }
+        return '';
+    }
 
     public function getCurrencyDefault(){
         $clientCompany = $this->getClientCompany();

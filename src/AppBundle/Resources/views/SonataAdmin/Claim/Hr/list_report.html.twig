@@ -16,9 +16,25 @@ file that was distributed with this source code.
 {%- endblock -%}
 
 {% block tab_menu %}{{ knp_menu_render(admin.sidemenu(action), {'currentClass' : 'active', 'template': sonata_admin.adminPool.getTemplate('tab_menu_template')}, 'twig') }}{% endblock %}
-      {% block sonata_breadcrumb %}
-
-      {% endblock sonata_breadcrumb %}
+   {% block sonata_breadcrumb %}
+       <div class="navbar-left">
+           <div class="hidden-xs">
+               <ol class="nav navbar-top-links breadcrumb">
+                   <li>
+                       <a href="{{ path('sonata_admin_dashboard') }}">Dashboard</a>
+                   </li>
+                   <li>
+                       <a href="{{ path('admin_app_claim_excelReport') }}">Processed Claims</a>
+                   </li>
+                   <li>
+                       <a href="{{ path('admin_app_claim_list',{'type':'hr-report-each-position','position-id':app.request.get('position-id')}) }}">Claims Report Summary</a>
+                   </li>
+                   <li class="active"><span>{{ getNameUser(app.request.get('position-id')) }}</span></li>
+                   <li class="active"><span>Show</span></li>
+               </ol>
+           </div>
+       </div>
+   {% endblock sonata_breadcrumb %}
 {% block list_table %}
     <div class="col-xs-12 col-md-12">
         {% set batchactions = admin.batchactions %}

@@ -185,6 +185,10 @@ class TwigExtension extends \Twig_Extension
     {
         return $this->container->get('app.hr_rule')->getProcessedDate($from,$position);
     }
+    public function getNameUser($id)
+    {
+        return $this->container->get('app.claim_rule')->getNameUser($id);
+    }
 
 
 
@@ -232,6 +236,7 @@ class TwigExtension extends \Twig_Extension
             'getNumberClaimEachEmployeeForApproverHistory' => new \Twig_Function_Method($this, 'getNumberClaimEachEmployeeForApproverHistory', array('is_safe' => array('html'))),
             'isShowMenuForApproverHistory' => new \Twig_Function_Method($this, 'isShowMenuForApproverHistory', array('is_safe' => array('html'))),
             'isShowMenuForCheckerHistory' => new \Twig_Function_Method($this, 'isShowMenuForCheckerHistory', array('is_safe' => array('html'))),
+            'getNameUser' => new \Twig_Function_Method($this, 'getNameUser', array('is_safe' => array('html'))),
 
         );
     }
