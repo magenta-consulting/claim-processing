@@ -32,7 +32,7 @@ file that was distributed with this source code.
                              </a>
                          </li>
                          <li>
-                             <a href="{{ path('admin_app_claim_list',{'type':'approver-history-each-position','position-id':app.request.get('position-id')}) }}">{{ getNameUser(app.request.get('position-id')) }}</a>
+                             <a href="{{ path('admin_app_claim_list',{'type':'approver-history-each-position','position-id':object.position.id}) }}">{{ getNameUser(object.position.id) }}</a>
                          </li>
                          <li class="active"><span>Show</span></li>
                      </ol>
