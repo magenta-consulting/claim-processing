@@ -80,6 +80,10 @@ class TwigExtension extends \Twig_Extension
     {
         return $this->container->get('app.claim_rule')->getCurrentClaimPeriod($key);
     }
+    public function getFlexiPeriod($key)
+    {
+        return $this->container->get('app.claim_rule')->getFlexiPeriod($key);
+    }
 
     public function isExceedLimitRule($claim, $position)
     {
@@ -189,6 +193,10 @@ class TwigExtension extends \Twig_Extension
     {
         return $this->container->get('app.claim_rule')->getNameUser($id);
     }
+    public function isHaveFlexiClaim()
+    {
+        return $this->container->get('app.claim_rule')->isHaveFlexiClaim();
+    }
 
 
 
@@ -237,6 +245,8 @@ class TwigExtension extends \Twig_Extension
             'isShowMenuForApproverHistory' => new \Twig_Function_Method($this, 'isShowMenuForApproverHistory', array('is_safe' => array('html'))),
             'isShowMenuForCheckerHistory' => new \Twig_Function_Method($this, 'isShowMenuForCheckerHistory', array('is_safe' => array('html'))),
             'getNameUser' => new \Twig_Function_Method($this, 'getNameUser', array('is_safe' => array('html'))),
+            'getFlexiPeriod' => new \Twig_Function_Method($this, 'getFlexiPeriod', array('is_safe' => array('html'))),
+            'isHaveFlexiClaim' => new \Twig_Function_Method($this, 'isHaveFlexiClaim', array('is_safe' => array('html'))),
 
         );
     }

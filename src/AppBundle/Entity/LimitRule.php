@@ -194,21 +194,6 @@ class LimitRule
 
 
 
-//    public function validate(ExecutionContextInterface $context, $payload)
-//    {
-//        $company = $this->getCompany();
-//        $this->claimLimitDescription = $this->buildRule($this);
-//        $expr = Criteria::expr();
-//        $criteria = Criteria::create();
-//        $criteria->where($expr->eq('claimLimitDescription', $this->claimLimitDescription))
-//            ->andWhere($expr->neq('id', $this->id));
-//        $categories = $company->getCategories()->matching($criteria);
-//        if (count($categories)) {
-//            $context->buildViolation('This rule is exist')
-//                ->addViolation();
-//        }
-//    }
-
 
 
 

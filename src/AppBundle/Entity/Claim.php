@@ -228,6 +228,12 @@ class Claim
      */
     private $approverHistories;
 
+    /**
+     * @var boolean
+     * @ORM\Column(name="flexi_claim",type="boolean",options={"default":0})
+     */
+    private $flexiClaim;
+
 
     public function __construct()
     {
@@ -236,6 +242,7 @@ class Claim
         $this->checkingHistories = new ArrayCollection();
         $this->approverHistories = new ArrayCollection();
         $this->status = self::STATUS_NOT_USE;
+        $this->flexiClaim = false;
     }
 
     /**
@@ -244,6 +251,22 @@ class Claim
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isFlexiClaim()
+    {
+        return $this->flexiClaim;
+    }
+
+    /**
+     * @param boolean $flexiClaim
+     */
+    public function setFlexiClaim($flexiClaim)
+    {
+        $this->flexiClaim = $flexiClaim;
     }
 
     /**

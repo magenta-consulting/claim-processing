@@ -59,6 +59,10 @@
                             href="{{ path('admin_app_companyclaimpolicies_list') }}"><i
                                 class="fa fa-angle-double-right"></i>Claim Policies Management</a>
                 </li>
+                <li class="item" data-route="admin.company_flexi_claim_policies"><a
+                            href="{{ path('admin_app_companyflexiclaimpolicies_list') }}"><i
+                                class="fa fa-angle-double-right"></i>Flexi Claim Policies Management</a>
+                </li>
 
 
                 <li class="item" data-route="admin.approval_amount_policies"><a
@@ -130,12 +134,17 @@
                             href="{{ path('admin_app_claim_firstPageCreateClaim') }}"><i
                                 class="fa fa-angle-double-right"></i>New Claims</a>
                 </li>
+                <li class="item" data-route="admin_app_claim_flexiClaimBalances"><a
+                            href="{{ path('admin_app_claim_flexiClaimBalances') }}"><i
+                                class="fa fa-angle-double-right"></i>Flexi Claim Balances</a>
+                </li>
                 <li class="treeview"><a href="#"><i class="fa fa-folder"></i>Claims Summary</a>
                     <ul class="active treeview-menu menu_level_1" style="display: none;">
                         <li class="item" data-route-param="current"><a
                                     href="{{ path('admin_app_claim_list',{'type':'current'}) }}"><i
                                         class="fa fa-angle-double-right"></i>Current Claims</a>
                         </li>
+
                         <li class="item" data-route-param="draft"><a
                                     href="{{ path('admin_app_claim_list',{'type':'draft'}) }}"><i
                                         class="fa fa-angle-double-right"></i>Draft Claims </a>
@@ -145,6 +154,10 @@
                                         class="fa fa-angle-double-right"></i>Rejected Claims <span
                                         class="label label-danger number-notification-not-view"
                                         style="font-size: 12px;">{{ getNumberRejectedClaim() }}</span></a>
+                        </li>
+                        <li class="item" data-route-param="flexi"><a
+                                    href="{{ path('admin_app_claim_list',{'type':'flexi'}) }}"><i
+                                        class="fa fa-angle-double-right"></i>Flexi Claims</a>
                         </li>
                         <li class="item" data-route-param=""><a href="{{ path('admin_app_claim_list') }}"><i
                                         class="fa fa-angle-double-right"></i>Past Claims </a>

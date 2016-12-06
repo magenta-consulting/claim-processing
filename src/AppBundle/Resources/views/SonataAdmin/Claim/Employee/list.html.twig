@@ -36,9 +36,12 @@ file that was distributed with this source code.
                         <br>
                         <p style="border-top: 1px solid black; margin-top: 10px;"></p>
                         <strong>Claims Submission Summary</strong><br>
-                        {% if app.request.get('type') != '' %}
+                        {% if app.request.get('type') != '' and app.request.get('type') != 'flexi' %}
                             <small>Claims Period: {{ getCurrentClaimPeriod('from')| date('d M') }}
                                 – {{ getCurrentClaimPeriod('to')| date('d M') }}</small>
+                            {% else %}
+                                <small>Flexi Claims Period: {{ getFlexiPeriod('from')| date('d M Y') }}
+                                    – {{ getFlexiPeriod('to')| date('d M Y') }}</small>
                         {% endif %}
                     </h4>
                 </div>

@@ -20,6 +20,14 @@ class ClaimController extends Controller
 {
 
 
+    public function flexiClaimBalancesAction()
+    {
+        $balances = $this->get('app.claim_rule')->getFlexiBalance();
+
+        return $this->render('@App/SonataAdmin/Claim/flexi_claim_balances.html.twig', [
+            'balances' => $balances
+        ]);
+    }
     public function formatPayMasterAction()
     {
         $from = $this->get('app.claim_rule')->getCurrentClaimPeriod('from')->format('Y-m-d');

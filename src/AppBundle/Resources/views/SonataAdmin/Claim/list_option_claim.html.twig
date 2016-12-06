@@ -18,20 +18,26 @@
                     <div class="box-body">
                         <a href="{{ path('admin_app_claim_list',{'type':'current'}) }}" style="width: 100%;" class="btn btn-success"
                            type="submit" name=""> Current Claims <br>
-                            <small>Period {{ getCurrentClaimPeriod('to')| date('d M Y') }} -  {{ getCurrentClaimPeriod('to')| date('d M Y') }}
+                            <small>Period {{ getCurrentClaimPeriod('from')| date('d M Y') }} -  {{ getCurrentClaimPeriod('to')| date('d M Y') }}
                             </small>
                         </a>
                         <a href="{{ path('admin_app_claim_list',{'type':'draft'}) }}" style="width: 100%;margin-top: 5px;" class="btn btn-default" type="submit"
                            name=""> Draft Claims
                             <br>
-                            <small>Period {{ getCurrentClaimPeriod('to')| date('d M Y') }} -  {{ getCurrentClaimPeriod('to')| date('d M Y') }}
+                            <small>Period {{ getCurrentClaimPeriod('from')| date('d M Y') }} -  {{ getCurrentClaimPeriod('to')| date('d M Y') }}
                             </small>
                         </a>
                         <a href="{{ path('admin_app_claim_list',{'type':'reject'}) }}" style="width: 100%;margin-top: 5px;" class="btn btn-default" type="submit"
                            name=""> Rejected Claims <span class="label label-danger number-notification-not-view"
                                                           style="font-size: 12px;">{{ getNumberRejectedClaim() }}</span>
                             <br>
-                            <small>Period {{ getCurrentClaimPeriod('to')| date('d M Y') }} -  {{ getCurrentClaimPeriod('to')| date('d M Y') }}
+                            <small>Period {{ getCurrentClaimPeriod('from')| date('d M Y') }} -  {{ getCurrentClaimPeriod('to')| date('d M Y') }}
+                            </small>
+                        </a>
+                        <a href="{{ path('admin_app_claim_list',{'type':'flexi'}) }}" style="width: 100%;margin-top: 5px;" class="btn btn-default" type="submit"
+                           name=""> Flexi Claims
+                            <br>
+                            <small>Period {{ getFlexiPeriod('from')| date('d M Y') }} -  {{ getFlexiPeriod('to')| date('d M Y') }}
                             </small>
                         </a>
                         <a href="{{ path('admin_app_claim_list') }}" style="width: 100%;margin-top: 5px;" class="btn btn-default" type="submit"

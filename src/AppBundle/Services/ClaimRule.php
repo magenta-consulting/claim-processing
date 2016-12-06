@@ -57,16 +57,19 @@ class ClaimRule
         }
         return $company;
     }
-    public function getNameUser($id){
+
+    public function getNameUser($id)
+    {
         $em = $this->container->get('doctrine')->getManager();
         $position = $em->getRepository('AppBundle\Entity\Position')->find($id);
-        if($position){
-            return $position->getFirstName() .' '.$position->getLastName();
+        if ($position) {
+            return $position->getFirstName() . ' ' . $position->getLastName();
         }
         return '';
     }
 
-    public function getCurrencyDefault(){
+    public function getCurrencyDefault()
+    {
         $clientCompany = $this->getClientCompany();
         $em = $this->container->get('doctrine')->getManager();
         $currencyExchange = $em->getRepository('AppBundle\Entity\CurrencyExchange')->findOneBy(['isDefault' => true, 'company' => $clientCompany]);
@@ -117,7 +120,8 @@ class ClaimRule
         return null;
     }
 
-    public function getPayCode($claim){
+    public function getPayCode($claim)
+    {
         $em = $this->container->get('doctrine')->getManager();
         $limitRule = $em->getRepository('AppBundle\Entity\LimitRule')->findOneBy([
             'claimType' => $claim->getClaimType(),
@@ -128,6 +132,8 @@ class ClaimRule
         }
         return $limitRule->getPayCode();
     }
+
+
     public function getLimitAmount(Claim $claim, $position)
     {
         $em = $this->container->get('doctrine')->getManager();
@@ -160,6 +166,23 @@ class ClaimRule
 
     public function isExceedLimitRule(Claim $claim, $position)
     {
+        $limitAmount = $this->getLimitAmount($claim, $position);
+        if (!$limitAmount) {
+            return false;
+        }
+        if ($claim->isFlexiClaim()) {
+            $totalAmount = $this->getTotalAmountFlexiClaimForEmployee($claim->getClaimType(), $claim->getClaimCategory(), $position);
+        } else {
+            $totalAmount = $this->getTotalAmountNormalClaimForEmployee($claim->getClaimType(), $claim->getClaimCategory(), $position);
+        }
+        if ($totalAmount > $limitAmount) {
+            return true;
+        }
+        return false;
+    }
+
+    public function getTotalAmountNormalClaimForEmployee($claimType, $claimCategory, $position)
+    {
         $em = $this->container->get('doctrine')->getManager();
         $periodFrom = $this->getCurrentClaimPeriod('from');
         $periodTo = $this->getCurrentClaimPeriod('to');
@@ -171,8 +194,8 @@ class ClaimRule
             ->andWhere($expr->eq('claim.claimType', ':claimType'))
             ->andWhere($expr->eq('claim.claimCategory', ':claimCategory'))
             ->setParameter('position', $position)
-            ->setParameter('claimType', $claim->getClaimType())
-            ->setParameter('claimCategory', $claim->getClaimCategory())
+            ->setParameter('claimType', $claimType)
+            ->setParameter('claimCategory', $claimCategory)
             ->andWhere($expr->eq('claim.periodFrom', ':periodFrom'))
             ->andWhere($expr->eq('claim.periodTo', ':periodTo'))
             ->setParameter('periodFrom', $periodFrom->format('Y-m-d'))
@@ -180,22 +203,16 @@ class ClaimRule
             ->getQuery()
             ->getResult();
 
-        $limitAmount = $this->getLimitAmount($claim, $position);
-        if (!$limitAmount) {
-            return false;
-        }
         $totalAmount = 0;
         foreach ($claims as $claim) {
             $totalAmount += $claim->getClaimAmountConverted();
         }
-        if ($totalAmount > $limitAmount) {
-            return true;
-        }
-        return false;
+        return $totalAmount;
     }
+
     public function getDescriptionEmployeeGroup($employeeGroup)
     {
-        if($employeeGroup == null){
+        if ($employeeGroup == null) {
             return null;
         }
         $description = [];
@@ -296,6 +313,136 @@ class ClaimRule
             return round($taxAmount * $exRate, 2);
         }
         return null;
+    }
+
+
+    /**
+     * Flexi claim
+     */
+
+    public function isHaveFlexiClaim(){
+        $em = $this->container->get('doctrine')->getManager();
+        //in the future will change with multiple cutofdate and claimable, currently just only one
+        $flexiClaimPolicy = $em->getRepository('AppBundle\Entity\CompanyFlexiClaimPolicies')->findOneBy(['company' => $this->getClientCompany()]);
+
+        if ($flexiClaimPolicy) {
+            return true;
+        }
+        return false;
+    }
+    public function isFlexiClaim($claim, $position)
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $limitRule = $em->getRepository('AppBundle\Entity\LimitRule')->findOneBy([
+            'claimType' => $claim->getClaimType(),
+            'claimCategory' => $claim->getClaimCategory()
+        ]);
+        if (!$limitRule) {
+            return 0;
+        }
+        //may be will have many limit amount, but the priority for more detail group
+        $employeeGroupBelongToUser = $this->getEmployeeGroupBelongToUser($position);
+        $expr = new Expr();
+        for ($i = count($employeeGroupBelongToUser) - 1; $i >= 0; $i--) {
+            $limitRuleEmployeeGroup = $em->createQueryBuilder()
+                ->select('limitRuleEmployeeGroup')
+                ->from('AppBundle\Entity\LimitRuleEmployeeGroup', 'limitRuleEmployeeGroup')
+                ->join('limitRuleEmployeeGroup.employeeGroup', 'employeeGroup')
+                ->where($expr->eq('limitRuleEmployeeGroup.limitRule', ':limitRule'))
+                ->andWhere($expr->eq('employeeGroup.description', ':employeeGroup'))
+                ->setParameter('limitRule', $limitRule)
+                ->setParameter('employeeGroup', $employeeGroupBelongToUser[$i])
+                ->getQuery()->getOneOrNullResult();
+            if ($limitRuleEmployeeGroup) {
+                return $limitRuleEmployeeGroup->isLimitPerYear();
+            }
+        }
+        return 0;
+    }
+
+    public function getFlexiBalance()
+    {
+        $position = $this->getPosition();
+        $company = $this->getClientCompany();
+        $expr = new Expr();
+        $employeeGroupBelongToUser = $this->getEmployeeGroupBelongToUser($position);
+        $em = $this->container->get('doctrine')->getManager();
+        $limitRules = $em->getRepository('AppBundle\Entity\LimitRule')->findBy([
+            'company' => $company,
+        ]);
+        $results = [];
+        foreach ($limitRules as $limitRule) {
+            //may be will have many limit amount, but the priority for more detail group
+            for ($i = count($employeeGroupBelongToUser) - 1; $i >= 0; $i--) {
+                $limitRuleEmployeeGroup = $em->createQueryBuilder()
+                    ->select('limitRuleEmployeeGroup')
+                    ->from('AppBundle\Entity\LimitRuleEmployeeGroup', 'limitRuleEmployeeGroup')
+                    ->join('limitRuleEmployeeGroup.employeeGroup', 'employeeGroup')
+                    ->where($expr->eq('limitRuleEmployeeGroup.limitRule', ':limitRule'))
+                    ->andWhere($expr->eq('employeeGroup.description', ':employeeGroup'))
+                    ->setParameter('limitRule', $limitRule)
+                    ->setParameter('employeeGroup', $employeeGroupBelongToUser[$i])
+                    ->getQuery()->getOneOrNullResult();
+                if ($limitRuleEmployeeGroup && $limitRuleEmployeeGroup->isLimitPerYear()) {
+                    $claimType = $limitRule->getClaimType();
+                    $claimcategory = $limitRule->getClaimCategory();
+                    $limit = $limitRuleEmployeeGroup->getClaimLimit();
+                    $totalAmount = $this->getTotalAmountFlexiClaimForEmployee($claimType, $claimcategory, $position);
+                    $balance = $limit - $totalAmount;
+                    $results[$claimType->getCode() . ' / ' . $claimcategory->getCode()] = $balance;
+                }
+            }
+        }
+        return $results;
+    }
+
+    public function getFlexiPeriod($key)
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        //in the future will change with multiple cutofdate and claimable, currently just only one
+        $flexiClaimPolicy = $em->getRepository('AppBundle\Entity\CompanyFlexiClaimPolicies')->findOneBy(['company' => $this->getClientCompany()]);
+
+        if ($flexiClaimPolicy) {
+            $date = $flexiClaimPolicy->getDateStart();
+            $month = $flexiClaimPolicy->getMonthStart();
+            $year = date('Y');
+            $str = $year . '-' . $month . '-' . $date;
+            $fromDate = new \DateTime($str);
+            $clone = clone $fromDate;
+            $toDate = $clone->modify('+1 year');
+            $period = ['from' => $fromDate->format('Y-m-d'), 'to' => $toDate->format('Y-m-d')];
+            return $period[$key];
+        }
+        return null;
+    }
+
+    public function getTotalAmountFlexiClaimForEmployee($claimType, $claimCategory, $position)
+    {
+        $fromDate = $this->getFlexiPeriod('from');
+        $toDate = $this->getFlexiPeriod('to');
+        $em = $this->container->get('doctrine')->getManager();
+        $expr = new Expr();
+        $claims = $em->createQueryBuilder()
+            ->select('claim')
+            ->from('AppBundle\Entity\Claim', 'claim')
+            ->where($expr->eq('claim.position', ':position'))
+            ->andWhere($expr->eq('claim.claimType', ':claimType'))
+            ->andWhere($expr->eq('claim.claimCategory', ':claimCategory'))
+            ->setParameter('position', $position)
+            ->setParameter('claimType', $claimType)
+            ->setParameter('claimCategory', $claimCategory)
+            ->andWhere('claim.receiptDate >= :fromDate')
+            ->andWhere('claim.receiptDate < :toDate')
+            ->setParameter('fromDate', $fromDate)
+            ->setParameter('toDate', $toDate)
+            ->getQuery()
+            ->getResult();
+
+        $totalAmount = 0;
+        foreach ($claims as $claim) {
+            $totalAmount += $claim->getClaimAmountConverted();
+        }
+        return $totalAmount;
     }
 
 }

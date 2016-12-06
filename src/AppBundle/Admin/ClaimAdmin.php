@@ -440,6 +440,7 @@ class ClaimAdmin extends BaseAdmin
         $collection->add('formatPayMasterExport', '{from}/format-pay-master-report');
         $collection->add('excelReport', 'excel-report');
         $collection->add('excelReportExport', '{from}/excel-report-report');
+        $collection->add('flexiClaimBalances', 'flexi-claim-balances');
     }
 
     protected
@@ -639,9 +640,11 @@ class ClaimAdmin extends BaseAdmin
             //employee update for claim
             $result = $this->getContainer()->get('app.approver_rule')->assignClaimToSpecificApprover($claim, $position);
             $payCode = $this->getContainer()->get('app.claim_rule')->getPayCode($claim);
+            $isFlexiClaim = $this->getContainer()->get('app.claim_rule')->isFlexiClaim($claim,$position);
             $claim->setApproverEmployee($result['approverEmployee']);
             $claim->setApproverBackupEmployee($result['approverBackupEmployee']);
             $claim->setPayCode($payCode);
+            $claim->setFlexiClaim($isFlexiClaim);
             if ($claim->getCurrencyExchange()) {
                 $claim->setExRate($this->getContainer()->get('app.claim_rule')->getExRate($claim->getCurrencyExchange()->getId(), $claim->getReceiptDate()));
             } else {

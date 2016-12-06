@@ -166,6 +166,13 @@ services:
                 - { name: sonata.admin, manager_type: orm, label: Claim Policies Management }
             calls:
                 - [setContainer, ["@service_container"]]
+    admin.company_flexi_claim_policies:
+            class: AppBundle\Admin\CompanyFlexiClaimPoliciesAdmin
+            arguments: [~, AppBundle\Entity\CompanyFlexiClaimPolicies, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Claim Flexi Policies Management }
+            calls:
+                - [setContainer, ["@service_container"]]
     admin.approval_amount_policies:
             class: AppBundle\Admin\ApprovalAmountPoliciesAdmin
             arguments: [~, AppBundle\Entity\ApprovalAmountPolicies, ~]

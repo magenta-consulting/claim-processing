@@ -259,6 +259,8 @@ class BaseAdmin extends AbstractAdmin
             if ($class === 'AppBundle\Entity\Claim') {
                 $periodFrom = $this->getContainer()->get('app.claim_rule')->getCurrentClaimPeriod('from');
                 $periodTo = $this->getContainer()->get('app.claim_rule')->getCurrentClaimPeriod('to');
+                $dateFrom = $this->getContainer()->get('app.claim_rule')->getFlexiPeriod('from');
+                $dateTo = $this->getContainer()->get('app.claim_rule')->getFlexiPeriod('to');
                 $request = $this->getRequest();
                 $type = $request->get('type');
                 switch ($type) {
@@ -345,6 +347,20 @@ class BaseAdmin extends AbstractAdmin
                         );
                         $query->setParameter('statusHrApproved', Claim::STATUS_PROCESSED);
                         $query->setParameter('positionId', $positionId);
+                        break;
+                    case 'flexi':
+                        $query->andWhere(
+                            $expr->eq($query->getRootAliases()[0] . '.position', ':position')
+                        );
+                        $query->andWhere(
+                            $expr->neq($query->getRootAliases()[0] . '.status', ':status')
+                        );
+                        $query->andWhere($query->getRootAliases()[0] . '.receiptDate >= :dateFrom');
+                        $query->andWhere($query->getRootAliases()[0] . '.receiptDate < :dateTo');
+                        $query->setParameter('dateFrom', $dateFrom);
+                        $query->setParameter('dateTo', $dateTo);
+                        $query->setParameter('position', $position);
+                        $query->setParameter('status', Claim::STATUS_NOT_USE);
                         break;
                     case 'current':
                         $query->andWhere(

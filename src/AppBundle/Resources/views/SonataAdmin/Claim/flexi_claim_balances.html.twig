@@ -1,0 +1,72 @@
+{% extends 'AppBundle:SonataAdmin:standard_layout.html.twig' %}
+
+
+
+      {% block sonata_breadcrumb %}
+          <div class="navbar-left">
+              <div class="hidden-xs">
+                  <ol class="nav navbar-top-links breadcrumb">
+                      <li>
+                          <a href="{{ path('sonata_admin_dashboard') }}">Dashboard</a>
+                      </li>
+                      <li>
+                          <a href="{{ path('admin_app_claim_flexiClaimBalances') }}">Flexi Claim Balances</a>
+                      </li>
+                      <li class="active"><span>Flexi Claim Balances List</span></li>
+                  </ol>
+              </div>
+          </div>
+      {% endblock sonata_breadcrumb %}
+{% block sonata_admin_content %}
+    <div>
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+
+                <div class="box box-primary" style="margin-bottom: 100px;">
+                    <div class="box-header">
+                        <div style="text-align: center">
+                            <h4 class="box-title">
+                                <small>{{ app.user.loginWithPosition.company.name }}</small>
+                                <br>
+                                <p style="border-top: 1px solid black; margin-top: 10px;"></p>
+                                <strong>Flexi Claim Balances
+                                </strong><br>
+                                <small>Flexi Claims Period: {{ getFlexiPeriod('from')| date('d M Y') }}
+                                    – {{ getFlexiPeriod('to')| date('d M Y') }}</small>
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="box-body table-responsive no-padding">
+
+
+                        <table class="table table-bordered table-striped sonata-ba-list">
+                            <thead>
+                            <tr class="sonata-ba-list-field-header">
+                                <th class="sonata-ba-list-field-header-text ">Name</th>
+                                <th class="sonata-ba-list-field-header-text ">Balance</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            {% for key,value in balances %}
+                                <tr>
+                                    <td>{{ key }}</td>
+                                    <td>{{ value }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+
+                        </table>
+
+
+                    </div>
+                    <div class="box-footer">
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
