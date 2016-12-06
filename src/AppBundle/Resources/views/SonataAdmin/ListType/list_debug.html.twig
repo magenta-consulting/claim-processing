@@ -22,7 +22,7 @@ file that was distributed with this source code.
                <strong>Email: {{ object.approverEmployee.email }}</strong> <br>
                 Employee No: {{ object.approverEmployee.employeeNo }}<br>
                 Company: {{ object.approverEmployee.company.name }}<br>
-                Approved: {{ object.status == 'APPROVER_APPROVED' ? object.approverUpdatedAt|date('d M Y H:i:s'):'N/A' }}
+                Date Approved: {{ object.status == 'APPROVER_APPROVED' ? object.approverUpdatedAt|date('d M Y H:i:s'):'N/A' }}
             {% else %}
                 None
             {% endif %}
@@ -37,7 +37,7 @@ file that was distributed with this source code.
                 <strong>Email: {{ object.checker.checker.email }}</strong><br>
                 Employee No: {{ object.checker.checker.employeeNo }}<br>
                 Company: {{ object.checker.checker.company.name }}<br>
-                Checked: {{ object.status == 'CHECKER_APPROVED' ? object.checkerUpdatedAt|date('d M Y H:i:s'):'N/A' }}
+                Date Checked: {{ object.status == 'CHECKER_APPROVED' ? object.checkerUpdatedAt|date('d M Y H:i:s'):'N/A' }}
             {% else %}
                 None
             {% endif %}
