@@ -407,7 +407,7 @@ class ClaimAdmin extends BaseAdmin
                     ->add('claimCategory.code', null, ['label' => 'Claim Category', 'sortable' => false])
                     ->add('status', null, ['label' => 'Status', 'sortable' => false])
                     ->add('claimAmountConverted', null, ['label' => 'Amount', 'sortable' => false])
-                    ->add('a', 'debug', ['label' => 'DEBUG'])
+                    ->add('a', 'debug', ['label' => 'Approval Flow'])
                     ->add('_action', null, array(
                         'actions' => array(
                             'delete' => array(

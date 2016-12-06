@@ -20,9 +20,9 @@ file that was distributed with this source code.
         <div class="col-md-10">
             {% if object.approver and object.approverEmployee%}
                <strong>Email: {{ object.approverEmployee.email }}</strong> <br>
-                <strong>Pass: p@ssword </strong> <br>
                 Employee No: {{ object.approverEmployee.employeeNo }}<br>
-                COmpany: {{ object.approverEmployee.company.name }}<br>
+                Company: {{ object.approverEmployee.company.name }}<br>
+                Approved: {{ object.status == 'APPROVER_APPROVED' ? object.approverUpdatedAt|date('d M Y H:i:s'):'N/A' }}
             {% else %}
                 None
             {% endif %}
@@ -35,9 +35,9 @@ file that was distributed with this source code.
         <div class="col-md-10">
             {% if object.checker and object.checker.checker %}
                 <strong>Email: {{ object.checker.checker.email }}</strong><br>
-                <strong>Pass: p@ssword </strong><br>
                 Employee No: {{ object.checker.checker.employeeNo }}<br>
-                COmpany: {{ object.checker.checker.company.name }}<br>
+                Company: {{ object.checker.checker.company.name }}<br>
+                Checked: {{ object.status == 'CHECKER_APPROVED' ? object.checkerUpdatedAt|date('d M Y H:i:s'):'N/A' }}
             {% else %}
                 None
             {% endif %}
