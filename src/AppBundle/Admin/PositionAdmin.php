@@ -62,33 +62,13 @@ class PositionAdmin extends BaseAdmin
         return $user;
     }
 
-    public function updateEmployeeGroupDescription(Position $position)
-    {
-        if ($position->getCompany()) {
-            $employeeGroupDescription[] = $position->getCompany()->getName();
-        }
-        if ($position->getCostCentre()) {
-            $employeeGroupDescription[] = $position->getCostCentre()->getCode();
-        }
-        if ($position->getDepartment()) {
-            $employeeGroupDescription[] = $position->getDepartment()->getCode();
-        }
-        if ($position->getEmployeeType()) {
-            $employeeGroupDescription[] = $position->getEmployeeType()->getCode();
-        }
-        if (count($employeeGroupDescription)) {
-            $employeeGroupDescription = implode('>', $employeeGroupDescription);
-        } else {
-            $employeeGroupDescription = '';
-        }
-        $position->setEmployeeGroupDescription($employeeGroupDescription);
-    }
+
 
     public function manualUpdate($position)
     {
         $user = $this->updateUser();
         $position->setUser($user);
-        $this->updateEmployeeGroupDescription($position);
+        $this->getContainer()->get('app.claim_rule')->updateEmployeeGroupDescription($position);
         //proxy position(bug sonata admin)
         foreach ($position->getSubmissionBy() as $submissionBy) {
             $position->addSubmissionBy($submissionBy);

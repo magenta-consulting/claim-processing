@@ -198,8 +198,18 @@ class ClaimRule
             ->setParameter('claimCategory', $claimCategory)
             ->andWhere($expr->eq('claim.periodFrom', ':periodFrom'))
             ->andWhere($expr->eq('claim.periodTo', ':periodTo'))
+            ->andWhere($expr->orX(
+                       $expr->eq('claim.status', ':statusPending'),
+                       $expr->eq('claim.status', ':statusCheckerApproved'),
+                       $expr->eq('claim.status', ':statusApproverApproved'),
+                       $expr->eq('claim.status', ':statusHrApproved')
+                   ))
             ->setParameter('periodFrom', $periodFrom->format('Y-m-d'))
             ->setParameter('periodTo', $periodTo->format('Y-m-d'))
+            ->setParameter('statusPending', Claim::STATUS_PENDING)
+            ->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED)
+            ->setParameter('statusApproverApproved', Claim::STATUS_APPROVER_APPROVED)
+            ->setParameter('statusHrApproved', Claim::STATUS_PROCESSED)
             ->getQuery()
             ->getResult();
 
@@ -234,6 +244,27 @@ class ClaimRule
             $description = '';
         }
         return $description;
+    }
+    public function updateEmployeeGroupDescription($position)
+    {
+        if ($position->getCompany()) {
+            $employeeGroupDescription[] = $position->getCompany()->getName();
+        }
+        if ($position->getCostCentre()) {
+            $employeeGroupDescription[] = $position->getCostCentre()->getCode();
+        }
+        if ($position->getDepartment()) {
+            $employeeGroupDescription[] = $position->getDepartment()->getCode();
+        }
+        if ($position->getEmployeeType()) {
+            $employeeGroupDescription[] = $position->getEmployeeType()->getCode();
+        }
+        if (count($employeeGroupDescription)) {
+            $employeeGroupDescription = implode('>', $employeeGroupDescription);
+        } else {
+            $employeeGroupDescription = '';
+        }
+        $position->setEmployeeGroupDescription($employeeGroupDescription);
     }
 
     public function getNumberRejectedClaim()
@@ -433,8 +464,18 @@ class ClaimRule
             ->setParameter('claimCategory', $claimCategory)
             ->andWhere('claim.receiptDate >= :fromDate')
             ->andWhere('claim.receiptDate < :toDate')
+            ->andWhere($expr->orX(
+                $expr->eq('claim.status', ':statusPending'),
+                $expr->eq('claim.status', ':statusCheckerApproved'),
+                $expr->eq('claim.status', ':statusApproverApproved'),
+                $expr->eq('claim.status', ':statusHrApproved')
+            ))
             ->setParameter('fromDate', $fromDate)
             ->setParameter('toDate', $toDate)
+            ->setParameter('statusPending', Claim::STATUS_PENDING)
+            ->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED)
+            ->setParameter('statusApproverApproved', Claim::STATUS_APPROVER_APPROVED)
+            ->setParameter('statusHrApproved', Claim::STATUS_PROCESSED)
             ->getQuery()
             ->getResult();
 
