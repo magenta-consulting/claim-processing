@@ -355,12 +355,16 @@ class BaseAdmin extends AbstractAdmin
                         $query->andWhere(
                             $expr->neq($query->getRootAliases()[0] . '.status', ':status')
                         );
+                        $query->andWhere(
+                            $expr->eq($query->getRootAliases()[0] . '.flexiClaim', ':flexiClaim')
+                        );
                         $query->andWhere($query->getRootAliases()[0] . '.receiptDate >= :dateFrom');
                         $query->andWhere($query->getRootAliases()[0] . '.receiptDate < :dateTo');
                         $query->setParameter('dateFrom', $dateFrom);
                         $query->setParameter('dateTo', $dateTo);
                         $query->setParameter('position', $position);
                         $query->setParameter('status', Claim::STATUS_NOT_USE);
+                        $query->setParameter('flexiClaim',true);
                         break;
                     case 'current':
                         $query->andWhere(

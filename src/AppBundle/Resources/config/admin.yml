@@ -224,3 +224,10 @@ services:
             calls:
                 - [setContainer, ["@service_container"]]
                 - [setUserManager, ["@fos_user.user_manager"]]
+    admin.third_party_checker_client:
+            class: AppBundle\Admin\ThirdPartyCheckerClientAdmin
+            arguments: [~, AppBundle\Entity\ThirdPartyCheckerClient, ~]
+            tags:
+                - { name: sonata.admin, manager_type: orm, label: Third Party Checker Client }
+            calls:
+                - [setContainer, ["@service_container"]]

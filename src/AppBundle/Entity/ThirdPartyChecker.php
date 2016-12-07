@@ -19,7 +19,7 @@ class ThirdPartyChecker
     public function __construct()
     {
         $this->createdDate = new \DateTime();
-        $this->roles = array();
+        $this->thirdPartyCheckerClients = new ArrayCollection();
         // your own logic
     }
     public function __toString()
@@ -34,12 +34,6 @@ class ThirdPartyChecker
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-
-    /**
-     * @var User
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="positions")
-     */
-    private $user;
 
     /**
      * @var string
@@ -64,11 +58,6 @@ class ThirdPartyChecker
      */
     private $image;
 
-    /**
-     * @var string
-     * @ORM\Column(name="roles",type="array")
-     */
-    private $roles;
     /**
      * @var string
      * @ORM\Column(name="email",type="string")
@@ -113,13 +102,10 @@ class ThirdPartyChecker
     private $lastDateOfService;
 
     /**
-     * @var Claim
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Claim",mappedBy="position")
+     * @var ThirdPartyCheckerClient
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ThirdPartyCheckerClient",mappedBy="thirdPartyChecker",cascade={"all"},orphanRemoval=true)
      */
-    private $claims;
-
-
-
+    private $thirdPartyCheckerClients;
 
     /**
      * @return mixed
@@ -128,83 +114,35 @@ class ThirdPartyChecker
     {
         return $this->id;
     }
+
     /**
-     * Returns the user roles
-     *
-     * @return array The roles
+     * @return ThirdPartyCheckerClient
      */
-    public function getRoles()
+    public function getThirdPartyCheckerClients()
     {
-        $roles = $this->roles;
-
-        // we need to make sure to have at least one role
-        $roles[] = static::ROLE_DEFAULT;
-
-        return array_unique($roles);
+        return $this->thirdPartyCheckerClients;
     }
-    public function setRoles(array $roles)
-    {
-        $this->roles = array();
 
-        foreach ($roles as $role) {
-            $this->addRole($role);
-        }
-
-        return $this;
-    }
     /**
-     * Never use this to check if this user has access to anything!
-     *
-     * Use the SecurityContext, or an implementation of AccessDecisionManager
-     * instead, e.g.
-     *
-     *         $securityContext->isGranted('ROLE_USER');
-     *
-     * @param string $role
-     *
-     * @return boolean
+     * @param ThirdPartyCheckerClient $thirdPartyCheckerClient
      */
-    public function hasRole($role)
+    public function setThirdPartyCheckerClients($thirdPartyCheckerClients)
     {
-        return in_array(strtoupper($role), $this->getRoles(), true);
+        $this->thirdPartyCheckerClients = $thirdPartyCheckerClients;
     }
-    public function addRole($role)
+
+
+    public function addThirdPartyCheckerClient($thirdPartyCheckerClient)
     {
-        $role = strtoupper($role);
-        if ($role === static::ROLE_DEFAULT) {
-            return $this;
-        }
-
-        if (!in_array($role, $this->roles, true)) {
-            $this->roles[] = $role;
-        }
-
-        return $this;
-    }
-    public function removeRole($role)
-    {
-        if (false !== $key = array_search(strtoupper($role), $this->roles, true)) {
-            unset($this->roles[$key]);
-            $this->roles = array_values($this->roles);
-        }
-
+        $this->thirdPartyCheckerClients->add($thirdPartyCheckerClient);
+        $thirdPartyCheckerClient->setThirdPartyChecker($this);
         return $this;
     }
 
-    /**
-     * @return User
-     */
-    public function getUser()
+    public function removeThirdPartyCheckerClient($thirdPartyCheckerClient)
     {
-        return $this->user;
-    }
-
-    /**
-     * @param User $user
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
+        $this->thirdPartyCheckerClients->removeElement($thirdPartyCheckerClient);
+        $thirdPartyCheckerClient->setThirdPartyChecker(null);
     }
 
     /**
@@ -224,7 +162,7 @@ class ThirdPartyChecker
     }
 
     /**
-     * @return string
+     * @return mixed
      */
     public function getFirstName()
     {
@@ -232,7 +170,7 @@ class ThirdPartyChecker
     }
 
     /**
-     * @param string $firstName
+     * @param mixed $firstName
      */
     public function setFirstName($firstName)
     {
@@ -256,7 +194,7 @@ class ThirdPartyChecker
     }
 
     /**
-     * @return Media
+     * @return mixed
      */
     public function getImage()
     {
@@ -264,7 +202,7 @@ class ThirdPartyChecker
     }
 
     /**
-     * @param Media $image
+     * @param mixed $image
      */
     public function setImage($image)
     {
@@ -383,21 +321,9 @@ class ThirdPartyChecker
         $this->lastDateOfService = $lastDateOfService;
     }
 
-    /**
-     * @return Claim
-     */
-    public function getClaims()
-    {
-        return $this->claims;
-    }
 
-    /**
-     * @param Claim $claims
-     */
-    public function setClaims($claims)
-    {
-        $this->claims = $claims;
-    }
+
+
 
 
 
