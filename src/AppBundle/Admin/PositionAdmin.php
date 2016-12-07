@@ -53,8 +53,10 @@ class PositionAdmin extends BaseAdmin
             $this->getUserManager()->updateUser($user);
         } else {
             if (!empty($plainPassword)) {
+                $user->setPlainPassword($plainPassword);
                 $this->getUserManager()->updateCanonicalFields($user);
                 $this->getUserManager()->updatePassword($user);
+                $this->getUserManager()->updateUser($user);
             }
         }
         return $user;
