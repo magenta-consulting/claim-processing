@@ -61,12 +61,35 @@ class ApproverHistory
     private $periodTo;
 
     /**
+     * @var string
+     * @ORM\Column(name="status",type="string")
+     */
+    private $status;
+
+    /**
      * @return mixed
      */
     public function getId()
     {
         return $this->id;
     }
+
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param string $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
 
     /**
      * @return claim

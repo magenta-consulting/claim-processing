@@ -97,11 +97,14 @@ file that was distributed with this source code.
                 {% if isShowApproveRejectCheckerButtonForClaim(object) %}
                     <form method="post" action="{{ path('admin_app_claim_show',{'id':admin.id(object)}) }}">
                         {% if isExceedLimitRule(object,object.position) %}
+                            {% set require = 'required="required"' %}
+                        {% else %}
+                            {% set require = '' %}
+                        {% endif %}
                             <div class="sonata-ba-field sonata-ba-field-standard-natural" style="margin-bottom: 10px;">
-                                <textarea required="required" placeholder="Checker Remarks" name="checker-remark"
+                                <textarea {{ require }} placeholder="Checker Remarks" name="checker-remark"
                                           class=" form-control">{{ object.checkerRemark }}</textarea>
                             </div>
-                        {% endif %}
                         <div class="sonata-ba-form-actions well well-small form-actions">
                             <button type="submit" class="btn btn-success" name="btn_checker_approve" value="1"> Approve
                             </button>

@@ -25,6 +25,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Sonata\AdminBundle\Controller\CRUDController as Controller;
+use AppBundle\Entity\ApproverHistory;
 
 class PositionController extends Controller
 {
@@ -37,7 +38,7 @@ class PositionController extends Controller
      */
     public function batchActionProceed(ProxyQueryInterface $selectedModelQuery, Request $request = null)
     {
-
+        $em = $this->getDoctrine()->getManager();
         $modelManager = $this->admin->getModelManager();
 
 
@@ -61,6 +62,16 @@ class PositionController extends Controller
                             $claim->setStatus(Claim::STATUS_PROCESSED);
                             $claim->setProcessedDate(new \DateTime());
                             $modelManager->update($claim);
+
+                            $history = new ApproverHistory();
+                            $history->setClaim($claim);
+                            $history->setPosition($claim->getPosition());
+                            $history->setApproverPosition($claim->getApproverEmployee());
+                            $history->setPeriodFrom($claim->getPeriodFrom());
+                            $history->setPeriodTo($claim->getPeriodTo());
+                            $history->setStatus(Claim::STATUS_APPROVER_APPROVED);
+                            $em->persist($history);
+                            $em->flush();
                         }
                     }
                 }

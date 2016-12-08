@@ -6,7 +6,7 @@
 
             <script type="text/javascript">
                 $(function () {
-                    $(".datepicker-claim").datepicker({autoclose: true,endDate: new Date()});
+                    $(".datepicker-claim").datepicker({autoclose: true, endDate: new Date()});
                 });
             </script>
             <script type="text/javascript">
@@ -62,6 +62,7 @@
                             }
                         });
                     }
+
                     function getTaxAmountConverted() {
                         var href = $('.wrap-claim-form').data('href-get-taxamount-converted');
                         var data = {};
@@ -80,6 +81,7 @@
                             }
                         });
                     }
+
                     function getClaimAmountConverted() {
                         var href = $('.wrap-claim-form').data('href-get-claimamount-converted');
                         var data = {};
@@ -176,17 +178,25 @@
                                     <br>
                                     <small>{{ position.company.name }}</small>
                                     <p style="border-top: 1px solid black; margin-top: 10px;"></p>
-                                    <small>Claims Period: {{ getCurrentClaimPeriod('from')| date('d M') }}
-                                        – {{ getCurrentClaimPeriod('to')| date('d M') }}</small>
+                                    {% if object.flexiClaim %}
+                                        <small>Flexi Claims Period: {{ getFlexiPeriod('from')| date('d M Y') }}
+                                            – {{ getFlexiPeriod('to')| date('d M Y') }}</small>
+                                    {% else %}
+                                        <small>Claims Period: {{ getCurrentClaimPeriod('from')| date('d M') }}
+                                            – {{ getCurrentClaimPeriod('to')| date('d M') }}</small>
+                                    {% endif %}
                                 </h4>
                             </div>
-                            <div class="box-body" >
+                            <div class="box-body">
                                 <div class="sonata-ba-collapsed-fields">
                                     {% if app.request.attributes.get('_route') == 'admin_app_claim_create' %}
                                         {{ form_row(form.claimType ,{'attr': {'class': 'claim-type'}}) }}
                                         {{ form_row(form.claimCategory,{'attr': {'class': 'claim-category'}}) }}
                                     {% elseif app.request.attributes.get('_route') == 'admin_app_claim_edit' %}
-                                        <div class="row wrap-claim-form" style="margin: 0px;text-align: center;" data-href-get-tax-amount ="{{ path('app_api_gettaxamount') }}" data-href-get-taxamount-converted="{{ path('app_api_gettaxamountconverted') }}" data-href-get-claimamount-converted="{{ path('app_api_getclaimamountconverted') }}">
+                                        <div class="row wrap-claim-form" style="margin: 0px;text-align: center;"
+                                             data-href-get-tax-amount="{{ path('app_api_gettaxamount') }}"
+                                             data-href-get-taxamount-converted="{{ path('app_api_gettaxamountconverted') }}"
+                                             data-href-get-claimamount-converted="{{ path('app_api_getclaimamountconverted') }}">
                                             <div class="col-md-3 col-sm-6 col-xs-12 wrap-take-photo">
                                                 {{ form_widget(form.imageFromCamera,{'attr': {'accept':'image/*','capture':'camera','class': 'claim-images take-photo','data-href':path('admin_app_claim_uploadImage',{'id':object.id})}}) }}
                                             </div>

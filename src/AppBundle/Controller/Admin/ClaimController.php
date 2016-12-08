@@ -289,6 +289,7 @@ class ClaimController extends Controller
                 $history->setCheckerPosition($object->getChecker()->getChecker());
                 $history->setPeriodFrom($object->getPeriodFrom());
                 $history->setPeriodTo($object->getPeriodTo());
+                $history->setStatus(Claim::STATUS_CHECKER_APPROVED);
                 $em->persist($history);
                 $em->flush();
             } else if ($request->get('btn_checker_reject') == 1) {
@@ -296,6 +297,17 @@ class ClaimController extends Controller
                 $object->setCheckerUpdatedAt(new \DateTime());
                 $object->setCheckerRemark($request->get('checker-remark'));
                 $object->setStatus(Claim::STATUS_CHECKER_REJECTED);
+
+                //add history
+                $history = new CheckerHistory();
+                $history->setClaim($object);
+                $history->setPosition($object->getPosition());
+                $history->setCheckerPosition($object->getChecker()->getChecker());
+                $history->setPeriodFrom($object->getPeriodFrom());
+                $history->setPeriodTo($object->getPeriodTo());
+                $history->setStatus(Claim::STATUS_CHECKER_REJECTED);
+                $em->persist($history);
+                $em->flush();
             } else if ($request->get('btn_approver_approve') == 1) {
                 $urlRedirect = $this->admin->generateUrl('list', ['type' => 'approving-each-position', 'position-id' => $object->getPosition()->getId()]);
                 $object->setApproverUpdatedAt(new \DateTime());
@@ -308,6 +320,7 @@ class ClaimController extends Controller
                 $history->setApproverPosition($object->getApproverEmployee());
                 $history->setPeriodFrom($object->getPeriodFrom());
                 $history->setPeriodTo($object->getPeriodTo());
+                $history->setStatus(Claim::STATUS_APPROVER_APPROVED);
                 $em->persist($history);
                 $em->flush();
             } else if ($request->get('btn_approver_reject') == 1) {
@@ -315,6 +328,16 @@ class ClaimController extends Controller
                 $object->setApproverUpdatedAt(new \DateTime());
                 $object->setApproverRemark($request->get('approver-remark'));
                 $object->setStatus(Claim::STATUS_APPROVER_REJECTED);
+
+                //add history
+                $history = new ApproverHistory();
+                $history->setClaim($object);
+                $history->setPosition($object->getPosition());
+                $history->setApproverPosition($object->getApproverEmployee());
+                $history->setPeriodFrom($object->getPeriodFrom());
+                $history->setPeriodTo($object->getPeriodTo());
+                $history->setStatus(Claim::STATUS_APPROVER_REJECTED);
+                $em->persist($history);
             } else if ($request->get('btn_hr_reject') == 1) {
                 $urlRedirect = $this->admin->generateUrl('list', ['type' => 'hr-each-position', 'position-id' => $object->getPosition()->getId()]);
                 $object->setStatus(Claim::STATUS_HR_REJECTED);
@@ -652,7 +675,7 @@ class ClaimController extends Controller
 
     public function batchActionApprove(ProxyQueryInterface $selectedModelQuery, Request $request = null)
     {
-
+        $em = $this->getDoctrine()->getManager();
         $modelManager = $this->admin->getModelManager();
 
 
@@ -674,6 +697,16 @@ class ClaimController extends Controller
                         $claim->setStatus(Claim::STATUS_APPROVER_APPROVED);
                         $claim->setApproverUpdatedAt(new \DateTime());
                         $modelManager->update($claim);
+
+                        $history = new ApproverHistory();
+                        $history->setClaim($claim);
+                        $history->setPosition($claim->getPosition());
+                        $history->setApproverPosition($claim->getApproverEmployee());
+                        $history->setPeriodFrom($claim->getPeriodFrom());
+                        $history->setPeriodTo($claim->getPeriodTo());
+                        $history->setStatus(Claim::STATUS_APPROVER_APPROVED);
+                        $em->persist($history);
+                        $em->flush();
                     }
                 }
             }

@@ -135,12 +135,7 @@
                                 href="{{ path('admin_app_claim_firstPageCreateClaim') }}"><i
                                     class="fa fa-angle-double-right"></i>New Claims</a>
                     </li>
-                    {% if isHaveFlexiClaim() %}
-                        <li class="item" data-route="admin_app_claim_flexiClaimBalances"><a
-                                    href="{{ path('admin_app_claim_flexiClaimBalances') }}"><i
-                                        class="fa fa-angle-double-right"></i>Flexi Claim Balances</a>
-                        </li>
-                    {% endif %}
+
                     <li class="treeview"><a href="#"><i class="fa fa-folder"></i>Claims Summary</a>
                         <ul class="active treeview-menu menu_level_1" style="display: none;">
                             <li class="item" data-route-param="current"><a
@@ -162,6 +157,10 @@
                                 <li class="item" data-route-param="flexi"><a
                                             href="{{ path('admin_app_claim_list',{'type':'flexi'}) }}"><i
                                                 class="fa fa-angle-double-right"></i>Flexi Claims</a>
+                                </li>
+                                <li class="item" data-route="admin_app_claim_flexiClaimBalances"><a
+                                            href="{{ path('admin_app_claim_flexiClaimBalances') }}"><i
+                                                class="fa fa-angle-double-right"></i>Flexi Claim Balances</a>
                                 </li>
                             {% endif %}
                             <li class="item" data-route-param=""><a href="{{ path('admin_app_claim_list') }}"><i

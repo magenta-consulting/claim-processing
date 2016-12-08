@@ -379,8 +379,6 @@ class ClaimAdmin extends BaseAdmin
             case 'hr-each-position':
             case 'hr-reject-each-position':
             case 'hr-report-each-position':
-            case 'checker-history-each-position':
-            case 'approver-history-each-position':
                 $listMapper
                     ->add('position.employeeNo', null, ['label' => 'Employee No', 'sortable' => false])
                     ->add('position.firstName', null, ['label' => 'Name', 'sortable' => false])
@@ -390,6 +388,46 @@ class ClaimAdmin extends BaseAdmin
                     ->add('periodFrom', 'date', ['label' => 'Period From', 'format' => 'd M Y', 'sortable' => false])
                     ->add('periodTo', null, ['label' => 'Period To', 'format' => 'd M Y', 'sortable' => false])
                     ->add('status', null, ['label' => 'Status', 'sortable' => false])
+                    ->add('createdAt', null, ['label' => 'Submission Date', 'format' => 'd M Y', 'sortable' => false])
+                    ->add('claimAmountConverted', null, ['label' => 'Amount', 'sortable' => false])
+                    ->add('_action', null, array(
+                        'actions' => array(
+                            'show' => array(
+                                'template' => 'AppBundle:SonataAdmin/CustomActions:_list-action-checker_approver_hr-view-claim.html.twig'
+                            ),
+                        )
+                    ));
+                break;
+            case 'checker-history-each-position':
+                $listMapper
+                    ->add('position.employeeNo', null, ['label' => 'Employee No', 'sortable' => false])
+                    ->add('position.firstName', null, ['label' => 'Name', 'sortable' => false])
+                    ->add('position.employeeGroup.costCentre.code', null, ['label' => 'Cost Centre', 'sortable' => false])
+                    ->add('claimType.code', null, ['label' => 'Claim Type', 'sortable' => false])
+                    ->add('claimCategory.code', null, ['label' => 'Claim Category', 'sortable' => false])
+                    ->add('periodFrom', 'date', ['label' => 'Period From', 'format' => 'd M Y', 'sortable' => false])
+                    ->add('periodTo', null, ['label' => 'Period To', 'format' => 'd M Y', 'sortable' => false])
+                    ->add('status', null, ['label' => 'Status', 'sortable' => false])
+                    ->add('createdAt', null, ['label' => 'Submission Date', 'format' => 'd M Y', 'sortable' => false])
+                    ->add('claimAmountConverted', null, ['label' => 'Amount', 'sortable' => false])
+                    ->add('_action', null, array(
+                        'actions' => array(
+                            'show' => array(
+                                'template' => 'AppBundle:SonataAdmin/CustomActions:_list-action-checker_approver_hr-view-claim.html.twig'
+                            ),
+                        )
+                    ));
+                break;
+            case 'approver-history-each-position':
+                $listMapper
+                    ->add('position.employeeNo', null, ['label' => 'Employee No', 'sortable' => false])
+                    ->add('position.firstName', null, ['label' => 'Name', 'sortable' => false])
+                    ->add('position.employeeGroup.costCentre.code', null, ['label' => 'Cost Centre', 'sortable' => false])
+                    ->add('claimType.code', null, ['label' => 'Claim Type', 'sortable' => false])
+                    ->add('claimCategory.code', null, ['label' => 'Claim Category', 'sortable' => false])
+                    ->add('periodFrom', 'date', ['label' => 'Period From', 'format' => 'd M Y', 'sortable' => false])
+                    ->add('periodTo', null, ['label' => 'Period To', 'format' => 'd M Y', 'sortable' => false])
+                    ->add('approverHistory.status', null, ['label' => 'Status', 'sortable' => false])
                     ->add('createdAt', null, ['label' => 'Submission Date', 'format' => 'd M Y', 'sortable' => false])
                     ->add('claimAmountConverted', null, ['label' => 'Amount', 'sortable' => false])
                     ->add('_action', null, array(
@@ -665,6 +703,8 @@ class ClaimAdmin extends BaseAdmin
         //must just save when create not update (will conflict when approver or checker update claim)
         $checker = $this->getContainer()->get('app.checker_rule')->getChecker($position);
         $approver = $this->getContainer()->get('app.approver_rule')->getApprover($position);
+        $isFlexiClaim = $this->getContainer()->get('app.claim_rule')->isFlexiClaim($claim,$position);
+        $claim->setFlexiClaim($isFlexiClaim);
         $claim->setChecker($checker);
         $claim->setApprover($approver);
         $claim->setPosition($position);
