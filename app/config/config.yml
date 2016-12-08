@@ -12,6 +12,8 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
+    router.request_context.host: claims.magentapulse.com
+    router.request_context.scheme: http
 
 framework:
     #esi:             ~
