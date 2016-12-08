@@ -427,7 +427,7 @@ class ClaimAdmin extends BaseAdmin
                     ->add('claimCategory.code', null, ['label' => 'Claim Category', 'sortable' => false])
                     ->add('periodFrom', 'date', ['label' => 'Period From', 'format' => 'd M Y', 'sortable' => false])
                     ->add('periodTo', null, ['label' => 'Period To', 'format' => 'd M Y', 'sortable' => false])
-                    ->add('approverHistory.status', null, ['label' => 'Status', 'sortable' => false])
+                    ->add('status', null, ['label' => 'Status', 'sortable' => false])
                     ->add('createdAt', null, ['label' => 'Submission Date', 'format' => 'd M Y', 'sortable' => false])
                     ->add('claimAmountConverted', null, ['label' => 'Amount', 'sortable' => false])
                     ->add('_action', null, array(

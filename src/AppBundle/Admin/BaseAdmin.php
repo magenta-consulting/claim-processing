@@ -286,7 +286,7 @@ class BaseAdmin extends AbstractAdmin
                     case 'checker-history-each-position':
                         $positionId = $request->get('position-id');
                         $query->leftJoin($query->getRootAliases()[0] . '.checkingHistories', 'checkingHistory');
-                        $query->leftJoin('checkingHistory.position', 'position');
+                        $query->join('checkingHistory.position', 'position');
                         $query->andWhere(
                             $expr->eq('position.id', ':positionId')
                         );
@@ -313,7 +313,7 @@ class BaseAdmin extends AbstractAdmin
                     case 'approver-history-each-position':
                         $positionId = $request->get('position-id');
                         $query->leftJoin($query->getRootAliases()[0] . '.approverHistories', 'approverHistory');
-                        $query->leftJoin('approverHistory.position', 'position');
+                        $query->join('approverHistory.position', 'position');
                         $query->andWhere(
                             $expr->eq('position.id', ':positionId')
                         );
