@@ -160,7 +160,6 @@ class BaseAdmin extends AbstractAdmin
                 $em->persist($claimType2);
 
 
-
                 $em->flush();
 
             }
@@ -215,6 +214,12 @@ class BaseAdmin extends AbstractAdmin
                 );
 
             }
+            if ($this->getClass() == 'AppBundle\Entity\Position' && !$this->getRequest()->isXmlHttpRequest()) {
+                $query->andWhere(
+                    $expr->eq($query->getRootAliases()[0] . '.thirdParty', ':thirdParty')
+                );
+                $query->setParameter('thirdParty', false);
+            }
         }
         if ($this->isCLient()) {
             if ($class === 'AppBundle\Entity\Company') {
@@ -230,7 +235,7 @@ class BaseAdmin extends AbstractAdmin
                 if ($this->getClass() !== 'AppBundle\Entity\Position') {
                     //manage infor except poisition
                     $query->andWhere(
-                            $expr->eq($query->getRootAliases()[0] . '.company', ':company')
+                        $expr->eq($query->getRootAliases()[0] . '.company', ':company')
                     );
                     $query->setParameter('company', $company);
                 } elseif ($this->getClass() == 'AppBundle\Entity\Position' && $this->getRequest()->isXmlHttpRequest()) {
@@ -244,19 +249,30 @@ class BaseAdmin extends AbstractAdmin
                     );
                     $query->setParameter('company', $company);
                     $query->setParameter('clientCompany', $clientCompany);
+                } elseif ($this->getClass() == 'AppBundle\Entity\Position' && !$this->getRequest()->isXmlHttpRequest()) {
+                    $query->andWhere(
+                        $expr->eq($query->getRootAliases()[0] . '.thirdParty', ':thirdParty')
+                    );
+                    $query->setParameter('thirdParty', false);
                 }
                 //when get user by comnany the system is automticly get user belong this company by param in url (company)
 
             }
         }
         if ($this->isHr()) {
+            if ($this->getClass() == 'AppBundle\Entity\Position' && !$this->getRequest()->isXmlHttpRequest()) {
+                $query->andWhere(
+                    $expr->eq($query->getRootAliases()[0] . '.thirdParty', ':thirdParty')
+                );
+                $query->setParameter('thirdParty', false);
+            }
             $query->andWhere(
                 $expr->eq($query->getRootAliases()[0] . '.company', ':company')
             );
             $query->setParameter('company', $company);
         }
         if ($this->isUser()) {
-            if($class === 'AppBundle\Entity\CheckerHistory'){
+            if ($class === 'AppBundle\Entity\CheckerHistory') {
                 $request = $this->getRequest();
                 $positionId = $request->get('position-id');
                 $query->join($query->getRootAliases()[0] . '.position', 'position');
@@ -265,12 +281,12 @@ class BaseAdmin extends AbstractAdmin
                     $expr->eq('position.id', ':positionId')
                 );
                 $query->andWhere(
-                        $expr->eq('checkerPosition', ':checkerPosition')
+                    $expr->eq('checkerPosition', ':checkerPosition')
                 );
                 $query->setParameter('positionId', $positionId);
                 $query->setParameter('checkerPosition', $this->getPosition());
             }
-            if($class === 'AppBundle\Entity\ApproverHistory'){
+            if ($class === 'AppBundle\Entity\ApproverHistory') {
                 $request = $this->getRequest();
                 $positionId = $request->get('position-id');
                 $query->join($query->getRootAliases()[0] . '.position', 'position');
@@ -279,7 +295,7 @@ class BaseAdmin extends AbstractAdmin
                     $expr->eq('position.id', ':positionId')
                 );
                 $query->andWhere(
-                        $expr->eq('approverPosition', ':approverPosition')
+                    $expr->eq('approverPosition', ':approverPosition')
                 );
                 $query->setParameter('positionId', $positionId);
                 $query->setParameter('approverPosition', $this->getPosition());
@@ -374,7 +390,7 @@ class BaseAdmin extends AbstractAdmin
                         $query->setParameter('dateTo', $dateTo);
                         $query->setParameter('position', $position);
                         $query->setParameter('status', Claim::STATUS_NOT_USE);
-                        $query->setParameter('flexiClaim',true);
+                        $query->setParameter('flexiClaim', true);
                         break;
                     case 'current':
                         $query->andWhere(
@@ -512,7 +528,7 @@ class BaseAdmin extends AbstractAdmin
                         $query->leftJoin($query->getRootAliases()[0] . '.claims', 'claim');
                         $query->leftJoin($query->getRootAliases()[0] . '.company', 'company');
                         $query->andWhere(
-                                $expr->eq('company', ':company')
+                            $expr->eq('company', ':company')
                         );
                         $query->andWhere($expr->eq('claim.status', ':statusCheckerApproved'));
                         $query->setParameter('statusCheckerApproved', Claim::STATUS_APPROVER_APPROVED);
