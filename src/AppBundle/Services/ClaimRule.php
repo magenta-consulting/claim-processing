@@ -247,6 +247,7 @@ class ClaimRule
     }
     public function updateEmployeeGroupDescription($position)
     {
+        $employeeGroupDescription = [];
         if ($position->getCompany()) {
             $employeeGroupDescription[] = $position->getCompany()->getName();
         }

@@ -118,6 +118,7 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface,Log
             $user->setRoles([]);
             $user->setCompany(null);
             $user->setLoginWithPosition(null);
+            $user->setThirdParty(null);
             $em->persist($user);
             $em->flush();
         }

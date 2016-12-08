@@ -21,6 +21,7 @@ class SwitchUserController extends Controller
             $user->setCompany($company);
             $user->setRoles($position->getRoles());
             $user->setLoginWithPosition($position);
+            $user->setThirdParty($position->isThirdParty());
             $em->persist($user);
             $em->flush();
             return $this->redirectToRoute('sonata_admin_dashboard');
@@ -31,6 +32,7 @@ class SwitchUserController extends Controller
             $user->setCompany($company);
             $user->setRoles($position->getRoles());
             $user->setLoginWithPosition($position);
+            $user->setThirdParty($position->isThirdParty());
             $em->persist($user);
             $em->flush();
             return $this->redirectToRoute('sonata_admin_dashboard');

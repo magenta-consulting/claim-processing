@@ -72,11 +72,34 @@ class User extends BaseUser implements EquatableInterface
     private $loginWithPosition;
 
     /**
+     * @var boolean
+     * @ORM\Column(name="third_party",type="boolean",options={"default":0},nullable=true)
+     */
+    private $thirdParty;
+
+
+    /**
      * @return mixed
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isThirdParty()
+    {
+        return $this->thirdParty;
+    }
+
+    /**
+     * @param boolean $thirdParty
+     */
+    public function setThirdParty($thirdParty)
+    {
+        $this->thirdParty = $thirdParty;
     }
 
     /**

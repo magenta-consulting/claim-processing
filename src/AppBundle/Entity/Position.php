@@ -24,6 +24,7 @@ class Position
         $this->checkingHistories = new ArrayCollection();
         $this->approverHistories = new ArrayCollection();
         $this->roles = array();
+        $this->thirdParty = false;
         // your own logic
     }
     public function __toString()
@@ -203,6 +204,12 @@ class Position
      */
     private $employeeGroupDescription;
 
+    /**
+     * @var boolean
+     * @ORM\Column(name="third_party",type="boolean",options={"default":0})
+     */
+    private $thirdParty;
+
 
     /**
      * @return mixed
@@ -211,6 +218,23 @@ class Position
     {
         return $this->id;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isThirdParty()
+    {
+        return $this->thirdParty;
+    }
+
+    /**
+     * @param boolean $thirdParty
+     */
+    public function setThirdParty($thirdParty)
+    {
+        $this->thirdParty = $thirdParty;
+    }
+
 
     /**
      * @return CheckerHistory

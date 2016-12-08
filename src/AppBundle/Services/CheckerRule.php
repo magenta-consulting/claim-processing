@@ -125,6 +125,9 @@ class CheckerRule extends ClaimRule
 
     public function isShowMenuForChecker($position)
     {
+        if($position->isThirdParty()){
+            return true;
+        }
         $expr = new Expr();
         $em = $this->container->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder('claim');
@@ -140,6 +143,9 @@ class CheckerRule extends ClaimRule
     }
     public function isShowMenuForCheckerHistory($position)
     {
+        if($position->isThirdParty()){
+            return true;
+        }
         $expr = new Expr();
         $em = $this->container->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder('checkerHistory');
