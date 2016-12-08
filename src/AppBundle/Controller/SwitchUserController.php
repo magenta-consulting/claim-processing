@@ -57,7 +57,36 @@ class SwitchUserController extends Controller
 //            'subject' => 'Contact form',
 //        ));
 
-        $this->get('app.claim_notification')->sendNotification();
+//        $this->get('app.claim_notification')->sendNotification();
+
+        $em = $this->getDoctrine()->getManager();
+        $connection = $em->getConnection();
+        $connection->beginTransaction();
+
+        try {
+            $connection->query('SET FOREIGN_KEY_CHECKS=0');
+            $connection->query('DROP TABLE category');
+            // Beware of ALTER TABLE here--it's another DDL statement and will cause
+            // an implicit commit.
+            $connection->query('SET FOREIGN_KEY_CHECKS=1');
+            $connection->commit();
+        } catch (\Exception $e) {
+            $connection->rollback();
+        }
+        $em = $this->getDoctrine()->getManager();
+        $connection = $em->getConnection();
+        $connection->beginTransaction();
+
+        try {
+            $connection->query('SET FOREIGN_KEY_CHECKS=0');
+            $connection->query('DROP TABLE currency_exchange_history');
+            // Beware of ALTER TABLE here--it's another DDL statement and will cause
+            // an implicit commit.
+            $connection->query('SET FOREIGN_KEY_CHECKS=1');
+            $connection->commit();
+        } catch (\Exception $e) {
+            $connection->rollback();
+        }
 
         return new Response('aa');
     }
