@@ -15,7 +15,7 @@ file that was distributed with this source code.
 
 {%- block actions -%}
     <li><a class="sonata-action-element"
-           href="{{ path('admin_app_claim_list',{'type':'checker-history-each-position','position-id':object.position.id}) }}"><i
+           href="{{ path('admin_app_checkerhistory_list',{'type':'checker-history-each-position','position-id':object.position.id}) }}"><i
                     class="fa fa-list" aria-hidden="true"></i>
             Return to list</a></li>
 {%- endblock -%}
@@ -34,7 +34,7 @@ file that was distributed with this source code.
                              </a>
                          </li>
                          <li>
-                             <a href="{{ path('admin_app_claim_list',{'type':'checker-history-each-position','position-id':object.position.id}) }}">{{ getNameUser(object.position.id) }}</a>
+                             <a href="{{ path('admin_app_checkerhistory_list',{'type':'checker-history-each-position','position-id':object.position.id}) }}">{{ getNameUser(object.position.id) }}</a>
                          </li>
                          <li class="active"><span>Show</span></li>
                      </ol>

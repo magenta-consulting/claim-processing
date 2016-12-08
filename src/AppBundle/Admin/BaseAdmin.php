@@ -256,6 +256,34 @@ class BaseAdmin extends AbstractAdmin
             $query->setParameter('company', $company);
         }
         if ($this->isUser()) {
+            if($class === 'AppBundle\Entity\CheckerHistory'){
+                $request = $this->getRequest();
+                $positionId = $request->get('position-id');
+                $query->join($query->getRootAliases()[0] . '.position', 'position');
+                $query->join($query->getRootAliases()[0] . '.checkerPosition', 'checkerPosition');
+                $query->andWhere(
+                    $expr->eq('position.id', ':positionId')
+                );
+                $query->andWhere(
+                        $expr->eq('checkerPosition', ':checkerPosition')
+                );
+                $query->setParameter('positionId', $positionId);
+                $query->setParameter('checkerPosition', $this->getPosition());
+            }
+            if($class === 'AppBundle\Entity\ApproverHistory'){
+                $request = $this->getRequest();
+                $positionId = $request->get('position-id');
+                $query->join($query->getRootAliases()[0] . '.position', 'position');
+                $query->join($query->getRootAliases()[0] . '.approverPosition', 'approverPosition');
+                $query->andWhere(
+                    $expr->eq('position.id', ':positionId')
+                );
+                $query->andWhere(
+                        $expr->eq('approverPosition', ':approverPosition')
+                );
+                $query->setParameter('positionId', $positionId);
+                $query->setParameter('approverPosition', $this->getPosition());
+            }
             if ($class === 'AppBundle\Entity\Claim') {
                 $periodFrom = $this->getContainer()->get('app.claim_rule')->getCurrentClaimPeriod('from');
                 $periodTo = $this->getContainer()->get('app.claim_rule')->getCurrentClaimPeriod('to');
@@ -283,15 +311,6 @@ class BaseAdmin extends AbstractAdmin
                         $query->setParameter('positionId', $positionId);
                         $query->setParameter('checker', $this->getPosition());
                         break;
-                    case 'checker-history-each-position':
-                        $positionId = $request->get('position-id');
-                        $query->leftJoin($query->getRootAliases()[0] . '.checkingHistories', 'checkingHistory');
-                        $query->join('checkingHistory.position', 'position');
-                        $query->andWhere(
-                            $expr->eq('position.id', ':positionId')
-                        );
-                        $query->setParameter('positionId', $positionId);
-                        break;
 
                     case 'approving-each-position':
                         $positionId = $request->get('position-id');
@@ -309,15 +328,6 @@ class BaseAdmin extends AbstractAdmin
                         $query->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
                         $query->setParameter('positionId', $positionId);
                         $query->setParameter('approverEmployee', $this->getPosition());
-                        break;
-                    case 'approver-history-each-position':
-                        $positionId = $request->get('position-id');
-                        $query->leftJoin($query->getRootAliases()[0] . '.approverHistories', 'approverHistory');
-                        $query->join('approverHistory.position', 'position');
-                        $query->andWhere(
-                            $expr->eq('position.id', ':positionId')
-                        );
-                        $query->setParameter('positionId', $positionId);
                         break;
                     case 'hr-each-position':
                     case 'hr-reject-each-position':

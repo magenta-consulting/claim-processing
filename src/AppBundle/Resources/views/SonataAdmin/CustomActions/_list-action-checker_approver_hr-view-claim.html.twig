@@ -3,13 +3,13 @@
        href="{{ path('admin_app_claim_show', {'id':object.id,'type':'checker-view-claim'}) }}">show</a>
 {% elseif app.request.get('type') == 'checker-history-each-position' %}
     <a class="btn btn-sm btn-default edit_link"
-       href="{{ path('admin_app_claim_show', {'id':object.id,'type':'checker-history-view-claim'}) }}">show</a>
+       href="{{ path('admin_app_claim_show', {'id':object.claim.id,'type':'checker-history-view-claim'}) }}">show</a>
 {% elseif app.request.get('type') == 'approving-each-position' %}
     <a class="btn btn-sm btn-default edit_link"
        href="{{ path('admin_app_claim_show', {'id':object.id,'type':'approving-view-claim'}) }}">show</a>
 {% elseif app.request.get('type') == 'approver-history-each-position' %}
     <a class="btn btn-sm btn-default edit_link"
-       href="{{ path('admin_app_claim_show', {'id':object.id,'type':'approver-history-view-claim'}) }}">show</a>
+       href="{{ path('admin_app_claim_show', {'id':object.claim.id,'type':'approver-history-view-claim'}) }}">show</a>
 {% elseif app.request.get('type') == 'hr-each-position' %}
     <a class="btn btn-sm btn-default edit_link"
        href="{{ path('admin_app_claim_show', {'id':object.id,'type':'hr-view-claim'}) }}">show</a>

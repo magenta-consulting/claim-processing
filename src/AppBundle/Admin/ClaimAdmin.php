@@ -230,28 +230,6 @@ class ClaimAdmin extends BaseAdmin
 
                 ));
                 break;
-            case 'checker-history-each-position':
-                $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
-                    'callback' => function ($queryBuilder, $alias, $field, $value) {
-                        if ($value['value'] === 'all') {
-                            return;
-                        } else {
-                            $dateFilter = new  \DateTime($value['value']);
-                        }
-                        $expr = new Expr();
-                        $queryBuilder->andWhere($expr->eq($alias . '.periodFrom', ':periodFrom'));
-                        $queryBuilder->setParameter('periodFrom', $dateFilter->format('Y-m-d'));
-                        return true;
-                    },
-                    'field_type' => 'choice',
-                    'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
-                        'choices' => $this->getContainer()->get('app.checker_rule')->getListClaimPeriodForFilterCheckerHistory(),
-                        'empty_data' => $this->getContainer()->get('app.claim_rule')->getCurrentClaimPeriod('from')->format('Y-m-d'),
-                    ],
-                    'advanced_filter' => false,
-
-                ));
-                break;
             case 'approving-each-position':
                 $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
                     'callback' => function ($queryBuilder, $alias, $field, $value) {
@@ -268,28 +246,6 @@ class ClaimAdmin extends BaseAdmin
                     'field_type' => 'choice',
                     'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
                         'choices' => $this->getContainer()->get('app.approver_rule')->getListClaimPeriodForFilterApprover(),
-                        'empty_data' => $this->getContainer()->get('app.claim_rule')->getCurrentClaimPeriod('from')->format('Y-m-d'),
-                    ],
-                    'advanced_filter' => false,
-
-                ));
-                break;
-            case 'approver-history-each-position':
-                $datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
-                    'callback' => function ($queryBuilder, $alias, $field, $value) {
-                        if ($value['value'] === 'all') {
-                            return;
-                        } else {
-                            $dateFilter = new  \DateTime($value['value']);
-                        }
-                        $expr = new Expr();
-                        $queryBuilder->andWhere($expr->eq($alias . '.periodFrom', ':periodFrom'));
-                        $queryBuilder->setParameter('periodFrom', $dateFilter->format('Y-m-d'));
-                        return true;
-                    },
-                    'field_type' => 'choice',
-                    'field_options' => ['attr' => ['placeholder' => 'Name, Email, Employee No, NRIC/Fin'],
-                        'choices' => $this->getContainer()->get('app.approver_rule')->getListClaimPeriodForFilterApproverHistory(),
                         'empty_data' => $this->getContainer()->get('app.claim_rule')->getCurrentClaimPeriod('from')->format('Y-m-d'),
                     ],
                     'advanced_filter' => false,
@@ -379,46 +335,6 @@ class ClaimAdmin extends BaseAdmin
             case 'hr-each-position':
             case 'hr-reject-each-position':
             case 'hr-report-each-position':
-                $listMapper
-                    ->add('position.employeeNo', null, ['label' => 'Employee No', 'sortable' => false])
-                    ->add('position.firstName', null, ['label' => 'Name', 'sortable' => false])
-                    ->add('position.employeeGroup.costCentre.code', null, ['label' => 'Cost Centre', 'sortable' => false])
-                    ->add('claimType.code', null, ['label' => 'Claim Type', 'sortable' => false])
-                    ->add('claimCategory.code', null, ['label' => 'Claim Category', 'sortable' => false])
-                    ->add('periodFrom', 'date', ['label' => 'Period From', 'format' => 'd M Y', 'sortable' => false])
-                    ->add('periodTo', null, ['label' => 'Period To', 'format' => 'd M Y', 'sortable' => false])
-                    ->add('status', null, ['label' => 'Status', 'sortable' => false])
-                    ->add('createdAt', null, ['label' => 'Submission Date', 'format' => 'd M Y', 'sortable' => false])
-                    ->add('claimAmountConverted', null, ['label' => 'Amount', 'sortable' => false])
-                    ->add('_action', null, array(
-                        'actions' => array(
-                            'show' => array(
-                                'template' => 'AppBundle:SonataAdmin/CustomActions:_list-action-checker_approver_hr-view-claim.html.twig'
-                            ),
-                        )
-                    ));
-                break;
-            case 'checker-history-each-position':
-                $listMapper
-                    ->add('position.employeeNo', null, ['label' => 'Employee No', 'sortable' => false])
-                    ->add('position.firstName', null, ['label' => 'Name', 'sortable' => false])
-                    ->add('position.employeeGroup.costCentre.code', null, ['label' => 'Cost Centre', 'sortable' => false])
-                    ->add('claimType.code', null, ['label' => 'Claim Type', 'sortable' => false])
-                    ->add('claimCategory.code', null, ['label' => 'Claim Category', 'sortable' => false])
-                    ->add('periodFrom', 'date', ['label' => 'Period From', 'format' => 'd M Y', 'sortable' => false])
-                    ->add('periodTo', null, ['label' => 'Period To', 'format' => 'd M Y', 'sortable' => false])
-                    ->add('status', null, ['label' => 'Status', 'sortable' => false])
-                    ->add('createdAt', null, ['label' => 'Submission Date', 'format' => 'd M Y', 'sortable' => false])
-                    ->add('claimAmountConverted', null, ['label' => 'Amount', 'sortable' => false])
-                    ->add('_action', null, array(
-                        'actions' => array(
-                            'show' => array(
-                                'template' => 'AppBundle:SonataAdmin/CustomActions:_list-action-checker_approver_hr-view-claim.html.twig'
-                            ),
-                        )
-                    ));
-                break;
-            case 'approver-history-each-position':
                 $listMapper
                     ->add('position.employeeNo', null, ['label' => 'Employee No', 'sortable' => false])
                     ->add('position.firstName', null, ['label' => 'Name', 'sortable' => false])

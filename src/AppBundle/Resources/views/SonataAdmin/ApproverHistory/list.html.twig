@@ -18,7 +18,6 @@ file that was distributed with this source code.
 {% block tab_menu %}{{ knp_menu_render(admin.sidemenu(action), {'currentClass' : 'active', 'template': sonata_admin.adminPool.getTemplate('tab_menu_template')}, 'twig') }}{% endblock %}
 
 
-
          {% block sonata_breadcrumb %}
              <div class="navbar-left">
                  <div class="hidden-xs">
@@ -31,7 +30,7 @@ file that was distributed with this source code.
                              </a>
                          </li>
                          <li>
-                             <a href="{{ path('admin_app_claim_list',{'type':'approver-history-each-position','position-id':app.request.get('position-id')}) }}">{{ getNameUser(app.request.get('position-id')) }}</a>
+                             <a href="{{ path('admin_app_approverhistory_list',{'type':'approver-history-each-position','position-id':app.request.get('position-id')}) }}">{{ getNameUser(app.request.get('position-id')) }}</a>
                          </li>
                          <li class="active"><span>List</span></li>
                      </ol>
@@ -219,7 +218,7 @@ file that was distributed with this source code.
                                                         id="{{ admin.uniqid }}_per_page" style="width: auto">
                                                     {% for per_page in admin.getperpageoptions %}
                                                         <option {% if per_page == admin.datagrid.pager.maxperpage %}selected="selected"{% endif %}
-                                                                value="{{ admin.generateUrl('list', {'type':'approver-history-each-position','position-id':app.request.get('position-id'),'filter': admin.datagrid.values|merge({'_page': 1, '_per_page': per_page})}) }}">
+                                                                value="{{ admin.generateUrl('list', {'type':'checker-history-each-position','position-id':app.request.get('position-id'),'filter': admin.datagrid.values|merge({'_page': 1, '_per_page': per_page})}) }}">
                                                             {{- per_page -}}
                                                         </option>
                                                     {% endfor %}
@@ -247,6 +246,7 @@ file that was distributed with this source code.
 {% endblock %}
 
 
+
 {% block list_filters %}
     {% if admin.datagrid.filters %}
         {% form_theme form admin.getTemplate('filter') %}
@@ -257,7 +257,7 @@ file that was distributed with this source code.
                     <form class="form-horizontal"
                           action="{{ admin.generateUrl('list') }}" method="GET" role="form">
                         {{ form_errors(form) }}
-                        <input type="hidden" name="type" value="approver-history-each-position">
+                        <input type="hidden" name="type" value="checker-history-each-position">
                         <input type="hidden" name="position-id" value="{{ app.request.get('position-id') }}">
                         <div class="row">
                             <div class="col-sm-9">
