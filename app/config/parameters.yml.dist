@@ -33,7 +33,7 @@ parameters:
     s3_filesystem: sonata.media.filesystem.local
     sonata.media.provider.image.class: Application\Sonata\MediaBundle\Provider\AppImageProvider
     sonata.media.provider.file.class: Application\Sonata\MediaBundle\Provider\AppFileProvider
-    router.request_context.host: claims.magentapulse.com1/
+    router.request_context.host: claims.magentapulse.com
     router.request_context.scheme: http
     router.request_context.base_url: /
 
