@@ -38,6 +38,7 @@ class CurrencyExchangeValue
     /**
      * @var CurrencyExchange
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CurrencyExchange")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $currencyExchange;
     /**

@@ -73,6 +73,7 @@ class Position
     /**
      * @var Media
      * @ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media",cascade={"persist","remove"})
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $image;
 
@@ -113,6 +114,7 @@ class Position
     /**
      * @var EmploymentType
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\EmploymentType")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $employmentType;
 
@@ -166,35 +168,41 @@ class Position
     /**
      * @var EmployeeType
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\EmployeeType")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $employeeType;
     /**
      * @var CostCentre
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CostCentre")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $costCentre;
 
     /**
      * @var Region
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Region")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $region;
 
     /**
      * @var Branch
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Branch")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $branch;
 
     /**
      * @var Department
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Department")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $department;
 
     /**
      * @var Section
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Section")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $section;
 

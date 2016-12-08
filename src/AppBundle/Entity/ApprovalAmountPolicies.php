@@ -50,48 +50,57 @@ class ApprovalAmountPolicies
     /**
      * @var Position
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $approver1;
     /**
      * @var Position
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $approver2;
     /**
      * @var Position
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $approver3;
 
     /**
      * @var Position
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $backupApprover1;
     /**
      * @var Position
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $backupApprover2;
     /**
      * @var Position
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $backupApprover3;
 
     /**
      * @var Position
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $overrideApprover1;
     /**
      * @var Position
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $overrideApprover2;
     /**
      * @var Position
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $overrideApprover3;
 

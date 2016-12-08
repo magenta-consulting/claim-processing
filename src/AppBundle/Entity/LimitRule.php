@@ -46,12 +46,14 @@ class LimitRule
     /**
      * @var PayCode
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PayCode")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $payCode;
 
     /**
      * @var TaxRate
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TaxRate")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $taxRate;
 
@@ -59,11 +61,13 @@ class LimitRule
     /**
      * @var ClaimType
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimType",inversedBy="limitRules")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $claimType;
     /**
      * @var ClaimCategory
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimCategory")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $claimCategory;
 

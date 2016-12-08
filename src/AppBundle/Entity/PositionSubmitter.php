@@ -25,14 +25,14 @@ class PositionSubmitter
     /**
      * @var Position
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position",inversedBy="submissionBy")
-     * @ORM\JoinColumn(name="proxy_position_id",referencedColumnName="id")
+     * @ORM\JoinColumn(name="proxy_position_id",referencedColumnName="id",onDelete="CASCADE")
      */
     private $submissionByPosition;
 
     /**
      * @var Position
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position",inversedBy="submissionFor")
-     * @ORM\JoinColumn(name="position_id",referencedColumnName="id")
+     * @ORM\JoinColumn(name="position_id",referencedColumnName="id",onDelete="CASCADE")
      */
     private $submissionForPosition;
 

@@ -30,18 +30,21 @@ class CheckerHistory
     /**
      * @var claim
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Claim",inversedBy="checkingHistories")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $claim;
 
     /**
      * @var Position
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position",inversedBy="checkingHistories")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $position;
 
     /**
      * @var Position
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $checkerPosition;
 

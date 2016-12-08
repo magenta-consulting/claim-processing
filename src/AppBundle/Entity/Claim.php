@@ -50,16 +50,19 @@ class Claim
     /**
      * @var ClaimType
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimType")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $claimType;
     /**
      * @var CurrencyExchange
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CurrencyExchange")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $currencyExchange;
     /**
      * @var ClaimCategory
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimCategory")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $claimCategory;
 
@@ -103,6 +106,7 @@ class Claim
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position",inversedBy="claims")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $position;
 
@@ -115,29 +119,34 @@ class Claim
     /**
      * @var Checker
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Checker",cascade={"persist"},inversedBy="claims")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $checker;
 
     /**
      * @var ApprovalAmountPolicies
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ApprovalAmountPolicies",cascade={"persist"},inversedBy="claims")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $approver;
 
     /**
      * @var Position
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $approverEmployee;
     /**
      * @var Position
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $approverBackupEmployee;
 
     /**
      * @var TaxRate
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TaxRate")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $taxRate;
 
@@ -174,6 +183,7 @@ class Claim
     /**
      * @var Position
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $createdBy;
 
@@ -213,6 +223,7 @@ class Claim
     /**
      * @var PayCode
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PayCode")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $payCode;
 

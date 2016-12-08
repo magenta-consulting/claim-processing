@@ -38,6 +38,7 @@ class ThirdPartyCheckerClient
     /**
      * @var Company
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
+     * @ORM\JoinColumn(name="company_id", referencedColumnName="id",onDelete="CASCADE")
      */
     private $client;
 

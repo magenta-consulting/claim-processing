@@ -25,12 +25,14 @@ class ClaimMedia
     /**
      * @var Claim
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Claim",inversedBy="claimMedias")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $claim;
 
     /**
      * @var Media
      * @ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media",cascade={"remove","persist"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $media;
 

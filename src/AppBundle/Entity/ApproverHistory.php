@@ -30,18 +30,21 @@ class ApproverHistory
     /**
      * @var claim
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Claim",inversedBy="approverHistories")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $claim;
 
     /**
      * @var Position
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position",inversedBy="approverHistories")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $position;
 
     /**
      * @var Position
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $approverPosition;
 

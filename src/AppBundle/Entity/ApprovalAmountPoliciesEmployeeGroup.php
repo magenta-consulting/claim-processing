@@ -32,12 +32,14 @@ class ApprovalAmountPoliciesEmployeeGroup
     /**
      * @var ApprovalAmountPolicies
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ApprovalAmountPolicies")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $approvalAmountPolicies;
 
     /**
      * @var LimitRule
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\EmployeeGroup")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $employeeGroup;
 

@@ -32,12 +32,14 @@ class CheckerEmployeeGroup
     /**
      * @var Checker
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Checker")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $checker;
 
     /**
      * @var LimitRule
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\EmployeeGroup")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $employeeGroup;
 

@@ -41,6 +41,7 @@ class ClaimType
     /**
      * @var ClaimTypeType
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimTypeType")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $claimTypeType;
 

@@ -36,6 +36,7 @@ class PayCode
     /**
      * @var PayCodeType
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PayCodeType")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $payCodeType;
 

@@ -68,6 +68,7 @@ class User extends BaseUser implements EquatableInterface
     /**
      * @var Position
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $loginWithPosition;
 

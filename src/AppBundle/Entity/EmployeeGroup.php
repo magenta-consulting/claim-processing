@@ -45,24 +45,28 @@ class EmployeeGroup
     /**
      * @var Company
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $companyApply;
 
     /**
      * @var CostCentre
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CostCentre")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $costCentre;
 
     /**
      * @var Department
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Department")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $department;
 
     /**
      * @var EmploymentType
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\EmployeeType")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $employeeType;
 

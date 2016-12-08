@@ -41,6 +41,7 @@ class Region
     /**
      * @var CostCentre
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CostCentre")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $costCentre;
 

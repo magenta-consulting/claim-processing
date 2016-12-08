@@ -50,11 +50,13 @@ class Checker
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $checker;
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Position")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $backupChecker;
 

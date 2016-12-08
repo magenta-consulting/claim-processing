@@ -43,12 +43,14 @@ class LimitRuleEmployeeGroup
     /**
      * @var LimitRule
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\LimitRule")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $limitRule;
 
     /**
      * @var LimitRule
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\EmployeeGroup")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $employeeGroup;
 
