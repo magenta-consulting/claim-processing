@@ -63,7 +63,12 @@ class PositionAdmin extends BaseAdmin
     }
 
 
-
+    protected
+    function configureRoutes(RouteCollection $collection)
+    {
+        parent::configureRoutes($collection);
+        $collection->add('changePassword', 'change-password');
+    }
     public function manualUpdate($position)
     {
         $user = $this->updateUser();

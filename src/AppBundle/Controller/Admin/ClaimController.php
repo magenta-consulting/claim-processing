@@ -275,7 +275,7 @@ class ClaimController extends Controller
         }
 
         $this->admin->setSubject($object);
-
+        $positionLogin = $this->getUser()->getLoginWithPosition();
         if ($request->isMethod('post')) {
             if ($request->get('btn_checker_approve') == 1) {
                 $urlRedirect = $this->admin->generateUrl('list', ['type' => 'checking-each-position', 'position-id' => $object->getPosition()->getId()]);
@@ -286,7 +286,7 @@ class ClaimController extends Controller
                 $history = new CheckerHistory();
                 $history->setClaim($object);
                 $history->setPosition($object->getPosition());
-                $history->setCheckerPosition($object->getChecker()->getChecker());
+                $history->setCheckerPosition($positionLogin);
                 $history->setPeriodFrom($object->getPeriodFrom());
                 $history->setPeriodTo($object->getPeriodTo());
                 $history->setStatus(Claim::STATUS_CHECKER_APPROVED);
@@ -302,7 +302,7 @@ class ClaimController extends Controller
                 $history = new CheckerHistory();
                 $history->setClaim($object);
                 $history->setPosition($object->getPosition());
-                $history->setCheckerPosition($object->getChecker()->getChecker());
+                $history->setCheckerPosition($positionLogin);
                 $history->setPeriodFrom($object->getPeriodFrom());
                 $history->setPeriodTo($object->getPeriodTo());
                 $history->setStatus(Claim::STATUS_CHECKER_REJECTED);
@@ -317,7 +317,7 @@ class ClaimController extends Controller
                 $history = new ApproverHistory();
                 $history->setClaim($object);
                 $history->setPosition($object->getPosition());
-                $history->setApproverPosition($object->getApproverEmployee());
+                $history->setApproverPosition($positionLogin);
                 $history->setPeriodFrom($object->getPeriodFrom());
                 $history->setPeriodTo($object->getPeriodTo());
                 $history->setStatus(Claim::STATUS_APPROVER_APPROVED);
@@ -333,7 +333,7 @@ class ClaimController extends Controller
                 $history = new ApproverHistory();
                 $history->setClaim($object);
                 $history->setPosition($object->getPosition());
-                $history->setApproverPosition($object->getApproverEmployee());
+                $history->setApproverPosition($positionLogin);
                 $history->setPeriodFrom($object->getPeriodFrom());
                 $history->setPeriodTo($object->getPeriodTo());
                 $history->setStatus(Claim::STATUS_APPROVER_REJECTED);

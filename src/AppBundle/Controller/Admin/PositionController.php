@@ -26,6 +26,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Sonata\AdminBundle\Controller\CRUDController as Controller;
 use AppBundle\Entity\ApproverHistory;
+use AppBundle\Form\UserPasswordType;
 
 class PositionController extends Controller
 {
@@ -62,16 +63,6 @@ class PositionController extends Controller
                             $claim->setStatus(Claim::STATUS_PROCESSED);
                             $claim->setProcessedDate(new \DateTime());
                             $modelManager->update($claim);
-
-                            $history = new ApproverHistory();
-                            $history->setClaim($claim);
-                            $history->setPosition($claim->getPosition());
-                            $history->setApproverPosition($claim->getApproverEmployee());
-                            $history->setPeriodFrom($claim->getPeriodFrom());
-                            $history->setPeriodTo($claim->getPeriodTo());
-                            $history->setStatus(Claim::STATUS_APPROVER_APPROVED);
-                            $em->persist($history);
-                            $em->flush();
                         }
                     }
                 }
@@ -100,12 +91,12 @@ class PositionController extends Controller
      */
     public function batchActionApprove(ProxyQueryInterface $selectedModelQuery, Request $request = null)
     {
-
+        $em = $this->getDoctrine()->getManager();
         $modelManager = $this->admin->getModelManager();
 
 
         $selectedModels = $selectedModelQuery->execute();
-
+        $positionLogin = $this->getUser()->getLoginWithPosition();
         // do the merge work here
 
         $currentPeriod = $this->get('app.claim_rule')->getCurrentClaimPeriod('from');
@@ -123,6 +114,17 @@ class PositionController extends Controller
                             $claim->setStatus(Claim::STATUS_APPROVER_APPROVED);
                             $claim->setApproverUpdatedAt(new \DateTime());
                             $modelManager->update($claim);
+
+
+                            $history = new ApproverHistory();
+                            $history->setClaim($claim);
+                            $history->setPosition($claim->getPosition());
+                            $history->setApproverPosition($positionLogin);
+                            $history->setPeriodFrom($claim->getPeriodFrom());
+                            $history->setPeriodTo($claim->getPeriodTo());
+                            $history->setStatus(Claim::STATUS_APPROVER_APPROVED);
+                            $em->persist($history);
+                            $em->flush();
                         }
                     }
                 }
@@ -139,7 +141,7 @@ class PositionController extends Controller
         $this->addFlash('sonata_flash_success', 'Approve Claims Successfully');
 
         return new RedirectResponse(
-            $this->generateUrl('admin_app_position_list',['type'=>'approving','filter' => $this->admin->getFilterParameters()])
+            $this->generateUrl('admin_app_position_list', ['type' => 'approving', 'filter' => $this->admin->getFilterParameters()])
         );
     }
 
@@ -268,5 +270,23 @@ class PositionController extends Controller
         }
 
         return call_user_func(array($this, $finalAction), $query);
+    }
+
+    public function changePasswordAction(Request $request)
+    {
+        $form = $this->createForm(UserPasswordType::class);
+        $userManager = $this->get('fos_user.user_manager');
+        $user = $this->getUser();
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $user->setPlainPassword($form->get('plainPassword')->getData());
+                $userManager->updateUser($user);
+                $this->addFlash('message', 'Update account successfully.');
+            } else {
+                $this->addFlash('error', 'Fail to update.');
+            }
+        }
+        return $this->render('@App/SonataAdmin/Position/change_password.html.twig', ['form' => $form->createView()]);
     }
 }
