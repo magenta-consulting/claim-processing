@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Admin;
 
+use AppBundle\Entity\CheckerHistory;
 use AppBundle\Entity\Claim;
 use AppBundle\Entity\ClaimType;
 use AppBundle\Entity\ClaimTypeType;
@@ -266,10 +267,13 @@ class BaseAdmin extends AbstractAdmin
                 );
                 $query->setParameter('thirdParty', false);
             }
-            $query->andWhere(
-                $expr->eq($query->getRootAliases()[0] . '.company', ':company')
-            );
-            $query->setParameter('company', $company);
+            if ($this->getClass() !== CheckerHistory::class) {
+                $query->andWhere(
+                    $expr->eq($query->getRootAliases()[0] . '.company', ':company')
+                );
+
+                $query->setParameter('company', $company);
+            }
         }
         if ($this->isUser()) {
             if ($class === 'AppBundle\Entity\CheckerHistory') {

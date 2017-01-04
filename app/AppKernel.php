@@ -80,7 +80,7 @@ class AppKernel extends Kernel
             return '/dev/shm/claim/cache/' .  $this->environment;
         }
 
-        return parent::getCacheDir();
+        return dirname(__DIR__).'/var/cache/'.$this->getEnvironment();
     }
 
     public function getLogDir()
@@ -89,7 +89,7 @@ class AppKernel extends Kernel
             return '/dev/shm/claim/logs';
         }
 
-        return parent::getLogDir();
+        return dirname(__DIR__).'/var/logs';
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)
