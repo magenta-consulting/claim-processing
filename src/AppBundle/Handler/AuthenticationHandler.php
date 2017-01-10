@@ -15,7 +15,7 @@ use Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 
-class AuthenticationHandler implements AuthenticationSuccessHandlerInterface,LogoutSuccessHandlerInterface
+class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, LogoutSuccessHandlerInterface
 {
 
     protected $httpUtils;
@@ -30,7 +30,7 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface,Log
         'use_referer' => false,
     );
 
-    public function __construct(HttpUtils $httpUtils, \Symfony\Component\DependencyInjection\ContainerInterface $cont,TokenStorage $tokenStorage)
+    public function __construct(HttpUtils $httpUtils, \Symfony\Component\DependencyInjection\ContainerInterface $cont, TokenStorage $tokenStorage)
     {
         $this->container = $cont;
         $this->httpUtils = $httpUtils;
@@ -99,20 +99,20 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface,Log
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {
         $urlRedirect = $this->determineTargetUrl($request);
-        if($this->container->get('security.authorization_checker')->isGranted('ROLE_ADMIN', null)){
+        if ($this->container->get('security.authorization_checker')->isGranted('ROLE_ADMIN', null)) {
             return $this->httpUtils->createRedirectResponse($request, $this->options['default_target_path']);
         }
         if ($urlRedirect == $this->options['default_target_path']) {
-            $urlRedirect = $this->container->get('router')->generate('app_switch_user', [], true);
+            $urlRedirect = $this->container->get('router')->generate('app_switch_user');
         }
-        return $this->httpUtils->createRedirectResponse($request, $urlRedirect);
+//        return $this->httpUtils->createRedirectResponse($request, $urlRedirect); Stupid Mike
+        return new RedirectResponse($urlRedirect, 302);
     }
-
 
 
     public function onLogoutSuccess(Request $request)
     {
-        if(!$this->container->get('security.authorization_checker')->isGranted('ROLE_ADMIN', null)) {
+        if (!$this->container->get('security.authorization_checker')->isGranted('ROLE_ADMIN', null)) {
             $em = $this->container->get('doctrine')->getManager();
             $user = $this->tokenStorage->getToken()->getUser();
             $user->setRoles([]);
