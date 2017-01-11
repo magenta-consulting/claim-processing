@@ -3,7 +3,7 @@ sonata_admin:
         use_select2:    false # disable select2
     templates:
         dashboard:                      AppBundle:SonataAdmin/Core:dashboard.html.twig
-        layout:                         AppBundle:SonataAdmin:standard_layout.html.twig
+        layout:                         ::admin/standard_layout.html.twig
     title:      ClaimEx
 #    dashboard:
 #        groups:
