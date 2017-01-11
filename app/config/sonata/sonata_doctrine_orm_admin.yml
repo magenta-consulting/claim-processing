@@ -7,6 +7,7 @@ sonata_doctrine_orm_admin:
         types:
             list:
                 debug:      AppBundle:SonataAdmin/ListType:list_debug.html.twig
+                demo:      AppBundle:SonataAdmin/ListType:list_demo.html.twig
                 exrate:      AppBundle:SonataAdmin/ListType:list_exrate.html.twig
                 number_claim:      AppBundle:SonataAdmin/ListType:list_number_claim.html.twig
                 submission_date_claim:      AppBundle:SonataAdmin/ListType:list_submission_date_claim.html.twig
@@ -34,6 +35,7 @@ sonata_doctrine_orm_admin:
                 url:        SonataAdminBundle:CRUD:list_url.html.twig
 
             show:
+                show_status:      AppBundle:SonataAdmin/ShowType:show_status.html.twig
                 show_approver:      AppBundle:SonataAdmin/ShowType:show_approver.html.twig
                 show_checker:      AppBundle:SonataAdmin/ShowType:show_checker.html.twig
                 show_remark:      AppBundle:SonataAdmin/ShowType:show_remark.html.twig
