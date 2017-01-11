@@ -343,7 +343,7 @@ class ClaimAdmin extends BaseAdmin
                     ->add('claimCategory.code', null, ['label' => 'Claim Category', 'sortable' => false])
                     ->add('periodFrom', 'date', ['label' => 'Period From', 'format' => 'd M Y', 'sortable' => false])
                     ->add('periodTo', null, ['label' => 'Period To', 'format' => 'd M Y', 'sortable' => false])
-                    ->add('status', null, ['label' => 'Status', 'sortable' => false])
+                    ->add('status', 'demo', ['label' => 'Status', 'sortable' => false])
                     ->add('createdAt', null, ['label' => 'Submission Date', 'format' => 'd M Y', 'sortable' => false])
                     ->add('claimAmountConverted', null, ['label' => 'Amount', 'sortable' => false])
                     ->add('_action', null, array(
@@ -355,11 +355,11 @@ class ClaimAdmin extends BaseAdmin
                     ));
                 break;
             default:
-
+                
                 $listMapper
                     ->add('claimType.code', null, ['label' => 'Claim Type', 'sortable' => false])
                     ->add('claimCategory.code', null, ['label' => 'Claim Category', 'sortable' => false])
-                    ->add('status', null, ['label' => 'Status', 'sortable' => false])
+                    ->add('status', 'demo', ['label' => 'Status', 'sortable' => false])
                     ->add('claimAmountConverted', null, ['label' => 'Amount', 'sortable' => false])
                     ->add('a', 'debug', ['label' => 'Approval Flow'])
                     ->add('_action', null, array(
@@ -439,7 +439,7 @@ class ClaimAdmin extends BaseAdmin
                     $show->add('claimAmountConverted', 'show_default_currency', ['label' => 'Receipt Value after conversion']);
                     $show->add('taxAmountConverted', 'show_default_currency', ['label' => 'Tax Value after Conversion']);
                 }
-                $show->add('status', 'text', ['label' => 'Status']);
+                $show->add('status', 'show_status', ['label' => 'Status']);
                 $show->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y']);
                 $show->add('submissionRemarks', null, ['label' => 'Claimant Submission Remarks']);
                 $show->end();
@@ -487,7 +487,7 @@ class ClaimAdmin extends BaseAdmin
                     $show->add('claimAmountConverted', 'show_default_currency', ['label' => 'Receipt Value after conversion']);
                     $show->add('taxAmountConverted', 'show_default_currency', ['label' => 'Tax Value after Conversion']);
                 }
-                $show->add('status', 'text', ['label' => 'Status']);
+                $show->add('status', 'show_status', ['label' => 'Status']);
                 $show->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y']);
                 $show->add('submissionRemarks', null, ['label' => 'Claimant Submission Remarks']);
                 $show->end();
@@ -538,7 +538,7 @@ class ClaimAdmin extends BaseAdmin
                     $show->add('claimAmountConverted', 'show_default_currency', ['label' => 'Receipt Value after conversion']);
                     $show->add('taxAmountConverted', 'show_default_currency', ['label' => 'Tax Value after Conversion']);
                 }
-                $show->add('status', 'text', ['label' => 'Status']);
+                $show->add('status', 'show_status', ['label' => 'Status']);
                 $show->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y']);
                 $show->end();
                 break;
@@ -561,7 +561,7 @@ class ClaimAdmin extends BaseAdmin
                     $show->add('claimAmountConverted', 'show_default_currency', ['label' => 'Receipt Value after conversion']);
                     $show->add('taxAmountConverted', 'show_default_currency', ['label' => 'Tax Value after Conversion']);
                 }
-                $show->add('status', 'text', ['label' => 'Status']);
+                $show->add('status', 'show_status', ['label' => 'Status']);
                 $show->add('receiptDate', 'date', ['label' => 'Receipt Date', 'format' => 'd M Y']);
                 $show->add('submissionRemarks', null, ['label' => 'Claimant Submission Remarks']);
                 $show->end();
