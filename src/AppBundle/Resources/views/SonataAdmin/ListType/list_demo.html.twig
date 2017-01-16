@@ -1,0 +1,38 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% extends admin.getTemplate('base_list_field') %}
+
+{% block field %}
+    {# dump(object) #}
+    
+    {# if object.approver and object.approverEmployee #}
+    {% if object.status=='PROCESSED'  %}
+         {{ object.status }}
+    {% else %}
+        {% if object.status=='CHECKER_APPROVED'  %}
+            Checker – Approved – {{ object.status == 'CHECKER_APPROVED' ? object.approverUpdatedAt|date('d M Y'):'N/A' }} – {{ object.approverEmployee.firstName }} {{ object.approverEmployee.lastName }}            
+        {% else %}
+            {% if object.status=='APPROVER_APPROVED'  %}
+                Approver – Approved – {{ object.status == 'APPROVER_APPROVED' ? object.approverUpdatedAt|date('d M Y'):'N/A' }} – {{ object.approverEmployee.firstName }} {{ object.approverEmployee.lastName }}                
+            {% else %}
+                {% if object.status=='APPROVER_REJECTED'  %}
+                    Approver – Rejected – {{ object.status == 'APPROVER_REJECTED' ? object.approverUpdatedAt|date('d M Y'):'N/A' }} – {{ object.approverEmployee.firstName }} {{ object.approverEmployee.lastName }}                
+                {% else %}
+                    {{ object.status }}
+                {% endif %}
+            {% endif %}
+        {% endif %}       
+        
+    {% endif %}
+    {#% if object.checker and object.checker.checker%#}       
+    
+{% endblock %}
