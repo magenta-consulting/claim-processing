@@ -15,7 +15,7 @@ file that was distributed with this source code.
 {% block breadcrumb %}{% endblock %}
 {% block content %}
 
-    {% if is_granted('ROLE_USER') and not is_granted('ROLE_ADMIN') and not is_granted('ROLE_CLIENT_ADMIN') and not is_granted('ROLE_HR_ADMIN') and app.user.thirdParty == false %}
+    {% if is_granted('ROLE_USER') and not is_granted('ROLE_ADMIN') and not is_granted('ROLE_CLIENT_ADMIN') and not is_granted('ROLE_HR_ADMIN') and app.user.thirdParty == false and not is_granted('ROLE_ACCOUNTANT') %}
         <div>
             {% include '@App/SonataAdmin/Common/claim_landing_page.html.twig' %}
         </div>

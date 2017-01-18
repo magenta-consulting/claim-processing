@@ -92,6 +92,7 @@ class PositionAdmin extends BaseAdmin
             $roles = [
                 'ROLE_CLIENT_ADMIN' => 'ROLE_CLIENT_ADMIN',
                 'ROLE_HR_ADMIN' => 'ROLE_HR_ADMIN',
+                'ROLE_ACCOUNTANT' => 'ROLE_ACCOUNTANT',
                 'ROLE_USER' => 'ROLE_USER',
             ];
         } else {

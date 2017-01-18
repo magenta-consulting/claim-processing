@@ -87,6 +87,14 @@ class BaseAdmin extends AbstractAdmin
         }
         return false;
     }
+    
+    public function isAccountant()
+    {
+        if ($this->getContainer()->get('security.authorization_checker')->isGranted('ROLE_ACCOUNTANT')) {
+            return true;
+        }
+        return false;
+    }
 
     protected function configureRoutes(RouteCollection $collection)
     {

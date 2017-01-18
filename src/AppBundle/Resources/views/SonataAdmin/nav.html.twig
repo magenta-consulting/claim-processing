@@ -124,9 +124,30 @@
                 </li>
             </ul>
         </li>
+        {% elseif app.user.hasRole('ROLE_ACCOUNTANT') %}
+            <li class="last treeview"><a href="#"><i class="fa fa-folder"></i><span>Process Claims</span><i
+                        class="fa pull-right fa-angle-left"></i></a>
+                <ul class="active treeview-menu menu_level_1" style="display: none;">
+                    <li data-route-param="hr" class="last item"><a
+                                href="{{ path('admin_app_position_list',{'type':'hr'}) }}"><i
+                                    class="fa fa-angle-double-right"></i>Process Employee Claims
+                        </a>
+                    </li>
+                    <li data-route="admin_app_claim_excelReport" class="last item"><a
+                                href="{{ path('admin_app_claim_excelReport') }}"><i
+                                    class="fa fa-angle-double-right"></i>Processed Claims
+                        </a>
+                    </li>
+                    <li data-route-param="hr-reject" class="last item"><a
+                                href="{{ path('admin_app_position_list',{'type':'hr-reject'}) }}"><i
+                                    class="fa fa-angle-double-right"></i>Unprocessed Claims
+                        </a>
+                    </li>
+                </ul>
+            </li>
     {% endif %}
 
-    {% if not is_granted('ROLE_ADMIN') and getCurrentClaimPeriod('from') %}
+    {% if not is_granted('ROLE_ADMIN') and getCurrentClaimPeriod('from') and not is_granted('ROLE_ACCOUNTANT') %}
         {% if app.user.thirdParty == false %}
             <li class="last treeview"><a href="#"><i class="fa fa-folder"></i><span>My Claims</span><i
                             class="fa pull-right fa-angle-left"></i></a>
