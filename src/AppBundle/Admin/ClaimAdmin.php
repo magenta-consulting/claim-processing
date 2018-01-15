@@ -377,7 +377,6 @@ class ClaimAdmin extends BaseAdmin
 
     }
 
-
     protected
     function configureRoutes(RouteCollection $collection)
     {

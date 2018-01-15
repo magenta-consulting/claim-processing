@@ -388,6 +388,14 @@ class ClaimController extends Controller {
 				}
 				$urlRedirect = $this->admin->generateUrl('create', $params);
 				
+				if($object->getChecker()) {
+					$object->setStatus(Claim::STATUS_PENDING);
+				} else {
+					$object->setSTatus(Claim::STATUS_CHECKER_APPROVED);
+				}
+				
+				$object->setSubmissionRemarks($request->get('employee-remark'));
+				
 				
 			} else {
 				$urlRedirect = $this->admin->generateUrl('firstPageCreateClaim');
