@@ -7,13 +7,14 @@ security:
         ROLE_HR_ADMIN: ROLE_USER
         ROLE_CLIENT_ADMIN: ROLE_USER
         ROLE_ACCOUNTANT: ROLE_USER
-        ROLE_ADMIN:  ROLE_SONATA_ADMIN
+        ROLE_ADMIN:  [ROLE_SONATA_ADMIN, ROLE_ALLOWED_TO_SWITCH]
     providers:
         fos_userbundle:
             id: fos_user.user_provider.username_email
 
     firewalls:
         main:
+            switch_user: true
             pattern: ^/
             form_login:
                 provider: fos_userbundle

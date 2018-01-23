@@ -241,8 +241,8 @@ class BaseAdmin extends AbstractAdmin
 
                 $query->setParameter('company', $company);
             } else {
-                if ($this->getClass() !== 'AppBundle\Entity\Position') {
-                    //manage infor except poisition
+                if ($this->getClass() !== 'AppBundle\Entity\Position' && property_exists ($this->getClass(),'company')) {
+                    //manage infor except position
                     $query->andWhere(
                         $expr->eq($query->getRootAliases()[0] . '.company', ':company')
                     );
