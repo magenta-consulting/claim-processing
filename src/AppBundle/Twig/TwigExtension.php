@@ -4,6 +4,7 @@ namespace AppBundle\Twig;
 
 
 use AppBundle\Entity\Claim;
+use AppBundle\Entity\Position;
 use Application\Sonata\MediaBundle\Entity\Media;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -53,7 +54,7 @@ class TwigExtension extends \Twig_Extension {
 	}
 	
 	
-	public function isShowMenuForChecker($position) {
+	public function isShowMenuForChecker(Position $position) {
 		return $this->container->get('app.checker_rule')->isShowMenuForChecker($position);
 	}
 	
