@@ -3,7 +3,9 @@
 namespace AppBundle\Services;
 
 use AppBundle\Entity\Claim;
+use AppBundle\Entity\Position;
 use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\Validator\Context\ExecutionContext;
@@ -16,7 +18,7 @@ class CheckerRule extends ClaimRule
     public function getChecker($position)
     {
         $expr = new Expr();
-        $em = $this->container->get('doctrine')->getManager();
+        $em = $this->getContainer()->get('doctrine')->getManager();
         //may be will have many checker, but the priority for more detail group
         $employeeGroupBelongToUser = $this->getEmployeeGroupBelongToUser($position);
         for ($i = count($employeeGroupBelongToUser) - 1; $i >= 0; $i--) {
@@ -40,7 +42,7 @@ class CheckerRule extends ClaimRule
     {
         $expr = new Expr();
         $position = $this->getPosition();
-        $em = $this->container->get('doctrine')->getManager();
+        $em = $this->getContainer()->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder('claim');
         $qb->select('claim');
         $qb->from('AppBundle:Claim', 'claim');
@@ -65,7 +67,7 @@ class CheckerRule extends ClaimRule
     {
         $expr = new Expr();
         $position = $this->getPosition();
-        $em = $this->container->get('doctrine')->getManager();
+        $em = $this->getContainer()->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder('checkerHistory');
         $qb->select('checkerHistory');
         $qb->from('AppBundle:checkerHistory', 'checkerHistory');
@@ -88,7 +90,7 @@ class CheckerRule extends ClaimRule
     public function getNumberClaimEachEmployeeForChecker($position, $positionChecker)
     {
         $expr = new Expr();
-        $em = $this->container->get('doctrine')->getManager();
+        $em = $this->getContainer()->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder('claim');
         $qb->select($qb->expr()->count('claim.id'));
         $qb->from('AppBundle:Claim', 'claim');
@@ -105,7 +107,7 @@ class CheckerRule extends ClaimRule
     public function getNumberClaimEachEmployeeForCheckerHistory($position, $positionChecker,$from)
     {
         $expr = new Expr();
-        $em = $this->container->get('doctrine')->getManager();
+        $em = $this->getContainer()->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder('checkerHistory');
         $qb->select($qb->expr()->count('checkerHistory.id'));
         $qb->from('AppBundle:checkerHistory', 'checkerHistory');
@@ -123,13 +125,14 @@ class CheckerRule extends ClaimRule
     }
 
 
-    public function isShowMenuForChecker($position)
+    public function isShowMenuForChecker(Position $position)
     {
         if($position->isThirdParty()){
             return true;
         }
         $expr = new Expr();
-        $em = $this->container->get('doctrine')->getManager();
+        $em = $this->getContainer()->get('doctrine')->getManager();
+        /** @var QueryBuilder $qb */
         $qb = $em->createQueryBuilder('claim');
         $qb->select($qb->expr()->count('claim.id'));
         $qb->from('AppBundle:Claim', 'claim');
@@ -147,7 +150,7 @@ class CheckerRule extends ClaimRule
             return true;
         }
         $expr = new Expr();
-        $em = $this->container->get('doctrine')->getManager();
+        $em = $this->getContainer()->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder('checkerHistory');
         $qb->select($qb->expr()->count('checkerHistory.id'));
         $qb->from('AppBundle:checkerHistory', 'checkerHistory');

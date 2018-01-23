@@ -16,8 +16,7 @@ use Doctrine\ORM\Query\Expr;
 
 class ApproverHistoryAdmin extends BaseAdmin
 {
-
-
+	
     protected
     function configureBatchActions($actions)
     {
