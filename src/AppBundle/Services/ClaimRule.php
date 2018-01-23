@@ -3,6 +3,7 @@
 namespace AppBundle\Services;
 
 use AppBundle\Entity\Claim;
+use AppBundle\Entity\Position;
 use Doctrine\ORM\Query\Expr;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Doctrine\Common\Collections\Criteria;
@@ -76,7 +77,7 @@ class ClaimRule
         return $currencyExchange;
     }
 
-    public function getEmployeeGroupBelongToUser($position)
+    public function getEmployeeGroupBelongToUser(Position $position)
     {
         $employeeGroupDescriptionStr = $position->getEmployeeGroupDescription();
         $employeeGroupDescriptionArr = explode('>', $employeeGroupDescriptionStr);
