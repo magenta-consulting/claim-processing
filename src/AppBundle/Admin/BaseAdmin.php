@@ -26,7 +26,10 @@ class BaseAdmin extends AbstractAdmin
     {
         $this->container = $container;
     }
-
+	
+	/**
+	 * @return ContainerInterface
+	 */
     public function getContainer()
     {
         return $this->container;
