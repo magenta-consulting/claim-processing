@@ -129,7 +129,10 @@ class ApprovalAmountPoliciesAdmin extends BaseAdmin
                 )
             ));
     }
-
+	
+	/**
+	 * @param ApprovalAmountPolicies $approvalAmountPolicies
+	 */
     public function manualUpdate($approvalAmountPolicies)
     {
         foreach ($approvalAmountPolicies->getApprovalAmountPoliciesEmployeeGroups() as $approvalAmountPoliciesEmployeeGroup) {

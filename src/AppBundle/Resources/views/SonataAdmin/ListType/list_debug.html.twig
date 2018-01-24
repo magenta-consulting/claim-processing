@@ -17,9 +17,18 @@ file that was distributed with this source code.
         {{ getLimitAmount(object,object.position) }}
         <br>###APPROVER###<br>
 
+        {% for history in object.approverHistories %}
+            <div class="col-md-10">
+                <strong>Email: {{ history.position.email }}</strong> <br>
+                Employee No: {{ history.position.employeeNo }}<br>
+                Company: {{ history.position.company.name }}<br>
+                Date
+                Approved: {{ object.status == 'APPROVER_APPROVED' ? object.approverUpdatedAt|date('d M Y H:i:s'):'N/A' }}
+            </div>
+        {% endfor %}
         <div class="col-md-10">
-            {% if object.approver and object.approverEmployee%}
-               <strong>Email: {{ object.approverEmployee.email }}</strong> <br>
+            {% if object.approver and object.approverEmployee %}
+                <strong>Email: {{ object.approverEmployee.email }}</strong> <br>
                 Employee No: {{ object.approverEmployee.employeeNo }}<br>
                 Company: {{ object.approverEmployee.company.name }}<br>
                 Date Approved: {{ object.status == 'APPROVER_APPROVED' ? object.approverUpdatedAt|date('d M Y H:i:s'):'N/A' }}

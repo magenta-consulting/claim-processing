@@ -269,6 +269,7 @@ class ClaimController extends Controller {
 		$em      = $this->getDoctrine()->getManager();
 		$id      = $request->get($this->admin->getIdParameter());
 		
+		/** @var Claim $object */
 		$object = $this->admin->getObject($id);
 		
 		if( ! $object) {

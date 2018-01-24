@@ -8,6 +8,7 @@ Workflow
 1- Aprrover
 ---
 - If the max amount field is empty, the claim has to go through next line of approver.
+- Max Amount means if the amount of the claim is larger than this amount, the approver will not be selected and the Code moves on to the next line of Approver.
 
 Configurations
 ===

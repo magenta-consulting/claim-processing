@@ -414,7 +414,9 @@ class BaseAdmin extends AbstractAdmin
                         $query->andWhere($expr->orX(
                             $expr->eq($query->getRootAliases()[0] . '.status', ':statusPending'),
                             $expr->eq($query->getRootAliases()[0] . '.status', ':statusCheckerApprove'),
-                            $expr->eq($query->getRootAliases()[0] . '.status', ':statusApproverApprove')
+	                        $expr->eq($query->getRootAliases()[0] . '.status', ':statusApproverApprove'),
+	                        $expr->eq($query->getRootAliases()[0] . '.status', ':statusApproverApprove1'),
+	                        $expr->eq($query->getRootAliases()[0] . '.status', ':statusApproverApprove2')
                         ));
                         $query->andWhere(
                             $expr->eq($query->getRootAliases()[0] . '.periodFrom', ':periodFrom')
@@ -427,7 +429,11 @@ class BaseAdmin extends AbstractAdmin
                         $query->setParameter('position', $position);
                         $query->setParameter('statusPending', Claim::STATUS_PENDING);
                         $query->setParameter('statusCheckerApprove', Claim::STATUS_CHECKER_APPROVED);
-                        $query->setParameter('statusApproverApprove', Claim::STATUS_APPROVER_APPROVED);
+                        $query
+	                        ->setParameter('statusApproverApprove', Claim::STATUS_APPROVER_APPROVED)
+	                        ->setParameter('statusApproverApprove1', Claim::STATUS_APPROVER_APPROVED_FIRST)
+	                        ->setParameter('statusApproverApprove2', Claim::STATUS_APPROVER_APPROVED_SECOND)
+                        ;
                         break;
                     case 'draft':
                         $query->andWhere(
