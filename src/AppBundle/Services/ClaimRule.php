@@ -5,6 +5,7 @@ namespace AppBundle\Services;
 use AppBundle\Entity\Claim;
 use AppBundle\Entity\Company;
 use AppBundle\Entity\Position;
+use AppBundle\Entity\User;
 use Doctrine\ORM\Query\Expr;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Doctrine\Common\Collections\Criteria;
@@ -23,7 +24,9 @@ class ClaimRule {
 		return $this->container;
 	}
 	
-	/*1 global--------------------------------------*/
+	/**
+	 * @return User|null
+	 */
 	public function getUser() {
 		$throwException = true;
 		$msg            = 'Unauthorisation Access';

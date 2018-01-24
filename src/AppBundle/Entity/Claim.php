@@ -21,7 +21,6 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  */
 class Claim
 {
-
     const STATUS_NOT_USE = 'NOT_USE';
     const STATUS_DRAFT = 'DRAFT';
     const STATUS_PENDING = 'PENDING';

@@ -2,7 +2,9 @@
 
 namespace AppBundle\Services;
 
+use AppBundle\Entity\ApprovalAmountPolicies;
 use AppBundle\Entity\Claim;
+use AppBundle\Entity\Position;
 use Doctrine\ORM\Query\Expr;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Doctrine\Common\Collections\Criteria;
@@ -11,11 +13,16 @@ use AppBundle\Services\ClaimRule;
 
 class ApproverRule extends ClaimRule
 {
-
-    public function getApprover($position)
+	
+	/**
+	 * @param Position $position
+	 *
+	 * @return ApprovalAmountPolicies|null
+	 */
+    public function getApprover(Position $position)
     {
         $expr = new Expr();
-        $em = $this->container->get('doctrine')->getManager();
+        $em = $this->getContainer()->get('doctrine')->getManager();
         //may be will have many approver, but the priority for more detail group
         $employeeGroupBelongToUser = $this->getEmployeeGroupBelongToUser($position);
         for ($i = count($employeeGroupBelongToUser) - 1; $i >= 0; $i--) {
@@ -114,7 +121,7 @@ class ApproverRule extends ClaimRule
     {
         $expr = new Expr();
         $position = $this->getPosition();
-        $em = $this->container->get('doctrine')->getManager();
+        $em = $this->getContainer()->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder('claim');
         $qb->select('claim');
         $qb->from('AppBundle:Claim', 'claim');
@@ -138,7 +145,7 @@ class ApproverRule extends ClaimRule
     {
         $expr = new Expr();
         $position = $this->getPosition();
-        $em = $this->container->get('doctrine')->getManager();
+        $em = $this->getContainer()->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder('approverHistory');
         $qb->select('approverHistory');
         $qb->from('AppBundle:approverHistory', 'approverHistory');
@@ -161,7 +168,7 @@ class ApproverRule extends ClaimRule
     public function getNumberClaimEachEmployeeForApprover($position, $positionApprover)
     {
         $expr = new Expr();
-        $em = $this->container->get('doctrine')->getManager();
+        $em = $this->getContainer()->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder('claim');
         $qb->select($qb->expr()->count('claim.id'));
         $qb->from('AppBundle:Claim', 'claim');
@@ -178,7 +185,7 @@ class ApproverRule extends ClaimRule
     public function getNumberClaimEachEmployeeForApproverHistory($position, $positionApprover,$from)
     {
         $expr = new Expr();
-        $em = $this->container->get('doctrine')->getManager();
+        $em = $this->getContainer()->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder('approverHistory');
         $qb->select($qb->expr()->count('approverHistory.id'));
         $qb->from('AppBundle:approverHistory', 'approverHistory');
@@ -198,7 +205,7 @@ class ApproverRule extends ClaimRule
     public function isShowMenuForApprover($position)
     {
         $expr = new Expr();
-        $em = $this->container->get('doctrine')->getManager();
+        $em = $this->getContainer()->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder('claim');
         $qb->select($qb->expr()->count('claim.id'));
         $qb->from('AppBundle:Claim', 'claim');
@@ -212,7 +219,7 @@ class ApproverRule extends ClaimRule
     public function isShowMenuForApproverHistory($position)
     {
         $expr = new Expr();
-        $em = $this->container->get('doctrine')->getManager();
+        $em = $this->getContainer()->get('doctrine')->getManager();
         $qb = $em->createQueryBuilder('approverHistory');
         $qb->select($qb->expr()->count('approverHistory.id'));
         $qb->from('AppBundle:approverHistory', 'approverHistory');
