@@ -623,7 +623,7 @@ class ClaimAdmin extends BaseAdmin
         $position = $this->getPosition();
         //must just save when create not update (will conflict when approver or checker update claim)
         $checker = $this->getContainer()->get('app.checker_rule')->getChecker($position);
-        $approver = $this->getContainer()->get('app.approver_rule')->getApprover($position);
+        $approver = $this->getContainer()->get('app.approver_rule')->getApprovalAmountPolicy($position);
         $isFlexiClaim = $this->getContainer()->get('app.claim_rule')->isFlexiClaim($claim,$position);
         $claim->setFlexiClaim($isFlexiClaim);
         $claim->setChecker($checker);

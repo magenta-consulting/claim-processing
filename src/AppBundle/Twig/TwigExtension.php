@@ -94,8 +94,8 @@ class TwigExtension extends \Twig_Extension {
 		return $this->container->get('app.checker_rule')->getChecker($position);
 	}
 	
-	public function getApprover($position) {
-		return $this->container->get('app.approver_rule')->getApprover($position);
+	public function getApprovalAmountPolicy($position) {
+		return $this->container->get('app.approver_rule')->getApprovalAmountPolicy($position);
 	}
 	
 	public function getInforUserClaim($positionId) {
@@ -222,7 +222,7 @@ class TwigExtension extends \Twig_Extension {
 			'isShowApproveRejectCheckerButtonForClaim'     => new \Twig_Function_Method($this, 'isShowApproveRejectCheckerButtonForClaim', array( 'is_safe' => array( 'html' ) )),
 			'isShowApproveRejectApproverButtonForClaim'    => new \Twig_Function_Method($this, 'isShowApproveRejectApproverButtonForClaim', array( 'is_safe' => array( 'html' ) )),
 			'getChecker'                                   => new \Twig_Function_Method($this, 'getChecker', array( 'is_safe' => array( 'html' ) )),
-			'getApprover'                                  => new \Twig_Function_Method($this, 'getApprover', array( 'is_safe' => array( 'html' ) )),
+			'getApprovalAmountPolicy'                      => new \Twig_Function_Method($this, 'getApprovalAmountPolicy', array( 'is_safe' => array( 'html' ) )),
 			'getNumberRejectedClaim'                       => new \Twig_Function_Method($this, 'getNumberRejectedClaim', array( 'is_safe' => array( 'html' ) )),
 			'getInforUserClaim'                            => new \Twig_Function_Method($this, 'getInforUserClaim', array( 'is_safe' => array( 'html' ) )),
 			'getCheckerNotification'                       => new \Twig_Function_Method($this, 'getCheckerNotification', array( 'is_safe' => array( 'html' ) )),

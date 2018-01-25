@@ -637,21 +637,21 @@ class Claim {
 	}
 	
 	/**
-	 * @param text $description
+	 * @param string $description
 	 */
 	public function setDescription($description) {
 		$this->description = $description;
 	}
 	
 	/**
-	 * @return Date
+	 * @return \DateTime
 	 */
 	public function getPeriodFrom() {
 		return $this->periodFrom;
 	}
 	
 	/**
-	 * @param Date $periodFrom
+	 * @param \DateTime $periodFrom
 	 */
 	public function setPeriodFrom($periodFrom) {
 		$this->periodFrom = $periodFrom;

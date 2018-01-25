@@ -739,6 +739,7 @@ class ClaimController extends Controller {
 			$from = $currentPeriod->format('Y-m-d');
 		}
 		try {
+			/** @var Claim $claim */
 			foreach($selectedModels as $claim) {
 				if($claim->getStatus() == Claim::STATUS_CHECKER_APPROVED) {
 					if($claim->getPeriodFrom()->format('Y-m-d') == $from || $from == 'all') {
