@@ -256,6 +256,9 @@ class Claim {
 		$this->flexiClaim        = false;
 	}
 	
+	public $lastApprover = null;
+	public $lastBackupApprover = null;
+	
 	/**
 	 * @param string $status
 	 */
@@ -271,10 +274,14 @@ class Claim {
 					$status = self::STATUS_APPROVER_APPROVED_SECOND;
 					break;
 			}
+			
+			$this->lastApprover       = $this->getApproverEmployee();
+			$this->lastBackupApprover = $this->getApproverBackupEmployee();
 		}
 		
 		$this->status = $status;
 		$result       = $this->getApproverToAssign();
+		
 		$this->setApproverEmployee($result['approverEmployee']);
 		$this->setApproverBackupEmployee($result['approverBackupEmployee']);
 		
@@ -311,8 +318,9 @@ class Claim {
 			
 			return $result;
 		} elseif($claim->getStatus() === Claim::STATUS_APPROVER_APPROVED) {
-			return [ 'approverEmployee'       => $claim->getApproverEmployee(),
-			         'approverBackupEmployee' => $claim->getApproverBackupEmployee()
+			return [
+				'approverEmployee'       => $claim->getApproverEmployee(),
+				'approverBackupEmployee' => $claim->getApproverBackupEmployee()
 			];
 		}
 		

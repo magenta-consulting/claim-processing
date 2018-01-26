@@ -725,7 +725,7 @@ class ClaimController extends Controller {
 	public function batchActionApprove(ProxyQueryInterface $selectedModelQuery, Request $request = null) {
 		$em           = $this->getDoctrine()->getManager();
 		$modelManager = $this->admin->getModelManager();
-		
+		$positionLogin = $this->getUser()->getLoginWithPosition();
 		
 		$selectedModels = $selectedModelQuery->execute();
 		
@@ -750,7 +750,8 @@ class ClaimController extends Controller {
 						$history = new ApproverHistory();
 						$history->setClaim($claim);
 						$history->setPosition($claim->getPosition());
-						$history->setApproverPosition($claim->getApproverEmployee());
+						$history->setApproverPosition($positionLogin);
+						
 						$history->setPeriodFrom($claim->getPeriodFrom());
 						$history->setPeriodTo($claim->getPeriodTo());
 						$history->setStatus(Claim::STATUS_APPROVER_APPROVED);
