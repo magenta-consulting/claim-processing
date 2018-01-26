@@ -19,11 +19,11 @@ file that was distributed with this source code.
 
         {% for history in object.approverHistories %}
             <div class="col-md-10">
-                <strong>Email: {{ history.position.email }}</strong> <br>
-                Employee No: {{ history.position.employeeNo }}<br>
-                Company: {{ history.position.company.name }}<br>
+                <strong>Email: {{ history.approverPosition.email }}</strong> <br>
+                Employee No: {{ history.approverPosition.employeeNo }}<br>
+                Company: {{ history.approverPosition.company.name }}<br>
                 Date
-                Approved: {{ object.status == 'APPROVER_APPROVED' ? object.approverUpdatedAt|date('d M Y H:i:s'):'N/A' }}
+                Approved: {{ history.createdAt|date('d M Y H:i:s') }}
             </div>
         {% endfor %}
         <div class="col-md-10">
