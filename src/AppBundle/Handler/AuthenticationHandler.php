@@ -109,18 +109,17 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, Lo
         return new RedirectResponse($urlRedirect, 302);
     }
 
-
     public function onLogoutSuccess(Request $request)
     {
         if (!$this->container->get('security.authorization_checker')->isGranted('ROLE_ADMIN', null)) {
             $em = $this->container->get('doctrine')->getManager();
             $user = $this->tokenStorage->getToken()->getUser();
-            $user->setRoles([]);
-            $user->setCompany(null);
-            $user->setLoginWithPosition(null);
-            $user->setThirdParty(null);
-            $em->persist($user);
-            $em->flush();
+//            $user->setRoles([]);
+//            $user->setCompany(null);
+//            $user->setLoginWithPosition(null);
+//            $user->setThirdParty(null);
+//            $em->persist($user);
+//            $em->flush();
         }
         $urlRedirect = $this->container->get('router')->generate('fos_user_security_login', array(), true);
         return new RedirectResponse($urlRedirect);
