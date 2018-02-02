@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Admin;
 
+use AppBundle\Entity\ApproverHistory;
 use AppBundle\Entity\CheckerHistory;
 use AppBundle\Entity\Claim;
 use AppBundle\Entity\ClaimType;
@@ -278,7 +279,7 @@ class BaseAdmin extends AbstractAdmin
                 );
                 $query->setParameter('thirdParty', false);
             }
-            if ($this->getClass() !== CheckerHistory::class) {
+            if ($this->getClass() !== CheckerHistory::class && $this->getClass() !== ApproverHistory::class) {
                 $query->andWhere(
                     $expr->eq($query->getRootAliases()[0] . '.company', ':company')
                 );
