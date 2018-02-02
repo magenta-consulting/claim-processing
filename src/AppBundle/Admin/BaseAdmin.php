@@ -279,7 +279,7 @@ class BaseAdmin extends AbstractAdmin
                 );
                 $query->setParameter('thirdParty', false);
             }
-            if ($this->getClass() !== CheckerHistory::class && $this->getClass() !== ApproverHistory::class) {
+            if ($this->getClass() !== CheckerHistory::class && property_exists ($this->getClass(),'company')) {
                 $query->andWhere(
                     $expr->eq($query->getRootAliases()[0] . '.company', ':company')
                 );
