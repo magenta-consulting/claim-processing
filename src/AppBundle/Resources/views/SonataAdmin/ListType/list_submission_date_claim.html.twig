@@ -13,4 +13,19 @@ file that was distributed with this source code.
 
 {% block field %}
  {{ object.claims[0].createdAt | date('d M Y') }}
+    {#
+
+    {% if app.request.get('filter') is not empty %}
+        {% set from = null %}
+        {% if app.request.get('filter')['claim_period']['value'] != 'all' %}
+            {% set from = date(app.request.get('filter')['claim_period']['value']) %}
+        {% endif %}
+
+    {% else %}
+        {% set from = getCurrentClaimPeriod('from') %}
+    {% endif %}
+
+ {{ filterClaimCollectionByPeriod(object.claims, from) | date('M d Y') }}
+
+    #}
 {% endblock %}

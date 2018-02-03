@@ -78,7 +78,7 @@ class CompanyClaimPolicies
     }
 
     /**
-     * @return date
+     * @return integer
      */
     public function getCutOffDate()
     {
@@ -86,7 +86,7 @@ class CompanyClaimPolicies
     }
 
     /**
-     * @param date $cutOffDate
+     * @param integer $cutOffDate
      */
     public function setCutOffDate($cutOffDate)
     {

@@ -67,7 +67,6 @@ class Claim {
 	 */
 	private $claimCategory;
 	
-	
 	/**
 	 * @var float
 	 * @ORM\Column(name="claim_amount",type="float",nullable=true)
@@ -164,12 +163,12 @@ class Claim {
 	private $taxAmountConverted;
 	
 	/**
-	 * @var Date
+	 * @var \DateTime
 	 * @ORM\Column(name="period_from",type="date",nullable=true)
 	 */
 	private $periodFrom;
 	/**
-	 * @var Date
+	 * @var \DateTime
 	 * @ORM\Column(name="period_to",type="date",nullable=true)
 	 */
 	private $periodTo;
@@ -666,14 +665,14 @@ class Claim {
 	}
 	
 	/**
-	 * @return Date
+	 * @return \DateTime
 	 */
 	public function getPeriodTo() {
 		return $this->periodTo;
 	}
 	
 	/**
-	 * @param Date $periodTo
+	 * @param \DateTime $periodTo
 	 */
 	public function setPeriodTo($periodTo) {
 		$this->periodTo = $periodTo;
@@ -896,7 +895,9 @@ class Claim {
 		$claimMedia->setClaim(null);
 	}
 	
-	
+	/**
+	 * @return CompanyClaimPolicies|null
+	 */
 	public function getClaimPolicy() {
 		$company       = $this->getCompany();
 		$clientCompany = $company->getParent() ? $company->getParent() : $company;
@@ -912,20 +913,22 @@ class Claim {
 		if($this->getClaimType()) {
 			$claimPolicy = $this->getClaimPolicy();
 			if($claimPolicy) {
-				$cutOffdate  = $claimPolicy->getCutOffDate();
-				$currentDate = date('d');
-				if($currentDate <= $cutOffdate) {
-					$periodTo   = new \DateTime('NOW');
+				$cutOffDay   = $claimPolicy->getCutOffDate();
+				$currentDate = new \DateTime();
+				$cutOffDate  = new \DateTime($currentDate->format('Y-m-') . $cutOffDay);
+				
+				if($currentDate <= $cutOffDate) {
+					$periodTo   = clone $cutOffDate;
 					$clone      = clone $periodTo;
-					$periodFrom = $clone->modify('-1 month');
+					$periodFrom = $clone->modify('-1 month')->modify(" +1 day");
 				} else {
-					$periodTo = new \DateTime('NOW');
+					$periodTo = clone $cutOffDate;
 					$periodTo->modify('+1 month');
 					$clone      = clone $periodTo;
-					$periodFrom = $clone->modify('-1 month');
+					$periodFrom = $clone->modify('-1 month')->modify(" +1 day");
 				}
-				$periodFrom->setDate($periodFrom->format('Y'), $periodFrom->format('m'), $cutOffdate + 1);
-				$periodTo->setDate($periodTo->format('Y'), $periodTo->format('m'), $cutOffdate);
+				
+//				$periodFrom->setDate($periodFrom->format('Y'), $periodFrom->format('m'), $cutOffDay + 1);
 				$this->setPeriodFrom($periodFrom);
 				$this->setPeriodTo($periodTo);
 			}

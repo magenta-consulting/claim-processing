@@ -5,7 +5,9 @@ namespace AppBundle\Twig;
 
 use AppBundle\Entity\Claim;
 use AppBundle\Entity\Position;
+use AppBundle\Entity\User;
 use Application\Sonata\MediaBundle\Entity\Media;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class TwigExtension extends \Twig_Extension {
@@ -206,8 +208,25 @@ class TwigExtension extends \Twig_Extension {
 		return '';
 	}
 	
+	public function filterClaimCollectionByPeriod(Collection $claims, \DateTime $period = null) {
+		if(empty($period)) {
+			return $claims->first()->getCreatedAt();
+		}
+		
+		/** @var User $user */
+		$user = $this->container->get('security.token_storage')->getToken()->getUser();
+		
+		$from = $period;
+		$to   = clone $period;
+		$to->modify('+1 month');
+		
+		return new \DateTime();
+	}
+	
 	public function getFunctions() {
 		return array(
+			'filterClaimCollectionByPeriod' => new \Twig_Function_Method($this, 'filterClaimCollectionByPeriod', array( 'is_safe' => array( 'html' ) )),
+			
 			'getParameter'                                 => new \Twig_Function_Method($this, 'getParameter', array( 'is_safe' => array( 'html' ) )),
 			'getNumberDecimalDigits'                       => new \Twig_Function_Method($this, 'getNumberDecimalDigits', array( 'is_safe' => array( 'html' ) )),
 			'getUrlMedia'                                  => new \Twig_Function_Method($this, 'getUrlMedia', array( 'is_safe' => array( 'html' ) )),
