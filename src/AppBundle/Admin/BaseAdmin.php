@@ -356,8 +356,17 @@ class BaseAdmin extends AbstractAdmin
                                 $expr->eq($query->getRootAliases()[0] . '.approverBackupEmployee', ':approverEmployee')
                             )
                         );
-                        $query->andWhere($expr->eq($query->getRootAliases()[0] . '.status', ':statusCheckerApproved'));
-                        $query->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
+                        $query->andWhere($expr->in($query->getRootAliases()[0] . '.status', ':states'));
+	                    
+	                    $query->setParameter('states', [
+		                    Claim::STATUS_CHECKER_APPROVED,
+		                    Claim::STATUS_APPROVER_APPROVED_FIRST,
+		                    Claim::STATUS_APPROVER_APPROVED_SECOND,
+		                    Claim::STATUS_APPROVER_APPROVED_THIRD
+	                    ]);
+                        
+                        
+                        
                         $query->setParameter('positionId', $positionId);
                         $query->setParameter('approverEmployee', $this->getPosition());
                         break;
@@ -414,7 +423,7 @@ class BaseAdmin extends AbstractAdmin
                         );
                         $query->andWhere($expr->orX(
                             $expr->eq($query->getRootAliases()[0] . '.status', ':statusPending'),
-                            $expr->eq($query->getRootAliases()[0] . '.status', ':statusCheckerApprove'),
+                            $expr->in($query->getRootAliases()[0] . '.status', ':states'),
 	                        $expr->eq($query->getRootAliases()[0] . '.status', ':statusApproverApprove'),
 	                        $expr->eq($query->getRootAliases()[0] . '.status', ':statusApproverApprove1'),
 	                        $expr->eq($query->getRootAliases()[0] . '.status', ':statusApproverApprove2')
@@ -429,7 +438,14 @@ class BaseAdmin extends AbstractAdmin
                         $query->setParameter('periodTo', $periodTo->format('Y-m-d'));
                         $query->setParameter('position', $position);
                         $query->setParameter('statusPending', Claim::STATUS_PENDING);
-                        $query->setParameter('statusCheckerApprove', Claim::STATUS_CHECKER_APPROVED);
+                        
+	                    $query->setParameter('states', [
+		                    Claim::STATUS_CHECKER_APPROVED,
+		                    Claim::STATUS_APPROVER_APPROVED_FIRST,
+		                    Claim::STATUS_APPROVER_APPROVED_SECOND,
+		                    Claim::STATUS_APPROVER_APPROVED_THIRD
+	                    ]);
+                        
                         $query
 	                        ->setParameter('statusApproverApprove', Claim::STATUS_APPROVER_APPROVED)
 	                        ->setParameter('statusApproverApprove1', Claim::STATUS_APPROVER_APPROVED_FIRST)
@@ -534,8 +550,18 @@ class BaseAdmin extends AbstractAdmin
                                 $expr->eq('claim.approverBackupEmployee', ':position')
                             )
                         );
-                        $query->andWhere($expr->eq('claim.status', ':statusCheckerApproved'));
-                        $query->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
+	
+	                    $query->andWhere($expr->in('claim.status', ':states'));
+	                    $query->setParameter('states', [
+		                    Claim::STATUS_CHECKER_APPROVED,
+		                    Claim::STATUS_APPROVER_APPROVED_FIRST,
+		                    Claim::STATUS_APPROVER_APPROVED_SECOND,
+		                    Claim::STATUS_APPROVER_APPROVED_THIRD
+	                    ]);
+                        
+                        
+                        
+                        
                         $query->setParameter('position', $position);
                         $query->setParameter('company', $company);
                         $query->setParameter('clientCompany', $clientCompany);
