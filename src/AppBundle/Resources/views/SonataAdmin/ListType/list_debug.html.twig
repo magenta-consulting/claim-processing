@@ -36,6 +36,25 @@ file that was distributed with this source code.
                 None
             {% endif %}
         </div>
+        {% set nextApprover = object.nextApproverToAssign %}
+        {% set approverAfterNext = object.approverAfterNextToAssign %}
+        {% if nextApprover is not empty %}
+            {% set approverEmployee = nextApprover['approverEmployee'] %}
+            <strong>Email: {{ approverEmployee.email }}</strong> <br>
+            Employee No: {{ approverEmployee.employeeNo }}<br>
+            Company: {{ approverEmployee.company.name }}<br>
+            Date Approved: N/A
+        {% endif %}
+
+        {% if approverAfterNext is not empty %}
+            {% set approverEmployee = approverAfterNext['approverEmployee'] %}
+            <strong>Email: {{ approverEmployee.email }}</strong> <br>
+            Employee No: {{ approverEmployee.employeeNo }}<br>
+            Company: {{ approverEmployee.company.name }}<br>
+            Date Approved: N/A
+        {% endif %}
+
+
 
     </div>
     ###CHECKER ###<br>

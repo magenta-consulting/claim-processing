@@ -286,6 +286,49 @@ class Claim {
 		
 	}
 	
+	public function getApproverAfterNextToAssign(ApprovalAmountPolicies $approvalAmountPolicy = null) {
+		$bkStatus = $this->status;
+		switch($bkStatus) {
+			case self::STATUS_CHECKER_APPROVED:
+				$this->status = self::STATUS_APPROVER_APPROVED_SECOND;
+				break;
+			case self::STATUS_APPROVER_APPROVED_FIRST:
+				$this->status = self::STATUS_APPROVER_APPROVED_THIRD;
+				break;
+			case self::STATUS_APPROVER_APPROVED_SECOND:
+				return null;
+		}
+		$result       = $this->getApproverToAssign($approvalAmountPolicy);
+		$this->status = $bkStatus;
+		if(empty($result['approverEmployee']) && empty($result['approverBackupEmployee'])) {
+			return null;
+		}
+		
+		return $result;
+	}
+	
+	public function getNextApproverToAssign(ApprovalAmountPolicies $approvalAmountPolicy = null) {
+		$bkStatus = $this->status;
+		switch($bkStatus) {
+			case self::STATUS_CHECKER_APPROVED:
+				$this->status = self::STATUS_APPROVER_APPROVED_FIRST;
+				break;
+			case self::STATUS_APPROVER_APPROVED_FIRST:
+				$this->status = self::STATUS_APPROVER_APPROVED_SECOND;
+				break;
+			case self::STATUS_APPROVER_APPROVED_SECOND:
+				$this->status = self::STATUS_APPROVER_APPROVED_THIRD;
+				break;
+		}
+		$result       = $this->getApproverToAssign($approvalAmountPolicy);
+		$this->status = $bkStatus;
+		if(empty($result['approverEmployee']) && empty($result['approverBackupEmployee'])) {
+			return null;
+		}
+		
+		return $result;
+	}
+	
 	public function getApproverToAssign(ApprovalAmountPolicies $approvalAmountPolicy = null) {
 		if(empty($approvalAmountPolicy)) {
 			if(empty($this->approver)) {
@@ -927,7 +970,7 @@ class Claim {
 					$clone      = clone $periodTo;
 					$periodFrom = $clone->modify('-1 month')->modify(" +1 day");
 				}
-				
+
 //				$periodFrom->setDate($periodFrom->format('Y'), $periodFrom->format('m'), $cutOffDay + 1);
 				$this->setPeriodFrom($periodFrom);
 				$this->setPeriodTo($periodTo);
