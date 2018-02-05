@@ -237,14 +237,19 @@ class ClaimRule {
 		                 ->andWhere($expr->eq('claim.periodTo', ':periodTo'))
 		                 ->andWhere($expr->orX(
 			                 $expr->eq('claim.status', ':statusPending'),
-			                 $expr->eq('claim.status', ':statusCheckerApproved'),
+			                 $expr->in('claim.status', ':states'),
 			                 $expr->eq('claim.status', ':statusApproverApproved'),
 			                 $expr->eq('claim.status', ':statusHrApproved')
 		                 ))
 		                 ->setParameter('periodFrom', $periodFrom->format('Y-m-d'))
 		                 ->setParameter('periodTo', $periodTo->format('Y-m-d'))
 		                 ->setParameter('statusPending', Claim::STATUS_PENDING)
-		                 ->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED)
+		                 ->setParameter('states', [
+			                 Claim::STATUS_CHECKER_APPROVED,
+			                 Claim::STATUS_APPROVER_APPROVED_FIRST,
+			                 Claim::STATUS_APPROVER_APPROVED_SECOND,
+			                 Claim::STATUS_APPROVER_APPROVED_THIRD
+		                 ])
 		                 ->setParameter('statusApproverApproved', Claim::STATUS_APPROVER_APPROVED)
 		                 ->setParameter('statusHrApproved', Claim::STATUS_PROCESSED)
 		                 ->getQuery()
@@ -508,14 +513,19 @@ class ClaimRule {
 		               ->andWhere('claim.receiptDate < :toDate')
 		               ->andWhere($expr->orX(
 			               $expr->eq('claim.status', ':statusPending'),
-			               $expr->eq('claim.status', ':statusCheckerApproved'),
+			               $expr->in('claim.status', ':states'),
 			               $expr->eq('claim.status', ':statusApproverApproved'),
 			               $expr->eq('claim.status', ':statusHrApproved')
 		               ))
 		               ->setParameter('fromDate', $fromDate)
 		               ->setParameter('toDate', $toDate)
 		               ->setParameter('statusPending', Claim::STATUS_PENDING)
-		               ->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED)
+		               ->setParameter('states', [
+			               Claim::STATUS_CHECKER_APPROVED,
+			               Claim::STATUS_APPROVER_APPROVED_FIRST,
+			               Claim::STATUS_APPROVER_APPROVED_SECOND,
+			               Claim::STATUS_APPROVER_APPROVED_THIRD
+		               ])
 		               ->setParameter('statusApproverApproved', Claim::STATUS_APPROVER_APPROVED)
 		               ->setParameter('statusHrApproved', Claim::STATUS_PROCESSED)
 		               ->getQuery()

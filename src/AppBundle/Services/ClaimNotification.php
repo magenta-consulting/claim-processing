@@ -73,8 +73,15 @@ class ClaimNotification extends ClaimRule
                 $expr->eq('claim.approverBackupEmployee', ':position')
             )
         );
-        $query->andWhere($expr->eq('claim.status', ':statusCheckerApproved'));
-        $query->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
+	
+	    $qb->andWhere($expr->in('claim.status', ':states'));
+	    $qb->setParameter('states', [
+		    Claim::STATUS_CHECKER_APPROVED,
+		    Claim::STATUS_APPROVER_APPROVED_FIRST,
+		    Claim::STATUS_APPROVER_APPROVED_SECOND,
+		    Claim::STATUS_APPROVER_APPROVED_THIRD
+	    ]);
+        
         $query->setParameter('position', $position);
         $query->setParameter('company', $company);
         $query->setParameter('clientCompany', $clientCompany);
@@ -115,8 +122,15 @@ class ClaimNotification extends ClaimRule
         $query->andWhere(
                 $expr->eq('claim.approverEmployee', ':position')
         );
-        $query->andWhere($expr->eq('claim.status', ':statusCheckerApproved'));
-        $query->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
+	
+	    $qb->andWhere($expr->in('claim.status', ':states'));
+	    $qb->setParameter('states', [
+		    Claim::STATUS_CHECKER_APPROVED,
+		    Claim::STATUS_APPROVER_APPROVED_FIRST,
+		    Claim::STATUS_APPROVER_APPROVED_SECOND,
+		    Claim::STATUS_APPROVER_APPROVED_THIRD
+	    ]);
+        
         $query->setParameter('position', $approver);
         return $query->getQuery()->getResult();
     }
