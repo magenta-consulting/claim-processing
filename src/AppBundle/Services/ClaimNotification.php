@@ -123,8 +123,8 @@ class ClaimNotification extends ClaimRule
                 $expr->eq('claim.approverEmployee', ':position')
         );
 	
-	    $qb->andWhere($expr->in('claim.status', ':states'));
-	    $qb->setParameter('states', [
+	    $query->andWhere($expr->in('claim.status', ':states'));
+	    $query->setParameter('states', [
 		    Claim::STATUS_CHECKER_APPROVED,
 		    Claim::STATUS_APPROVER_APPROVED_FIRST,
 		    Claim::STATUS_APPROVER_APPROVED_SECOND,
