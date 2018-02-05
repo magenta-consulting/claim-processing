@@ -136,8 +136,13 @@ class ApproverRule extends ClaimRule {
 		$qb->select($qb->expr()->count('claim.id'));
 		$qb->from('AppBundle:Claim', 'claim');
 		$qb->where($expr->orX('claim.approverEmployee = :position', 'claim.approverBackupEmployee = :position'));
-		$qb->andWhere($expr->eq('claim.status', ':statusCheckerApproved'));
-		$qb->setParameter('statusCheckerApproved', Claim::STATUS_CHECKER_APPROVED);
+		$qb->andWhere($expr->in('claim.status', ':states'));
+		$qb->setParameter('states', [
+			Claim::STATUS_CHECKER_APPROVED,
+			Claim::STATUS_APPROVER_APPROVED_FIRST,
+			Claim::STATUS_APPROVER_APPROVED_SECOND,
+			Claim::STATUS_APPROVER_APPROVED_THIRD
+		]);
 		$qb->setParameter('position', $position);
 		
 		return $qb->getQuery()->getSingleScalarResult();
