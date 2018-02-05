@@ -294,6 +294,7 @@ class Claim {
 				break;
 			case self::STATUS_APPROVER_APPROVED_FIRST:
 			case self::STATUS_APPROVER_APPROVED_SECOND:
+			case self::STATUS_APPROVER_APPROVED_THIRD:
 				return null;
 		}
 		$result       = $this->getApproverToAssign($approvalAmountPolicy);
@@ -315,6 +316,7 @@ class Claim {
 				$this->status = self::STATUS_APPROVER_APPROVED_THIRD;
 				break;
 			case self::STATUS_APPROVER_APPROVED_SECOND:
+			case self::STATUS_APPROVER_APPROVED_THIRD:
 				return null;
 				break;
 		}
