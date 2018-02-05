@@ -290,11 +290,9 @@ class Claim {
 		$bkStatus = $this->status;
 		switch($bkStatus) {
 			case self::STATUS_CHECKER_APPROVED:
-				$this->status = self::STATUS_APPROVER_APPROVED_SECOND;
-				break;
-			case self::STATUS_APPROVER_APPROVED_FIRST:
 				$this->status = self::STATUS_APPROVER_APPROVED_THIRD;
 				break;
+			case self::STATUS_APPROVER_APPROVED_FIRST:
 			case self::STATUS_APPROVER_APPROVED_SECOND:
 				return null;
 		}
@@ -311,13 +309,13 @@ class Claim {
 		$bkStatus = $this->status;
 		switch($bkStatus) {
 			case self::STATUS_CHECKER_APPROVED:
-				$this->status = self::STATUS_APPROVER_APPROVED_FIRST;
-				break;
-			case self::STATUS_APPROVER_APPROVED_FIRST:
 				$this->status = self::STATUS_APPROVER_APPROVED_SECOND;
 				break;
-			case self::STATUS_APPROVER_APPROVED_SECOND:
+			case self::STATUS_APPROVER_APPROVED_FIRST:
 				$this->status = self::STATUS_APPROVER_APPROVED_THIRD;
+				break;
+			case self::STATUS_APPROVER_APPROVED_SECOND:
+				return null;
 				break;
 		}
 		$result       = $this->getApproverToAssign($approvalAmountPolicy);
