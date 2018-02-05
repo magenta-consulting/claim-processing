@@ -26,16 +26,18 @@ file that was distributed with this source code.
                 Approved: {{ history.createdAt|date('d M Y H:i:s') }}
             </div>
         {% endfor %}
+
         <div class="col-md-10">
-            {% if object.approver and object.approverEmployee %}
+            {% if object.approver and object.approverEmployee and object.status != 'APPROVER_APPROVED' and object.status != 'PROCESSED' %}
                 <strong>Email: {{ object.approverEmployee.email }}</strong> <br>
                 Employee No: {{ object.approverEmployee.employeeNo }}<br>
                 Company: {{ object.approverEmployee.company.name }}<br>
-                Date Approved: {{ object.status == 'APPROVER_APPROVED' ? object.approverUpdatedAt|date('d M Y H:i:s'):'N/A' }}
+                Date Approved: N/A
             {% else %}
                 None
             {% endif %}
         </div>
+
         {% set nextApprover = object.nextApproverToAssign %}
         {% set approverAfterNext = object.approverAfterNextToAssign %}
         {% if nextApprover is not empty %}

@@ -270,6 +270,7 @@ class Claim {
 					break;
 				case $this->approver->getApprover2()->getId():
 				case $this->approver->getOverrideApprover2()->getId():
+				case self::STATUS_APPROVER_APPROVED:
 					$status = self::STATUS_APPROVER_APPROVED_SECOND;
 					break;
 			}
@@ -290,16 +291,20 @@ class Claim {
 		$bkStatus = $this->status;
 		switch($bkStatus) {
 			case self::STATUS_CHECKER_APPROVED:
-				$this->status = self::STATUS_APPROVER_APPROVED_THIRD;
+				$this->status = self::STATUS_APPROVER_APPROVED_SECOND;
 				break;
 			case self::STATUS_APPROVER_APPROVED_FIRST:
 			case self::STATUS_APPROVER_APPROVED_SECOND:
 			case self::STATUS_APPROVER_APPROVED_THIRD:
+			default:
 				return null;
 		}
 		$result       = $this->getApproverToAssign($approvalAmountPolicy);
 		$this->status = $bkStatus;
 		if(empty($result['approverEmployee']) && empty($result['approverBackupEmployee'])) {
+			return null;
+		}
+		if($result['approverEmployee'] === $this->approverEmployee) {
 			return null;
 		}
 		
@@ -310,19 +315,23 @@ class Claim {
 		$bkStatus = $this->status;
 		switch($bkStatus) {
 			case self::STATUS_CHECKER_APPROVED:
-				$this->status = self::STATUS_APPROVER_APPROVED_SECOND;
+				$this->status = self::STATUS_APPROVER_APPROVED_FIRST;
 				break;
 			case self::STATUS_APPROVER_APPROVED_FIRST:
-				$this->status = self::STATUS_APPROVER_APPROVED_THIRD;
+				$this->status = self::STATUS_APPROVER_APPROVED_SECOND;
 				break;
 			case self::STATUS_APPROVER_APPROVED_SECOND:
 			case self::STATUS_APPROVER_APPROVED_THIRD:
+			default:
 				return null;
 				break;
 		}
 		$result       = $this->getApproverToAssign($approvalAmountPolicy);
 		$this->status = $bkStatus;
 		if(empty($result['approverEmployee']) && empty($result['approverBackupEmployee'])) {
+			return null;
+		}
+		if($result['approverEmployee'] === $this->approverEmployee) {
 			return null;
 		}
 		
