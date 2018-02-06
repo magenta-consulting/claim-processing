@@ -146,6 +146,9 @@ class TwigExtension extends \Twig_Extension {
 	public function isShowApproveRejectApproverButtonForClaim(Claim $claim) {
 		$listStatusAllow = [
 			Claim::STATUS_CHECKER_APPROVED,
+			Claim::STATUS_APPROVER_APPROVED_FIRST,
+			Claim::STATUS_APPROVER_APPROVED_SECOND,
+			Claim::STATUS_APPROVER_APPROVED_THIRD
 		];
 		if(in_array($claim->getStatus(), $listStatusAllow)) {
 			return true;
