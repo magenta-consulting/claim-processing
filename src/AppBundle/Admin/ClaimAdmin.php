@@ -302,7 +302,7 @@ class ClaimAdmin extends BaseAdmin {
 				
 				));
 				break;
-			case 'rejected':
+			case 'reject':
 			case null:
 				$datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
 					'callback'        => function($queryBuilder, $alias, $field, $value) {
