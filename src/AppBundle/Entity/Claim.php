@@ -258,6 +258,14 @@ class Claim {
 	public $lastApprover = null;
 	public $lastBackupApprover = null;
 	
+	public function isApprovalFlowCompleted() {
+		if($this->status === self::STATUS_APPROVER_REJECTED || $this->status === self::STATUS_PROCESSED || $this->status === self::STATUS_APPROVER_APPROVED) {
+			return true;
+		}
+		
+		return false;
+	}
+	
 	/**
 	 * @param string $status
 	 */
@@ -296,6 +304,7 @@ class Claim {
 			case self::STATUS_APPROVER_APPROVED_FIRST:
 			case self::STATUS_APPROVER_APPROVED_SECOND:
 			case self::STATUS_APPROVER_APPROVED_THIRD:
+			case self::STATUS_APPROVER_REJECTED:
 			default:
 				return null;
 		}
@@ -322,6 +331,7 @@ class Claim {
 				break;
 			case self::STATUS_APPROVER_APPROVED_SECOND:
 			case self::STATUS_APPROVER_APPROVED_THIRD:
+			case self::STATUS_APPROVER_REJECTED:
 			default:
 				return null;
 				break;

@@ -1,0 +1,60 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% extends admin.getTemplate('base_list_field') %}
+
+{% block field %}
+    <div class="row" style="border-bottom: 1px solid #f4f4f4; margin-bottom: 10px;padding-bottom: 10px;">
+        {% if object.approverEmployee %}
+            <table class="table">
+                <thead>
+                {% if object.approvalFlowCompleted %}
+                    <tr><th style="vertical-align: middle;">Approver Remarks</th><td colspan="2">{{ object.approverRemark }}</td></tr>
+                {% endif %}
+                <tr>
+                    <th>Approver</th>
+                    <th>Date Time Stamp</th>
+                    <th>Action</th>
+                    {#<th>Remarks</th>#}
+                </tr>
+                </thead>
+
+                <tbody>
+                {% if object.approvalFlowCompleted %}
+
+                {% else %}
+
+                    <tr>
+                        <td>{{ object.approverEmployee.firstName ~' '~ object.approverEmployee.lastName }}</td>
+                        <td>{{ object.approverUpdatedAt ? object.approverUpdatedAt | date('d M Y, h:i A') }}</td>
+                        <td>{{ object.approverUpdatedAt ? object.status }}</td>
+                        {#<td>N/A</td>#}
+                    </tr>
+                {% endif %}
+                {% for history in object.approverHistories %}
+                    <tr>
+                        <td>{{ history.approverPosition.firstName ~' '~ history.approverPosition.lastName }}</td>
+                        <td>{{ history.createdAt|date('d M Y h:i A') }}</td>
+                        <td>{{ history.status }}</td>
+                        {#<td>N/A</td>#}
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+
+        {% else %}
+            None
+        {% endif %}
+
+    </div>
+
+{% endblock %}

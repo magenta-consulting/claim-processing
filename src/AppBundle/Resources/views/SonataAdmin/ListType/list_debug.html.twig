@@ -23,12 +23,12 @@ file that was distributed with this source code.
                 Employee No: {{ history.approverPosition.employeeNo }}<br>
                 Company: {{ history.approverPosition.company.name }}<br>
                 Date
-                Approved: {{ history.createdAt|date('d M Y H:i:s') }}
+                {{ history.status == 'APPROVER_REJECTED'?'Rejected':'Approved'  }}: {{ history.createdAt|date('d M Y H:i:s') }}
             </div>
         {% endfor %}
 
         <div class="col-md-10">
-            {% if object.approver and object.approverEmployee and object.status != 'APPROVER_APPROVED' and object.status != 'PROCESSED' %}
+            {% if object.approver and object.approverEmployee and object.status != 'CHECKER_REJECTED' and object.status != 'APPROVER_REJECTED' and object.status != 'APPROVER_APPROVED' and object.status != 'PROCESSED' %}
                 <strong>Email: {{ object.approverEmployee.email }}</strong> <br>
                 Employee No: {{ object.approverEmployee.employeeNo }}<br>
                 Company: {{ object.approverEmployee.company.name }}<br>

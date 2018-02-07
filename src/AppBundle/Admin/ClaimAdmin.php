@@ -302,6 +302,7 @@ class ClaimAdmin extends BaseAdmin {
 				
 				));
 				break;
+			case 'rejected':
 			case null:
 				$datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
 					'callback'        => function($queryBuilder, $alias, $field, $value) {
@@ -578,7 +579,7 @@ class ClaimAdmin extends BaseAdmin {
 				$show->add('submissionRemarks', null, [ 'label' => 'Claimant Submission Remarks' ]);
 				$show->end();
 				$show->with('Approver', array( 'class' => 'col-md-6' ));
-				$show->add('approver', 'show_approver', [ 'label' => 'Company' ]);
+				$show->add('approver', 'show_approver_history', [ 'label' => 'Company' ]);
 				$show->end();
 				$show->with('Checker', array( 'class' => 'col-md-6' ));
 				$show->add('checker', 'show_checker', [ 'label' => 'Company' ]);
