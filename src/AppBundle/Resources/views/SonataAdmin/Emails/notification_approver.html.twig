@@ -5,7 +5,7 @@
         <li class=""><a
                     href="{{ url('admin_app_claim_list', {'type':'approving-each-position','position-id':position.id}) }}"><strong>{{ position.firstName ~' ' ~ position.lastName }}</strong>
                 has {{ getNumberClaimEachEmployeeForApprover(position,approver) }}
-                claims that require [Approval]</a></li>
+                claim(s) that require [Approval]</a></li>
     {% endfor %}
 
 </ul>
