@@ -137,9 +137,12 @@ class ClaimNotification extends ClaimRule
 
     public function sendmailToChecker($checker, $listPosition)
     {
-        $message = \Swift_Message::newInstance()
+	    $from = array('noreply@magentapulse.com' => 'ClaimEx - Checker');
+	
+	    $message = \Swift_Message::newInstance()
             ->setSubject('New Employee Claims Requiring Your Action')
-            ->setFrom('noreply@magentapulse.com')
+	        
+            ->setFrom($from)
             ->setTo($checker->getEmail())
 //            ->setTo('tuandumikedu@gmail.com')
             ->setBody(
@@ -157,9 +160,11 @@ class ClaimNotification extends ClaimRule
 
     public function sendmailToApprover($approver, $listPosition)
     {
+	    $from = array('noreply@magentapulse.com' => 'ClaimEx - Approver');
+	    
         $message = \Swift_Message::newInstance()
             ->setSubject('New Employee Claims Requiring Your Action')
-            ->setFrom('noreply@magentapulse.com')
+            ->setFrom($from)
             ->setTo($approver->getEmail())
 //            ->setTo('tuandumikedu@gmail.com')
             ->setBody(
