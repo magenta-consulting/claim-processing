@@ -234,7 +234,7 @@ class Claim {
 	private $checkingHistories;
 	
 	/**
-	 * @var CheckerHistory
+	 * @var ApproverHistory
 	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\ApproverHistory",mappedBy="claim")
 	 */
 	private $approverHistories;
@@ -257,6 +257,22 @@ class Claim {
 	
 	public $lastApprover = null;
 	public $lastBackupApprover = null;
+	
+	public function isFirstApprovalPending() {
+		return $this->status === self::STATUS_CHECKER_APPROVED;
+	}
+	
+	public function isFirstApprovalCompleted() {
+		if($this->isApprovalFlowCompleted()) {
+			return true;
+		}
+		
+		return in_array($this->status, [
+			self::STATUS_APPROVER_APPROVED_FIRST,
+			self::STATUS_APPROVER_APPROVED_SECOND,
+			self::STATUS_APPROVER_APPROVED_THIRD
+		]);
+	}
 	
 	public function isApprovalFlowCompleted() {
 		
