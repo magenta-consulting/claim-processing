@@ -1,0 +1,5 @@
+all_elements: All Claims
+approve:
+    message_batch_all_confirmation: Are you sure you want to confirm this action and approve all claims in the selected period?
+
+message_batch_confirmation: Are you sure you want to confirm this action and %action% the selected claim?|Are you sure you want to confirm this action and %action% the %count% selected claims?

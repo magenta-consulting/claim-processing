@@ -259,7 +259,29 @@ class Claim {
 	public $lastBackupApprover = null;
 	
 	public function isApprovalFlowCompleted() {
-		if($this->status === self::STATUS_APPROVER_REJECTED || $this->status === self::STATUS_PROCESSED || $this->status === self::STATUS_APPROVER_APPROVED) {
+		
+		if(in_array($this->status, [
+			self::STATUS_APPROVER_REJECTED,
+			self::STATUS_PROCESSED,
+			self::STATUS_APPROVER_APPROVED
+		])) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public function isApprovalPending() {
+		if($this->isApprovalFlowCompleted()) {
+			return false;
+		}
+		
+		if(in_array($this->status, [
+			self::STATUS_CHECKER_APPROVED,
+			self::STATUS_APPROVER_APPROVED_FIRST,
+			self::STATUS_APPROVER_APPROVED_SECOND,
+			self::STATUS_APPROVER_APPROVED_THIRD
+		])) {
 			return true;
 		}
 		

@@ -741,7 +741,7 @@ class ClaimController extends Controller {
 		try {
 			/** @var Claim $claim */
 			foreach($selectedModels as $claim) {
-				if($claim->getStatus() == Claim::STATUS_CHECKER_APPROVED) {
+				if($claim->isApprovalPending()) {
 					if($claim->getPeriodFrom()->format('Y-m-d') == $from || $from == 'all') {
 						$claim->setStatus(Claim::STATUS_APPROVER_APPROVED);
 						$claim->setApproverUpdatedAt(new \DateTime());

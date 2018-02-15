@@ -28,10 +28,21 @@ file that was distributed with this source code.
                     title_batch_confirmation{% endtrans %}</h4>
             </div>
             <div class="box-body">
+                {% set trans_domain = 'SonataAdminBundle' %}
+                {% set message_batch_all_confirmation_label = 'message_batch_all_confirmation' %}
+                {% set claim_action = 'check'  %}
+
+                {% if app.request.get('type') == 'approving' or app.request.get('type') == 'approving-each-position' %}
+
+                    {% set trans_domain = 'SonataAdminClaim' %}
+                    {% set message_batch_all_confirmation_label = 'approve.' ~ message_batch_all_confirmation_label %}
+                    {% set claim_action = 'approve'  %}
+
+                {% endif %}
                 {% if data.all_elements %}
-                    {{ 'message_batch_all_confirmation'|trans({}, 'SonataAdminBundle') }}
+                    {{ message_batch_all_confirmation_label|trans({}, trans_domain) }}
                 {% else %}
-                    {% transchoice data.idx|length with {'%count%': data.idx|length} from 'SonataAdminBundle' %}message_batch_confirmation{% endtranschoice %}
+                    {% transchoice data.idx|length with {'%count%': data.idx|length, '%action%':claim_action} from trans_domain %}message_batch_confirmation{% endtranschoice %}
                 {% endif %}
             </div>
             <div class="box-footer clearfix">

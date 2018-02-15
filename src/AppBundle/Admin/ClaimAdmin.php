@@ -36,6 +36,10 @@ class ClaimAdmin extends BaseAdmin {
 		return parent::getPosition();
 	}
 	
+	public function getTemplate($name) {
+		return parent::getTemplate($name);
+	}
+	
 	public function filterClaimTypeBycompanyForUser() {
 		$position                = $this->getPosition();
 		$em                      = $this->container->get('doctrine')->getManager();
