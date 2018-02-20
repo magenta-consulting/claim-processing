@@ -41,8 +41,29 @@ file that was distributed with this source code.
 {% endblock sonata_breadcrumb %}
 
 {% block show %}
-    <div class="sonata-ba-view">
+    <div class="alert alert-warning">
+        {% if object.firstApprovalCompleted is not empty %}
+            Please Approve this Claim Submission
+        {% endif %}
 
+        {% if object.checker is empty %}
+            {% if object.firstApprovalPending is not empty %}
+                Please Check and Verify this Claim Submission.
+            {% endif %}
+        {% else %}
+            {# the condition is met only when the Checker has approved the Claim so, checked by always has a value #}
+            - Checked by
+            <strong>{{ object.checker.checker.firstName ~ object.checker.checker.lastName }}</strong> -
+            <code>{{ object.checker.checker.email }}</code>
+        {% endif %}
+
+        {% if object.firstApprovalCompleted is not empty %}
+            - Last Approved by
+            <strong>{{ object.approverHistories.last.approverPosition.firstName ~ object.approverHistories.last.approverPosition.lastName }}</strong> -
+            <code>{{ object.approverHistories.last.approverPosition.email }}</code>
+        {% endif %}
+    </div>
+    <div class="sonata-ba-view">
         {{ sonata_block_render_event('sonata.admin.show.top', { 'admin': admin, 'object': object }) }}
 
         {% set has_tab = (admin.showtabs|length == 1 and admin.showtabs|keys[0] != 'default') or admin.showtabs|length > 1 %}
@@ -105,28 +126,6 @@ file that was distributed with this source code.
                         <div class="sonata-ba-field sonata-ba-field-standard-natural" style="margin-bottom: 10px;">
                                 <textarea {{ require }} placeholder="Approver Remarks" name="approver-remark"
                                                         class=" form-control">{{ object.checkerRemark }}</textarea>
-                        </div>
-                        <div class="alert alert-warning">
-                            {% if object.firstApprovalCompleted is not empty %}
-                                Please Approve this Claim Submission
-                            {% endif %}
-
-                            {% if object.checker is empty %}
-                                {% if object.firstApprovalPending is not empty %}
-                                    Please Check and Verify this Claim Submission.
-                                {% endif %}
-                            {% else %}
-                                {# the condition is met only when the Checker has approved the Claim so, checked by always has a value #}
-                                - Checked by
-                                <strong>{{ object.checker.checker.firstName ~ object.checker.checker.lastName }}</strong> -
-                                <code>{{ object.checker.checker.email }}</code>
-                            {% endif %}
-
-                            {% if object.firstApprovalCompleted is not empty %}
-                                - Last Approved by
-                                <strong>{{ object.approverHistories.last.approverPosition.firstName ~ object.approverHistories.last.approverPosition.lastName }}</strong> -
-                                <code>{{ object.approverHistories.last.approverPosition.email }}</code>
-                            {% endif %}
                         </div>
                         <div class="sonata-ba-form-actions well well-small form-actions">
                             <button type="submit" class="btn btn-success" name="btn_approver_approve" value="1">
