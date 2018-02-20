@@ -63,6 +63,16 @@ file that was distributed with this source code.
             <code>{{ object.approverHistories.last.approverPosition.email }}</code>
         {% endif %}
     </div>
+
+    {% if isExceedLimitRule(object,object.position) %}
+        {% set remarksRequired = 'required="required"' %}
+        <div class="alert alert-warning">
+            {{ object.position.firstName }} has been approved ${{ getTotalClaimAmountForEmployee(object,object.position) }} SGD which already exceeded the limit. Approval Remarks are required.
+        </div>
+    {% else %}
+        {% set remarksRequired = '' %}
+    {% endif %}
+
     <div class="sonata-ba-view">
         {{ sonata_block_render_event('sonata.admin.show.top', { 'admin': admin, 'object': object }) }}
 
@@ -118,14 +128,9 @@ file that was distributed with this source code.
             <div class="box-body">
                 {% if isShowApproveRejectApproverButtonForClaim(object) %}
                     <form method="post" action="{{ path('admin_app_claim_show',{'id':admin.id(object)}) }}">
-                        {% if isExceedLimitRule(object,object.position) %}
-                            {% set require = 'required="required"' %}
-                        {% else %}
-                            {% set require = '' %}
-                        {% endif %}
                         <div class="sonata-ba-field sonata-ba-field-standard-natural" style="margin-bottom: 10px;">
-                                <textarea {{ require }} placeholder="Approver Remarks" name="approver-remark"
-                                                        class=" form-control">{{ object.checkerRemark }}</textarea>
+                                <textarea {{ remarksRequired }} placeholder="Approver Remarks" name="approver-remark"
+                                                                class=" form-control">{{ object.checkerRemark }}</textarea>
                         </div>
                         <div class="sonata-ba-form-actions well well-small form-actions">
                             <button type="submit" class="btn btn-success" name="btn_approver_approve" value="1">

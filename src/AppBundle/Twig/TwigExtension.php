@@ -88,6 +88,10 @@ class TwigExtension extends \Twig_Extension {
 		return $this->container->get('app.claim_rule')->isExceedLimitRule($claim, $position);
 	}
 	
+	public function getTotalClaimAmountForEmployee($claim, $position) {
+		return $this->container->get('app.claim_rule')->getTotalClaimAmountForEmployee($claim, $position);
+	}
+	
 	public function getLimitAmount($claim, $position) {
 		return $this->container->get('app.claim_rule')->getLimitAmount($claim, $position);
 	}
@@ -262,6 +266,9 @@ class TwigExtension extends \Twig_Extension {
 			'isShowMenuForCheckerHistory'                  => new \Twig_Function_Method($this, 'isShowMenuForCheckerHistory', array( 'is_safe' => array( 'html' ) )),
 			'getNameUser'                                  => new \Twig_Function_Method($this, 'getNameUser', array( 'is_safe' => array( 'html' ) )),
 			'getFlexiPeriod'                               => new \Twig_Function_Method($this, 'getFlexiPeriod', array( 'is_safe' => array( 'html' ) )),
+			
+			'getTotalClaimAmountForEmployee'                             => new \Twig_Function_Method($this, 'getTotalClaimAmountForEmployee', array( 'is_safe' => array( 'html' ) )),
+			
 			'isHaveFlexiClaim'                             => new \Twig_Function_Method($this, 'isHaveFlexiClaim', array( 'is_safe' => array( 'html' ) )),
 		
 		);

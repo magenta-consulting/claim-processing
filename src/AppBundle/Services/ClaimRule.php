@@ -207,16 +207,24 @@ class ClaimRule {
 		if( ! $limitAmount) {
 			return false;
 		}
-		if($claim->isFlexiClaim()) {
-			$totalAmount = $this->getTotalAmountFlexiClaimForEmployee($claim->getClaimType(), $claim->getClaimCategory(), $position);
-		} else {
-			$totalAmount = $this->getTotalAmountNormalClaimForEmployee($claim->getClaimType(), $claim->getClaimCategory(), $position);
-		}
+		
+		$totalAmount = $this->getTotalClaimAmountForEmployee($claim, $position);
+		
 		if($totalAmount > $limitAmount) {
 			return true;
 		}
 		
 		return false;
+	}
+	
+	public function getTotalClaimAmountForEmployee(Claim $claim, $position) {
+		if($claim->isFlexiClaim()) {
+			$totalAmount = $this->getTotalAmountFlexiClaimForEmployee($claim->getClaimType(), $claim->getClaimCategory(), $position);
+		} else {
+			$totalAmount = $this->getTotalAmountNormalClaimForEmployee($claim->getClaimType(), $claim->getClaimCategory(), $position);
+		}
+		
+		return $totalAmount;
 	}
 	
 	public function getTotalAmountNormalClaimForEmployee($claimType, $claimCategory, $position) {
