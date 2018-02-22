@@ -312,12 +312,21 @@ class Claim {
 			switch($this->approverEmployee->getId()) {
 				case $this->approver->getApprover1()->getId():
 				case $this->approver->getOverrideApprover1()->getId():
-					$status = self::STATUS_APPROVER_APPROVED_FIRST;
+					// First approver has done his job.
+					// Check if we have second approver.
+					if($this->approver->getApprover2()) {
+						$status = self::STATUS_APPROVER_APPROVED_FIRST;
+					}
 					break;
 				case $this->approver->getApprover2()->getId():
 				case $this->approver->getOverrideApprover2()->getId():
-				case self::STATUS_APPROVER_APPROVED:
-					$status = self::STATUS_APPROVER_APPROVED_SECOND;
+					if($this->approver->getApprover3()) {
+						$status = self::STATUS_APPROVER_APPROVED_SECOND;
+					}
+					break;
+				case $this->approver->getApprover3()->getId():
+				case $this->approver->getOverrideApprover3()->getId():
+					$status = self::STATUS_APPROVER_APPROVED;
 					break;
 			}
 			
@@ -393,30 +402,42 @@ class Claim {
 			}
 			$approvalAmountPolicy = $this->approver;
 		}
-		$claim  = $this;
-		$amount = $claim->getClaimAmount();
-		
+		$claim                        = $this;
+		$amount                       = $claim->getClaimAmount();
+		$shouldReturnCurrentApprovers = false;
 		
 		// to support multi-line Approval Workflow
-		if($approvalAmountPolicy->getApprover2() && $claim->getStatus() === Claim::STATUS_APPROVER_APPROVED_FIRST) {
-			if($approvalAmountPolicy->getApprover2()->getId() != $this->getPosition()->getId()) {
-				$result['approverEmployee'] = $approvalAmountPolicy->getApprover2();
+		if($claim->getStatus() === Claim::STATUS_APPROVER_APPROVED_FIRST) {
+			if($approvalAmountPolicy->getApprover2()) {
+				if($approvalAmountPolicy->getApprover2()->getId() != $this->getPosition()->getId()) {
+					$result['approverEmployee'] = $approvalAmountPolicy->getApprover2();
+				} else {
+					$result['approverEmployee'] = $approvalAmountPolicy->getOverrideApprover2();
+				}
+				$result['approverBackupEmployee'] = $approvalAmountPolicy->getBackupApprover2();
+				
+				return $result;
 			} else {
-				$result['approverEmployee'] = $approvalAmountPolicy->getOverrideApprover2();
+				$shouldReturnCurrentApprovers = true;
 			}
-			$result['approverBackupEmployee'] = $approvalAmountPolicy->getBackupApprover2();
-			
-			return $result;
-		} elseif($approvalAmountPolicy->getApprover3() && $claim->getStatus() === Claim::STATUS_APPROVER_APPROVED_SECOND) {
-			if($approvalAmountPolicy->getApprover3()->getId() != $this->getPosition()->getId()) {
-				$result['approverEmployee'] = $approvalAmountPolicy->getApprover3();
+		} elseif($claim->getStatus() === Claim::STATUS_APPROVER_APPROVED_SECOND) {
+			if($approvalAmountPolicy->getApprover3()) {
+				if($approvalAmountPolicy->getApprover3()->getId() != $this->getPosition()->getId()) {
+					$result['approverEmployee'] = $approvalAmountPolicy->getApprover3();
+				} else {
+					$result['approverEmployee'] = $approvalAmountPolicy->getOverrideApprover3();
+				}
+				$result['approverBackupEmployee'] = $approvalAmountPolicy->getBackupApprover3();
+				
+				return $result;
 			} else {
-				$result['approverEmployee'] = $approvalAmountPolicy->getOverrideApprover3();
+				$shouldReturnCurrentApprovers = true;
 			}
-			$result['approverBackupEmployee'] = $approvalAmountPolicy->getBackupApprover3();
-			
-			return $result;
 		} elseif($claim->getStatus() === Claim::STATUS_APPROVER_APPROVED) {
+			$shouldReturnCurrentApprovers = true;
+		}
+		
+		if($shouldReturnCurrentApprovers) {
 			return [
 				'approverEmployee'       => $claim->getApproverEmployee(),
 				'approverBackupEmployee' => $claim->getApproverBackupEmployee()
