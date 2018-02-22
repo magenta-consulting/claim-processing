@@ -55,13 +55,13 @@ file that was distributed with this source code.
             {% if object.firstApprovalCompleted is empty %}
                 Please Approve this Claim Submission
             {% endif %}
-            - Checked by
+            - <code>Checked</code> by
             <strong>{{ object.checker.checker.firstName ~ object.checker.checker.lastName }}</strong> -
             <code>{{ object.checker.checker.email }}</code>
         {% endif %}
 
         {% if object.firstApprovalCompleted is not empty %}
-            - Last Approved by
+            - Last <code>Checked</code>/<code>Approved</code> by
             <strong>{{ object.approverHistories.last.approverPosition.firstName ~ object.approverHistories.last.approverPosition.lastName }}</strong> -
             <code>{{ object.approverHistories.last.approverPosition.email }}</code>
         {% endif %}
