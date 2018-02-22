@@ -19,7 +19,7 @@ file that was distributed with this source code.
     {% else %}
         {% if object.status=='CHECKER_APPROVED'  %}
             {% if object.checker is not empty %}
-                CHECKED ( by {{ object.checker.checker.firstName ~ ' ' ~ object.checker.checker.lastName }} ) at {{ object.approverUpdatedAt|date('d M Y') }}
+                CHECKED ( by {{ object.checker.checker.firstName ~ ' ' ~ object.checker.checker.lastName }} ) at {{ object.checkerUpdatedAt|date('d M Y') }}
                 <br/>
             {% endif %}
               PENDING APPROVAL by {{ object.approverEmployee.firstName }} {{ object.approverEmployee.lastName }}

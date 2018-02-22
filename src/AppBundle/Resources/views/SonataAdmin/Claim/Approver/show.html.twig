@@ -52,6 +52,9 @@ file that was distributed with this source code.
             {% endif %}
         {% else %}
             {# the condition is met only when the Checker has approved the Claim so, checked by always has a value #}
+            {% if object.firstApprovalCompleted is empty %}
+                Please Approve this Claim Submission
+            {% endif %}
             - Checked by
             <strong>{{ object.checker.checker.firstName ~ object.checker.checker.lastName }}</strong> -
             <code>{{ object.checker.checker.email }}</code>
