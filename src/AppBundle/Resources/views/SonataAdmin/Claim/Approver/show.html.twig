@@ -133,7 +133,7 @@ file that was distributed with this source code.
                     <form method="post" action="{{ path('admin_app_claim_show',{'id':admin.id(object)}) }}">
                         <div class="sonata-ba-field sonata-ba-field-standard-natural" style="margin-bottom: 10px;">
                                 <textarea {{ remarksRequired }} placeholder="Approver Remarks" name="approver-remark"
-                                                                class=" form-control">{{ object.checkerRemark }}</textarea>
+                                                                class=" form-control"></textarea>
                         </div>
                         <div class="sonata-ba-form-actions well well-small form-actions">
                             <button type="submit" class="btn btn-success" name="btn_approver_approve" value="1">

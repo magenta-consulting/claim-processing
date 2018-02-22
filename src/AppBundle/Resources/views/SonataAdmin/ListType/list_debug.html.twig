@@ -34,7 +34,7 @@ file that was distributed with this source code.
                 Company: {{ object.approverEmployee.company.name }}<br>
                 Date Approved: N/A
             {% else %}
-                {% if object.status != 'PROCESSED' %}
+                {% if object.status != 'PROCESSED' and object.status != 'APPROVER_APPROVED' %}
                 None
                 {% endif %}
             {% endif %}

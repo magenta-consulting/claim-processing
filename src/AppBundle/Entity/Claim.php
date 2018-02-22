@@ -370,6 +370,7 @@ class Claim {
 	public function getNextApproverToAssign(ApprovalAmountPolicies $approvalAmountPolicy = null) {
 		$bkStatus = $this->status;
 		switch($bkStatus) {
+			case self::STATUS_PENDING:
 			case self::STATUS_CHECKER_APPROVED:
 				$this->status = self::STATUS_APPROVER_APPROVED_FIRST;
 				break;
