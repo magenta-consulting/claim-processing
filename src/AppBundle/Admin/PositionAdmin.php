@@ -383,7 +383,7 @@ class PositionAdmin extends BaseAdmin
                     ->add('company.name', null, ['label' => 'Company', 'sortable' => false])
                     ->add('employeeGroup.costCentre.code', null, ['label' => 'Cost Centre', 'sortable' => false])
                     ->add('2', 'number_claim', ['label' => 'No. Pending Claims', 'sortable' => false])
-                    ->add('4', 'submission_date_claim', ['label' => 'Initial Submission Date', 'sortable' => false])
+//                    ->add('4', 'submission_date_claim', ['label' => 'Initial Submission Date', 'sortable' => false])
                     ->add('_action', null, array(
                         'actions' => array(
                             'list' => array(
