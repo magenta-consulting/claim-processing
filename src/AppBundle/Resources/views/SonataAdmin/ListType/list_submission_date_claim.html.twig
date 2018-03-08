@@ -12,7 +12,11 @@ file that was distributed with this source code.
 {% extends admin.getTemplate('base_list_field') %}
 
 {% block field %}
- {{ object.claims[0].createdAt | date('d M Y') }}
+    {% if object.pendingClaims.count > 0 %}
+        {{ object.pendingClaims[0].createdAt | date('d M Y') }}
+    {% else %}
+        N/A
+    {% endif %}
     {#
 
     {% if app.request.get('filter') is not empty %}

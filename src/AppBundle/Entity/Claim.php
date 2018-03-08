@@ -47,19 +47,20 @@ class Claim {
 	 */
 	private $company;
 	
-	
 	/**
 	 * @var ClaimType
 	 * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimType")
 	 * @ORM\JoinColumn(onDelete="CASCADE")
 	 */
 	private $claimType;
+	
 	/**
 	 * @var CurrencyExchange
 	 * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CurrencyExchange")
 	 * @ORM\JoinColumn(onDelete="CASCADE")
 	 */
 	private $currencyExchange;
+	
 	/**
 	 * @var ClaimCategory
 	 * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClaimCategory")
@@ -80,17 +81,17 @@ class Claim {
 	private $claimAmountConverted;
 	
 	/**
-	 * @var text
+	 * @var string
 	 * @ORM\Column(name="description",type="text",nullable=true)
 	 */
 	private $description;
-	
 	
 	/**
 	 * @var date
 	 * @ORM\Column(name="receipt_date",type="date",nullable=true)
 	 */
 	private $receiptDate;
+	
 	/**
 	 * @var date
 	 * @ORM\Column(name="processed_date",type="datetime",nullable=true)
