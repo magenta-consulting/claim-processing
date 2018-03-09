@@ -168,6 +168,7 @@ class Claim {
 	 * @ORM\Column(name="period_from",type="date",nullable=true)
 	 */
 	private $periodFrom;
+	
 	/**
 	 * @var \DateTime
 	 * @ORM\Column(name="period_to",type="date",nullable=true)

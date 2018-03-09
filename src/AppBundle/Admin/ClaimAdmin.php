@@ -24,6 +24,12 @@ use Sonata\AdminBundle\Admin\AdminInterface;
 
 class ClaimAdmin extends BaseAdmin {
 	
+	protected function configureDefaultFilterValues(array &$filterValues)
+	{
+		$filterValues['_sort_by'] = 'periodFrom';
+		$filterValues['_sort_order'] = 'ASC';
+	}
+	
 	public function getPosition() {
 		if($this->getRequest()->get('type') === 'onbehalf') {
 			$em         = $this->container->get('doctrine')->getManager();
@@ -234,6 +240,8 @@ class ClaimAdmin extends BaseAdmin {
 				));
 				break;
 			case 'approving-each-position':
+				$emptyFilterChoiceData = 'all';
+				// $this->getContainer()->get('app.claim_rule')->getCurrentClaimPeriod('from')->format('Y-m-d')
 				$datagridMapper->add('claim_period', 'doctrine_orm_callback', array(
 					'callback'        => function($queryBuilder, $alias, $field, $value) {
 						if($value['value'] === 'all') {
@@ -251,7 +259,7 @@ class ClaimAdmin extends BaseAdmin {
 					'field_options'   => [
 						'attr'       => [ 'placeholder' => 'Name, Email, Employee No, NRIC/Fin' ],
 						'choices'    => $this->getContainer()->get('app.approver_rule')->getListClaimPeriodForFilterApprover(),
-						'empty_data' => $this->getContainer()->get('app.claim_rule')->getCurrentClaimPeriod('from')->format('Y-m-d'),
+						'empty_data' => $emptyFilterChoiceData,
 					],
 					'advanced_filter' => false,
 				

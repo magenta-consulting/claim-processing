@@ -22,7 +22,7 @@ class PositionAdmin extends BaseAdmin {
 	
 	protected function configureDefaultFilterValues(array &$filterValues)
 	{
-		$filterValues['_sort_by'] = 'claims.receiptDate';
+		$filterValues['_sort_by'] = 'claims.periodFrom';
 		$filterValues['_sort_order'] = 'ASC';
 //		$this->datagridValues['_sort_by'] = 'claims.receiptDate';
 //		$this->datagridValues['_sort_order'] = 'ASC';
@@ -432,7 +432,7 @@ class PositionAdmin extends BaseAdmin {
 				}
 				if($allFilter) {
 					$listMapper->add('4', 'submission_date_claim', [
-						'label'    => 'Initial Submission Date',
+						'label'    => 'Pending Period',
 						'sortable' => false
 					]);
 				}

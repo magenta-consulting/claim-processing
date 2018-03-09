@@ -13,7 +13,8 @@ file that was distributed with this source code.
 
 {% block field %}
     {% if object.pendingClaims.count > 0 %}
-        {{ object.pendingClaims[0].createdAt | date('d M Y') }}
+        {% set claim = object.pendingClaims[0] %}
+        {{ claim.periodFrom | date('d M Y') }} - {{ claim.periodTo | date('d M Y') }}
     {% else %}
         N/A
     {% endif %}
