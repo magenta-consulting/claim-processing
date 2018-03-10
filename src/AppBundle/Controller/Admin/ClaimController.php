@@ -723,8 +723,8 @@ class ClaimController extends Controller {
 	
 	
 	public function batchActionApprove(ProxyQueryInterface $selectedModelQuery, Request $request = null) {
-		$em           = $this->getDoctrine()->getManager();
-		$modelManager = $this->admin->getModelManager();
+		$em            = $this->getDoctrine()->getManager();
+		$modelManager  = $this->admin->getModelManager();
 		$positionLogin = $this->getUser()->getLoginWithPosition();
 		
 		$selectedModels = $selectedModelQuery->execute();
@@ -733,11 +733,16 @@ class ClaimController extends Controller {
 		
 		$currentPeriod = $this->get('app.claim_rule')->getCurrentClaimPeriod('from');
 		$filter        = $this->admin->getFilterParameters();
-		if(isset($filter['claim_period'])) {
-			$from = $filter['claim_period']['value'];
+		if(array_key_exists('claim_period', $filter)) {
+			if(isset($filter['claim_period'])) {
+				$from = $filter['claim_period']['value'];
+			} else {
+				$from = $currentPeriod->format('Y-m-d');
+			}
 		} else {
-			$from = $currentPeriod->format('Y-m-d');
+			$from = 'all';
 		}
+		
 		try {
 			/** @var Claim $claim */
 			foreach($selectedModels as $claim) {
