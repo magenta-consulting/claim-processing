@@ -20,13 +20,12 @@ use Sonata\AdminBundle\Route\RouteCollection;
 class PositionAdmin extends BaseAdmin {
 	protected $parentAssociationMapping = 'company';
 	
-	protected function configureDefaultFilterValues(array &$filterValues)
-	{
-		$filterValues['_sort_by'] = 'claims.periodFrom';
+	protected function configureDefaultFilterValues(array &$filterValues) {
+		$filterValues['_sort_by']    = 'claims.periodFrom';
 		$filterValues['_sort_order'] = 'ASC';
 //		$this->datagridValues['_sort_by'] = 'claims.receiptDate';
 //		$this->datagridValues['_sort_order'] = 'ASC';
-		
+
 //		$query->setSortBy([ [ 'fieldName' => '' ] ], [ 'fieldName' => 'receiptDate' ]);
 //		$query->setSortOrder('ASC');
 	}

@@ -12,23 +12,24 @@ file that was distributed with this source code.
 {% extends admin.getTemplate('base_list_field') %}
 
 {% block field %}
-    {% if app.request.get('filter') is not empty %}
-        {% set from = app.request.get('filter')['claim_period']['value'] %}
+    {% if app.request.get('filter') is not empty and  app.request.get('filter')['claim_period'] is defined %}
+            {% set from = app.request.get('filter')['claim_period']['value'] %}
     {% else %}
-        {% set from = getCurrentClaimPeriod('from')|date('Y-m-d') %}
+        {#{% set from = getCurrentClaimPeriod('from')|date('Y-m-d') %}#}
+        {% set from = 'all' %}
     {% endif %}
 
     {% if app.request.get('type') == 'checking' %}
         {{ getNumberClaimEachEmployeeForChecker(object,app.user.loginWithPosition) }}
     {% elseif app.request.get('type') == 'checker-history' %}
         {{ getNumberClaimEachEmployeeForCheckerHistory(object,app.user.loginWithPosition,from) }}
-    {% elseif app.request.get('type') == 'approving'  %}
+    {% elseif app.request.get('type') == 'approving' %}
         {{ getNumberClaimEachEmployeeForApprover(object,app.user.loginWithPosition) }}
-    {% elseif app.request.get('type') == 'approver-history'  %}
+    {% elseif app.request.get('type') == 'approver-history' %}
         {{ getNumberClaimEachEmployeeForApproverHistory(object,app.user.loginWithPosition,from) }}
-    {% elseif app.request.get('type') == 'hr'  %}
+    {% elseif app.request.get('type') == 'hr' %}
         {{ getTotalAmountClaimEachEmployeeForHr(object,from)|number_format(2, '.', ',') }}
-    {% elseif app.request.get('type') == 'hr-reject'  %}
+    {% elseif app.request.get('type') == 'hr-reject' %}
         {{ getTotalAmountClaimEachEmployeeForHr(object,from)|number_format(2, '.', ',') }}
     {% endif %}
 {% endblock %}
