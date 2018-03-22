@@ -574,8 +574,6 @@ class BaseAdmin extends AbstractAdmin {
 		}
 		/** @var QueryBuilder $qb */
 		$qb  = $query->getQueryBuilder();
-		$sql = $qb->getQuery()->getSQL();
-		$x   = 'aaaa';
 		
 		return $query;
 	}

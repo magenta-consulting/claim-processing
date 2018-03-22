@@ -264,6 +264,10 @@ class Claim {
 		return $this->status === self::STATUS_CHECKER_APPROVED;
 	}
 	
+	public function isSecondApprovalPending() {
+		return $this->status === self::STATUS_APPROVER_APPROVED_FIRST && ! empty($this->approver->getApprover2());
+	}
+	
 	public function isFirstApprovalCompleted() {
 		if($this->isApprovalFlowCompleted()) {
 			return true;
@@ -316,13 +320,13 @@ class Claim {
 				case $this->approver->getOverrideApprover1()->getId():
 					// First approver has done his job.
 					// Check if we have second approver.
-					if($this->approver->getApprover2()) {
+					if($this->isFirstApprovalPending() && $this->approver->getApprover2()) {
 						$status = self::STATUS_APPROVER_APPROVED_FIRST;
 					}
 					break;
 				case $this->approver->getApprover2()->getId():
 				case $this->approver->getOverrideApprover2()->getId():
-					if($this->approver->getApprover3()) {
+					if($this->isSecondApprovalPending() && $this->approver->getApprover3()) {
 						$status = self::STATUS_APPROVER_APPROVED_SECOND;
 					}
 					break;
