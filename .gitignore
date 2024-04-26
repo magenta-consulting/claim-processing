@@ -1,3 +1,4 @@
+.DS_Store
 .idea/
 ### sym3
 /app/config/parameters.yml
