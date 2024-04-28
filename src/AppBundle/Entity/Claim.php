@@ -315,6 +315,11 @@ class Claim {
 	 */
 	public function setStatus($status) {
 		if($this->status !== self::STATUS_APPROVER_APPROVED && $status === self::STATUS_APPROVER_APPROVED) {
+            $overrideApprover2 = $this->approver->getOverrideApprover2();
+            $overrideApprover2Id = null;
+            if ($overrideApprover2 != null) {
+                $overrideApprover2Id = $overrideApprover2->getId();
+            }
 			switch($this->approverEmployee->getId()) {
 				case $this->approver->getApprover1()->getId():
 				case $this->approver->getOverrideApprover1()->getId():
@@ -325,7 +330,7 @@ class Claim {
 					}
 					break;
 				case $this->approver->getApprover2()->getId():
-				case $this->approver->getOverrideApprover2()->getId():
+				case $overrideApprover2Id:
 					if($this->isSecondApprovalPending() && $this->approver->getApprover3()) {
 						$status = self::STATUS_APPROVER_APPROVED_SECOND;
 					}
